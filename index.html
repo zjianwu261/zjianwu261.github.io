@@ -147,7 +147,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/28/Hexo&GitHub&typora%E7%BB%84%E5%90%88%E6%8B%B3/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/28/%E7%8E%A9%E5%AE%A2%E4%BA%91%E5%88%B7armbian%E5%AE%89%E8%A3%85shellclash%E5%AE%9E%E7%8E%B0trojan%E8%8A%82%E7%82%B9%E8%AE%A2%E9%98%85/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -161,7 +161,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/01/28/Hexo&GitHub&typora%E7%BB%84%E5%90%88%E6%8B%B3/" class="post-title-link" itemprop="url">Hexo&GitHub&typora组合拳</a>
+            <a href="/2022/01/28/%E7%8E%A9%E5%AE%A2%E4%BA%91%E5%88%B7armbian%E5%AE%89%E8%A3%85shellclash%E5%AE%9E%E7%8E%B0trojan%E8%8A%82%E7%82%B9%E8%AE%A2%E9%98%85/" class="post-title-link" itemprop="url">玩客云刷armbian安装shellclash实现trojan节点订阅</a>
         </h2>
 
         <div class="post-meta">
@@ -172,7 +172,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-01-28 11:30:35 / Modified: 11:36:54" itemprop="dateCreated datePublished" datetime="2022-01-28T11:30:35+08:00">2022-01-28</time>
+              <time title="Created: 2022-01-28 11:59:26 / Modified: 13:47:48" itemprop="dateCreated datePublished" datetime="2022-01-28T11:59:26+08:00">2022-01-28</time>
             </span>
 
           
@@ -186,8 +186,117 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>再次启动博客</p>
+          <p>[toc]</p>
+<h2 id="0、前沿"><a href="#0、前沿" class="headerlink" title="0、前沿"></a>0、前沿</h2><p>之前买过斐讯n1，也稳定使用年把时间。前段时间娃老家，为了尽量减少割裂，也一同带回了家。回头查看咸鱼，发现斐讯n1已经高攀不起。无奈只得另觅其他矿渣，这时候刷到powersee 的视频<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=4BqFH_VrFpo&t=266s">你的需求，也许30块就能搞定</a>眼前一亮，这能满足我的需求吗？——至少4k电视不卡吧，拼多多买之。</p>
+<h2 id="1、拆机底包刷机包三连"><a href="#1、拆机底包刷机包三连" class="headerlink" title="1、拆机底包刷机包三连"></a>1、拆机底包刷机包三连</h2><p>网上有很多教程，就不赘述。胆大细心就好，我用的也是powersee的步骤和刷机包。具体可以参考</p>
+<p><a target="_blank" rel="noopener" href="https://powersee.github.io/2021/01/wankeyun-server/">玩客云导航固件使用说明</a>和上面给的视频教程</p>
+<h2 id="2、安装shellclash"><a href="#2、安装shellclash" class="headerlink" title="2、安装shellclash"></a>2、安装shellclash</h2><p>之前在x86服务器上安装过clash内核实现tun透明代理，YouTube up主长风分享提供的<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=r24-cmWV9RU&list=PLVKpM9zINniFVTY8bfeLQe44KdoOtI328&index=2&t=827s">Clash &amp; Linux 实现透明代理</a>，无奈玩客云的cpu（ramv7l）不支持。只得另寻他法，后来看到shellclash，直接找到github 地址<a target="_blank" rel="noopener" href="https://github.com/juewuy/ShellClash">shellClash</a>一行代码就可以搞定。运行脚本，安装clash核心和导入trojan节点。默认导入机场的订阅地址就可以了，但我是自建的vps，YouTube up主悟空 <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=4i17JZIPwYE&t=8s">自建Trojan节点如何转换为Clash托管地址</a> 在自己的Linux服务器上搭建了一个转换服务器，成功实现！</p>
+<p>订阅节点的格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trojan://密码@服务器地址:443?peer=#节点别名1</span><br></pre></td></tr></table></figure>
 
+<p>可以使用别人提供的<a target="_blank" rel="noopener" href="https://sub.dler.io/">服务器</a>，也可以自己搭建，都<a target="_blank" rel="noopener" href="https://github.com/CareyWang/sub-web">支持docker安装</a></p>
+<p><img src="../%E7%8E%A9%E5%AE%A2%E4%BA%91%E5%88%B7armbian%E5%AE%89%E8%A3%85shellclash%E5%AE%9E%E7%8E%B0trojan%E8%8A%82%E7%82%B9%E8%AE%A2%E9%98%85/image-20220128133520797.png" alt="image-20220128133520797"></p>
+<h2 id="3、测试速度"><a href="#3、测试速度" class="headerlink" title="3、测试速度"></a>3、测试速度</h2><p>实话说，受限于晶晨s805 32位系统，装了shellclash做旁路由，YouTube速度也就2、3万水平（腾讯轻量云香港节点），跟电脑上装clash for window动辄6、7万水平还是有差距</p>
+<p>这是玩客云刷了armbian，之后安装shellclash做软路由，电脑连接上之后YouTube的表现</p>
+<p><img src="../%E7%8E%A9%E5%AE%A2%E4%BA%91%E5%88%B7armbian%E5%AE%89%E8%A3%85shellclash%E5%AE%9E%E7%8E%B0trojan%E8%8A%82%E7%82%B9%E8%AE%A2%E9%98%85/telegram-cloud-photo-size-5-6311799559730343335-y.jpg" alt="telegram-cloud-photo-size-5-6311799559730343335-y"></p>
+<p>这是电脑上直接装clash for window， YouTube的表现，两者都是相同的节点</p>
+<p><img src="../%E7%8E%A9%E5%AE%A2%E4%BA%91%E5%88%B7armbian%E5%AE%89%E8%A3%85shellclash%E5%AE%9E%E7%8E%B0trojan%E8%8A%82%E7%82%B9%E8%AE%A2%E9%98%85/telegram-cloud-photo-size-5-6311799559730343336-y.jpg" alt="telegram-cloud-photo-size-5-6311799559730343336-y"></p>
+<p>查看玩客云资源使用情况，发现也没有占满，还有很大的利用空间</p>
+<p><img src="../%E7%8E%A9%E5%AE%A2%E4%BA%91%E5%88%B7armbian%E5%AE%89%E8%A3%85shellclash%E5%AE%9E%E7%8E%B0trojan%E8%8A%82%E7%82%B9%E8%AE%A2%E9%98%85/telegram-cloud-photo-size-5-6311799559730343338-x.jpg" alt="telegram-cloud-photo-size-5-6311799559730343338-x"></p>
+<p>所以期待有其他的trojan节点的方式吧</p>
+<h2 id="4、其他可能需要的"><a href="#4、其他可能需要的" class="headerlink" title="4、其他可能需要的"></a>4、其他可能需要的</h2><h3 id="4-1、修改为静态IP地址"><a href="#4-1、修改为静态IP地址" class="headerlink" title="4.1、修改为静态IP地址"></a>4.1、修改为静态IP地址</h3><p>方便电视连接，这样可以长期使用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 备份</span><br><span class="line">cp /etc/network/interfaces /etc/network/interfaces.backup</span><br><span class="line"># 修改</span><br><span class="line">sudo vim /etc/network/interfaces</span><br><span class="line"># dG删除所有，复制下面内容</span><br><span class="line">#Ethernet adapter 0</span><br><span class="line">auto eth0</span><br><span class="line">allow-hotplug eth0</span><br><span class="line">#no-auto-down eth0</span><br><span class="line">iface eth0 inet static</span><br><span class="line">address 192.168.0.13</span><br><span class="line">netmask 255.255.255.0</span><br><span class="line">gateway 192.168.0.1</span><br><span class="line">dns-nameservers 192.168.0.1</span><br><span class="line">#dns-nameservers 1.1.1.1 1.0.0.1</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-1、自动挂载优盘"><a href="#4-1、自动挂载优盘" class="headerlink" title="4.1、自动挂载优盘"></a>4.1、自动挂载优盘</h3><p>powersee的armbian系统里也有些存储应用，玩客云默认只有8g储存，作为下载或分享盘，需要挂载一个优盘（或硬盘），设置成开机自启动。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 查看优盘</span><br><span class="line">lsblk</span><br><span class="line"># 挂载优盘</span><br><span class="line">mount /dev/sda1 /mnt/sda1</span><br><span class="line">写入自动启动</span><br><span class="line"># 查看id，知道优盘的UUID</span><br><span class="line">blkid</span><br><span class="line"># 写入fstab</span><br><span class="line">echo &quot;UUID=B801-1CDF /mnt/sda1 vfat defaults 0 0&quot; &gt;&gt; /etc/fstab</span><br><span class="line"># 查看写入情况</span><br><span class="line">ls /etc/fstab</span><br></pre></td></tr></table></figure>
+
+<p><img src="../%E7%8E%A9%E5%AE%A2%E4%BA%91%E5%88%B7armbian%E5%AE%89%E8%A3%85shellclash%E5%AE%9E%E7%8E%B0trojan%E8%8A%82%E7%82%B9%E8%AE%A2%E9%98%85/image-20220128120012546.png" alt="image-20220128120012546"></p>
+<h3 id="4-2、安装minidlna"><a href="#4-2、安装minidlna" class="headerlink" title="4.2、安装minidlna"></a>4.2、安装minidlna</h3><p>原因是家里的lg电视可以扫描到内网里的minidlna分享的视频，所以必须给安排上，找到一个<a target="_blank" rel="noopener" href="http://178518.github.io/book/raspbian/dlna.html">参考</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 安装软件</span><br><span class="line">sudo apt-get install minidlna</span><br><span class="line"># 修改配置文件</span><br><span class="line">sudo /etc/minidlna.conf</span><br><span class="line"></span><br><span class="line">#媒体文件目录：</span><br><span class="line">media_dir=/mnt/sda1/</span><br><span class="line">#数据库目录，minidlna使用的是sqlite数据库来索引文件</span><br><span class="line">db_dir=/var/lib/minidlna</span><br><span class="line">#端口</span><br><span class="line">port=8200</span><br><span class="line">#网络名称，用于其它设备发现当前设备</span><br><span class="line">friendly_name=DLNA</span><br></pre></td></tr></table></figure>
+
+<p>让minidlna随机启动</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo update-rc.d minidlna defaults</span><br></pre></td></tr></table></figure>
+
+<p>启动minidlna服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service minidlna start</span><br></pre></td></tr></table></figure>
+
+<p>强制刷新，以便minidlna将最新的媒体文件进行索引</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service minidlna force-reload</span><br></pre></td></tr></table></figure>
+
+<p>查看资源个数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://ip:8200/</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-3、自带应用账号密码"><a href="#4-3、自带应用账号密码" class="headerlink" title="4.3、自带应用账号密码"></a>4.3、自带应用账号密码</h3><p>文件管理器：账号密码都是 admin</p>
+<p>portainer : 账号 admin 密码 powersee</p>
+<p>transmission : 账号密码都是 admin</p>
+<p>qbittorrent : 账号 admin 密码 adminadmin</p>
+<p>ssh ：账号 root 密码 powersee233</p>
+<h2 id="感谢"><a href="#感谢" class="headerlink" title="感谢"></a>感谢</h2><p>包括但不限于powersee、长风分享、悟空等大神的分享！！！</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/28/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="MaverickZhang">
+      <meta itemprop="description" content="小木屋">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/28/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/" class="post-title-link" itemprop="url">如何使用typora优雅写hexo图片博客</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-28 11:30:35 / Modified: 11:56:51" itemprop="dateCreated datePublished" datetime="2022-01-28T11:30:35+08:00">2022-01-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>[toc]</p>
+<h2 id="1-部署hexo"><a href="#1-部署hexo" class="headerlink" title="1. 部署hexo"></a>1. 部署hexo</h2><p>安装node.js，以macOS为例，直接<a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn/download/">官网下载</a>，<img src="../%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/image-20220128114630888.png" alt="image-20220128114630888"></p>
+<h2 id="2-初始化本地文件夹"><a href="#2-初始化本地文件夹" class="headerlink" title="2. 初始化本地文件夹"></a>2. 初始化本地文件夹</h2><h2 id="3-GitHub建立xxx-github-io仓"><a href="#3-GitHub建立xxx-github-io仓" class="headerlink" title="3. GitHub建立xxx.github.io仓"></a>3. GitHub建立xxx.github.io仓</h2><h2 id="4-与typora进行联动"><a href="#4-与typora进行联动" class="headerlink" title="4. 与typora进行联动"></a>4. 与typora进行联动</h2><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2>
       
     </div>
 
@@ -477,64 +586,6 @@
 <p><em><strong>*一九四九年九月十六日*</strong></em></p>
 <p>　　中国人之所以应当感谢美国资产阶级发言人艾奇逊，不但是因为艾奇逊明确地供认了美国出钱出枪，蒋介石出人，替美国打仗杀中国人这样一种事实，使得中国的先进分子有证据地去说服落后分子。不是吗？你们看，艾奇逊自己招认了，最近数年的这一场使得几百万中国人丧失生命的大血战，是美国帝国主义有计划地组织成功的。中国人之所以应当感谢艾奇逊，又不但因为艾奇逊公开地宣称，他们要招收中国的所谓“民主个人主义”分子，组织美国的第五纵队，推翻中国共产党领导的人民政府，因此引起了中国人特别是那些带有自由主义色彩的中国人的注意，大家相约不要上美国人的当，到处警戒美帝国主义在暗地里进行的阴谋活动。中国人之所以应当感谢艾奇逊，还因为艾奇逊胡诌了一大篇中国近代史，而艾奇逊的历史观点正是中国知识分子中有一部分人所同具的观点，就是说资产阶级的唯心的历史观。驳斥了艾奇逊，就有可能使得广大的中国人获得打开眼界的益处。对于那些抱着和艾奇逊相同或者有某些相同的观点的人们，则可能是更加有益的。<br>　　艾奇逊胡诌的中国近代史是什么呢？他首先试图从中国的经济状况和思想状况去说明中国革命的发生。在这里，他讲了很多的神话。<br>　　艾奇逊说：“中国人口在十八、十九两个世纪里增加了一倍，因此使土地受到不堪负担的压力。人民的吃饭问题是每个中国政府必然碰到的第一个问题。一直到现在没有一个政府使这个问题得到了解决。国民党在法典里写上了许多土地改革法令，想这样来解决这个问题。这些法令有的失败了，有的被忽视。国民政府之所以有今天的窘况，很大的一个原因是它没有使中国有足够的东西吃。中共宣传的内容，一大部分是他们决心解决土地问题的诺言。”<br>　　在不明事理的中国人看来，很有点像。人口太多了，饭少了，发生革命。国民党没有解决这个问题，共产党也不见得能解决这个问题，“一直到现在没有一个政府使这个问题得到了解决”。<br>　　革命的发生是由于人口太多的缘故吗？古今中外有过很多的革命，都是由于人口太多吗？中国几千年以来的很多次的革命，也是由于人口太多吗？美国一百七十四年以前的反英革命[1]，也是由于人口太多吗？艾奇逊的历史知识等于零，他连美国独立宣言也没有读过。华盛顿杰斐逊[2]们之所以举行反英革命，是因为英国人压迫和剥削美国人，而不是什么美国人口过剩。中国人民历次推翻自己的封建朝廷，是因为这些封建朝廷压迫和剥削人民，而不是什么人口过剩。俄国人所以举行二月革命和十月革命，是因为俄皇和俄国资产阶级的压迫和剥削，而不是什么人口过剩，俄国至今还是土地多过人口很远的。蒙古土地那么广大，人口那么稀少，照艾奇逊的道理是不能设想会发生革命的，但是却早已发生了[3]。<br>　　按照艾奇逊的说法，中国是毫无出路的，人口有了四亿七千五百万，是一种“不堪负担的压力”，革命也好，不革命也好，总之是不得了。艾奇逊在这里寄予了很大的希望，这个希望他没有说出来，却被许多美国新闻记者经常地透露了出来，这就是所谓中国共产党解决不了自己的经济问题，中国将永远是天下大乱，只有靠美国的面粉，即是说变为美国的殖民地，才有出路。<br>　　辛亥革命[4]为什么没有成功，没有解决吃饭问题呢？是因为辛亥革命只推翻一个清朝政府，而没有推翻帝国主义和封建主义的压迫和剥削。<br>　　北伐战争为什么没有成功，没有解决吃饭问题呢？是因为蒋介石背叛革命，投降帝国主义，成了压迫和剥削中国人的反革命首领。<br>　　“一直到现在没有一个政府使这个问题得到了解决”吗？西北、华北、东北、华东各个解决了土地问题的老解放区，难道还有如同艾奇逊所说的那种“吃饭问题”存在吗？美国在中国的侦探或所谓观察家是不少的，为什么连这件事也没有探出来呢？上海等处的失业问题即吃饭问题，完全是帝国主义、封建主义、官僚资本主义和国民党反动政府的残酷无情的压迫和剥削的结果。在人民政府下，只消几年工夫，就可以和华北、东北等处一样完全地解决失业即吃饭的问题。<br>　　中国人口众多是一件极大的好事。再增加多少倍人口也完全有办法，这办法就是生产。西方资产阶级经济学家如像马尔萨斯[5]者流所谓食物增加赶不上人口增加的一套谬论，不但被马克思主义者早已从理论上驳斥得干干净净，而且已被革命后的苏联和中国解放区的事实所完全驳倒。根据革命加生产即能解决吃饭问题的真理，中共中央已命令全国各地的共产党组织和人民解放军，对于国民党的旧工作人员，只要有一技之长而不是反动有据或劣迹昭著的分子，一概予以维持，不要裁减。十分困难时，饭匀着吃，房子挤着住。已被裁减而生活无着者，收回成命，给以饭吃。国民党军起义的或被俘的，按此原则，一律收留。凡非首要的反动分子，只要悔罪，亦须给以生活出路。<br>　　世间一切事物中，人是第一个可宝贵的。在共产党领导下，只要有了人，什么人间奇迹也可以造出来。我们是艾奇逊反革命理论的驳斥者，我们相信革命能改变一切，一个人口众多、物产丰盛、生活优裕、文化昌盛的新中国，不要很久就可以到来，一切悲观论调是完全没有根据的。<br>　　“西方的影响”，这是艾奇逊解释中国革命所以发生的第二个原因。艾奇逊说：“中国自己的高度文化和文明，有了三千多年的发展，大体上不曾沾染外来的影响。中国人即是被武力征服，最后总是能够驯服和融化侵入者。他们自然会因此把自己当作世界的中心，把自己看成是文明人类的最高表现。到了十九世纪中叶，西方突破了中国孤立的墙壁，那在以前是不可逾越的。这些外来者带来了进取性，带来了发展得盖世无双的西方技术，带来了为以往的侵入者所从来不曾带入中国的高度文化。一部分由于这些品质，一部分由于清朝统治的衰落，西方人不但没有被中国融化，而且介绍了许多新思想进来，这些新思想发生了重要作用，激起了骚动和不安。”<br>　　在不明事理的中国人看来，艾奇逊说得很有点像。西方的新观念输入了中国，引起了革命。<br>　　革什么人的命呢？因为“清朝统治的衰落”，向弱点进攻，是革清朝的命了。艾奇逊在这里说得不恰当。辛亥革命是革帝国主义的命。中国人所以要革清朝的命，是因为清朝是帝国主义的走狗。反对英国鸦片侵略的战争[6]，反对英法联军侵略的战争[7]，反对帝国主义走狗清朝的太平天国战争[8]，反对法国侵略的战争[9]，反对日本侵略的战争[10]，反对八国联军侵略的战争[11]，都失败了，于是再有反对帝国主义走狗清朝的辛亥革命，这就是到辛亥为止的近代中国史。艾奇逊所说的“西方的影响”是什么呢？就是马克思恩格斯在《共产党宣言》（一八四八年）中所说的西方资产阶级按照自己的面貌用恐怖的方法去改造世界[12]。在这个影响或改造过程中，西方资产阶级需要买办和熟习西方习惯的奴才，不得不允许中国这一类国家开办学校和派遣留学生，给中国“介绍了许多新思想进来”。随着也就产生了中国这类国家的民族资产阶级和无产阶级。同时并使农民破产，造成了广大的半无产阶级。这样，西方资产阶级就在东方造成了两类人，一类是少数人，这就是为帝国主义服务的洋奴；一类是多数人，这就是反抗帝国主义的工人阶级、农民阶级、城市小资产阶级、民族资产阶级和从这些阶级出身的知识分子，所有这些，都是帝国主义替自己造成的掘墓人，革命就是从这些人发生的。不是什么西方思想的输入引起了“骚动和不安”，而是帝国主义的侵略引起了反抗。<br>　　在这个反抗运动中，在一个很长的时期内，即从一八四○年的鸦片战争到一九一九年的五四运动[13]的前夜，共计七十多年中，中国人没有什么思想武器可以抗御帝国主义。旧的顽固的封建主义的思想武器打了败仗了，抵不住，宣告破产了。不得已，中国人被迫从帝国主义的老家即西方资产阶级革命时代的武器库中学来了进化论、天赋人权论和资产阶级共和国等项思想武器和政治方案，组织过政党，举行过革命，以为可以外御列强，内建民国。但是这些东西也和封建主义的思想武器一样，软弱得很，又是抵不住，败下阵来，宣告破产了。<br>　　一九一七年的俄国革命唤醒了中国人，中国人学得了一样新的东西，这就是马克思列宁主义。中国产生了共产党，这是开天辟地的大事变。孙中山也提倡“以俄为师”，主张“联俄联共”。总之是从此以后，中国改换了方向。<br>　　艾奇逊是帝国主义政府的发言人，他当然一个字也不愿意提到帝国主义。他将帝国主义的侵略，说成“外来者带来了进取性”。看啊，多么美丽的名称――“进取性”。中国人学了这种“进取性”，不是进取到英国或美国去，只是在中国境内引起了“骚动和不安”，即是革帝国主义及其走狗的命。可惜没有一次成功，都给“进取性”的发明人即帝国主义者打败了。于是掉转头去学别的东西，很奇怪，果然一学就灵。<br>　　“中国共产党是在二十年代初期，在俄罗斯革命的思想推动之下建立起来的”。艾奇逊说对了。这种思想不是别的，就是马克思列宁主义。这种思想，和艾奇逊所说的西方资产阶级的“为以往的侵入者所从来不曾带入中国的高度文化”相比较，不知要高出几多倍。其明效大验，就是和中国旧的封建主义文化相比较可以被艾奇逊们傲视为“高度文化”的那种西方资产阶级的文化，一遇见中国人民学会了的马克思列宁主义的新文化，即科学的宇宙观和社会革命论，就要打败仗。被中国人民学会了的科学的革命的新文化，第一仗打败了帝国主义的走狗北洋军阀，第二仗打败了帝国主义的又一名走狗蒋介石在二万五千里长征路上对于中国红军的拦阻，第三仗打败了日本帝国主义及其走狗汪精卫，第四仗最后地结束了美国和一切帝国主义在中国的统治及其走狗蒋介石等一切反动派的统治。<br>　　马克思列宁主义来到中国之所以发生这样大的作用，是因为中国的社会条件有了这种需要，是因为同中国人民革命的实践发生了联系，是因为被中国人民所掌握了。任何思想，如果不和客观的实际的事物相联系，如果没有客观存在的需要，如果不为人民群众所掌握，即使是最好的东西，即使是马克思列宁主义，也是不起作用的。我们是反对历史唯心论的历史唯物论者。<br>　　非常奇怪，“苏维埃的学说和实践，对于孙中山先生的思想和原则，尤其是在经济方面和党的组织方面，有相当的影响”。被艾奇逊们所傲视的西方的“高度文化”，对于孙先生的影响怎么样呢？艾奇逊没有说。孙先生以大半辈子的光阴从西方资产阶级文化中寻找救国真理，结果是失望，转而“以俄为师”，这是一个偶然的事件吗？显然不是。孙先生和他所代表的苦难的中国人民，一齐被“西方的影响”所激怒，下决心“联俄联共”，和帝国主义及其走狗奋斗和拚命，当然不是偶然的。在这里，艾奇逊不敢说苏联人是帝国主义侵略者，孙中山是向侵略者学习。那末，好了，孙中山可以向苏联人学习，而苏联人并非帝国主义侵略者，为什么孙中山的继承者，孙中山死后的中国人，就不可以向苏联人学习呢？为什么孙中山以外的中国人从马克思列宁主义学了科学的宇宙观和社会革命理论，并使之和中国的特点相结合，发动了中国的人民解放战争和人民大革命，创立了人民民主专政的共和国，就叫做“受苏联控制”，“共产国际的第五纵队”，“赤色帝国主义的走狗”呢？世上有这样高明的逻辑吗？<br>　　自从中国人学会了马克思列宁主义以后，中国人在精神上就由被动转入主动。从这时起，近代世界历史上那种看不起中国人，看不起中国文化的时代应当完结了。伟大的胜利的中国人民解放战争和人民大革命，已经复兴了并正在复兴着伟大的中国人民的文化。这种中国人民的文化，就其精神方面来说，已经超过了整个资本主义的世界。比方美国的国务卿艾奇逊之流，他们对于现代中国和现代世界的认识水平，就在中国人民解放军的一个普通战士的水平之下。<br>　　至此为止，艾奇逊以一个资产阶级大学教授讲述无聊课本的姿态，向人们表示他在寻求中国事变的因果关系。中国之所以发生革命，一因人口太多，二因西方思想的刺激。你们看，他好像是一个因果论者。接下去，他就连这点无聊的伪造的因果论也不见了，出现了一大堆莫名其妙的事变。中国人就是那样毫无原因地互相争权夺利和猜疑仇恨。斗争中的国民党和共产党，双方的精神力量的对比，发生了莫名其妙的变化，一方极度下降，降到零度以下，另一方极度上升，升到狂热的程度。什么原因呢？谁也不知道――这就是艾奇逊所代表的美国的“高度文化”中所固有的逻辑。<br>注释：<br>[1]指美国的独立战争。一七七五年起北美十三个殖民地的人民先后进行推翻英国殖民统治、争取独立的资产阶级革命战争。一七七六年七月四日发表了《独立宣言》，正式宣告脱离英国。英国战败后，被迫在一七八三年签订《巴黎和约》，承认美国独立。<br>[2]参见本卷《为什么要讨论白皮书》注[3]。<br>[3]指一九二一年至一九二四年外蒙古发生的人民革命。在这次革命中，蒙古人民革命党领导蒙古人民，在苏俄的支持和帮助下，驱逐日本帝国主义所支持的白俄军队，推翻外蒙古地方的封建统治，脱离当时中国的北洋政府，建立了蒙古人民共和国。<br>[4]见本书第一卷《湖南农民运动考察报告》。<br>[5]托马斯·罗伯特·马尔萨斯（一七六六――一八三四），英国国教会僧侣，经济学家。在一七九八年出版的《人口原理》一书中，他认为在没有任何限制的条件下，人类社会人口以几何数列增长，而生活资料以算术数列增长，因此人口必定发生过剩现象，只有贫困和罪恶（包括战争和瘟疫等）、“道德的抑制”（包括禁欲、无力赡养子女者不得结婚等）可使生活资料和人口之间恢复平衡。这一理论曾被资产阶级用来为他们对劳动人民的压迫和剥削及其侵略和战争政策辩护。<br>[6]见本书第一卷《论反对日本帝国主义的策略》注[35]。<br>[7]见本书第二卷《中国革命和中国共产党》注[18]。<br>[8]见本书第一卷《论反对日本帝国主义的策略》注[36]。<br>[9]见本书第二卷《中国革命和中国共产党》注[19]。<br>[10]见本书第一卷《矛盾论》注[22]。<br>[11]见本书第二卷《中国革命和中国共产党》注[21]。<br>[12]《共产党宣言》第一章《资产者和无产者》中说：资产阶级“迫使一切民族――如果它们不想灭亡的话――采用资产阶级的生产方式；它迫使它们在自己那里推行所谓文明制度，即变成资产者。一句话，它按照自己的面貌为自己创造出一个世界。”（《马克思恩格斯选集》第1卷，人民出版社1972年版，第255页。）<br>[13] 见本书第一卷《实践论》注[6]。<br>出处：毛泽东选集第四卷  人民出版社1991年6月第2版</p>
 
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="cn">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/27/firstBlog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="MaverickZhang">
-      <meta itemprop="description" content="小木屋">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/27/firstBlog/" class="post-title-link" itemprop="url">firstBlog.md</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-01-27 20:25:12 / Modified: 20:28:03" itemprop="dateCreated datePublished" datetime="2022-01-27T20:25:12+08:00">2022-01-27</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="我的第一篇博客"><a href="#我的第一篇博客" class="headerlink" title="我的第一篇博客"></a>我的第一篇博客</h1>
       
     </div>
 
