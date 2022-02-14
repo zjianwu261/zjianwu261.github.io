@@ -343,10 +343,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-01-28 11:30:35 / Modified: 11:56:51" itemprop="dateCreated datePublished" datetime="2022-01-28T11:30:35+08:00">2022-01-28</time>
+              <time title="Created: 2022-01-28 11:30:35" itemprop="dateCreated datePublished" datetime="2022-01-28T11:30:35+08:00">2022-01-28</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-02-14 18:11:33" itemprop="dateModified" datetime="2022-02-14T18:11:33+08:00">2022-02-14</time>
+              </span>
 
           
 
@@ -360,8 +366,32 @@
 
       
           <p>[toc]</p>
-<h2 id="1-部署hexo"><a href="#1-部署hexo" class="headerlink" title="1. 部署hexo"></a>1. 部署hexo</h2><p>安装node.js，以macOS为例，直接<a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn/download/">官网下载</a>，<img src="../%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/image-20220128114630888.png" alt="image-20220128114630888"></p>
-<h2 id="2-初始化本地文件夹"><a href="#2-初始化本地文件夹" class="headerlink" title="2. 初始化本地文件夹"></a>2. 初始化本地文件夹</h2><h2 id="3-GitHub建立xxx-github-io仓"><a href="#3-GitHub建立xxx-github-io仓" class="headerlink" title="3. GitHub建立xxx.github.io仓"></a>3. GitHub建立xxx.github.io仓</h2><h2 id="4-与typora进行联动"><a href="#4-与typora进行联动" class="headerlink" title="4. 与typora进行联动"></a>4. 与typora进行联动</h2><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2>
+<h2 id="1-部署hexo"><a href="#1-部署hexo" class="headerlink" title="1. 部署hexo"></a>1. 部署hexo</h2><h3 id="1-1-git和node-js安装"><a href="#1-1-git和node-js安装" class="headerlink" title="1.1. git和node.js安装"></a>1.1. git和node.js安装</h3><p>git安装，直接官网下载安装<a target="_blank" rel="noopener" href="https://sourceforge.net/projects/git-osx-installer/">git-osx-installer</a>。如果安装了Homebrew，也可以参考如下操作。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install git</span><br></pre></td></tr></table></figure>
+<p><img src="../img/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/2022-02-14-17-31-46.png"></p>
+<p>node.js安装，以macOS为例，直接<a target="_blank" rel="noopener" href="https://nodejs.org/zh-cn/download/">官网下载</a>，<img src="../img/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/image-20220128114630888.png" alt="image-20220128114630888"></p>
+<h3 id="1-2-生成博客"><a href="#1-2-生成博客" class="headerlink" title="1.2. 生成博客"></a>1.2. 生成博客</h3><p>Hexo 是一个快速、简洁且高效的博客框架。接下来只需要使用 npm 即可完成 Hexo 的安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<h3 id="1-3-初始化本地文件夹"><a href="#1-3-初始化本地文件夹" class="headerlink" title="1.3. 初始化本地文件夹"></a>1.3. 初始化本地文件夹</h3><p>安装 Hexo 完成后，请执行下列命令，Hexo 将会在指定文件夹中新建所需要的文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init &lt;folder&gt;</span><br><span class="line">cd &lt;folder&gt;</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+<p><folder> 表示项目名称，可以自定义，然后 cd 表示进入到生成的项目，npm install 表示安装依赖。</p>
+<h2 id="2-与GitHub建立关联"><a href="#2-与GitHub建立关联" class="headerlink" title="2. 与GitHub建立关联"></a>2. 与GitHub建立关联</h2><p>在GitHub上新建仓库 xxx.github.io，需要注意的是xxx必须是GitHub的账户名<br><img src="../img/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/2022-02-14-17-36-13.png"><br>然后项目就建成了，点击Settings，向下拉到最后有个GitHub Pages，点击Choose a theme选择一个主题。然后等一会儿，输入网址 xxx.github.io<br><img src="../img/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/2022-02-14-17-39-36.png"></p>
+<h2 id="4-与编辑器联动"><a href="#4-与编辑器联动" class="headerlink" title="4. 与编辑器联动"></a>4. 与编辑器联动</h2><p>总体还是倾向于vscode这种all in的编辑器</p>
+<h3 id="4-1-与typora进行联动"><a href="#4-1-与typora进行联动" class="headerlink" title="4.1. 与typora进行联动"></a>4.1. 与typora进行联动</h3><p>需要明确的是，hexo中博文存放在source/_posts文件夹中，而要在网页上显示markdown中的图片，需要以相对的位置。<br>这里将图片存放在source/img文件夹下，并且给个博文的图片单独存放在以博文命名的文件夹中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../img/$&#123;filename&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="../img/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/2022-02-14-17-42-13.png"></p>
+<h3 id="4-2-在vscode中编辑"><a href="#4-2-在vscode中编辑" class="headerlink" title="4.2. 在vscode中编辑"></a>4.2. 在vscode中编辑</h3><p>vscode支持markdown编辑，需要安装剪切板图片粘贴插件<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=mushan.vscode-paste-image">Paste Image</a>和预览插件<a target="_blank" rel="noopener" href="https://shd101wyy.github.io/markdown-preview-enhanced/#/zh-cn/?id=markdown-preview-enhanced">Markdown Preview Enhanced</a>，两者的配置如下：</p>
+<h4 id="4-2-1-Paste-Image配置"><a href="#4-2-1-Paste-Image配置" class="headerlink" title="4.2.1 Paste Image配置"></a>4.2.1 Paste Image配置</h4><p>点击左下角的齿轮，选择命令面板（command+shift+p），输入settings.json，打开工作区设置<br><img src="../img/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/2022-02-14-17-52-37.png"><br>在博客文件夹下会新建.vscode/settings.json文件，粘贴以下即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;pasteImage.path&quot;: &quot;$&#123;projectRoot&#125;/source/img/$&#123;currentFileNameWithoutExt&#125;&quot;,</span><br><span class="line">    &quot;pasteImage.basePath&quot;: &quot;$&#123;projectRoot&#125;/source&quot;,</span><br><span class="line">    &quot;pasteImage.forceUnixStyleSeparator&quot;: true,</span><br><span class="line">    &quot;pasteImage.prefix&quot;: &quot;../&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上配置文件可以在官方的说明文档中找到<br><img src="../img/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/2022-02-14-17-48-45.png"></p>
+<h4 id="4-2-2-Markdown-Preview-Enhanced配置"><a href="#4-2-2-Markdown-Preview-Enhanced配置" class="headerlink" title="4.2.2 Markdown Preview Enhanced配置"></a>4.2.2 Markdown Preview Enhanced配置</h4><p>同样在设置中搜索markdown preview enhanced: image， 将图片位置更改为相对位置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../img/$&#123;filename&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="../img/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/2022-02-14-18-06-47.png"><br>这样点击预览就可以显示博文<br><img src="../img/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/2022-02-14-18-08-53.png"></p>
+<p>最后部署到GitHub上</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo c &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
+<p>其中hexo c是清除已生成博文，hexo g是重新生成，hexo d是推送到远端服务器，即GitHub上。完结撒花 🎉🎉🎉<br><img src="../img/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8typora%E4%BC%98%E9%9B%85%E5%86%99hexo%E5%9B%BE%E7%89%87%E5%8D%9A%E5%AE%A2/2022-02-14-18-11-10.png"></p>
+
       
     </div>
 
