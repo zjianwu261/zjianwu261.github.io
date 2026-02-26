@@ -1,11 +1,11 @@
 # Authors
 
 Name Name:
-  name        : "Name Name"
-  uri         : "https://name.com"
-  email       : "name@name.com"
-  bio         : "This is the first name."
-  avatar      : "bio-photo-2.jpg"
+  name        : "张建武"
+  uri         : "zjianwu261@github.io"
+  email       : "zjw261@hfuu.edu.cn"
+  bio         : "博士毕业于 USTC，目前是合肥大学人工智能与大数据学院专职教师。主要研究方向围绕"算法轻量化-去噪增强-边缘部署"的技术链条，开展面向嵌入式设备的智能图像处理系统研究，具体包括：（1）复杂场景下的深度去噪算法设计；（2）面向端侧计算的神经网络压缩与加速；（3）算法-硬件协同优化及在边缘AI设备上的实时应用验证。"
+  avatar      : "zjw_photo.jpeg"
   twitter     : "name"
   google_plus : "Name"
 
