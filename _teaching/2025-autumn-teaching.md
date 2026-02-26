@@ -9,4 +9,4 @@ location: "合肥, 中国"
 ---
 
 # 课程 PPT
-- [第1章 如何学习单片机](course-materials/2025秋单片机原理与应用/课件第1章 如何学习单片机/index.html)
+- [第1章 如何学习单片机](/course-materials/2025秋单片机原理与应用/课件第1章 如何学习单片机/index.html)
