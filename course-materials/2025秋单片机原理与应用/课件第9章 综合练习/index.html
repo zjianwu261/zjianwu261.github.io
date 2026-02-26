@@ -1,0 +1,3101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 40%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/Step_by_Step_learning.webp" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 55%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第9章 综合练习
+</div>
+
+<div class="" style="position: absolute; left: 10%; top: 70%; height: 20%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《单片机原理与应用》<br><br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div>
+
+<aside class="notes"><p>好的，各位同学，我们继续单片机原理与应用的课程，综合练习。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本次课主要内容
+</div>
+
+<div class="" style="line-height: 2.0; font-size: 45px; position: absolute; left: 5%; top: 15%; height: 60%; width: 44%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 9.1 单片机IO结构和上下拉电阻
+- 9.2 蜂鸣器的学习
+- 9.3 继电器的学习
+- 9.4 编程实用技巧案例
+- 9.5 实用秒表程序例程
+- 9.6 PWM 的初步认识
+- 9.7 PWM 实现呼吸灯效果
+- 9.8 长短按键的应用
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 17%; height: 66%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20250926113008649.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>(模块一：硬件基础与接口 - 约 30 秒)</p>
+<p>“首先，我们将从硬件基础开始，重点学习 9.1 单片机 I/O 结构和上下拉电阻。这是理解如何正确连接外部器件的关键。特别是上下拉电阻，是避免 I/O 口浮空、确保按键和传感器可靠输入输出的必备知识。”</p>
+<p>“紧接着，我们学习三种重要的外部执行器件：</p>
+<p>9.2 蜂鸣器的学习： 如何利用简单的电平控制或 PWM 信号发出声音。
+9.3 继电器的学习： 继电器是单片机实现弱电控制强电的关键桥梁，掌握它，单片机才能真正控制家电、电机等大功率设备。”</p>
+<p>(模块二：编程技巧与实用案例 - 约 30 秒)</p>
+<p>“掌握了硬件接口后，我们将进入程序设计的深度学习。</p>
+<p>9.4 编程实用技巧案例： 这里会分享一些编写高效、稳定、易读代码的经验和技巧。</p>
+<p>9.5 实用秒表程序例程： 秒表是一个非常经典的计时应用，通过它，我们将把定时器、中断和显示技术进行完美结合，实现一个完整的、实用的功能。”</p>
+<p>(模块三：高级应用与进阶控制 - 约 30 秒)</p>
+<p>“最后，我们进入本次课的重点和难点：脉冲宽度调制（PWM）和人机交互的优化。</p>
+<p>9.6 PWM 的初步认识： PWM 是一种非常强大的技术，它是实现数字调光、调速的核心。</p>
+<p>9.7 PWM 实现呼吸灯效果： 我们会用一个极具美感的案例——呼吸灯，来演示 PWM 的实际应用。</p>
+<p>9.8 长短按键的应用： 这是一种提升用户体验的实用技巧，让一个按键拥有‘短按确认’和‘长按设置’等多种功能，极大地优化了人机交互。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.1 单片机IO结构和上下拉电阻
+</div>
+<div class="" style="position: absolute; left: 0%; top: 12%; height: 70%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20250928151827615.png" alt="" style="width: 500px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027153218641.png" alt="" style="width: 500px; object-fit: fill">
+
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 42%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **工作原理（回顾）**
+	- **条件：** **内部输出高** → **才能读取外部**。
+- **实际结构**
+	- **核心：** **MOS管**（非三极管）。
+	- **功能：** **上拉** + **开关**。
+- **MOS管作用**
+	- **输出高电平：** 拉高引脚。
+	- **实现输入（双向）：**
+	    - MOS管必须**关闭**（≈ 内部输出高）。
+	    - 允许**外部电路拉低**引脚，实现准确读取。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果准双向I/O口的内部输出设置为**低电平**，那么此时，外部还能输入**高电平**信号吗？
+</div>
+</div>
+
+<aside class="notes"><p>上节课，我们花了不少时间，深入理解了<strong>准双向I/O口</strong>的运行机制。我们用<strong>三极管</strong>的例子来模拟它的工作过程，得出了一个非常重要的结论：<strong>只有当I/O口内部输出为高电平时，它才能顺利地读取到外部引脚的实际电平状态。</strong></p>
+<p>那么，这个用三极管模拟的原理，在真实的单片机里是如何实现的呢？今天，我们就将目光从模拟电路转向实际的芯片内部结构。</p>
+<p>在真实的单片机中，例如我们最常使用的<strong>51系列单片机</strong>，准双向I/O口的内部结构并非使用三极管，而是使用如下图所示的<strong>MOS管</strong>（金属-氧化物-半导体场效应管）来实现的。</p>
+<p>请大家看屏幕上的这张结构图。虽然核心器件的类型变了，从三极管换成了MOS管，但请大家务必记住：<strong>它们所实现的工作逻辑和特性是完全一致的</strong>。</p>
+<p>在这个结构中，<strong>这个MOS管扮演了一个至关重要的角色</strong>，它本质上是一个<strong>可控的、有源的上拉电阻</strong>，也就是<strong>上拉电阻</strong>和<strong>开关</strong>的组合体。</p>
+<p>它的工作模式可以这样理解：</p>
+<ul>
+<li>当单片机<strong>内部输出高电平</strong>时，这个MOS管会<strong>关闭</strong>，但它能以一个较弱的力度将引脚电位拉到高电平。</li>
+<li>而实现“准双向”功能的关键也在于此：只有当这个MOS管<strong>关闭</strong>（即内部输出为1）时，<strong>外部电路才能用一个低电平信号，轻松地将引脚电位拉低</strong>。此时，内部的读取电路才能准确地检测到这个来自外部的低电平信号。</li>
+</ul>
+<p>如果单片机程序将一个准双向I/O口的内部输出设置为<strong>低电平</strong>，那么此时，外部还能通过这个引脚向单片机输入一个<strong>高电平</strong>信号吗？为什么？</p>
+<p><strong>不能。</strong></p>
+<p>因为当内部输出设置为低电平时，其内部的驱动电路会强制将引脚钳位在低电平。此时，即使外部试图输入一个高电平信号，也会被内部强大的低电平驱动能力所“短路”，无法将引脚电位拉高。因此，内部的读取电路读到的将始终是低电平，无法正确感知外部的高电平输入。</p>
+<p>这也再次印证了我们上节课和本节课强调的那个核心原则：<strong>只有当I/O口内部输出为高电平时，它才能正确地读取外部输入的信号。</strong></p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.1 单片机IO结构和上下拉电阻：MOS 管的两种基本形态
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 66%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027153552097.png" alt="" style="width: 570px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20250926120341370.png" alt="" style="width: 550px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 38%; top: 15%; height: 65%; width: 62%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **MOS管的两种形态**
+	- **基本分类：** MOS管分为**两种基本形态**（代号 P-MOS和 N-MOS）
+- **功能类比与对比**
+	- **类比对象：** 类似于模拟电路中的 **PNP型** 和 **NPN型** **三极管**
+	- **三极管回顾：** NPN 和 PNP 的**导通条件**和**电流方向**相反。
+	- **MOS管互补作用：**
+	    - **P-MOS：** 通常用于**拉高**电平（上拉）。
+	    - **N-MOS：** 通常用于**拉低**电平（下拉）。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：要想实现**高电平**输出，应该主要由**P-MOS还是N-MOS**来负责导通？
+</div>
+</div>
+
+<aside class="notes"><p>我们来看MOS管的基本分类。MOS管主要分为<strong>两种基本形态</strong>：一种是 <strong>P-MOS管</strong>，另一种是 <strong>N-MOS管</strong>。它们是构成所有复杂数字电路，包括我们单片机I/O口的最基本单元。</p>
+<p>为了更好地理解它们，我们可以用一个熟悉的模型来类比，MOS管的这两种类型，就<strong>类似于NPN型和PNP型三极管</strong>，它们是一对功能互补的伙伴。</p>
+<ul>
+<li><p><strong>P-MOS管</strong>，我们可以把它想象成一个<strong>由低电平触发的上拉开关</strong>。当它的栅极（G极）被给予一个低电平时，它就会导通，负责将输出端连接到电源（VCC），从而<strong>拉高电平</strong>。所以，它通常担任 <strong>“上拉”</strong> 的角色。</p>
+</li>
+<li><p><strong>N-MOS管</strong>，则正相反，它是一个<strong>由高电平触发的下拉开关</strong>。当它的栅极为高电平时，它导通，负责将输出端连接到地（GND），从而<strong>拉低电平</strong>。因此，它专门负责 <strong>“下拉”</strong>。</p>
+</li>
+</ul>
+<p>理解这对“黄金搭档”各自的特性和分工，是我们下一步解锁<strong>推挽输出</strong>等高级输出模式威力的大门。</p>
+<p><strong>问题：</strong> 基于刚才的讲解，请大家思考：在我们之前介绍的<strong>推挽输出</strong>结构中，要想实现一个完美的、驱动能力强的<strong>高电平</strong>输出，应该主要由<strong>P-MOS还是N-MOS</strong>来负责导通？为什么？</p>
+<p><strong>解答：</strong><br>应该由 <strong>P-MOS管</strong> 来负责。</p>
+<p><strong>原因在于：</strong><br>推挽输出的核心是“强上拉”和“强下拉”。当需要输出高电平时：</p>
+<ol>
+<li><strong>P-MOS管</strong> 导通，相当于一个闭合的开关，直接将引脚连接到电源VCC，从而为外部电路提供强大的<strong>拉电流</strong>，将电平稳稳地抬到高电平。</li>
+<li>与此同时，<strong>N-MOS管</strong> 必须处于<strong>完全关闭</strong>状态，以避免形成从VCC到GND的直通短路电路。</li>
+</ol>
+<p>所以，<strong>P-MOS是实现强上拉、输出高质量高电平的关键执行者。</strong></p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.1 单片机IO结构和上下拉电阻：开漏输出（Open-Drain / Open-Collector）
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027160731643.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 42%; top: 11%; height: 69%; width: 58%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **结构特点：**
+	- 仅有一个**下拉晶体管（N-MOS）**；
+	- 没有上拉管（即上方的 P-MOS 不存在）；
+	- 需要外部上拉电阻才能输出“高电平”。
+- **结果：**
+	- 当 N-MOS 导通 → 引脚被拉低（0）
+	- 当 N-MOS 截止 → 引脚悬空（外部上拉电阻拉高）
+ - **用途：**
+	- 适合**线与逻辑（wired-AND）**场合；
+	- **I²C 总线**、**多机通信口**；
+	- 可与不同电压系统接口（例如 3.3V MCU 驱动 5V 设备
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么开漏输出在需要驱动比单片机电源电压更高的外部设备时，会非常方便？
+</div>
+</div>
+
+<aside class="notes"><p>我们刚刚学习了P-MOS和N-MOS这对互补开关的特性。现在，我们将利用这对开关中的<strong>N-MOS</strong>，来构建一种非常独特且实用的输出模式。这种模式在总线通信中至关重要，它就是——<strong>开漏输出</strong></p>
+<p>请大家看屏幕上的这张结构图。开漏输出的内部结构有一个非常鲜明的特点：<strong>它只有一颗下拉的N-MOS晶体管，而缺少了那个负责上拉的P-MOS管。</strong></p>
+<p>这种“缺一条腿”的结构，直接决定了它的工作方式：</p>
+<ul>
+<li>当程序<strong>输出逻辑0</strong>时，内部的N-MOS管<strong>导通</strong>，强有力地将引脚拉低到GND。</li>
+<li>当程序<strong>输出逻辑1</strong>时，内部的N-MOS管<strong>截止</strong>，相当于与引脚<strong>彻底断开</strong>。此时，引脚对外呈现<strong>高阻态</strong>，就像悬空一样。<strong>如果没有任何外部措施，引脚电平是不确定的。</strong></li>
+</ul>
+<p>那么，如何让它输出一个确定的高电平呢？答案就在图外：<strong>必须依赖一个外部的上拉电阻</strong>连接到VCC。当N-MOS截止时，这个外部电阻负责将引脚电位拉高。</p>
+<p>正是这种独特的“内部只能拉低，靠外部才能拉高”的特性，赋予了开漏输出两大无可替代的用途：  </p>
+<ul>
+<li>第一，<strong>实现“线与”逻辑</strong>：多个开漏输出可以直接连在一根总线上，任何一方输出0，总线就是0，只有所有人都输出1，总线才是1。这天然实现了逻辑“与”的功能，是<strong>I²C总线</strong>等通信协议的基础。  </li>
+<li>第二，<strong>方便的电平转换</strong>：因为高电平由外部上拉电阻的电源决定，我们可以轻松地用一颗3.3V的单片机，通过控制开漏输出，去驱动一个5V的系统。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.1 单片机IO结构和上下拉电阻：推挽输出（Push-Pull）
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027161648439.png" alt="" style="width: 500px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 42%; top: 11%; height: 69%; width: 58%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **结构特点：**
+	- 有一对互补的 MOS 管：上方 P-MOS、下方 N-MOS；
+	- P-MOS 负责输出高电平，N-MOS 负责输出低电平；
+	- 二者不会同时导通（避免短路）。
+- **结果：**
+	- 输出“高”时：P-MOS 导通，上拉能力强；
+	- 输出“低”时：N-MOS 导通，下拉能力强；
+	- 输出电平切换速度快，可提供较大驱动电流。
+- **用途：**
+	- 普通数字输出；驱动 LED、继电器、晶体管等；
+	- **SPI、UART** 等高速信号线。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：强推挽输出模式由于驱动能力强，在实际使用中需要注意什么？
+</div>
+</div>
+
+<aside class="notes"><p>开漏输出，它虽然灵活，但在驱动能力上有所限制。接下来，我们介绍一种追求<strong>高速度和强驱动</strong>的输出模式——<strong>强推挽输出（Strong Push-Pull Output）</strong></p>
+<p>强推挽输出，顾名思义，它拥有<strong>比较强的驱动能力</strong>。为什么它驱动能力强呢？这就要看它的内部结构。</p>
+<p>当内部输出一个高电平时，电流是<strong>通过 MOS 管直接输出</strong>的，注意这里<strong>没有串联电阻进行限流</strong>。因此，它能提供的电流输出能力是比较大的。同理，如果内部输出一个低电平，它将允许<strong>反向电流</strong>（即灌入电流）也可以很大。</p>
+<p>总结来说，<strong>强推挽的一个主要特点就是驱动能力强</strong>，无论是在输出高电平（拉电流）还是输出低电平（灌电流）时，都能提供比一般 I/O 口更大的电流。这使得它非常适合用来驱动对电流要求较高的负载，或者在高速信号传输时保持信号完整性。</p>
+<p><strong>简单问题：</strong> 强推挽输出模式由于驱动能力强，在实际使用中需要注意什么？</p>
+<p><strong>解答：</strong> 强推挽输出由于没有串联限流电阻，当输出端意外发生<strong>短路</strong>时，可能会流过非常大的瞬间电流，这有可能会<strong>烧坏</strong>单片机的 I/O 口或其内部的 MOS 管。因此，在使用强推挽模式驱动外部器件时，需要确保外部电路连接正确，并在必要时（例如连接到外部长线或容性负载时）考虑增加<strong>外部限流保护</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.1 单片机IO结构和上下拉电阻：高阻态（High Impedance, Hi-Z）
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027161909785.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 42%; top: 11%; height: 69%; width: 58%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **结构特点：**
+	- 输出端与内部电路**断开**，即内部既无上拉也无下拉晶体管导通。相当于把端口“悬空”。
+	- 输入电路仍然存在，但输出驱动电路关闭。
+- **结果：**
+	- 引脚表现为“第三态”或“高阻态”，既不输出高电平也不输出低电平。
+	- 外部信号可自由驱动该引脚而不受干扰。
+- **用途：**
+	- 当端口作为输入使用；
+	- 当总线（例如 I²C、SPI 多主）需要共享时。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们学习了开漏输出，它通过“断开”内部上拉，实现了总线的灵活控制。现在，我们要将这种“断开”的理念发挥到极致，探讨一种既不输出高、也不输出低的特殊状态，它在共享总线和模拟信号读取中扮演着至关重要的角色——这就是<strong>高阻态</strong>。</p>
+<p>请大家看屏幕上的结构图。高阻态，有时也叫做<strong>高阻抗状态</strong>或<strong>三态</strong>，它的核心特点可以用一个词概括：<strong>“断开”</strong>。</p>
+<p>在硬件结构上，这意味着内部的<strong>上拉（P-MOS）和下拉（N-MOS）驱动管全部处于关闭状态</strong>。输出电路与引脚彻底断开连接，使得引脚对内部输出呈现极高的阻抗。</p>
+<p>这种结构带来了一个直接的结果：</p>
+<ul>
+<li>引脚<strong>既不主动输出高电平，也不主动输出低电平</strong>。它放弃了对引脚电平的控制权，使其处于一种“悬空”或“静默”的状态。</li>
+<li>正因为放弃了控制权，<strong>外部的信号就可以毫无干扰地驱动这个引脚</strong>，改变其电平，而不会被内部强大的驱动电路所影响。</li>
+</ul>
+<p>那么，这种“主动放弃”有什么用呢？它的用途非常关键：<br>第一，这是将端口作为<strong>纯输入口</strong>，尤其是<strong>模拟输入口</strong>（如ADC采样）时的标准配置。因为它确保了外部微弱的模拟信号不会被扭曲。<br>第二，在<strong>多设备共享的同一条总线</strong>上（例如SPI从设备、I²C从设备地址线），所有不参与当前通信的设备都必须将其接口设置为高阻态，从而“隐身”起来，让出总线的控制权，避免信号冲突。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.1 单片机IO结构和上下拉电阻：上下拉电阻
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027160731643.png" alt="" style="width: 800px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027161909785.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 11%; height: 69%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **电平不确定问题**
+	- 开漏输出和高阻态模式下
+	- 引脚悬空导致电平不确定
+- **基本概念**
+	- **上拉电阻**：信号→电阻→VCC（默认高电平）
+	- **下拉电阻**：信号→电阻→GND（默认低电平）
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们刚刚讨论了开漏输出和高阻态，这两种模式都有一个共同点：当内部电路断开时，引脚电平是<strong>不确定的</strong>。这种不确定性显然会引发逻辑错误，那么，如何在电路设计中主动地、可靠地给这个不确定的信号一个确定的“家”呢？答案就是使用<strong>上拉电阻</strong>和<strong>下拉电阻</strong>。</p>
+<p>上拉与下拉电阻，是数字电路中最基础也最重要的被动元件之一。它们的作用非常直观：</p>
+<ul>
+<li><strong>上拉电阻</strong>：将一个不确定的、悬空的信号，通过一个电阻连接到<strong>电源（VCC）</strong>，将其<strong>锚定在高电平</strong>。</li>
+<li><strong>下拉电阻</strong>：将一个不确定的、悬空的信号，通过一个电阻连接到<strong>地（GND）</strong>，将其<strong>锚定在低电平</strong>。</li>
+</ul>
+<p>同时，这个电阻本身也起到了<strong>限流</strong>的作用，防止在电平被强制拉高或拉低时产生过大的电流。</p>
+<p>我们来看一个最经典的应用场景：回想一下我们刚学的<strong>开漏输出</strong>模式。当内部N-MOS管关闭时，引脚悬空，电平不确定。这时，我们<strong>在外部增加一个上拉电阻接到VCC</strong>。那么，当MOS管关闭时，这个电阻就会将引脚稳稳地拉到高电平，从而输出一个确定的“1”。</p>
+<p>同理，对于一个设置为<strong>高阻态输入</strong>的引脚，如果我们在外部不连接任何信号源，为了防止静电感应或电路噪声导致引脚电平乱跳，我们也可以为它连接一个上拉或下拉电阻，给它一个默认的、确定的逻辑状态。</p>
+<p>所以，上拉和下拉电阻就像是电路中的“锚”，为那些浮动的信号节点提供了一个稳定的参考点。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.1 单片机IO结构和上下拉电阻：上拉电阻应用
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027173919827.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+1. **开漏输出必备**
+    - 无上拉电阻无法输出高电平
+2. **增强驱动能力**
+    - 外接小电阻提升输出电流
+    - 用于驱动LED等负载
+3. **限流保护**
+    - 在电平转换电路中限流
+4. **抗干扰设计**
+    - 固定未使用引脚电平
+    - 减少电磁干扰和功耗
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们学习了上拉和下拉电阻的基本作用——为不确定的信号提供一个稳定的电平。现在，让我们进一步了解，这两个看似简单的电阻，在实际电路设计中还能实现哪些更强大的功能。</p>
+<p>第一，这是开漏输出的<strong>标配</strong>。正如我们所学，<strong>OC门（集电极开路门）或单片机的开漏输出要输出高电平，必须外接上拉电阻</strong>。没有它，高电平就无从谈起。</p>
+<p>第二，它能<strong>增强IO口的驱动能力</strong>。我们以经典的STC89C52单片机为例，它的IO口内部自带一个约20kΩ的上拉电阻。在5V电压下，仅靠内部电阻，最大输出电流只有约250微安，非常微弱。如果我们在外部并联一个更小的上拉电阻，总电流输出能力就会显著提升，可以驱动更重的负载，比如更亮的LED。</p>
+<p>第三，它本身就是一个<strong>限流电阻</strong>。在一些电平转换电路中，比如用5V信号控制一个12V的器件，上拉电阻到12V电源，既能完成电平抬升，也严格限制了电流，保护了双方电路。</p>
+<p>第四，它还能<strong>提高系统的抗干扰能力</strong>。对于单片机中那些未使用的、悬空的引脚，外界的电磁干扰很容易导致其电平紊乱，虽然可能不影响程序逻辑，但会增加芯片功耗和系统噪声。为这些悬空引脚加上一个上拉或下拉电阻，给它一个确定的归宿，就能有效抑制干扰，让系统运行更加稳定可靠。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.1 单片机IO结构和上下拉电阻：如何选择上下拉电阻
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20241005232254479.png" alt="" style="width: 1300px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 48%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **为低功耗考虑：**
+    - **倾向：** 电阻越大越好。  
+    - **原理：** 静态电流 `$I=V/R$` 最小。 
+- **为强驱动考虑：**
+    - **倾向：** 电阻越小越好。 
+    - **作用：** 提供更大电流，提升驱动力。
+- **为高速度考虑：**
+    - **倾向：** 电阻不能太大。
+    - **原因：** 限制开漏输出的上升沿速度`$\tau = RC$`
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们深入探讨了上拉电阻的四大实战应用，知道了为什么要用它。那么，在实际的电路设计中，当我们面对琳琅满目的电阻值时，<strong>究竟该如何选择这个阻值呢？</strong> 这并不是一个随意的选择，而是一个关键的权衡艺术。</p>
+<p>选择上拉电阻的阻值，本质上是在三个相互矛盾的需求之间找到一个最佳的平衡点。这三个原则就像是一个“不可能三角”。</p>
+<p><strong>第一原则：功耗要低 —— 电阻越大越好</strong><br>从节能和降低发热的角度看，我们希望电阻越大越好。因为根据欧姆定律 I = V/R，电阻越大，从电源VCC流到地的静态电流就越小，系统功耗也就越低。</p>
+<p><strong>第二原则：驱动要强 —— 电阻越小越好</strong><br>但从驱动能力角度看，结论正好相反。当我们需要为LED等负载提供较大电流时，或者需要快速充放电时，电阻越小，能提供的电流才越大，驱动能力才越强。</p>
+<p><strong>第三原则：速度要快 —— 电阻不能太大（关键于开漏输出）</strong><br>这一点对于开漏输出尤其重要。大家请看这个波形对比图。由于引脚对地存在寄生电容，电平切换时，高电平的上升过程并不是直上直下，而是需要对电容充电。电阻越大，充电速度越慢，导致<strong>信号上升沿变得平缓</strong>。</p>
+<p>如果信号频率很高，平缓的上升沿会导致逻辑误判：高电平还没稳定建立，就又被拉低了。因此，在高速数字总线（如I2C）上，上拉电阻的阻值有严格的上限。</p>
+<p><strong>总结来说：</strong> 我们的设计就是在<strong>低功耗、强驱动、高速度</strong>这三者之间，根据具体应用场景做出最合适的折中。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.2 蜂鸣器的学习
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027223452268.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 48%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 结构分类
+	- 压电式：压电陶瓷振动，声音尖锐 → 警报器
+	- 电磁式：线圈电磁驱动，声音柔和 → 提示音
+- 驱动分类
+	- 有源蜂鸣器：自带振荡源，电平驱动 → 简单
+	- 无源蜂鸣器：无振荡源，脉冲驱动 → 可调音
+- 核心区别
+	- "源"=振荡源。
+	- 有源：给电平就响。无源：给脉才响
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么通常需要在单片机IO口和蜂鸣器之间连接一个三极管，而不是直接将蜂鸣器接到IO口上？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，上节课我们深入研究了单片机IO口的结构与上下拉电阻，重点解决了如何确保引脚电平稳定以及驱动电流合理的问题。今天，我们将把这些知识学以致用，来驱动一个非常典型的输出设备——蜂鸣器。看看我们的单片机是如何从‘静默’的电流控制，实现‘有声’的信号输出的。</p>
+<p>蜂鸣器作为一种电声转换器件，因其成本低、控制方便，在我们的生活中无处不在。比如，家里燃气泄漏时报警器发出的尖锐鸣叫，或者办公室打印机完成任务时那一声清脆的‘嘀’响，背后都是蜂鸣器在工作</p>
+<p>“要正确驱动它，我们首先得了解它的分类。蜂鸣器主要有两种分类维度：</p>
+<ul>
+<li>第一，按结构分类：<ul>
+<li>压电式蜂鸣器：依靠压电陶瓷片振动，声音高频、尖锐，非常适合做警报器，穿透力强。</li>
+<li>电磁式蜂鸣器：依靠电磁线圈驱动，声音通常更柔和，常用于打印机等设备的常规提示音。</li>
+</ul>
+</li>
+<li>第二，按驱动方式分类（这是本节课的核心重点）：请注意，这里的 ‘源’特指振荡源，与电源无关。<ul>
+<li>有源蜂鸣器：内部自带振荡电路。驱动它极其简单——回想我们驱动LED的方式——只需要给一个持续的高或低电平，它就能自己发出持续的声音。这就像打开一个音乐盒，只要上发条它就会自己播放。</li>
+<li>无源蜂鸣器：内部没有振荡源。驱动它需要一点技巧——不能直接给电平，而必须由我们的单片机IO口输出一个特定频率的脉冲信号来驱动它发声。这就像弹奏一把小提琴，弓（电平）一直在拉，但手指（程序）必须在弦（频率）上不断按动，才能发出准确的音符。”</li>
+</ul>
+</li>
+</ul>
+<p>“基于我们上节课的IO口知识，这里有一个驱动层面的问题：当我们用一个IO口直接驱动一个无源蜂鸣器时，为什么通常需要在单片机IO口和蜂鸣器之间连接一个三极管或MOS管，而不是直接将蜂鸣器接到IO口上？”</p>
+<p>（停顿片刻，给听众思考时间）</p>
+<p>【解答问题】
+“回答得非常好！核心原因就是驱动能力。
+上节课我们学过，单片机单个IO口的拉电流和灌电流能力是有限的（通常仅20mA左右）。而无源蜂鸣器在工作时需要的瞬时电流可能远超这个值。直接连接可能会烧毁IO口或导致系统不稳定。
+因此，我们需要用一个三极管作为电流放大开关：让单片机的微弱电流信号去控制三极管的通断，再由三极管来承担驱动蜂鸣器所需的大电流。这正是将我们学到的驱动理论付诸实践的关键一步。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.2 蜂鸣器的学习
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+#include <reg52.h>
+sbit BUZZ = P1^6;  // 蜂鸣器控制引脚
+void main() 
+{
+    EA = 1;        // 使能总中断
+    TMOD = 0x01;   // 设置 T0 为模式 1
+    TH0 = 0xFC;    // 为 T0 赋初值 0xFC67,定时 1ms
+    TL0 = 0x67;
+    ET0 = 1;       // 使能 T0 中断
+    TR0 = 1;       // 启动 T0
+    BUZZ = 0;      // 启动蜂鸣器鸣叫
+
+    while (1);
+}
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+/* T0 中断服务函数,用于控制蜂鸣器发声 */
+void InterruptTimer0() interrupt 1 
+{
+    static unsigned int tmr = 0;
+    TH0 = 0xFC;    // 重新加载重载值
+    TL0 = 0x67;
+    tmr++;
+    if (BUZZ == 0) {
+        if (tmr >= 500) {  // 蜂鸣器鸣叫 0.5s
+            BUZZ = 1;
+            tmr = 0;
+        }
+```
+```C
+    } else {
+        if (tmr >= 1500) { // 蜂鸣器关闭 1.5s
+            BUZZ = 0;
+            tmr = 0;
+        }
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我们将 `static unsigned int tmr = 0;` 中的 `static` 关键字移除，程序还能正常运行吗？
+</div>
+</div>
+
+<aside class="notes"><p>既然我们已经理解了有源蜂鸣器是通过简单的电平控制来驱动的，那么接下来，我们就来看一个实际的代码案例，利用51 单片机的定时器中断，来实现一个经典的、有节奏的报警声。</p>
+<p>大家请看代码的 <code>main</code> 函数部分：</p>
+<ol>
+<li><strong>引脚定义：</strong> 我们首先用 <code>sbit BUZZ = P1^6;</code> 定义了蜂鸣器控制引脚 <code>$\text{P1.6}$</code>。</li>
+<li><strong>中断使能：</strong> <code>EA = 1;</code> 开启总中断。</li>
+<li><strong>定时器配置：</strong><ul>
+<li><code>TMOD = 0x01;</code> 将定时器 <code>$T_0$</code> 设置为模式 <code>$\text{1}$</code>（<code>$\text{16}$</code> 位定时器）。</li>
+<li><code>TH0 = 0xFC; TL0 = 0x67;</code> 赋予初值，计算可得 <code>$(0\text{xFFFF} - 0\text{FC67} + 1)$</code> 刚好等于 <code>$1000$</code> 个机器周期，即**定时 <code>$\text{1ms}$</code>**。</li>
+<li><code>ET0 = 1; TR0 = 1;</code> 分别<strong>使能</strong> <code>$T_0$</code> 中断并<strong>启动</strong> <code>$T_0$</code> 运行。</li>
+</ul>
+</li>
+<li><strong>初始状态：</strong> <code>BUZZ = 0;</code> 在程序启动时，首先给蜂鸣器引脚一个<strong>低电平</strong>（假设是低电平驱动），<strong>启动蜂鸣器鸣叫</strong>。</li>
+</ol>
+<p>**定时器中断服务函数 (<code>InterruptTimer0</code>)**，这是实现节奏控制的核心：</p>
+<ol>
+<li><p><strong>重装初值：</strong> 每次进入中断，我们必须<strong>重新加载</strong> <code>TH0</code> 和 <code>TL0</code> 的初值 <code>$0\text{FC67}$</code>，确保下一次仍准确定时 <code>$\text{1ms}$</code>。</p>
+</li>
+<li><p><strong>计时与计数器：</strong> 我们使用一个静态变量 <code>static unsigned int tmr = 0;</code> 来累积 <code>$\text{1ms}$</code> 的中断次数。</p>
+</li>
+<li><p><strong>鸣叫阶段 (BUZZ == 0)：</strong></p>
+<ul>
+<li>当蜂鸣器正在响时，如果 <code>tmr</code> 达到 <code>$\text{500}$</code>（即 <code>$500 \times 1\text{ms} = 0.5\text{s}$</code>），我们执行：<ul>
+<li><code>BUZZ = 1;</code> <code>$\rightarrow$</code> <strong>关闭蜂鸣器。</strong></li>
+<li><code>tmr = 0;</code> <code>$\rightarrow$</code> <strong>清零计时器</strong>，准备计时关闭时间。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>关闭阶段 (BUZZ == 1)：</strong></p>
+<ul>
+<li>当蜂鸣器处于关闭状态时，如果 <code>tmr</code> 达到 <code>$\text{1500}$</code>（即 <code>$1500 \times 1\text{ms} = 1.5\text{s}$</code>），我们执行：<ul>
+<li><code>BUZZ = 0;</code> <code>$\rightarrow$</code> <strong>再次启动蜂鸣器鸣叫。</strong></li>
+<li><code>tmr = 0;</code> <code>$\rightarrow$</code> <strong>清零计时器</strong>，准备计时鸣叫时间。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>最终效果：</strong> 程序将实现一个 <code>$0.5\text{s}$</code> 鸣叫、 <code>$1.5\text{s}$</code> 停止的循环报警效果。</p>
+<p><strong>问题：</strong> 在这段代码中，如果我们将 <code>static unsigned int tmr = 0;</code> 中的 <code>static</code> 关键字移除，程序还能正确实现 <code>$0.5\text{s}$</code> 鸣叫、<code>$1.5\text{s}$</code> 停止的循环效果吗？为什么？</p>
+<p><strong>解答：</strong> <strong>不能。</strong> 移除 <code>static</code> 关键字后，<code>tmr</code> 变量将变成一个普通的局部变量。每次中断服务函数 (<code>InterruptTimer0</code>) 被调用时，<code>tmr</code> 都会被**重新初始化为 <code>$0$</code>**。这样，<code>tmr</code> 永远无法累加到 <code>$\text{500}$</code> 或 <code>$\text{1500}$</code>，导致蜂鸣器永远停留在启动时设置的鸣叫状态 (<code>BUZZ = 0</code>)，无法实现循环的响停效果。<code>static</code> 确保了 <code>tmr</code> 的值在函数调用之间得以保持（即持久性）。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.3 继电器的学习
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027231823479.png" alt="" style="width: 700px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027231842048.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **定义**
+	- **本质：** 电磁控制开关。
+	- **用途：** 单片机（弱信号）控制高功率负载。
+- **两大核心功能**
+	- **功率放大：** 小电流/低压 `$\rightarrow$` 大电流/高压。
+	- **安全隔离：** 隔离控制电路与高压负载。
+- **工作原理**
+	- **输入端：** 接收单片机低压信号。
+	- **输出端：** 控制高压电路通断。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>同学们，我们刚才讨论了如何处理像蜂鸣器这样的小电流负载。但是，在实际的工业控制或智能家居项目中，单片机经常需要面对一些‘大家伙’——比如驱动强大的电机、高功率的灯具，甚至直接控制市电电器。很显然，单片机 <code>$\text{IO}$</code> 口那点微弱的电流是远远不够的。为了让单片机这个‘小个子’也能控制‘大力士’，我们就需要一个关键的中间控制元件，它就是——<strong>继电器</strong>。</p>
+<p>继电器本质上是一个<strong>电控开关</strong>，它的使命是根据我们给出的<strong>控制信号</strong>来接通或者断开一个完全独立的电流回路。它的内部结构可以清晰地划分为两个系统：一个是<strong>控制系统</strong>，它接收来自单片机那边的低电压、小电流信号；另一个是<strong>被控制系统</strong>，也就是负责接通或断开高电压、大电流的执行电路。当我们的控制信号达到预定条件时，继电器就会“动作”，利用电磁原理实现输出电路的导通或者断开。</p>
+<p>继电器的核心价值体现在其强大的功能上。首先，它实现了至关重要的<strong>电路隔离</strong>，将单片机工作的安全低压环境与高电压、大电流的负载电路彻底隔离开来，从而保护了我们宝贵的单片机免受干扰和损坏。其次，继电器承担了<strong>信号转换和放大</strong>的角色。它可以把输入端微不足道的<strong>小电流、低电压信号</strong>，华丽地转换成足以驱动各种高功率负载的<strong>大电流、高电压信号</strong>。除此之外，继电器还具有<strong>灵敏度高、动作速度快、体积小巧</strong>等一系列优点。正是凭借这些特性，继电器才能在电力系统、通信系统以及我们关注的自动控制系统等领域得到如此广泛而重要的应用。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.3 继电器的学习
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027232232621.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+
+<div class="" style="line-height: 1.6; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **引脚类型 (`$\text{5}$` 个)：**
+	- `$\text{2}$` 个控制引脚。
+	- `$\text{3}$` 个被控引脚 (`$\text{COM}, \text{NO}, \text{NC}$`)。
+- **驱动状态**
+	- **RELAY 高电平 (`$\text{1}$`)：**继电器**释放**，`$\text{COM}$` 连接 `$\text{NC}$`
+	- **RELAY 低电平 (`$\text{0}$`)：** 继电器**吸合**，`$\text{COM}$` 连接 `$\text{NO}$`
+ - **连接选择与应用**
+	- **常开连接：** 用于**启动**设备（默认断开），比如比如声控灯、电动门禁等
+	- **常闭连接：** 用于**安全断开**（默认闭合）。安全监测系统中，当检测到气体泄漏时，继电器激活
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们的 <code>$\text{Kkingst51}$</code> 开发板使用的是一个 <code>$\text{5V}$</code> 控制系统继电器，它最大能够控制 <code>$\text{250V}$</code> 的电压，这完全满足了我们控制大部分家用电器的需求。</p>
+<p>这个继电器共有 <code>$\text{5}$</code> 个引脚：</p>
+<ul>
+<li><p><strong>控制系统引脚 (<code>$\text{2}$</code> 个)：</strong> 用于连接单片机 <code>$\text{IO}$</code> 口和 <code>$\text{5V}$</code> 电源。</p>
+</li>
+<li><p><strong>被控制系统引脚 (<code>$\text{3}$</code> 个)：</strong> 构成一个<strong>单刀双掷 (<code>$\text{SPDT}$</code>) 开关</strong>。它们分别是：</p>
+<ul>
+<li><strong>公共端 (<code>$\text{COM}$</code>)：</strong> 即开关的中心点。</li>
+<li><strong>常开 (<code>$\text{NO}$</code> - Normally Open)：</strong> 默认断开的触点。 </li>
+<li><strong>常闭 (<code>$\text{NC}$</code> - Normally Closed)：</strong> 默认闭合的触点。4</li>
+</ul>
+</li>
+<li><p><strong>状态一 (继电器未吸合)：</strong> 当单片机的 <code>$\text{RELAY}$</code> 引脚输出<strong>高电平</strong>时，三极管截止。此时继电器线圈控制端没有电流流过，继电器处于<strong>释放状态</strong>。这时，<code>$\text{1}$</code> 脚 (<code>$\text{NC}$</code>) 和公共端 <code>$\text{2}$</code> 脚 (<code>$\text{COM}$</code>) 是连接在一起的。</p>
+</li>
+<li><p><strong>状态二 (继电器吸合)：</strong> 当单片机的 <code>$\text{RELAY}$</code> 引脚输出<strong>低电平</strong>时，三极管导通，电流流过继电器线圈。由于磁力的作用，触点发生切换，此时 <code>$\text{3}$</code> 脚 (<code>$\text{NO}$</code>) 会和公共端 <code>$\text{2}$</code> 脚 (<code>$\text{COM}$</code>) <strong>吸合</strong>到一起。</p>
+</li>
+</ul>
+<p>继电器的用法可以分为常开和常闭两种连接方式：</p>
+<ol>
+<li><p><strong>常开 (<code>$\text{NO}$</code>)：</strong></p>
+<ul>
+<li><strong>特点：</strong> 线圈未通电时，触点处于<strong>断开状态</strong>。</li>
+<li><strong>应用场景：</strong> 常用于<strong>特定条件下启动</strong>设备的场景，比如声控灯、电动门禁等，即需要控制信号来“打开”设备。</li>
+</ul>
+</li>
+<li><p><strong>常闭 (<code>$\text{NC}$</code>)：</strong></p>
+<ul>
+<li><strong>特点：</strong> 线圈未通电时，触点处于<strong>闭合状态</strong>。</li>
+<li><strong>应用场景：</strong> 常用于<strong>特定条件下断开</strong>连接的场合，例如在安全监测系统中，当检测到气体泄漏时，继电器激活，会<strong>断开常闭点</strong>来切断电源，实现紧急安全关停。</li>
+</ul>
+</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.3 继电器的学习
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251027234159164.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```
+#include <reg52.h>
+sbit RELAY = P3^3; // 继电器控制引脚
+void main() {
+    unsigned int i;
+    RELAY = 0; // 继电器吸合
+    for (i = 0; i < 50000; i++); // 延时一段时间（空转延时）
+
+    RELAY = 1; // 继电器释放
+    while (1); // 程序停在此处，防止继续执行
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们已经明确了 <code>$\text{Kingst51}$</code> 开发板上的继电器是采用<strong>低电平驱动</strong>的。现在，我们来看一个最简单的程序，演示如何通过单片机 <code>$\text{P3.3}$</code> 引脚来控制继电器完成一次<strong>吸合</strong>和<strong>释放</strong>的动作。</p>
+<h3 id="一、代码初始化与引脚定义"><strong>一、代码初始化与引脚定义</strong></h3>
+<p>大家请看代码的主要部分：</p>
+<ol>
+<li><p><strong>引脚定义：</strong> 我们使用 <code>sbit RELAY = P3^3;</code> 将继电器控制引脚定义为单片机的 <code>$\text{P3.3}$</code> 口。</p>
+</li>
+<li><p><strong>主函数 (<code>main</code>)：</strong> 程序的主体逻辑非常简单，就是三个顺序步骤。</p>
+</li>
+</ol>
+<h3 id="二、控制逻辑实现"><strong>二、控制逻辑实现</strong></h3>
+<ol>
+<li><p><strong>步骤一：继电器吸合</strong></p>
+<ul>
+<li><p><code>RELAY = 0;</code></p>
+</li>
+<li><p><strong>原理回顾：</strong> 因为我们的电路是<strong>低电平驱动</strong>的，输出 <code>$\text{0}$</code> (低电平) 会使三极管导通，继电器线圈得电，触点吸合 (<code>$\text{COM}$</code> 接 <code>$\text{NO}$</code>)。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>步骤二：维持吸合状态（延时）</strong></p>
+<ul>
+<li><p><code>for (i = 0; i &lt; 50000; i++);</code></p>
+</li>
+<li><p>这是一个<strong>空循环延时</strong>。它的作用是让继电器在吸合状态下维持一段可观察的时间，方便我们看到效果。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>步骤三：继电器释放</strong></p>
+<ul>
+<li><p><code>RELAY = 1;</code></p>
+</li>
+<li><p><strong>原理回顾：</strong> 输出 <code>$\text{1}$</code> (高电平) 使三极管截止，线圈失电，继电器<strong>释放</strong>，触点恢复默认状态 (<code>$\text{COM}$</code> 接 <code>$\text{NC}$</code>)。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>步骤四：程序停止</strong></p>
+<ul>
+<li><p><code>while (1);</code></p>
+</li>
+<li><p>程序进入死循环，保持继电器在<strong>释放</strong>状态，防止主函数继续运行导致意外。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>整体效果：</strong> 运行这段程序后，继电器会“咔嗒”一声吸合，维持一小段时间后，再“咔嗒”一声释放，并停在释放状态。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.4 编程实用技巧案例：自动类型转换 (隐式)
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251028105507826.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- 类型转换基础
+	- **目的：** 统一混合运算中的数据类型。
+	- **方式：**自动转换 (隐式)、强制转换 (显式)
+- 自动类型转换 (隐式)
+	- **原则：** **短 → 长** (字节数少的 → 字节数多的)。
+	- **风险：** 运算结果可能**溢出**目标变量范围。
+	- **案例：**
+	    - `int C = (unsigned char)A * (int)B;` 100×700=70000 (运算结果)。
+	    - C 为 int 型：**溢出** → 结果 4464 (70000(mod65536))
+	- **结论：** 警惕自动转换后的**结果溢出**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么在例 2 中，100×700 得到 70000，最后的结果是 4464，而不是 `int` 类型的最大值 65535？
+</div>
+</div>
+
+<aside class="notes"><p>好的，上一个技巧我们了解了继电器，现在我们来看编程实用技巧案例，第一个是<strong>数据类型转换</strong></p>
+<h3 id="一、不同数据类型间的相互转换">一、不同数据类型间的相互转换</h3>
+<p>在 C 语言编程，特别是在单片机这种资源受限的环境中，我们经常会遇到不同数据类型混合运算的情况。</p>
+<p>大家要记住一个基本原则：<strong>在 C 语言里，不同数据类型之间是可以混合运算的。</strong></p>
+<p>当一个表达式中出现数据类型不一致时，编译器会先将它们<strong>转换为同一种类型</strong>，然后再进行计算。</p>
+<p>实现类型转换主要有两种方法：</p>
+<ol>
+<li><strong>自动类型转换 (隐式转换)</strong></li>
+<li><strong>强制类型转换 (显式转换)</strong></li>
+</ol>
+<h3 id="二、自动类型转换-隐式转换">二、自动类型转换 (隐式转换)</h3>
+<p>自动类型转换遵循一个核心原则：<strong>短字节数据向长字节数据转换。</strong> 目标是确保计算过程中不丢失精度。</p>
+<p>我们来看两个例子：</p>
+<p><strong>例 1：基本转换</strong></p>
+<ul>
+<li><code>unsigned char A = 10;</code></li>
+<li><code>int B = 700;</code></li>
+<li><code>int C = A * B;</code></li>
+</ul>
+<p>在这个运算中，<code>A</code> 是短字节的 <code>unsigned char</code>，<code>B</code> 是长字节的 <code>int</code>。根据原则，<code>A</code> 会被<strong>自动提升</strong>为 <code>int</code> 型。</p>
+<p>因此，实际计算是：<code>C = (int)A * B</code>，结果 10×700=7000。由于 7000 在 <code>int</code> 范围内，所以 <code>C</code> 等于 7000。</p>
+<p><strong>例 2：计算溢出问题</strong></p>
+<p>现在我们稍作修改：</p>
+<ul>
+<li><code>unsigned char A = 100;</code></li>
+<li><code>int B = 700;</code></li>
+<li><code>int C = A * B;</code></li>
+</ul>
+<p>100×700=70000。</p>
+<p>很多同学会直接得出 <code>C = 70000</code>。<strong>但这是错误的！</strong></p>
+<p><strong>问题出在哪里？</strong></p>
+<ol>
+<li>首先，<code>A</code> 仍然被提升为 <code>int</code>，计算过程得到 <code>70000</code>。</li>
+<li><strong>关键是结果类型</strong>：<code>C</code> 的变量类型是 <code>int</code> 型。对于许多单片机平台（如 16 位），<code>int</code> 的最大值通常是 65535。</li>
+<li><strong>结果溢出</strong>：70000 超过了 <code>int</code> 的最大范围，导致<strong>溢出</strong>。</li>
+</ol>
+<p><strong>溢出的结果计算：</strong>：它的正确结果是 70000−65536=4464。</p>
+<p>这告诉我们一个重要的教训：在单片机编程中，<strong>即使是自动类型转换，如果运算结果超出了目标变量的存储范围，仍然会产生错误的结果——溢出。</strong> 这也是我们在进行数据处理时，需要时刻警惕的“陷阱”。</p>
+<p><strong>提问：</strong> 为什么在例 2 中，100×700 得到 70000，最后的结果是 4464，而不是 <code>int</code> 类型的最大值 65535？</p>
+<p><strong>解答：</strong> 溢出时，计算机会自动截断或“绕回”（Wrap Around）。对于无符号整数，溢出会从 0 开始重新计数；对于有符号整数，溢出会根据补码的机制进行“绕回”。在这里，<code>70000</code> 超过了 <code>int</code> 的最大值 216−1（即 65535）。它实际上是 70000 对 216（即 65536）取模的结果。</p>
+<p>70000(mod65536)=4464</p>
+<p>因此，溢出的结果是 4464。这表明在单片机中进行乘法运算时，<strong>必须提前考虑结果是否会超出目标变量的存储范围</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.4 编程实用技巧案例：强制类型转换 (显式)
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251028113258043.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 核心目的与写法
+	- **目的：** 确保运算精度，避免自动转换后的结果溢出。
+	- **写法：** 在操作数前加 `(目标类型)`。
+- 关键原则与错误
+	- **正确：** **对操作数**转换 → `C = (long int)A * B;`
+	    - 提升 A → 自动提升 B → 运算结果 70000 (正确)。
+	- **错误：** **对运算结果**转换 → `C = (long int)(A * B);`
+	    - 运算在括号内**先溢出** (得 4464)，再转换**无效**。
+	- **总结：** 转换操作数，优先级是关键。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>那么，我们如何避免这种问题，确保得到正确的结果 70000 呢？答案就是使用<strong>强制类型转换</strong>。</p>
+<h3 id="一、强制类型转换-显式转换">一、强制类型转换 (显式转换)</h3>
+<p>当自动类型转换不符合我们的预期，或者我们希望将一个短字节数据提升为更长字节数据，以确保计算精度时，就需要用到强制类型转换。</p>
+<p><strong>定义：</strong> 程序员通过代码，明确指示编译器将某一变量或表达式的值转换为指定的类型。</p>
+<p><strong>基本写法：</strong></p>
+<p>在需要转换的变量或表达式前，使用<strong>圆括号</strong>将<strong>目标类型</strong>括起来。</p>
+<p><strong>正确应用：解决溢出问题</strong></p>
+<p>为了让结果 C 正确地得到 70000，我们应该将乘法中的操作数之一（如 A）强制提升为足够大的类型，例如 <code>long int</code>。C = (long int)A * B;</p>
+<p><strong>解析步骤：</strong></p>
+<ol>
+<li><strong>优先级：</strong> <code>(long int)A</code> 强制转换的优先级<strong>高于</strong>乘法操作符 <code>*</code>。</li>
+<li><strong>A 提升：</strong> 变量 A（100）首先被强制转换为 <code>long int</code> 型。</li>
+<li><strong>B 自动提升：</strong> 表达式现在是 <code>(long int)A</code> 乘以 <code>B</code>（<code>int</code> 型）。根据我们上一页学的<strong>自动类型转换</strong>原则（短 →长），<code>B</code> 会自动提升为 <code>long int</code> 型。</li>
+<li><strong>计算：</strong> 最终的运算变成了两个 <code>long int</code> 类型的乘法，结果 70000 不会溢出 <code>long int</code> 的范围。</li>
+<li><strong>赋值：</strong> <code>C</code> 接收到正确的 70000。</li>
+</ol>
+<h3 id="二、强制转换的常见错误形式">二、强制转换的常见错误形式</h3>
+<p>大家要特别注意一种错误的写法，它无法解决溢出问题：</p>
+<p><strong>错误写法：</strong>C = (long int)(A * B);</p>
+<p><strong>错误原因：</strong></p>
+<ol>
+<li><strong>括号优先：</strong> 此时，括号内的 <code>A * B</code> 运算优先级最高，它会<strong>先执行</strong>。</li>
+<li><strong>先溢出：</strong> 由于 A 和 B 在相乘时，仍然是 <code>int</code> 类型间的运算，结果 70000 会<strong>先溢出</strong>，得到 4464。</li>
+<li><strong>后转换：</strong> 强制类型转换 <code>(long int)</code> 最后才对已经溢出得到的 4464 进行转换。</li>
+</ol>
+<p>所以，C 最终得到的结果仍然是 4464。<strong>只有对操作数进行强制转换（而非对运算结果）才能避免溢出。</strong></p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.4 编程实用技巧案例：不同类型变量的赋值
+</div>
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251102213807863.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 42%; top: 15%; height: 65%; width: 58%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 赋值的一般规则 (A=100, B=700)
+	- **短 → 长 (`B = A`)**：**结果：** 值不变 (`B = 100`)。
+	- **长 → 短 (`A = B`)**：**结果：** 发生**截断**（仅保留低位字节）。 **计算：** 700(mod256)=188。
+- 51 单片机 `bit` 赋值
+	- **目标：** 赋值给 `bit` (0 或 1)。
+	- **规则：**：原值 =0 → 结果 **0**。原值 `$ \neq 0$` → 结果 **1**。
+	- **用途：** 逻辑判断。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：已知 `char` 有符号最大值是 127。如果 `int B = 130;`，执行 `char A = B;` 后，A 的值是多少？
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们学习了如何通过强制类型转换来避免运算中的溢出问题。现在，我们把视角转向另一个常见操作：<strong>不同数据类型变量之间的赋值</strong>，看看这里面隐藏着哪些规则和陷阱</p>
+<h3 id="一、不同类型变量的赋值规则">一、不同类型变量的赋值规则</h3>
+<p>我们来看一个赋值的例子：</p>
+<ul>
+<li><code>unsigned char A = 100;</code></li>
+<li><code>int B = 700;</code></li>
+</ul>
+<p>然后我们分别进行赋值操作：<code>B = A;</code> 和 <code>A = B;</code>。最终的结果 A 和 B 分别是多少？</p>
+<h4 id="1-短字节-→-长字节赋值-ba">1. 短字节 → 长字节赋值 (B=A)</h4>
+<ul>
+<li><strong>规则：</strong> 短字节类型变量向长字节类型变量赋值时，<strong>值保持不变</strong>。</li>
+<li><strong>示例：</strong> 将 A (100) 赋值给 B。</li>
+<li><strong>结果：</strong> B 仍等于 <strong>100</strong>。</li>
+</ul>
+<h4 id="2-长字节-→-短字节赋值-ab">2. 长字节 → 短字节赋值 (A=B)</h4>
+<ul>
+<li><strong>规则：</strong> 长字节类型变量向短字节类型变量赋值时，如果数值超出短字节变量的最大范围，就会发生<strong>溢出和截断</strong>。</li>
+<li><strong>示例：</strong> 将 B (700) 赋值给 A (<code>unsigned char</code> 最大值 255)。700 超过了 255。</li>
+<li><strong>处理方式：</strong> 编译器会<strong>截取</strong>长字节数据的<strong>低位字节</strong>。对于 51 单片机这类 8 位机，就是只取低八位，高八位被丢弃。</li>
+</ul>
+<p><strong>如何计算截断后的值？</strong></p>
+<p>最简单的方法是使用<strong>模运算</strong>：用大数值对目标类型范围（256）取余数。</p>
+<p>A=700(mod256)=188</p>
+<ul>
+<li>实际计算：700−512=188。</li>
+<li><strong>结果：</strong> A 等于 <strong>188</strong>。</li>
+<li><strong>本质：</strong> 这等效于把 B 的高位字节扔掉，只保留低位字节。</li>
+</ul>
+<h3 id="二、51-单片机的特殊性：bit-变量赋值">二、51 单片机的特殊性：<code>bit</code> 变量赋值</h3>
+<p>在 51 单片机中，我们有一个特殊的变量类型：<code>bit</code> (位变量)，它只能存储 0 或 1。</p>
+<p><strong>举例：</strong></p>
+<ul>
+<li><code>bit A;</code></li>
+<li><code>int B = 5;</code></li>
+<li><code>A = (bit)B;</code></li>
+</ul>
+<p><strong>赋值规则：</strong></p>
+<ul>
+<li>如果 <code>int</code> 变量 B 的值为 <strong>0</strong>，则 <code>bit</code> 型 A 的结果为 <strong>0</strong>。</li>
+<li>如果 <code>int</code> 变量 B 的值为 <strong>非零值</strong> (例如 1, 5, -100)，则 <code>bit</code> 型 A 的结果都为 <strong>1</strong>。</li>
+</ul>
+<p>这是 51 单片机 C 语言编译器为了方便逻辑判断而特有的规定。</p>
+<p><strong>提问：</strong> 已知 <code>char</code> 变量（有符号 8 位）的最大值是 127。如果 <code>int B = 130;</code>，执行 <code>char A = B;</code> 后，A 的值是多少？</p>
+<p><strong>解答：</strong></p>
+<ol>
+<li>B 的值 130 超过了 <code>char</code> 的最大值 127。</li>
+<li>发生溢出截断，需要对 256 取模，但要考虑符号。</li>
+<li>130(mod256)=130。</li>
+<li>在 8 位有符号数中，130 对应的二进制是 <code>10000010</code>。由于最高位是 1，表示负数。</li>
+<li>对负数取补码：<code>01111101</code> → 125。所以实际值为 −(126)。</li>
+<li><em>（为了简化和聚焦于截断）</em> 记住，截断后，结果是 130−256=−126。</li>
+<li><strong>最终结果：A 等于 -126。</strong>（这是长字节向短字节有符号数赋值时，<strong>截断并解释为补码</strong>的结果）。</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.4 编程实用技巧案例：定时器定时时间调整
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251102213958819.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 核心问题
+	- 定时器长时间运行，累计误差（系统开销、晶振）
+- 两种补偿策略
+	- **1. Debug 微观补偿：**观察每次中断多出的时间（微/纳秒），编写代码，精确减去多余时间。修正单次中断误差。
+	- **2. 累计宏观补偿：**：长时间运行（如 1 小时），统计总误差，将总误差平均分配到所有周期修正。修正长期运行误差。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么定时器即使设置了精确的定时初值，长时间运行后仍然会产生误差
+</div>
+</div>
+
+<aside class="notes"><p>各位同学，前面我们一起完成了秒表程序。我相信有同学如果让它长时间运行，会发现一个普遍的问题：随着时间推移，秒表可能越来越不准，也就是<strong>误差比较大</strong>。这是因为晶振、指令执行时间等因素的累积。那么，我们如何才能让定时器走得更精确呢？这里，我给大家提供两种主要的误差补偿方法：</p>
+<h3 id="一、定时器误差的两种补偿方法">一、定时器误差的两种补偿方法</h3>
+<h4 id="1-使用调试工具-debug-观察并进行微调补偿">1. 使用调试工具 (Debug) 观察并进行微调补偿</h4>
+<ul>
+<li><strong>操作思路：</strong> 这种方法要求我们深入到微秒甚至纳秒级别去观察。</li>
+<li><strong>具体步骤：</strong> 假设我们程序中设定定时器是精确地定时 10 毫秒。通过使用仿真器或 IDE 的 Debug 功能，我们会发现，由于指令执行和系统开销，实际的定时时间可能会略微<strong>多出</strong>几个微秒或纳秒。</li>
+<li><strong>补偿：</strong> 我们就可以通过<strong>编写程序代码</strong>，把这多出来的一点点时间（例如 5 微秒）精确地计算进去，从而在下一次定时时进行抵消或补偿。这是一种精确但工作量较大的微观补偿。</li>
+</ul>
+<h4 id="2-长时间运行累计误差进行调整-宏观补偿">2. 长时间运行累计误差进行调整 (宏观补偿)</h4>
+<ul>
+<li><strong>操作思路：</strong> 这种方法更侧重于<strong>平均化</strong>和<strong>宏观修正</strong>。</li>
+<li><strong>具体步骤：</strong> 我们让程序运行一个很长的时间，例如 1 个小时（共 3600 秒），来统计它在这段时间内累计的总误差。</li>
+<li><strong>补偿：</strong> 将这总误差，平均分配到每一次定时器中断中。例如，如果 1 小时累计慢了 100 毫秒，我们将 100毫秒的补偿量，平均分散到这 1 小时内所有的定时器周期中，从而实现误差的平摊和调整。</li>
+</ul>
+<p>这两种方法各有侧重，第一种适用于精确的微调，第二种适用于对长时间运行误差的系统性校正。下一节课，我们将用实际代码演示如何实现这些补偿。</p>
+<p>在单片机中，为什么定时器即使设置了精确的定时初值，长时间运行后仍然会产生误差？误差的主要来源有两个方面：<strong>晶振误差</strong>（晶振本身频率不可能绝对精确）和<strong>系统开销</strong>（定时器中断服务函数中的指令执行、入栈出栈等操作都会消耗时间，这些时间会累积到每次定时周期中，导致实际周期比理论值稍长）。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.4 编程实用技巧案例：字节操作修改位
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251102214904731.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+- 字节操作修改位 (位屏蔽)
+	- 问题：字节赋值会干扰寄存器其他位。
+	- 目标：独立配置目标位，实现无干扰操作。
+- 解决方案：两步位操作
+	- 屏蔽（清零）：使用 & 运算符。
+		- TMOD &= 0xF0;(&0 清零目标位)。
+	- 赋值（设置）：使用 | 运算符。
+		- TMOD |= 0x01; (∣1 设置目标位)。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果想将 TMOD 的最低位（M0）设置为 1，但保留 TMOD 寄存器其他位，应该使用什么操作符？
+</div>
+</div>
+
+<aside class="notes"><p>解决了定时器的精度问题，现在我们来看一个更高级的寄存器操作技巧：如何在不影响寄存器其他位的前提下，只修改我们关心的那一位或那几位？</p>
+<p>在单片机中，我们知道有些寄存器是<strong>可位寻址</strong>的，可以直接操作某一位，比如 TCON 寄存器的 TR0 位，我们可以直接写 <code>TR0 = 1;</code>。但对于像 TMOD (定时器模式寄存器) 这种<strong>不可位寻址</strong>的寄存器，我们通常必须使用<strong>字节赋值</strong>，例如 <code>TMOD = 0x01;</code>。</p>
+<p>这种直接赋值存在一个潜在问题：虽然我们只想配置定时器 0 (低四位)，但同时也将高四位（定时器 1 的配置位）强制设置成了 <code>0000</code>。如果程序中同时使用了定时器 0 和定时器 1，这种操作就会<strong>相互干扰</strong>，破坏了另一个定时器的配置。因此，我们希望在操作定时器 0 时，定时器 1 的配置位能保持不变，实现寄存器配置的<strong>模块化和独立性</strong>。</p>
+<p>要实现互不干扰的独立操作，我们必须利用<strong>位运算符</strong>（与 <code>&amp;</code> 和或 <code>|</code>）来实现<strong>位屏蔽</strong>。核心原理在于：<strong>跟 0 进行与运算可以清零，跟 1 进行与运算可以保持原值；跟 1 进行或运算可以置 1，跟 0 进行或运算可以保持原值。</strong></p>
+<p>以安全配置 TMOD 的低四位为 <code>0001</code> 为例，我们需要用两条语句代替直接赋值：</p>
+<p><strong>第一步：清零目标位 (屏蔽)。</strong> 我们使用 <code>TMOD &amp;= 0xF0;</code>（<code>0xF0</code> 是 <code>1111 0000</code>）。这条语句利用与 <code>1</code> 保持原值的特性，保证高四位不变；同时利用与 <code>0</code> 清零的特性，将低四位全部清零，为后续设置做好准备。</p>
+<p><strong>第二步：设置目标值。</strong> 接着使用 <code>TMOD |= 0x01;</code>。这条语句利用或 <code>0</code> 保持原值的特性，保证高四位仍不变；同时利用或 <code>1</code> 置位的特性，将低四位设置为 <code>0001</code>。</p>
+<p>经过这两步操作，我们只修改了 TMOD 的低四位，而高四位的配置丝毫未受影响，真正实现了寄存器配置的独立性。同理，我们在配置定时器 1 时，也可以用类似的方法保证定时器 0 的配置不受干扰。</p>
+<p>如果我只想将 TMOD 的最低位（M0）设置为 1，但保留 TMOD 寄存器其他七位的值，应该使用什么操作符？</p>
+<p><strong>解答：</strong> 应该使用<strong>按位或</strong>操作符 <code>|</code> 和数值 0x01，即 <code>TMOD |= 0x01;</code>。因为 0x01 的最低位为 1，其他位为 0。最低位与 1 进行或运算会被置 1；其他位与 0 进行或运算则保持原有值不变。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.4 编程实用技巧案例：数码管动态扫描函数的改进算法
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+switch (i)
+{
+    case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=LedBuff[0]; break;
+    case 1: ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=LedBuff[1]; break;
+    case 2: ADDR2=0; ADDR1=1; ADDR0=0; i++; P0=LedBuff[2]; break;
+    case 3: ADDR2=0; ADDR1=1; ADDR0=1; i++; P0=LedBuff[3]; break;
+    case 4: ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=LedBuff[4]; break;
+    case 5: ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=LedBuff[5]; break;
+    default: break;
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心原理**
+	- **观察：** 位选 P1.2-P1.0 的值即是索引 **`i`** (0-5)。
+	- **策略：** 用 `i` 直接控制 P1 的低三位和 `LED_BUFFER` 数组。
+- **优化代码 (四步)：**
+	- **清零保护：** `P1 &= 0xF8;`
+	- **位选赋值：** `P1 |= i;`
+	- **段选输出：** `P0 = LED_BUFFER[i];`
+	- **索引循环：** `if (i < 5) i++; else i = 0;`
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们已经知道，使用 <code>switch</code> 语句实现数码管动态扫描比传统的 <code>if...else if...</code> 结构更加简洁高效。然而，在单片机编程中，追求极致的效率和代码简洁性是永恒的目标。通过深入观察 <code>switch</code> 语句的执行逻辑，我们可以找到一个更优雅的替代方案。</p>
+<p>在我们的动态扫描程序中，存在一个明显的规律：</p>
+<ul>
+<li><code>case i</code> 对应的 P1 口低三位（P1.2, P1.1, P1.0）正是当前的扫描计数器 <strong><code>i</code></strong> 的值（从 0 到 5）。</li>
+<li>P0 口输出的段码始终是 <code>LED_BUFFER</code> 数组中索引为 <strong><code>i</code></strong> 的元素。</li>
+</ul>
+<p>基于这一关联性，我们可以利用<strong>字节操作修改位</strong>的方式，彻底取代冗长的 <code>switch</code> 语句。</p>
+<p>新的优化方案仅需四条语句即可完成数码管的位选、段选和循环：</p>
+<ol>
+<li><p>清零目标位：</p>
+<p> P1 &amp;= 0xF8;</p>
+<p> (ob1111 1000)。这一步的关键在于，它只清零 P1 口的最低三位，而不影响 P1 口高五位连接的任何其他外设，保证了系统的稳定性。</p>
+</li>
+<li><p>赋值位选值：</p>
+<p> P1 |= i;</p>
+<p> 将扫描索引 i 的值（0到5）通过“或”操作写入 P1 口的低三位，从而实现数码管位选的快速切换。</p>
+</li>
+<li><p>输出段选码：</p>
+<p> P0 = LED_BUFFER[i];</p>
+<p> P0 口输出数组中对应索引 i 的段码数据。</p>
+</li>
+<li><p>循环控制：</p>
+<p> if (i &lt; 5) i++; else i = 0;</p>
+<p> 控制扫描索引 i 在 0 到 5 之间循环，为下一次扫描做准备。</p>
+</li>
+</ol>
+<p>这种优化方法不仅代码量更少，执行效率更高，而且逻辑清晰，特别适用于驱动 8 个或更多数码管的系统。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.5 实用秒表程序例程：项目介绍
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251102225854402.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **项目目标与特点**
+    - 目标：开发高精度、实用的秒表程序。
+    - 精度：`$10\text{ ms}$` 精度，采用**误差补偿机制**。
+    - 内容：综合应用 **定时器、中断、数码管、按键**。
+- **编程策略**
+    - 方法：采用**模块化编程**（如复用 `KeyDriver()`, `LEDScan()`）。
+    - 重点：集中精力于**定时器配置**与**精确计数**。
+- **计时机制（关键）**
+    - 选择：必须使用 **定时器 + 中断**。
+    - 优势：保证**高精度**和**多任务并行**（非阻塞）。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>项目概述与特点</strong></p>
+<p>我们即将进入一个完整的、贴近实际应用的<strong>实用秒表项目</strong>开发。这个程序并非简单的计时，而是一个具有高精确度的实用小项目，综合涵盖了定时器、数码管、中断、按键等多个核心知识点。为了保证计时的高精确度，我们采用了上一节介绍的<strong>误差补偿方式</strong>，即通过长时间运行后计算平均误差进行补偿。在显示上，我们追求精细，保留小数点后两位有效数字，精确到 10 个毫秒。这是一个贴近实际开发的实战项目，是未来进行复杂系统开发的重要基础。</p>
+<p><strong>模块化编程与函数复用</strong></p>
+<p>在项目开发中，我们充分利用<strong>模块化编程</strong>的优势。这种方式能够大大加快开发速度并提高代码的复用性。前面课程中已经调试好的底层驱动函数，例如 <code>KeyDriver()</code>（按键驱动）、<code>KeyScan()</code>（按键扫描）和 <code>LEDScan()</code>（数码管动态扫描）等，都可以直接复制过来应用。这样，我们可以将主要的精力集中在秒表的核心逻辑，即定时器配置和精确计数上。</p>
+<p><strong>秒表计时为什么必须用定时器？</strong></p>
+<p>在秒表程序中，我们必须使用<strong>定时器和中断</strong>来计时，而不能使用简单的软件延时。这是因为软件延时计时会受到CPU执行其他代码的影响，导致<strong>计时精度极差</strong>且<strong>无法进行多任务处理</strong>。定时器配合中断可以保证每隔固定的机器周期产生一次中断，从而实现<strong>高精度的周期性计时</strong>，并且不占用主程序时间，实现计时、显示和按键检测的<strong>并行处理</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.5 实用秒表程序例程
+</div>
+<div class="" style="position: absolute; left: 2%; top: 12%; height: 78%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+#include <reg52.h>
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+sbit KEY1 = P2^4;
+sbit KEY2 = P2^5;
+sbit KEY3 = P2^6;
+sbit KEY4 = P2^7;
+
+unsigned char code LedChar[] = {
+    0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8,
+    0x80, 0x90, 0x88, 0x83, 0xC6, 0xA1, 0x86, 0x8E
+};
+unsigned char LedBuff[6] = {
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+};
+```
+```C
+unsigned char KeySta[4] = 
+{
+    1, 1, 1, 1
+};
+
+bit StopwatchRunning = 0;
+bit StopwatchRefresh = 1;
+unsigned char DecimalPart = 0;
+unsigned int  IntegerPart = 0;
+unsigned char T0RH = 0;
+unsigned char T0RL = 0;
+
+void ConfigTimer0(unsigned int ms);
+void StopwatchDisplay();
+void KeyDriver();
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 12%; height: 78%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```
+void main() {
+    EA = 1;
+    ENLED = 0;
+    ADDR3 = 1;
+    P2 = 0xFE;
+	ConfigTimer0(2);
+	
+    while (1){
+        if (StopwatchRefresh) {
+            StopwatchRefresh = 0;
+            StopwatchDisplay();
+        }
+        KeyDriver();
+    }
+}
+```
+```C
+void ConfigTimer0(unsigned int ms) {
+    unsigned long tmp;
+    tmp = 11059200 / 12;
+    tmp = (tmp * ms) / 1000;
+    tmp = 65536 - tmp;
+    tmp = tmp + 18;
+    T0RH = (unsigned char)(tmp>>8);
+    T0RL = (unsigned char)tmp;
+    TMOD &= 0xF0;
+    TMOD |= 0x01;
+    TH0 = T0RH;
+    TL0 = T0RL;
+    ET0 = 1;
+    TR0 = 1;
+}
+```
+</div>
+</div>
+
+<aside class="notes"><p>现在，让我们正式进入到秒表程序的实现部分。PPT上展示的是我们实用秒表程序例程的<strong>第一部分</strong>，也就是<strong>程序的基本结构和变量定义</strong></p>
+<ul>
+<li><p><strong>头文件与位定义：</strong></p>
+<ul>
+<li><code>#include &lt;reg52.h&gt;</code>：引入52系列单片机的寄存器定义。</li>
+<li><code>sbit</code> 定义：将常用的控制端口（如数码管的选通<code>ADDR3</code>、<code>ENLED</code>）和按键端口（<code>KEY1</code>到<code>KEY4</code>）以<strong>别名</strong>方式定义，使代码更具可读性。</li>
+</ul>
+</li>
+<li><p><strong>数码管显示数据 (<code>LedChar</code>)：</strong></p>
+<ul>
+<li><code>unsigned char code LedChar[]</code>：这是一个<strong>常量数组</strong>，存储了从数字0到F（十六进制）的<strong>段码</strong>。<code>code</code>关键字意味着它存储在<strong>程序存储器</strong>（ROM）中，节约了宝贵的RAM空间。</li>
+<li><code>LedBuff[6]</code>：这是<strong>显示缓冲区</strong>，用于存储6位数码管当前要显示的段码。</li>
+</ul>
+</li>
+<li><p><strong>关键状态变量：</strong></p>
+<ul>
+<li><code>StopwatchRunning</code>：<code>bit</code>类型，标志秒表是否处于<strong>运行状态</strong>（0为停止，1为运行）。</li>
+<li><code>StopwatchRefresh</code>：<code>bit</code>类型，标志<strong>是否需要刷新数码管显示</strong>，通常由定时器或主循环设置。</li>
+<li><code>DecimalPart</code> / <code>IntegerPart</code>：分别存储秒表的<strong>小数部分</strong>（0-99，通常代表百分之一秒）和<strong>整数部分</strong>（秒或分钟）。</li>
+</ul>
+</li>
+<li><p><strong>定时器初始化 (<code>ConfigTimer0</code>)：</strong></p>
+<ul>
+<li>主函数 <code>main()</code> 中调用 <code>ConfigTimer0(2)</code>，这表示我们配置了定时器T0，使其<strong>每2毫秒</strong>（ms）产生一次中断。</li>
+</ul>
+</li>
+<li><p><strong>主循环 (<code>main</code>)：</strong></p>
+<ul>
+<li>核心是一个<strong>无限循环</strong> <code>while(1)</code>。</li>
+<li><strong>显示刷新：</strong> 检查 <code>StopwatchRefresh</code> 标志，如果为真，则调用 <code>StopwatchDisplay()</code> 函数刷新数码管，并清除标志。</li>
+<li><strong>按键处理：</strong> 调用 <code>KeyDriver()</code> 函数实时扫描并处理按键事件。</li>
+</ul>
+</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.5 实用秒表程序例程
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 12%; height: 78%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+void StopwatchDisplay()
+{
+	signed char i;
+	unsigned char buf[4];
+
+    //小数部分转换到低2位
+    LedBuff[0] = LedChar[DecimalPart%10];
+    LedBuff[1] = LedChar[DecimalPart/10];
+    //整数部分转换到高4位
+    buf[0] = IntegerPart%10;
+    buf[1] = (IntegerPart/10)%10;
+    buf[2] = (IntegerPart/100)%10;
+    buf[3] = (IntegerPart/1000)%10;
+```
+``` C
+    for (i=3; i>=1; i--)
+    {
+        if (buf[i] == 0)
+            LedBuff[i+2] = 0xFF;
+        else
+            break;
+    }
+    for ( ; i>=0; i--)
+    {
+        LedBuff[i+2] = LedChar[buf[i]];
+    }
+    LedBuff[2] &= 0x7F;
+}
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 12%; height: 78%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```C
+void StopwatchAction()
+{
+    if (StopwatchRunning)
+        StopwatchRunning = 0;
+    else
+        StopwatchRunning = 1;
+}
+
+void StopwatchReset()
+{
+    StopwatchRunning = 0;
+    DecimalPart = 0;
+    IntegerPart = 0;
+    StopwatchRefresh = 1;
+}
+```
+```C
+void KeyDriver() {
+    unsigned char i;
+    static unsigned char backup[4] = {1,1,1,1};
+    for (i=0; i<4; i++){
+        if (backup[i] != KeySta[i]){
+            if (backup[i] != 0){
+                if (i == 1)
+                    StopwatchReset();
+                else if (i == 2)
+                    StopwatchAction();
+            }
+            backup[i] = KeySta[i];
+        }
+    }
+}
+```
+</div>
+</div>
+
+<aside class="notes"><p>接着我们来看一下秒表的核心功能是如何实现的，这主要集中在<strong>显示、控制和按键驱动</strong>这三个关键函数中。</p>
+<h3 id="stopwatchdisplay：数码管显示刷新"><strong><code>StopwatchDisplay()</code>：数码管显示刷新</strong></h3>
+<ul>
+<li><p><strong>功能：</strong> 将秒表的计数值（<code>DecimalPart</code> 和 <code>IntegerPart</code>）转换成数码管的<strong>段码</strong>，并存入显示缓冲区 <code>LedBuff</code>。</p>
+</li>
+<li><p><strong>小数部分处理 (低两位)：</strong></p>
+<ul>
+<li><code>DecimalPart%10</code> (个位) 和 <code>DecimalPart/10</code> (十位) 直接取模和整除，将其对应的段码（通过 <code>LedChar</code> 数组查找）存入 <code>LedBuff[0]</code> 和 <code>LedBuff[1]</code>。</li>
+<li><strong>注意：</strong> <code>LedBuff[0]</code> 是最低位（百分位），<code>LedBuff[1]</code> 是十分位。</li>
+</ul>
+</li>
+<li><p><strong>整数部分处理 (高四位)：</strong></p>
+<ul>
+<li>通过连续的取模和整除操作，将 <code>IntegerPart</code> 的个、十、百、千位数字提取到临时数组 <code>buf</code> 中。</li>
+</ul>
+</li>
+<li><p><strong>消零处理（高位不显示）：</strong></p>
+<ul>
+<li>第一个 <code>for</code> 循环 (<code>for (i=3; i&gt;=1; i--)</code>) 实现<strong>高位零不显示</strong>（即消隐）。它从千位（<code>buf[3]</code>）开始，如果数字为 0，则将对应的显示缓冲区设为 <code>0xFF</code>（<strong>全灭</strong>），直到遇到第一个非零数字或个位数字。</li>
+</ul>
+</li>
+<li><p><strong>段码转换：</strong></p>
+<ul>
+<li>第二个 <code>for</code> 循环将处理后的 <code>buf</code> 中的数字转换为段码存入 <code>LedBuff[i+2]</code>（对应数码管的第 3 到第 6 位）。</li>
+</ul>
+</li>
+<li><p><strong>小数点处理：</strong></p>
+<ul>
+<li><code>LedBuff[2] &amp;= 0x7F;</code>：将显示整数个位的数码管段码（<code>LedBuff[2]</code>）的最高位（DP点）清零，<strong>点亮小数点</strong>，实现“秒.百分之一秒”的显示格式。</li>
+</ul>
+</li>
+</ul>
+<h3 id="秒表控制与按键驱动"><strong>秒表控制与按键驱动</strong></h3>
+<ul>
+<li><p><strong><code>StopwatchAction()</code>：启动/暂停</strong></p>
+<ul>
+<li>通过判断 <code>StopwatchRunning</code> 的当前状态，实现秒表的<strong>启动和暂停</strong>的切换。</li>
+</ul>
+</li>
+<li><p><strong><code>StopwatchReset()</code>：复位</strong></p>
+<ul>
+<li>将 <code>StopwatchRunning</code> 置 0 (停止)，清零 <code>DecimalPart</code> 和 <code>IntegerPart</code>，并设置 <code>StopwatchRefresh = 1</code>，确保<strong>立即刷新显示为 00:00</strong>。</li>
+</ul>
+</li>
+<li><p><strong><code>KeyDriver()</code>：按键处理</strong></p>
+<ul>
+<li>采用了<strong>静态变量 <code>backup</code></strong> 来存储按键的上一次状态，实现<strong>边沿检测</strong>。</li>
+<li><code>if (backup[i] != KeySta[i])</code>：检测到状态变化（按键按下或弹起）。</li>
+<li><code>if (backup[i] != 0)</code>：判断是<strong>按键弹起瞬间</strong>（即按键已被按下并释放），从而避免按键抖动带来的多次触发。</li>
+<li>根据按键索引 <code>i</code> (1 对应 <code>KEY2</code>，2 对应 <code>KEY3</code>），调用 <code>StopwatchReset()</code> 或 <code>StopwatchAction()</code>。</li>
+</ul>
+</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.5 实用秒表程序例程
+</div>
+<div class="" style="position: absolute; left: 2%; top: 12%; height: 78%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+void KeyScan(){
+    unsigned char i;
+    static unsigned char keybuf[4] = {
+        0xFF, 0xFF, 0xFF, 0xFF
+    };
+    //按键值移入缓冲区
+    keybuf[0] = (keybuf[0] << 1) | KEY1;
+    keybuf[1] = (keybuf[1] << 1) | KEY2;
+    keybuf[2] = (keybuf[2] << 1) | KEY3;
+    keybuf[3] = (keybuf[3] << 1) | KEY4;
+    //消抖后更新按键状态
+    for (i=0; i<4; i++){
+        if (keybuf[i] == 0x00){
+            KeySta[i] = 0;
+        }
+```
+```C
+        else if (keybuf[i] == 0xFF){
+            KeySta[i] = 1;
+        }
+    }
+}
+void LedScan(){
+    static unsigned char i = 0;
+    P0 = 0xFF;
+    P1 = (P1 & 0xF8) | i;
+    P0 = LedBuff[i];
+    if (i < 5) i++;
+    else i = 0;
+}
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 12%; height: 78%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```C
+void StopwatchCount(){
+    if (StopwatchRunning){
+        DecimalPart++;
+        if (DecimalPart >= 100){
+            DecimalPart = 0;
+            IntegerPart++;
+            if (IntegerPart >= 10000){
+                IntegerPart = 0;
+            }
+        }
+        StopwatchRefresh = 1;
+    }
+}
+```
+```C
+void InterruptTimer0() interrupt 1 {
+    static unsigned char tmr10ms = 0;
+    TH0 = T0RH;
+    TL0 = T0RL;
+    LedScan();
+    KeyScan();
+    tmr10ms++; //定时10ms进行一次秒表计数
+    if (tmr10ms >= 5){
+        tmr10ms = 0;
+        StopwatchCount();
+    }
+}
+```
+</div>
+</div>
+
+<aside class="notes"><p>现在我们来到整个秒表程序中<strong>最关键、最核心</strong>的部分：<strong>中断服务函数</strong>，以及它如何驱动<strong>计时、按键消抖和动态显示</strong>。</p>
+<h3 id="核心驱动：定时器0中断"><strong>核心驱动：定时器0中断</strong></h3>
+<ul>
+<li><p><strong>函数：</strong> <code>void InterruptTimer0() interrupt 1</code></p>
+</li>
+<li><p><strong>功能：</strong> 这是定时器 T0 的中断服务程序，是整个秒表实时性的基础。</p>
+</li>
+<li><p><strong>重装初值：</strong> <code>TH0 = T0RH; TL0 = T0RL;</code> 立即重新装载定时器初值，确保下一个定时周期准确。</p>
+</li>
+<li><p><strong>实时驱动：</strong></p>
+<ul>
+<li><code>LedScan();</code>：执行<strong>数码管动态扫描</strong>，以确保显示稳定。</li>
+<li><code>KeyScan();</code>：执行<strong>按键扫描和消抖</strong>，实时获取按键的稳定状态。</li>
+</ul>
+</li>
+<li><p><strong>分频计数 (<code>tmr10ms</code>)：</strong></p>
+<ul>
+<li><p>我们配置定时器是每 <strong>2ms</strong> 中断一次。</p>
+</li>
+<li><p><code>tmr10ms</code> 变量用于计数中断次数。当它计数到 5 次时（5×2ms=10ms），调用 <code>StopwatchCount()</code>，实现<strong>每 10 毫秒</strong>进行一次秒表计时更新。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="⏱️-stopwatchcount：秒表逻辑计时"><strong>⏱️ <code>StopwatchCount()</code>：秒表逻辑计时</strong></h3>
+<ul>
+<li><strong>条件判断：</strong> <code>if (StopwatchRunning)</code> 只有在秒表处于<strong>运行状态</strong>时才进行计时。</li>
+<li><strong>小数部分累加：</strong> <code>DecimalPart++</code> 累加，代表 10ms（即百分之一秒）。<ul>
+<li>当达到 100 时 (<code>DecimalPart &gt;= 100</code>)，表示 1 秒钟已到，<strong>进位</strong>。</li>
+</ul>
+</li>
+<li><strong>整数部分累加：</strong> <code>IntegerPart++</code> 累加，代表秒。<ul>
+<li>当达到 10000 时，表示秒表计时达到最大值（9999s），<strong>归零</strong>。</li>
+</ul>
+</li>
+<li><strong>刷新标志：</strong> <code>StopwatchRefresh = 1;</code> 设置刷新标志，通知主循环在退出中断后立即调用 <code>StopwatchDisplay()</code> 来更新显示。</li>
+</ul>
+<h3 id="-keyscan：按键扫描与软件消抖（重要！）">** <code>KeyScan()</code>：按键扫描与软件消抖（重要！）**</h3>
+<ul>
+<li><p><strong>移位缓冲区 (<code>keybuf</code>)：</strong></p>
+<ul>
+<li><code>static unsigned char keybuf[4]</code> 是一个<strong>按键状态的历史记录缓冲区</strong>，每个字节的位记录了按键最新的 8 次采样值。</li>
+<li><code>keybuf[i] = (keybuf[i] &lt;&lt; 1) | KEYn;</code>：新的按键采样值（<code>KEYn</code>）移入 LSB（最低位），旧的采样值左移。</li>
+</ul>
+</li>
+<li><p><strong>消抖判断：</strong></p>
+<ul>
+<li><code>keybuf[i] == 0x00</code>：表示按键连续 8 次采样都为低电平（按下），状态稳定，<code>KeySta[i] = 0</code> (按下)。</li>
+<li><code>keybuf[i] == 0xFF</code>：表示按键连续 8 次采样都为高电平（松开），状态稳定，<code>KeySta[i] = 1</code> (松开)。</li>
+</ul>
+</li>
+<li><p><strong>目的：</strong> 这种<strong>软件移位消抖</strong>法可以有效滤除按键在按下和松开瞬间产生的毛刺和抖动信号。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.6 PWM 的初步认识
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251103164415053.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **1. PWM 概述**
+    - 全称：**脉冲宽度调制** (PWM)。
+    - 作用：利用**数字信号**实现**模拟效果**。
+- **2. PWM 的本质**
+    - 原理：通过改变输出方波的**脉冲宽度**实现控制。
+    - 基础：保持**周期 T 固定**。
+- **3. 核心指标**
+    - 概念：**占空比** (Ton​/T)。
+    - 意义：调节信号的**平均强度**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：在 PWM 应用中，占空比的调节最终是如何影响被控对象（如 LED 灯）的
+</div>
+</div>
+
+<aside class="notes"><p>同学们，在前面的课程中，我们已经掌握了数码管显示、按键消抖和定时器等基础应用。今天，我们将进入一个非常重要的应用——<strong>脉冲宽度调制（PWM）</strong>。PWM 在单片机应用中非常广泛，但它的基本原理却非常简单。</p>
+<p>PWM 的全名叫<strong>脉冲宽度调制</strong>（Pulse Width Modulation），它的核心作用是<strong>使用数字信号（方波）来达到一个模拟信号的效果</strong>。这个概念的理解，要从它的名称入手。脉冲宽度调制，顾名思义，它其实就是通过<strong>改变输出方波的脉冲宽度</strong>来实现不同的控制效果。</p>
+<p>我们可以通过一个具体的例子来理解：假设我们有一个<strong>固定的周期</strong> T=10ms 的方波。在第一个周期，高电平时间 Ton​ 是 4ms，低电平时间 Toff​ 是 6ms；到了第二个周期，我们改变为 Ton​ 是 6ms，Toff​ 是 4ms；第三个周期， Ton​ 是 8ms，Toff​ 是 2ms。虽然总周期都是 10ms，但每个周期内高电平和低电平的脉冲宽度是不同的。<strong>这个脉冲宽度的变化，就是 PWM 的本质。</strong></p>
+<p>基于这个本质，我们引入一个关键概念：<strong>占空比 (Duty Cycle)<strong>。占空比就是指高电平时间 Ton​ 占整个周期 T 的比例，即 占空比=TTon​​×100%。按照上面的例子计算，周期 1 的占空比是 40%，周期 2 是 60%，周期 3 是 80%。我们正是通过</strong>控制占空比</strong>，来间接实现了对输出信号“强度”的调节，从而实现数字信号的模拟效果。</p>
+<p><strong>Q: 在 PWM 应用中，占空比的调节最终是如何影响被控对象（如 LED 灯）的？</strong></p>
+<p><strong>A: PWM 占空比的调节会改变被控对象在</strong>一个周期内获得的平均能量<strong>。</strong></p>
+<p>对于 LED 灯来说：</p>
+<ol>
+<li><p><strong>高电平时间越长（占空比越大）：</strong> LED 亮的时间就越长，灭的时间越短。</p>
+</li>
+<li><p><strong>在频率足够高（如 100Hz 以上）时：</strong> 人眼无法分辨闪烁，只能感知到 LED 的<strong>平均亮度</strong>。</p>
+</li>
+<li><p><strong>结果：</strong> 占空比越大，LED 在一个周期内被点亮的时间比例越高，它获得的平均功率越大，因此<strong>人眼看到的亮度就越高</strong>。这种效果使得数字电平（0 和 1）的输出具备了“亮度等级”（模拟）的控制能力。</p>
+</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.6 PWM 的初步认识：数字信号模拟效果
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251105230333484.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **1. 解决问题：数字到模拟的桥梁**
+    - 数字：仅 `$0$`（亮）和 `$1$`（灭）两种状态。
+    - 模拟：具备**连续等级**（如亮度、强度）。
+- **2. 核心机制：视觉暂留效应**
+    - 方法：将 PWM 频率提高到 **`$100 \text{Hz}$` 以上**。
+    - 结果：人眼感知到的是**平均亮度**而非闪烁。
+- **3. 占空比的调控作用**
+    - 原理：调节 `$T_{on}$` 与 `$T_{off}$` 的时间比例。
+    - 效果：**高占空比** `$\rightarrow$` 平均亮度**高**。
+    - 总结：实现强度等级的**模拟控制**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+如果在 PWM 控制 LED 亮度的例子中，我们将 PWM 的频率设置得低于 50 赫兹，会发生什么现象
+</div>
+</div>
+
+<aside class="notes"><p>同学们，我们上一部分已经明白了 PWM 的本质是通过改变占空比来实现控制。现在，我们要解决一个关键问题：<strong>PWM 是如何利用这种占空比的变化，将只有零和一的数字信号，转化为具有连续性效果的模拟信号呢？</strong> 首先，我们明确一下数字和模拟的差异：在数字世界里，比如控制 LED，我们只有 <strong>0（亮）</strong> 和 <strong>1（灭）</strong> 两种状态；而模拟世界则有<strong>亮度等级</strong>或<strong>强度等级</strong>，例如‘很亮’、‘比较亮’、‘比较弱’等。</p>
+<p><strong>(核心机制：视觉暂留)</strong></p>
+<p>“PWM 实现模拟效果的核心机制在于利用了人眼的<strong>视觉暂留效应</strong>。当我们让 LED 在亮（<code>LED=0</code>）和灭（<code>LED=1</code>）之间间隔运行时，小灯会闪烁。但关键在于，如果我们把这个亮灭的间隔时间不断减小，将 PWM 的频率提高到 <strong>100 赫兹以上</strong>，人眼就无法分辨出这种高速的闪烁了。此时，我们人眼感知到的，是 LED 在每个周期内的<strong>平均亮度</strong>。这种现象表现为：LED 保持一个亮的状态，但它的亮度又没有持续点亮（即占空比 <code>$100\%$</code>）时那么高，这就达到了<strong>模拟电路</strong>中控制强度的效果。”</p>
+<p><strong>(占空比的调控作用)</strong></p>
+<p>“因此，我们通过不断改变时间参数来实现‘模拟调控’：让 LED 亮（<code>$T_{on}$</code>）的时间大于或小于灭（<code>$T_{off}$</code>）的时间。当 <code>$T_{on}$</code> 越长（<strong>高占空比</strong>），LED 获得的平均能量越多，平均亮度就<strong>越高</strong>；反之，当 <code>$T_{on}$</code> 越短（<strong>低占空比</strong>），平均亮度就<strong>越低</strong>。这种通过调节时间比例来控制平均强度的技术，就成功地将数字信号（0/1）转化为了具有强度等级的模拟控制概念。”</p>
+<p>最后，我们来思考一个与频率相关的重要问题：<strong>如果在 PWM 控制 LED 亮度的例子中，我们将 PWM 的频率设置得低于 50 赫兹，会发生什么现象？</strong>”</p>
+<p>“答案是：如果 PWM 频率低于 50 赫兹，人眼会<strong>明显感觉到 LED 在闪烁</strong>。这是因为人类的视觉系统需要刷新频率高于 50Hz 或 60Hz，才能将闪烁的光线识别为稳定持续的光源。如果频率过低，PWM 就无法利用视觉暂留实现模拟的‘亮度等级’效果，我们只能看到光线在不断地亮灭切换，这将极大地影响用户体验。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.6 PWM 的初步认识：编程实现与亮度观察
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+#include <reg52.h>
+/* -------------------- 硬件位定义 -------------------- */
+sbit PWMOUT = P0^0;     /* PWM 输出口                */
+sbit ADDR0  = P1^0;     /* LED 位选线                */
+sbit ADDR1  = P1^1;
+sbit ADDR2  = P1^2;
+sbit ADDR3  = P1^3;
+sbit ENLED  = P1^4;     /* 低电平使能独立 LED        */
+
+/* -------------------- 全局变量 -------------------- */
+static unsigned char HighRH;   /* 高电平重载值高字节        */
+static unsigned char HighRL;   /* 高电平重载值低字节        */
+static unsigned char LowRH;    /* 低电平重载值高字节        */
+static unsigned char LowRL;    /* 低电平重载值低字节        */
+```
+```
+/* -------------------- 函数原型 -------------------- */
+void ConfigPWM(unsigned int fr, unsigned char dc);
+void ClosePWM(void);
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+void main(void)
+{
+    unsigned int i;
+
+    EA     = 1;     /* 开总中断                    */
+    ENLED  = 0;     /* 使能独立 LED                */
+    ADDR3  = 1;
+    ADDR2  = 1;
+    ADDR1  = 1;
+    ADDR0  = 0;
+```
+```C
+    while (1)
+    {
+        ConfigPWM(100, 10);      /* 100 Hz，10 % */
+        for (i = 0; i < 40000; i++);
+        ClosePWM();
+        ConfigPWM(100, 40);      /* 100 Hz，40 % */
+        for (i = 0; i < 40000; i++);
+        ClosePWM();
+        ConfigPWM(100, 90);      /* 100 Hz，90 % */
+        for (i = 0; i < 40000; i++);
+        ClosePWM();              /* 占空比 100 % */
+        for (i = 0; i < 40000; i++);
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们学习了 PWM 利用视觉暂留实现模拟控制的原理。现在，我们来看一个基于 8051 单片机的实际代码，看看如何在编程中实现这种占空比的调控。</p>
+<p>首先看代码的左侧：</p>
+<ol>
+<li><strong>硬件位定义：</strong> 核心是 <code>sbit PWMOUT = P0^0;</code>，这个 <code>P0.0</code> 引脚就是我们 PWM 信号的输出口，它直接连接着我们要控制亮度的 LED。</li>
+<li><strong>全局变量：</strong> 我们定义了四个静态变量 (<code>HighRH/RL</code>, <code>LowRH/RL</code>)，它们是用来存储计算后的<strong>定时器重载值</strong>。这告诉我们，我们是通过单片机的<strong>定时器中断</strong>来精确地控制高电平（亮 <code>$T_{on}$</code>）和低电平（灭 <code>$T_{off}$</code>）的时间。</li>
+<li><strong>函数原型：</strong> <code>ConfigPWM</code> 是核心配置函数，它接收两个参数：<code>fr</code>（频率）和 <code>dc</code>（占空比，Duty Cycle）。</li>
+</ol>
+<p>（讲解 main 函数的执行逻辑） 接着我们看代码的右侧，<code>main</code> 函数是程序的入口和控制逻辑所在：</p>
+<ol>
+<li><strong>初始化：</strong> 程序开启了总中断 <code>EA = 1</code>，并初始化了 LED 硬件。</li>
+<li><strong>核心循环 <code>while(1)</code>：</strong> 程序进入一个无限循环，不断地改变 PWM 的参数：</li>
+</ol>
+<ul>
+<li><strong>第一次调节：</strong> <code>ConfigPWM(100, 10);</code> ——我们将频率设定在 100 赫兹（保证人眼观察不到闪烁），**占空比设置为 10%**。这意味着 LED 在一个周期内只亮 <code>$10\%$</code> 的时间。</li>
+<li><strong>视觉效果：</strong> 此时，我们观察到的 LED 应该是<strong>很暗淡</strong>的。</li>
+<li><strong>延迟：</strong> 紧接着是一个较长的延时循环 <code>for (i = 0; i &lt; 40000; i++);</code>，目的是让这个 10% 的亮度持续一段时间，供我们观察。</li>
+<li><strong>第二次调节：</strong> 延迟结束后，<code>ClosePWM()</code> 重置 PWM，然后我们调用 <code>ConfigPWM(100, 40);</code>，**占空比提高到 40%**。</li>
+<li><strong>视觉效果：</strong> 此时 LED 的平均亮度会<strong>明显提高</strong>，达到一个中等亮度水平。</li>
+<li><strong>第三次调节：</strong> 占空比进一步提高到 **90%**。</li>
+<li><strong>视觉效果：</strong> LED 此时看起来就<strong>非常明亮</strong>了，接近于 <code>$100\%$</code> 持续点亮的亮度。</li>
+</ul>
+<p>（总结） 通过这个循环，我们看到，在<strong>保持频率不变</strong>的情况下，仅仅改变 <code>ConfigPWM</code> 的第二个参数（占空比），就能够实现 LED 亮度从暗到中等到亮度的连续变化。这正是 PWM 实现模拟控制最直接、最基础的编程体现。</p>
+<p>（提出问题并解答）</p>
+<p>现在，请大家思考一个关于程序运行流程的问题：</p>
+<p><strong>提问：</strong> 在 <code>main</code> 函数的 <code>while(1)</code> 循环中，每次调用 <code>ConfigPWM</code> 之后，都紧跟着一个 <code>for (i = 0; i &lt; 40000; i++);</code> 延迟循环。请问，<strong>这个延迟循环在控制 LED 亮度演示中起到了什么作用？</strong></p>
+<p><strong>答案：</strong> 这个延迟循环的作用是<strong>设置亮度观察时间</strong>。由于微控制器的运行速度非常快，如果没有这个延迟，程序会瞬间完成 10%、40%、90% 占空比的切换。人眼根本无法捕捉和区分这三种不同的亮度等级。通过加入延时，我们确保了每种亮度状态都能持续足够长的时间（例如几秒钟），让观察者能够清晰地看到并对比不同占空比所对应的平均亮度差异。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.6 PWM 的初步认识：编程实现与亮度观察
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+void ConfigPWM(unsigned int fr, unsigned char dc)
+{
+    unsigned int  high;
+    unsigned int  low;
+    unsigned long tmp;
+
+    tmp  = (11059200UL / 12) / fr;   /* 一个周期计数个数        */
+    high = (tmp * dc) / 100;         /* 高电平计数个数          */
+    low  = tmp - high;               /* 低电平计数个数          */
+
+    /* 计算重载值并补偿中断响应延时 12 个时钟 */
+    high = 65536UL - high + 12;
+    low  = 65536UL - low  + 12;
+```
+```C
+    HighRH = (unsigned char)(high >> 8);
+    HighRL = (unsigned char) high;
+    LowRH  = (unsigned char)(low  >> 8);
+    LowRL  = (unsigned char) low;
+    TMOD &= 0xF0;   /* 清零 T0 控制位            */
+    TMOD |= 0x01;   /* T0 模式 1，16 位定时器    */
+    TH0    = HighRH;
+    TL0    = HighRL;
+    ET0    = 1;     /* 使能 T0 中断              */
+    TR0    = 1;     /* 启动 T0                   */
+    PWMOUT = 1;     /* 默认输出高电平            */
+}
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+/* --------------------------------------------------
+ * 关闭 PWM 输出
+ * -------------------------------------------------- */
+void ClosePWM(void)
+{
+    TR0    = 0;     /* 停 T0                     */
+    ET0    = 0;     /* 禁 T0 中断                */
+    PWMOUT = 1;     /* 输出固定高电平            */
+}
+
+/* --------------------------------------------------
+ * T0 中断服务函数 —— 翻转 PWM
+ * -------------------------------------------------- */
+```
+```C
+void InterruptTimer0(void) interrupt 1 using 1 {
+    if (PWMOUT)     {     /* 当前高电平 -> 输出低电平  */
+        TH0    = LowRH;
+        TL0    = LowRL;
+        PWMOUT = 0;
+    }
+    else   {       /* 当前低电平 -> 输出高电平  */
+        TH0    = HighRH;
+        TL0    = HighRL;
+        PWMOUT = 1;
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么在计算定时器重载值时，一定要进行 +12 的操作？
+</div>
+</div>
+
+<aside class="notes"><h3 id="1-configpwm函数：目标设定与重载值计算">1. <code>ConfigPWM</code>函数：目标设定与重载值计算</h3>
+<p><strong>（转口话：）</strong> 刚才我们看到<code>main</code>函数如何通过调用<code>ConfigPWM</code>来改变亮度。那么，这个函数内部是如何将我们期望的频率和亮度，转化为单片机能理解的计数值呢？</p>
+<h4 id="核心计算步骤">核心计算步骤</h4>
+<ol>
+<li><p><strong>确定总计数值</strong>：我们用晶振频率除以12，得到定时器的基准时钟频率，再除以期望的PWM频率，从而计算出完成一个<strong>完整周期</strong>所需的总计时器计数值。</p>
+</li>
+<li><p><strong>分割高低电平时间</strong>：利用百分比形式的占空比，将总计数值精确地分割为高电平时间对应的计数和低电平时间对应的计数。</p>
+</li>
+<li><p><strong>转换重载值并进行补偿</strong>：</p>
+<ul>
+<li><p>因为51单片机定时器是向上计数至溢出的，所以我们需要用最大值 65536 减去目标计数值。</p>
+</li>
+<li><p>请注意这里的 <strong>+12</strong>。这是一个<strong>非常精妙的细节</strong>，它是为了<strong>补偿中断响应延迟</strong>所消耗的约12个时钟周期，确保我们输出的PWM波形具有最高的精度。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="硬件初始化与启动">硬件初始化与启动</h4>
+<p>计算完成后，<code>ConfigPWM</code>将重载值存入全局变量，然后配置定时器0为16位模式1，设置初始值，并执行两个关键操作：</p>
+<ul>
+<li><p><strong>开启中断</strong>（<code>ET0 = 1;</code>）：这是整个PWM系统能够自动、持续运行的基础。</p>
+</li>
+<li><p><strong>启动定时器</strong>（<code>TR0 = 1;</code>）：同时我们将引脚设置为高电平，开始第一个高电平周期。</p>
+</li>
+</ul>
+<h3 id="2-中断服务程序：精确执行的状态机">2. 中断服务程序：精确执行的“状态机”</h3>
+<p><strong>（转口话：）</strong> 定时器启动后，就在后台默默计数。一旦溢出，CPU会立刻暂停主程序，跳转到我们的中断服务程序 <code>InterruptTimer0</code>。</p>
+<ul>
+<li><p><strong>后台机制</strong>：这是一个<strong>自动、高效的后台任务</strong>，保证了PWM波形的连续性。</p>
+</li>
+<li><p><strong>状态翻转逻辑</strong>：中断服务程序内部其实是一个<strong>简单的状态机</strong>：</p>
+<ul>
+<li><p><strong>如果当前是高电平时间结束</strong>：它会立刻将定时器重载值切换为低电平对应的值，并将输出引脚<strong>翻转为0</strong>。</p>
+</li>
+<li><p><strong>如果当前是低电平时间结束</strong>：它会立刻将定时器重载值切换回高电平对应的值，并将输出引脚<strong>翻转为1</strong>。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong>：<code>ConfigPWM</code>负责精确计算和配置，而<code>InterruptTimer0</code>负责在后台不知疲倦地、准时地翻转电平。二者协同配合，才能在引脚上生成受控的PWM波形。</p>
+<p><strong>问题：</strong> 为什么在计算定时器重载值时，一定要进行 +12 的操作？</p>
+<p><strong>解答：</strong> 这个 +12 是为了<strong>补偿中断响应的延迟</strong>。当定时器溢出后，CPU需要消耗大约12个时钟周期来响应中断、进入中断函数并执行完设置下一周期重载值的关键代码。 +12 操作确保了下一周期计时的起点是精确无误的，从而保证了 PWM 的定时精度。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.7 PWM 实现呼吸灯效果：呼吸灯原理介绍
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/呼吸灯.gif" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **呼吸灯原理**
+    - **定义**：亮度在数十个等级间平滑、连续过渡
+    - **过程**：最亮 ↔ 渐暗 ↔ 熄灭 ↔ 渐亮 ↔ 最亮（循环）
+- **应用场景**
+    - 灯光秀、KTV等舞台氛围灯光
+- **要点**：
+    - **Timer 0**：产生PWM波形（控制频率）
+    - **Timer 1**：定时调整占空比（控制亮度变化）
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么 Timer 0 和 Timer 1 必须使用不同的工作频率？
+</div>
+</div>
+
+<aside class="notes"><h3 id="双定时器配合：实现呼吸灯效果（timer-0--timer-1）">双定时器配合：实现“呼吸灯”效果（Timer 0 &amp; Timer 1）</h3>
+<p><strong>（承上启下转口话：）</strong></p>
+<blockquote>
+<p>上节课，我们用 Timer 0 实现了固定占空比的 PWM。今天，为了实现平滑的<strong>呼吸灯</strong>效果，我们需要一个机制，在后台<strong>定时、自动、连续地</strong>修改 Timer 0 正在输出的占空比。这个“新机制”就是<strong>引入 Timer 1</strong>，形成了双定时器协同工作的架构。</p>
+</blockquote>
+<h3 id="1-双定时器的分工">1. 双定时器的分工</h3>
+<p>在呼吸灯的架构中，两个定时器有着明确的分工：</p>
+<ul>
+<li><strong>Timer 0：PWM 波形发生器</strong>。它继续负责高频、精确地翻转电平，产生基准频率的 PWM 波形。其占空比由程序中的全局变量控制。</li>
+<li><strong>Timer 1：占空比控制（节奏器）</strong>。它被配置为较低的频率（例如几十毫秒一次），专门用于定时触发中断，为呼吸灯提供变化的节奏。</li>
+</ul>
+<p><strong>总结：</strong> Timer 0 负责輸出波形的<strong>速度</strong>（高频），而 Timer 1 负责調整亮度的<strong>節奏</strong>（低頻）</p>
+<h3 id="2-timer-1-中断的核心逻辑">2. Timer 1 中断的核心逻辑</h3>
+<p>Timer 1 的中断服务程序是我们实现呼吸灯的<strong>中枢神经</strong>。它主要执行三个关键动作：</p>
+<ol>
+<li><p><strong>更新占空比</strong>：在中断中，程序会根据当前的变化方向（由 <code>g_step</code> 变量控制），对全局占空比变量 <code>g_dc</code> 进行微小调整，实现连续渐变。</p>
+</li>
+<li><p><strong>重新配置 PWM</strong>：立即调用 <code>ConfigPWM</code> 函数，将新的 <code>g_dc</code> 值应用到 Timer 0 的重载配置中，让 PWM 波形立刻反映出新的亮度。</p>
+</li>
+<li><p><strong>判断边界，翻转方向</strong>：程序会判断 <code>g_dc</code> 是否达到了最大值（最亮）或最小值（熄灭）。一旦触及边界，立即将步长 <code>g_step</code> 的符号进行<strong>翻转</strong>，从而实现从渐亮到渐暗，或从渐暗到渐亮的循环。</p>
+</li>
+</ol>
+<p>正是这种相互独立又紧密配合的工作方式，使得我们的 LED 能够柔和、连续地“呼吸”起来。</p>
+<p><strong>问题：</strong> 为什么 Timer 0 和 Timer 1 必须使用不同的工作频率？</p>
+<p><strong>解答：</strong> Timer 0 作为 PWM 发生器，需要工作在 KHz 级别的高频，以确保人眼看不出闪烁；而 Timer 1 作为占空比控制器（节奏器），必须工作在较低的毫秒级频率，才能让亮度变化看起来是平滑、缓慢的渐变过程。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.7 PWM 实现呼吸灯效果：程序
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+#include <reg52.h>
+sbit PWMOUT = P0^0;
+sbit ADDR0  = P1^0;
+sbit ADDR1  = P1^1;
+sbit ADDR2  = P1^2;
+sbit ADDR3  = P1^3;
+sbit ENLED  = P1^4;
+unsigned long PeriodCnt = 0;  // PWM周期计数值
+unsigned char HighRH = 0;     // 高电平重载值的高字节
+unsigned char HighRL = 0;     // 高电平重载值的低字节
+unsigned char LowRH  = 0;     // 低电平重载值的高字节
+unsigned char LowRL  = 0;     // 低电平重载值的低字节
+unsigned char T1RH   = 0;     // T1重载值的高字节
+unsigned char T1RL   = 0;     // T1重载值的低字节
+```
+```C
+void ConfigTimer1(unsigned int ms);
+void ConfigPWM(unsigned int fr, unsigned char dc);
+void AdjustDutyCycle(unsigned char dc);
+void main() {
+    EA = 1;       // 开总中断
+    ENLED = 0;    // 使能独立LED
+    ADDR3 = 1;
+    ADDR2 = 1;
+    ADDR1 = 1;
+    ADDR0 = 0;
+    ConfigPWM(100, 10);  // 配置并启动PWM，频率100Hz，初始占空比10%
+    ConfigTimer1(50);    // 用T1定时调整占空比，50ms调整一次
+    while (1);
+}
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 11%; height: 38%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+/* 配置并启动T1，ms-定时时间 */
+void ConfigTimer1(unsigned int ms) {
+    unsigned long tmp;  // 临时变量
+    tmp = 11059200 / 12;      // 定时器计数频率
+    tmp = (tmp * ms) / 1000;  // 计算所需的计数值
+    tmp = 65536 - tmp;        // 计算定时器重载值
+    tmp = tmp + 12;           // 补偿中断响应延时造成的误差
+    T1RH = (unsigned char)(tmp >> 8);  // 定时器重载值拆分为高低字节
+    T1RL = (unsigned char)tmp;
+    TMOD &= 0x0F;   // 清零T1的控制位
+    TMOD |= 0x10;   // 配置T1为模式1
+    TH1 = T1RH;     // 加载T1重载值
+    TL1 = T1RL;
+    ET1 = 1;        // 使能T1中断
+    TR1 = 1;        // 启动T1
+}
+```
+</div>
+
+<div class="" style="line-height: 1.6; position: absolute; left: 44%; top: 50%; height: 38%; width: 56%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **主程序与初始化** (T1RH/RL 变量新增)
+    - **启动**: Timer 0 (PWM/100Hz) & Timer 1 (50ms/节奏)
+- **Timer 1 配置** (`ConfigTimer1`)
+    - **核心步骤**: 计算重载值（含 +12 补偿），配置模式 1，开启并启动 T1。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><h3 id="呼吸灯程序解析：主程序与-timer-1-初始化">呼吸灯程序解析：主程序与 Timer 1 初始化</h3>
+<p><strong>（承上启下转口话：）</strong></p>
+<blockquote>
+<p>上一页我们从理论上确定了呼吸灯需要 Timer 0 和 Timer 1 协同工作。现在，让我们聚焦到具体的程序实现上。这是整个程序代码的起始部分，我们重点来看<strong>全局变量的声明、<code>main</code> 函数的调用顺序以及 Timer 1 的配置</strong>。</p>
+</blockquote>
+<h3 id="1-变量声明与-main-函数分析">1. 变量声明与 <code>main</code> 函数分析</h3>
+<p>首先看代码左上方。在变量声明部分，除了我们熟悉的用于存储 Timer 0 高低电平重载值的 <code>HighRH/RL</code> 和 <code>LowRH/RL</code> 外，我们新增了两个关键变量：**<code>T1RH</code> 和 <code>T1RL</code>**，它们专门用来存储 Timer 1 的重载值，用于控制呼吸的节奏。</p>
+<p>接下来看 <code>main</code> 函数：这是整个程序的启动入口，它的逻辑非常清晰——<strong>设置和启动</strong>。</p>
+<ul>
+<li><p>首先开启总中断 <code>EA = 1</code>。</p>
+</li>
+<li><p>随后，通过配置地址引脚，使能我们想要控制的独立 LED 灯。</p>
+</li>
+<li><p>最重要的两行启动代码是：</p>
+<ul>
+<li><p><code>ConfigPWM(100, 10);</code>：<strong>启动 Timer 0</strong>。我们选择 <strong>100Hz</strong> 的频率（足够高，不闪烁），并设定一个**初始占空比 10%**，让 LED 一开始就处于微亮状态。</p>
+</li>
+<li><p><code>ConfigTimer1(50);</code>：<strong>启动 Timer 1</strong>。我们配置它以 <strong>50 毫秒（ms）</strong> 为周期触发中断。这 50ms 就是我们调整占空比的“节拍”。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-timer-1-配置函数-configtimer1">2. Timer 1 配置函数 <code>ConfigTimer1</code></h3>
+<p>我们再看右侧代码的 <code>ConfigTimer1</code> 函数。这个函数是实现“呼吸节奏”的关键。</p>
+<p>它的工作原理与 Timer 0 的配置非常相似，但目的是<strong>设定定时周期</strong>，而不是 PWM 周期。</p>
+<ol>
+<li><p><strong>计算重载值</strong>：程序首先将基准时钟频率除以 1000，然后乘以我们期望的定时时间 <code>ms</code>（这里是 50ms），计算出 50ms 所需的计数值。</p>
+</li>
+<li><p><strong>转换并补偿</strong>：同样地，用 65536 减去计数值得到重载值，并且这里我们再次看到了那个** +12 的补偿项**，确保 Timer 1 的中断周期也精确地等于 50ms。</p>
+</li>
+<li><p><strong>模式配置与启动</strong>：我们将 Timer 1 配置为<strong>模式 1</strong>（16位自动重载），加载计算出的重载值，并通过 <code>ET1 = 1</code>开启 Timer 1 中断，最后用 <code>TR1 = 1</code> 启动 Timer 1。</p>
+</li>
+</ol>
+<p>至此，我们的两个定时器都已经启动并进入了工作状态：Timer 0 负责高频输出 PWM 波形，Timer 1 则在后台以 50ms 的固定频率默默地准备触发中断，等待调整占空比。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.7 PWM 实现呼吸灯效果：程序
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+/* 配置并启动PWM，fr-频率，dc-占空比 */
+void ConfigPWM(unsigned int fr, unsigned char dc)
+{
+    unsigned int high, low;
+    PeriodCnt = (11059200 / 12) / fr;  // 计算一个周期所需的计数值
+    high = (PeriodCnt * dc) / 100;     // 计算高电平所需的计数值
+    low  = PeriodCnt - high;           // 计算低电平所需的计数值
+    high = 65536 - high + 12;          // 计算高电平的定时器重载值并补偿中断延时
+    low  = 65536 - low + 12;           // 计算低电平的定时器重载值并补偿中断延时
+    HighRH = (unsigned char)(high >> 8);  // 高电平重载值拆分为高低字节
+    HighRL = (unsigned char)high;
+```
+```C
+    LowRH  = (unsigned char)(low >> 8);   // 低电平重载值拆分为高低字节
+    LowRL  = (unsigned char)low;
+    
+    TMOD &= 0xF0;   // 清零T0的控制位
+    TMOD |= 0x01;   // 配置T0为模式1
+    TH0 = HighRH;   // 加载T0重载值
+    TL0 = HighRL;
+    ET0 = 1;        // 使能T0中断
+    TR0 = 1;        // 启动T0
+    PWMOUT = 1;     // 输出高电平
+}
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+/* 占空比调整函数，频率不变只调整占空比 */
+void AdjustDutyCycle(unsigned char dc)
+{
+    unsigned int high, low;
+    high = (PeriodCnt * dc) / 100;    // 计算高电平所需的计数值
+    low  = PeriodCnt - high;          // 计算低电平所需的计数值
+    high = 65536 - high + 12;         // 计算高电平的定时器重载值并补偿中断延时
+    low  = 65536 - low + 12;          // 计算低电平的定时器重载值并补偿中断延时
+    HighRH = (unsigned char)(high >> 8);  // 高电平重载值拆分为高低字节
+    HighRL = (unsigned char)high;
+    LowRH  = (unsigned char)(low >> 8);   // 低电平重载值拆分为高低字节
+    LowRL  = (unsigned char)low;
+}
+```
+```C
+/* T0中断服务函数，产生PWM输出 */
+void InterruptTimer0() interrupt 1 {
+    if (PWMOUT == 1) { // 当前输出为高电平时，装载低电平值并输出低电平
+        TH0 = LowRH;
+        TL0 = LowRL;
+        PWMOUT = 0;
+    }
+    else  {      // 当前输出为低电平时，装载高电平值并输出高电平
+        TH0 = HighRH;
+        TL0 = HighRL;
+        PWMOUT = 1;
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们已经启动了 Timer 0 和 Timer 1。现在，让我们深入到 PWM 发生器的核心——这三个函数如何协同工作，确保我们的 LED 能够高精度地输出波形，并随时响应亮度的变化。</p>
+<h3 id="1-configpwm-函数：首次配置与频率锁定">1. <code>ConfigPWM</code> 函数：首次配置与频率锁定</h3>
+<p>我们来看左侧上方的 <code>ConfigPWM</code> 函数。这个函数只在 <code>main</code> 函数中被<strong>调用一次</strong>，它的核心任务是锁定 PWM 的频率并进行初次配置。</p>
+<ul>
+<li><p><strong>频率锁定</strong>：它首先计算出一个 PWM 周期所需要的总计数值 <code>PeriodCnt</code>。<strong>这个值一旦确定，整个 PWM 波形的频率就被锁定了，后续就不会改变</strong>。</p>
+</li>
+<li><p><strong>计算高低电平</strong>：然后，它根据传入的占空比 <code>dc</code>，计算出初始的高电平（Ton​）和低电平（Toff​）所需的重载值，并进行 +12 的补偿。</p>
+</li>
+<li><p><strong>启动 Timer 0</strong>：最后，它将重载值加载到 <code>TH0/TL0</code> 中，配置 Timer 0 为模式 1，开启中断，并用 <code>TR0 = 1</code> 启动定时器，同时让 <code>PWMOUT = 1</code> 开始输出高电平。</p>
+</li>
+</ul>
+<h3 id="2-adjustdutycycle-函数：实时调整占空比">2. <code>AdjustDutyCycle</code> 函数：实时调整占空比</h3>
+<p>再看左侧下方的 <code>AdjustDutyCycle</code> 函数。这个函数是专为呼吸灯设计的，它将被 <strong>Timer 1 的中断</strong>所调用。</p>
+<ul>
+<li><p><strong>仅调整占空比</strong>：注意，这个函数**不再计算 <code>PeriodCnt</code>**，因为它假设频率已经锁定。它只接收新的占空比 <code>dc</code>。</p>
+</li>
+<li><p><strong>重算重载值</strong>：它利用已锁定的 <code>PeriodCnt</code> 和新的 <code>dc</code>，重新计算 Ton​ 和 Toff​ 所需的重载值。</p>
+</li>
+<li><p><strong>更新全局变量</strong>：它将新的重载值存入全局变量 <code>HighRH/RL</code> 和 <code>LowRH/RL</code> 中。</p>
+</li>
+</ul>
+<p><strong>关键点：</strong> 这个函数只负责<strong>计算和更新数据</strong>，它本身不操作 <code>TH0/TL0</code> 寄存器。真正将新的占空比应用到硬件中的，是接下来的 Timer 0 中断。</p>
+<h3 id="3-interrupttimer0：后台精准翻转">3. <code>InterruptTimer0</code>：后台精准翻转</h3>
+<p>最后来看右侧的 <strong>Timer 0 中断服务程序</strong>。这是 PWM 连续、高精度输出的保证。</p>
+<ul>
+<li><p><strong>状态机执行者</strong>：这个函数是一个高效的状态机，在 Timer 0 每次溢出时被触发。</p>
+</li>
+<li><p><strong>重载新值</strong>：它检查当前的输出状态：</p>
+<ul>
+<li><p><strong>如果当前是高电平</strong> (<code>PWMOUT == 1</code>)：说明 Ton​ 结束，它立刻装载<strong>低电平</strong>的重载值 (<code>LowRH/RL</code>)，并将输出<strong>翻转为 0</strong>。</p>
+</li>
+<li><p><strong>如果当前是低电平</strong> (<code>else</code>)：说明 Toff​ 结束，它立刻装载<strong>高电平</strong>的重载值 (<code>HighRH/RL</code>)，并将输出<strong>翻转为 1</strong>。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>核心思想：</strong> Timer 0 中断在每次电平翻转的瞬间，都会去全局变量中读取<strong>最新的</strong> Ton​ 或 Toff​ 值。当 Timer 1 调用 <code>AdjustDutyCycle</code> 更新了这些全局变量后，Timer 0 在下一个翻转周期就会自动采用新的占空比，实现了<strong>平滑且无缝的亮度调整</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.7 PWM 实现呼吸灯效果：程序
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+/* T1中断服务函数，定时动态调整占空比 */
+void InterruptTimer1() interrupt 3
+{
+    static bit dir = 0;
+    static unsigned char index = 0;
+    unsigned char code table[13] = {  // 占空比调整表
+        5, 18, 30, 41, 51, 60, 68, 75, 81, 86, 90, 93, 95
+    };
+
+    TH1 = T1RH;  // 重新加载T1重载值
+    TL1 = T1RL;
+    
+    AdjustDutyCycle(table[index]);  // 调整PWM的占空比
+```
+```C
+    if (dir == 0) { // 逐步增大占空比
+        index++;
+        if (index >= 12) {
+            dir = 1;
+        }
+    }
+    else  {  // 逐步减小占空比
+        index--;
+        if (index == 0) {
+            dir = 0;
+        }
+    }
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **一、核心要素**
+    - 静态变量：dir(方向)、index(索引)
+    - 查找表：13个非线性占空比值
+- **二、中断执行**
+    - 定时器重载：维持50ms周期
+    - 应用占空比：AdjustDutyCycle(table[index])
+- **三、状态机控制**
+    - 渐亮：index++，达12时dir=1
+    - 渐暗：index--，归0时dir=0
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><blockquote>
+<p>在前一页我们讨论了 <code>ConfigPWM</code> 和 <code>AdjustDutyCycle</code> 负责<strong>计算</strong>新的占空比。现在，让我们看看我们的<strong>“节拍器”</strong>——Timer 1 的中断服务程序 <code>InterruptTimer1</code>，是如何以 50 毫秒的节奏，驱动占空比连续变化的。这是整个呼吸灯效果最核心、最巧妙的部分。</p>
+</blockquote>
+<h3 id="1-静态变量与占空比查找表">1. 静态变量与占空比查找表</h3>
+<p>我们首先关注 Timer 1 中断服务程序（ISR）中的关键要素：</p>
+<ol>
+<li><p><strong>静态控制变量</strong>：<code>static bit dir = 0;</code> 和 <code>static unsigned char index = 0;</code>。</p>
+<ul>
+<li><p><code>dir</code>（方向）：控制亮度是渐亮（<code>dir=0</code>）还是渐暗（<code>dir=1</code>）。<code>static</code> 确保它在每次中断后都保持上一次的状态。</p>
+</li>
+<li><p><code>index</code>（索引）：指向当前要采用的占空比值。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>占空比查找表</strong>：<code>unsigned char code table[13] = { ... };</code>。</p>
+<ul>
+<li><p>这个数组存储了从 5% 到 95% <strong>非线性分布</strong>的 13 个占空比值。</p>
+</li>
+<li><p><strong>非线性设计的目的</strong>：人眼对亮度的感知是非线性的（对低亮度变化敏感，对高亮度变化不敏感）。使用这个<strong>非均匀的表格</strong>，能够让亮度的变化在人眼看来更加<strong>平滑、自然</strong>，避免了亮度在高值时感觉变化很慢，在低值时感觉变化很快的问题。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-中断执行与占空比应用">2. 中断执行与占空比应用</h3>
+<p>Timer 1 每次溢出时，ISR 都会执行以下操作：</p>
+<ol>
+<li><p><strong>重载定时器</strong>：<code>TH1 = T1RH; TL1 = T1RL;</code> 确保 Timer 1 能够继续精确地以 50ms 周期运行。</p>
+</li>
+<li><p><strong>应用占空比</strong>：<code>AdjustDutyCycle(table[index]);</code> 这是关键一步。它从查找表中取出 <code>index</code> 对应的占空比值，并调用 <code>AdjustDutyCycle</code> 函数来更新 Timer 0 的重载全局变量。</p>
+</li>
+</ol>
+<h3 id="3-状态机：呼吸方向的翻转控制">3. 状态机：呼吸方向的翻转控制</h3>
+<p>最后，程序通过 <code>if (dir == 0)</code> 的逻辑，形成了一个简单的<strong>状态机</strong>，控制呼吸的方向：</p>
+<ul>
+<li><p><strong>渐亮过程</strong> (<code>dir == 0</code>)：<code>index</code> 递增。当 <code>index</code> 达到表的最大值 12 时，说明已达到最亮状态，此时将 <code>dir</code> <strong>翻转为 1</strong>，进入渐暗过程。</p>
+</li>
+<li><p><strong>渐暗过程</strong> (<code>dir == 1</code>)：<code>index</code> 递减。当 <code>index</code> 减小到 0 时，说明已达到最暗状态，此时将 <code>dir</code> <strong>翻转为 0</strong>，进入渐亮过程。</p>
+</li>
+</ul>
+<p>通过 Timer 1 提供的稳定节拍、查找表提供的非线性平滑过渡，以及这个简单的状态机，我们就实现了完整且自然的“呼吸”循环。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.8 长短按键的应用
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251118153336205.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.7; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **一、核心概念**
+    - 短按：快速释放，执行单次操作
+    - 长按：持续按住，触发连续操作
+- **二、实现原理**
+    - 检测按下：立即执行一次操作
+    - 计时判断：超过阈值（1s）判为长按
+    - 连续触发：间隔时间（200ms）重复执行
+- **三、实践项目：定时炸弹倒计时**
+    - 向上/向下键：长短按键设定时间
+    - 回车键：启动倒计时
+    - 取消键：停止倒计时
+    - 倒计时归零：PWM驱动声光报警
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>上一页我们利用PWM技术，通过程序控制让一个LED灯实现了平滑的呼吸效果。大家可以看到，通过精确控制占空比，我们能够轻松地控制LED的亮度。那么，如果我们想用按键来与这个“会呼吸的灯”进行交互，比如长按让它变亮，短按让它变暗，这就引出了我们今天要学习的关键技术——<strong>长短按键的识别</strong>。</p>
+<p>首先，我们来看一下它的<strong>核心概念</strong>。</p>
+<ul>
+<li><p><strong>短按</strong>：指的是按下后快速释放，用于执行一次性的精确操作，例如让呼吸灯的亮度等级降低一档。</p>
+</li>
+<li><p><strong>长按</strong>：指的是按下并持续按住超过一个设定的时间阈值，用于触发连续、快速的重复操作，例如按住按键让亮度等级持续增加。</p>
+</li>
+</ul>
+<p>那么，这个功能是如何在单片机里实现的呢？它的<strong>实现原理</strong>可以概括为三个步骤：</p>
+<ol>
+<li><p><strong>检测按下</strong>：当程序检测到按键被按下时，先执行一次目标操作（比如亮度加1）。</p>
+</li>
+<li><p><strong>计时判断</strong>：同时，单片机内部开始计时，记录按键按下的持续时间。当这个时间超过我们设定的门槛（例如1秒），就判定为长按。</p>
+</li>
+<li><p><strong>连续触发</strong>：在确认为长按后，程序会每隔一个很短的时间间隔（例如200毫秒），就自动再执行一次目标操作，实现连续增加的效果。</p>
+</li>
+</ol>
+<p>为了让大家更好地理解这个机制，本节课我们将完成一个<strong>实践项目：定时炸弹倒计时</strong>。<br>在这个项目里，我们将运用长短按键功能：</p>
+<ul>
+<li><p>使用<strong>向上/向下键</strong>（短按单次调整，长按连续快速调整）来设定倒计时时间。</p>
+</li>
+<li><p>使用<strong>回车键</strong>来启动倒计时。</p>
+</li>
+<li><p>使用<strong>取消键</strong>来停止。</p>
+</li>
+<li><p>当倒计时归零时，我们将调用上一节课学到的PWM知识，驱动蜂鸣器和LED，制造出警报闪烁和鸣响的“爆炸”效果。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.8 长短按键的应用
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+#include <reg52.h>
+sbit BUZZ      = P1^6;
+sbit ADDR3     = P1^3;
+sbit ENLED     = P1^4;
+sbit KEY_IN_1  = P2^4;
+sbit KEY_IN_2  = P2^5;
+sbit KEY_IN_3  = P2^6;
+sbit KEY_IN_4  = P2^7;
+sbit KEY_OUT_1 = P2^3;
+sbit KEY_OUT_2 = P2^2;
+sbit KEY_OUT_3 = P2^1;
+sbit KEY_OUT_4 = P2^0;
+unsigned char code LedChar[] = {  // 数码管显示字符转换表
+    0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8,
+    0x80, 0x90, 0x88, 0x83, 0xC6, 0xA1, 0x86, 0x8E
+};
+```
+```C
+// 数码管+独立LED显示缓冲区
+unsigned char LedBuff[7] = {
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+};
+
+// 矩阵按键编号到标准键盘键码的映射表
+unsigned char code KeyCodeMap[4][4] = {
+    { 0x31, 0x32, 0x33, 0x26 }, // 数字键1、数字键2、数字键3、向上键
+    { 0x34, 0x35, 0x36, 0x25 }, // 数字键4、数字键5、数字键6、向左键
+    { 0x37, 0x38, 0x39, 0x28 }, // 数字键7、数字键8、数字键9、向下键
+    { 0x30, 0x1B, 0x0D, 0x27 }  // 数字键0、ESC键、回车键、向右键
+};
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+// 全部矩阵按键的当前状态
+unsigned char KeySta[4][4] = {
+    {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}
+};
+
+// 每个按键按下的持续时间，单位ms
+unsigned long xdata KeyDownTime[4][4] = {
+    {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}
+};
+
+bit flag1s = 0;        // 1秒定时标志
+bit flagStart = 0;     // 倒计时启动标志
+```
+```C
+unsigned char T0RH = 0; // T0重载值的高字节
+unsigned char T0RL = 0; // T0重载值的低字节
+unsigned int CountDown = 0; // 倒计时计数器
+void ConfigTimer0(unsigned int ms);
+void ShowNumber(unsigned long num);
+void KeyDriver();
+void KeyAction(unsigned char keycode);
+void KeyScan();
+void LedScan();
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>大家好，上一节我们学习了长短按键的概念和实现原理，知道了如何通过计时来区分短按和长按。现在，让我们深入到代码层面，看看这些理论是如何通过C语言和单片机硬件具体实现的。本节课我们将通过一个“定时炸弹倒计时”的程序，来完整解析长短按键的应用。</p>
+<p>大家看PPT的左侧，这里定义了程序的核心硬件接口和数据结构。</p>
+<ul>
+<li><p>首先，我们通过<code>sbit</code>关键字定义了蜂鸣器、LED以及矩阵键盘的I/O口，这是我们与硬件交互的基础。</p>
+</li>
+<li><p>这里有两个非常关键的<strong>数据表</strong>：</p>
+<ul>
+<li><p><code>LedChar[]</code>是数码管字型码表，负责将数字转换成数码管能显示的段码。</p>
+</li>
+<li><p><code>KeyCodeMap[][]</code>是<strong>按键映射表</strong>，它将物理位置（第几行第几列）的按键，映射成一个我们程序中易于识别的标准键码。比如，这里的<code>0x0D</code>代表回车键，<code>0x1B</code>代表ESC键。这种设计极大地提高了程序的可读性和可维护性。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>（转向右侧代码）<br>再看右侧，这里定义了程序运行所需的<strong>核心变量和函数框架</strong>。</p>
+<ul>
+<li><p><code>KeySta[4][4]</code>数组记录了每个按键的<strong>当前状态</strong>（按下或弹起），这是按键扫描的基础。</p>
+</li>
+<li><p><code>KeyDownTime[4][4]</code>数组是<strong>实现长短按键功能的核心</strong>，它专门用来记录每个按键被按下的持续时间，单位为毫秒。通过判断这个时间，我们就能区分短按和长按。</p>
+</li>
+<li><p>此外，还有像<code>flag1s</code>、<code>CountDown</code>这样的状态和计数变量，它们共同协作，管理着倒计时的流程。</p>
+</li>
+</ul>
+<p>最后，大家可以看到程序的<strong>函数骨架</strong>。<code>KeyDriver</code>和<code>KeyScan</code>负责检测和处理按键，<code>ShowNumber</code>负责显示，<code>ConfigTimer0</code>负责精确计时。这些函数模块分工明确，共同构建了整个应用。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.8 长短按键的应用
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+void main()
+{
+    EA = 1;            // 使能总中断
+    ENLED = 0;         // 选择数码管和独立LED
+    ADDR3 = 1;
+    ConfigTimer0(1);   // 配置T0定时1ms
+    ShowNumber(0);     // 上电显示0
+    while (1) {
+        KeyDriver();   // 调用按键驱动函数
+        if (flagStart && flag1s)  { // 倒计时启动且1秒定时到达时，处理倒计时
+```
+```C
+            flag1s = 0;
+            if (CountDown > 0){ // 倒计时未到0时，计数器递减
+                CountDown--;
+                ShowNumber(CountDown); // 刷新倒计时数显示
+                if (CountDown == 0) {   // 减到0时，执行声光报警
+                    BUZZ = 0;          // 启动蜂鸣器发声
+                    LedBuff[6] = 0x00; // 点亮独立LED
+                }
+            }
+        }
+    }
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 11%; height: 79%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+/* 配置并启动T0，ms-T0定时时间 */
+void ConfigTimer0(unsigned int ms) {
+    unsigned long tmp;  // 临时变量
+    tmp = 11059200 / 12;      // 定时器计数频率
+    tmp = (tmp * ms) / 1000;  // 计算所需的计数值
+    tmp = 65536 - tmp;        // 计算定时器重载值
+    tmp = tmp + 28;           // 补偿中断响应延时造成的误差
+    T0RH = (unsigned char)(tmp >> 8); // 定时器重载值拆分为高低字节
+    T0RL = (unsigned char)tmp;
+    TMOD &= 0xF0;   // 清零T0的控制位
+    TMOD |= 0x01;   // 配置T0为模式1
+    TH0 = T0RH;     // 加载T0重载值
+    TL0 = T0RL;
+    ET0 = 1;        // 使能T0中断
+    TR0 = 1;        // 启动T0
+}
+```
+```
+/* 将一个无符号长整型的数字显示到数码管上，num-待显示数字 */
+void ShowNumber(unsigned long num) {
+    signed char i;
+    unsigned char buf[6];
+    for (i = 0; i < 6; i++) {   // 把长整型数转换为6位十进制的数组
+        buf[i] = num % 10;  num = num / 10;
+    }
+    for (i = 5; i >= 1; i--) { // 从最高位起，遇到0转换为空格，遇到非0则退出循环
+        if (buf[i] == 0) LedBuff[i] = 0xFF;
+        else break;
+    }
+    for ( ; i >= 0; i--) {     // 剩余低位都如实转换为数码管显示字符
+        LedBuff[i] = LedChar[buf[i]];
+    }
+}
+```
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.8 长短按键的应用
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+/* 按键动作函数，根据键码执行相应的操作，keycode-按键键码 */
+void KeyAction(unsigned char keycode)
+{
+    if (keycode == 0x26) {      // 向上键，倒计时设定值递增
+        if (CountDown < 9999) { // 最大计时9999秒
+            CountDown++;
+            ShowNumber(CountDown);
+        }
+    }
+    else if (keycode == 0x28) { // 向下键，倒计时设定值递减
+        if (CountDown > 1)  {   // 最小计时1秒
+            CountDown--;
+            ShowNumber(CountDown);
+        }
+    }
+```
+```C
+    else if (keycode == 0x0D) { // 回车键，启动倒计时
+        flagStart = 1;         // 启动倒计时
+    }
+    else if (keycode == 0x1B) { // Esc键，取消倒计时
+        BUZZ = 1;              // 关闭蜂鸣器
+        LedBuff[6] = 0xFF;     // 关闭独立LED
+        flagStart = 0;         // 停止倒计时
+        CountDown = 0;         // 倒计时数归零
+        ShowNumber(CountDown);
+    }
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 11%; height: 79%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+/* 按键驱动函数，检测按键动作，调度相应动作函数，需在主循环中调用 */
+void KeyDriver() {
+    unsigned char i, j;
+    static unsigned char xdata backup[4][4] = {  // 按键值备份，保存前一次的值
+        {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}
+    };
+    static unsigned long xdata TimeThr[4][4] = {  // 快速输入执行的时间阈值
+        {1000, 1000, 1000, 1000}, {1000, 1000, 1000, 1000},
+        {1000, 1000, 1000, 1000}, {1000, 1000, 1000, 1000}
+    };
+    
+    for (i = 0; i < 4; i++) {  // 循环扫描4*4的矩阵按键
+        for (j = 0; j < 4; j++) {
+            if (backup[i][j] != KeySta[i][j])  {   // 检测按键动作
+                if (backup[i][j] != 0)  {          // 按键按下时执行动作
+```
+```C
+                  KeyAction(KeyCodeMap[i][j]);  // 调用按键动作函数
+                }
+                backup[i][j] = KeySta[i][j];      // 刷新前一次的备份值
+            }
+            if (KeyDownTime[i][j] > 0) {           // 检测执行快速输入
+                if (KeyDownTime[i][j] >= TimeThr[i][j]){
+                    KeyAction(KeyCodeMap[i][j]);  // 调用按键动作函数
+                    TimeThr[i][j] += 200;    
+                }
+            }
+            else {   // 按键弹起时复位阈值时间
+                TimeThr[i][j] = 1000;  // 恢复1s的初始阈值时间
+            }
+        }
+    }
+}
+```
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们分析了程序的全局变量和数据结构，现在让我们聚焦到程序的核心执行逻辑上。大家看PPT的左侧，这里是整个应用的**主函数(main函数)**，它就像我们项目的大脑，负责调度所有功能模块。</p>
+<p>在主函数中：</p>
+<ul>
+<li><p>程序首先进行<strong>初始化</strong>：开启总中断、设置显示设备、配置定时器T0为1ms中断一次，并初始化显示。</p>
+</li>
+<li><p>随后进入一个永恒的<code>while (1)</code><strong>主循环</strong>。在这个循环里，程序持续不断地做两件最重要的事：</p>
+<ol>
+<li><p>调用 <code>KeyDriver()</code> <strong>按键驱动函数</strong>，这是实现长短按键识别的核心，它会检查按键状态并执行相应的动作。</p>
+</li>
+<li><p>检查<strong>倒计时逻辑</strong>：只有当启动标志<code>flagStart</code>和1秒定时标志<code>flag1s</code>同时有效时，才会进行倒计时减1、更新显示。当倒计时减到0的瞬间，程序会通过拉低<code>BUZZ</code>口线启动蜂鸣器，并点亮独立LED，实现声光报警效果。</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>（转向右侧代码）<br>现在我们来看右侧的两个关键支撑函数。</p>
+<ul>
+<li><p><code>ConfigTimer0</code>函数负责为整个系统提供<strong>精确的“心跳”</strong>。它根据单片机的晶振频率（11.0592MHz）和所需的定时时间（1ms），精确计算出定时器的重载值。这里特别加入了+28的机器周期补偿，以修正中断响应延迟带来的定时误差，确保了系统计时的精确性。</p>
+</li>
+<li><p><code>ShowNumber</code>函数则负责<strong>人机交互的显示部分</strong>。它巧妙地将一个长整型数字分解成单个数字，并转换成数码管可以显示的段码。其中包含一个<strong>高位灭零</strong>的优化算法：从最高位开始检查，如果是0就不显示（送0xFF），直到遇到第一个非零数字为止，这样能避免显示“000123”这种不规范的格式，提升显示效果。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.8 长短按键的应用
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```
+/* 按键扫描函数，需在定时中断中调用 */
+void KeyScan() {
+    unsigned char i;
+    static unsigned char keyout = 0;   // 矩阵按键扫描输出索引
+    static unsigned char keybuf[4][4] = {  // 矩阵按键扫描缓冲区
+        {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF},
+        {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}
+    };
+    switch (keyout)  {  // 根据输出索引值，拉低相应输出引脚
+        case 0: KEY_OUT_1 = 0; break;
+        case 1: KEY_OUT_2 = 0; break;
+        case 2: KEY_OUT_3 = 0; break;
+        case 3: KEY_OUT_4 = 0; break;
+        default: break;
+    }
+```
+```C
+     // 将一行的4个按键值移入缓冲区
+    keybuf[keyout][0] = (keybuf[keyout][0] << 1) | KEY_IN_1;
+    keybuf[keyout][1] = (keybuf[keyout][1] << 1) | KEY_IN_2;
+    keybuf[keyout][2] = (keybuf[keyout][2] << 1) | KEY_IN_3;
+    keybuf[keyout][3] = (keybuf[keyout][3] << 1) | KEY_IN_4;
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+    // 消抖后更新按键状态
+    for (i = 0; i < 4; i++)  // 每行4个按键，所以循环4次
+    {
+        if ((keybuf[keyout][i] & 0x0F) == 0x00)
+        {   // 连续4次扫描值为0，即4*4ms内都是按下状态时，可认为按键已稳定的按下
+            KeySta[keyout][i] = 0;
+            KeyDownTime[keyout][i] += 4;  // 按下的持续时间累加
+        }
+        else if ((keybuf[keyout][i] & 0x0F) == 0x0F)
+        {   // 连续4次扫描值为1，即4*4ms内都是弹起状态时，可认为按键已稳定的弹起
+            KeySta[keyout][i] = 1;
+            KeyDownTime[keyout][i] = 0;   // 按下的持续时间清零
+        }
+    }
+```
+```C
+    keyout++;       // 输出索引值递增
+    keyout &= 0x03; // 索引值加到4即归零
+    
+    // 拉高全部输出引脚
+    KEY_OUT_1 = 1;
+    KEY_OUT_2 = 1;
+    KEY_OUT_3 = 1;
+    KEY_OUT_4 = 1;
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>前面我们看到了主程序的框架，现在让我们深入探讨实现长短按键功能的基础——<strong>矩阵按键的扫描与消抖机制</strong>。这个<code>KeyScan()</code>函数是整个按键系统的核心，它需要在1ms定时中断中被调用，以确保实时响应。</p>
+<p>大家看左侧代码，这里实现了<strong>矩阵按键的动态扫描</strong>：</p>
+<ul>
+<li><p>函数使用一个<code>keyout</code>索引，通过<code>switch</code>语句<strong>循环选通每一列</strong>（将对应的KEY_OUT引脚拉低），这是扫描的第一步。</p>
+</li>
+<li><p>在选通某一列后，函数读取<strong>所有行的输入状态</strong>，并通过一个巧妙的移位操作<code>(keybuf[keyout][0] &lt;&lt; 1) | KEY_IN_1</code>将按键状态移入<strong>扫描缓冲区</strong>。这个缓冲区记录了每个按键最近4次的扫描状态，为后续的消抖处理提供了数据基础。</p>
+</li>
+</ul>
+<p>（转向右侧代码）<br>现在看右侧，这是<strong>按键消抖与状态更新的关键逻辑</strong>：</p>
+<ul>
+<li><p>通过检查缓冲区低4位的值，程序可以判断按键的稳定状态：</p>
+<ul>
+<li><p>如果连续4次扫描都是0（<code>0x00</code>），判定为<strong>稳定按下</strong>，更新<code>KeySta</code>状态，并累加<code>KeyDownTime</code>——这正是实现长按计时的核心！</p>
+</li>
+<li><p>如果连续4次扫描都是1（<code>0x0F</code>），判定为<strong>稳定弹起</strong>，更新状态并清零按下时间。</p>
+</li>
+</ul>
+</li>
+<li><p>这种<strong>移位消抖法</strong>相比简单的延时消抖更加高效可靠，它不阻塞程序运行，而是通过多次采样来确认状态。</p>
+</li>
+<li><p>最后，扫描索引<code>keyout</code>循环递增，并拉高所有列线，为下一次扫描做准备。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 9.8 长短按键的应用
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+/* LED动态扫描刷新函数，需在定时中断中调用 */
+void LedScan()
+{
+    static unsigned char i = 0;  // 动态扫描索引
+    
+    P0 = 0xFF;             // 关闭所有段选位，显示消隐
+    P1 = (P1 & 0xF8) | i;  // 位选索引值赋值到P1口低3位
+    P0 = LedBuff[i];       // 缓冲区中索引位置的数据送到P0口
+    
+    if (i < 6)             // 索引递增循环，遍历整个缓冲区
+        i++;
+    else
+        i = 0;
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+/* T0中断服务函数，完成数码管、按键扫描与秒定时 */
+void InterruptTimer0() interrupt 1 {
+    static unsigned int tmr1s = 0;  // 1秒定时器
+    TH0 = T0RH;   TL0 = T0RL; // 重新加载重载值
+    LedScan();    // LED扫描显示
+    KeyScan();    // 按键扫描
+    if (flagStart){   // 倒计时启动时处理1秒定时
+        tmr1s++;
+        if (tmr1s >= 1000) {
+            tmr1s = 0; flag1s = 1;
+        }
+    }
+    else {  // 倒计时未启动时1秒定时器始终归零
+        tmr1s = 0;
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们详细分析了按键扫描的底层机制，现在让我们来看整个系统中另一个至关重要的部分——定时器中断服务函数。它就像是系统的心跳，以1ms为节拍，协调着显示刷新、按键扫描和定时计数等多个任务的同步运行。</p>
+<p>大家看右侧的<strong>中断服务函数</strong> <code>InterruptTimer0()</code>：</p>
+<ul>
+<li><p>它首先<strong>重载定时器</strong>，确保下一次中断仍能精确地在1ms后发生，这是所有定时基准的来源。</p>
+</li>
+<li><p>然后依次调用 <code>LedScan()</code> 和 <code>KeyScan()</code>。这意味着<strong>每1ms都会刷新一次显示，扫描一次按键</strong>，这种高频率的刷新保证了显示无闪烁，按键响应及时。</p>
+</li>
+<li><p>它还负责管理<strong>1秒定时标志</strong>。当倒计时启动后（<code>flagStart</code>为真），一个局部静态变量<code>tmr1s</code>开始累加，每1000次中断（即1秒）就设置<code>flag1s</code>标志，主循环中的倒计时逻辑正是依赖这个标志来工作的。</p>
+</li>
+</ul>
+<p>（转向左侧代码）<br>现在我们看左侧的 <code>LedScan()</code> <strong>动态显示函数</strong>：</p>
+<ul>
+<li><p>它采用<strong>分时复用</strong>原理，每次只点亮一位数码管。通过先关闭显示（<code>P0=0xFF</code>消隐）、再选择位选（操作P1口低3位）、最后送段选数据（<code>P0=LedBuff[i]</code>）的步骤，避免了数码管间的串扰。</p>
+</li>
+<li><p>静态变量 <code>i</code> 作为扫描索引，在0-6之间循环，确保7位数码管能被均匀、快速地扫描。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第9章 综合练习/file-20251118162651529.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **一、硬件基础**
+    - IO结构：准双向/推挽/开漏/高阻
+    - 驱动电路：蜂鸣器/继电器/上下拉电阻
+- **二、编程核心**
+    - 数据类型转换与位操作
+    - 定时器配置与误差补偿
+- **三、综合应用**
+    - 秒表程序：多模块协同
+    - PWM技术：呼吸灯控制
+    - 长短按键：人机交互优化
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>同学们，经过第9章完整的学习和实践，我们已经从单片机的基础IO操作，逐步进阶到了能够完成综合性项目的水平。现在让我们回顾一下本章的核心知识体系，看看这些知识点是如何环环相扣，构建起我们解决实际问题的能力。</p>
+<p>首先，在<strong>硬件基础</strong>层面，我们深入理解了单片机与外部世界交互的桥梁：</p>
+<ul>
+<li><p>掌握了<strong>四种IO口工作模式</strong>的特性与适用场景，从最常用的准双向口到用于总线通信的开漏输出。</p>
+</li>
+<li><p>学会了如何设计<strong>驱动电路</strong>，用三极管驱动蜂鸣器，用继电器控制大功率设备，并用上下拉电阻来确保电平稳定。</p>
+</li>
+</ul>
+<p>其次，在<strong>编程核心</strong>层面，我们锤炼了嵌入式开发的关键技能：</p>
+<ul>
+<li><p>理解了<strong>数据类型转换</strong>的规则与陷阱，以及高效的<strong>位操作</strong>方法，这是精准控制硬件的基础。</p>
+</li>
+<li><p>掌握了<strong>定时器</strong>的精确配置，并学会了通过补偿方法来修正误差，这是所有与时间相关应用的基石。</p>
+</li>
+</ul>
+<p>最后，通过三个<strong>综合应用</strong>项目，我们将所有知识点融会贯通：</p>
+<ul>
+<li><p><strong>秒表程序</strong>体现了多模块（定时、显示、按键）的协同设计思想。</p>
+</li>
+<li><p><strong>PWM呼吸灯</strong>展示了如何用数字信号实现模拟控制效果。</p>
+</li>
+<li><p><strong>长短按键</strong>优化了人机交互体验，使我们的产品更加易用。</p>
+</li>
+</ul>
+<p>这一章的学习，为大家独立开发完整的单片机应用打下了坚实的基础。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1080,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>

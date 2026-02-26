@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 40%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/Step_by_Step_learning.webp" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 55%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第6章 中断与数码管动态显示
+</div>
+
+<div class="" style="position: absolute; left: 10%; top: 70%; height: 20%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《单片机原理与应用》<br><br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本次课主要内容
+</div>
+
+
+<div class="" style="line-height: 2.5; font-size: 45px; position: absolute; left: 5%; top: 20%; height: 50%; width: 44%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 6.1 数组的概念及应用
+- 6.2 if和swith语句的用法
+- 6.3 数码管动态显示
+- 6.4 数码管显示消隐
+- 6.5 中断系统的学习
+- 6.6 中断优先级
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 17%; height: 66%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20240921154734061.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>同学们，欢迎回到《单片机原理与应用》的课堂。我是你们的任课教师张建武。</p>
+<p>在之前的<strong>第五章《定时器与数码管基础》</strong>中，我们已经成功掌握了<strong>静态数码管显示技术</strong>，学会了如何精确地通过控制单片机的I/O口来点亮和显示一个数字。然而，正如我们所见，这种简单直接的“静态”方式，在实际工程应用中很快就暴露了它<strong>致命的局限性</strong>。</p>
+<p>请大家想一想，一个最基础的四位数码管（比如一个简单的电子时钟），如果采用静态显示：</p>
+<ul>
+<li><strong>每一位</strong>都需要独立的一组<strong>8根</strong>数据线（七段码 a∼g 和小数点 DP）。</li>
+<li><strong>每一位</strong>还需要一根独立的<strong>位选</strong>控制线（COM）。</li>
+</ul>
+<p>这意味着，一个四位显示屏就需要占用我们单片机高达 4×8+4=36 根 I/O 引脚！对于引脚资源本就<strong>寸土寸金</strong>的单片机而言，这种“<strong>一对一</strong>”的资源消耗模式，简直是<strong>无法承受的奢侈与浪费！</strong></p>
+<p><strong>所以，今天我们开启第六章的学习，核心目标就是要彻底解决这个实际应用中的“痛点”，让单片机能够以更</strong>高效<strong>、更</strong>节约资源<strong>的方式，与我们用户进行交互！</strong></p>
+<p>本章的知识点将围绕如何实现资源复用展开，它们包括：</p>
+<ul>
+<li><strong>6.1 数组的概念及应用</strong>：为数据存储打下基础。</li>
+<li><strong>6.2 if和switch语句的用法</strong>：为控制逻辑提供支撑。</li>
+<li><strong>6.3 数码管动态显示</strong>：我们的核心解决方案！</li>
+<li><strong>6.4 数码管显示消隐</strong>：确保显示效果无闪烁。</li>
+<li><strong>6.5 中断系统的学习</strong>：高效处理周期性任务的关键。</li>
+<li><strong>6.6 中断优先级</strong>：保障关键任务的响应速度。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.1 数组的概念及应用
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20250912154553461.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **数组的概念：**
+    - 定义：一系列**相同类型**数据的集合。
+    - 作用：用一个变量名管理多个数据。
+- **数组的特点：**
+    - 通过**下标/索引**访问单个元素。
+    - 提高编程效率，使代码更简洁、可读。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 数组的下标是从几开始计数的呢？
+</div>
+</div>
+
+<aside class="notes"><p>好的，同学们，在之前的学习中，我们已经掌握了<strong>变量的基本类型</strong>，比如 <code>char</code> 和 <code>int</code>。它们能帮我们存储像<code>count</code>这样的单个数据。</p>
+<p>但是，如果我们有一大堆相同类型的数据需要处理，比如一个班级所有同学的语文、数学和英语成绩，如果还为每门课、每个同学都单独定义一个变量，那代码会变得非常复杂和难以管理。</p>
+<p>那有没有更高效的方法呢？这就是我们今天要讲的新内容——<strong>数组</strong>。</p>
+<p>大家可以把数组想象成一个整齐排列的盒子，每个盒子都装着同一类型的东西。它本质上是<strong>一系列相同类型数据的集合</strong>。我们只需要一个<strong>数组名</strong>，就能管理这整个“盒子”。而如果要拿取或放入某个特定的数据，只需要通过它的<strong>下标</strong>，也就是它的位置序号，就能精准地找到它。</p>
+<p>使用数组，我们就能用一个变量名来管理大量数据，比如用<code>X</code>来存储所有同学的成绩，然后用<code>X[0]</code>、<code>X[1]</code>来分别代表第一个和第二个同学的成绩，这极大地简化了编程，让我们的代码更简洁、更高效。</p>
+<p><strong>提问：</strong> 那么，数组的下标是从几开始计数的呢？
+<strong>解答：</strong> 在C语言中，数组的下标总是从 <strong>0</strong> 开始。所以，一个包含10个元素的数组，它的下标范围是 0 到 9。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.1 数组的概念及应用：内存中存储形式
+</div>
+
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20250912155330598.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **为什么能通过下标访问？**
+    - 核心原因：**内存连续存储**。
+    - 数组元素在内存中的地址是紧密相连的。
+- **访问原理**
+    - 定位公式：**目标地址 = 数组首地址 + (元素大小 × 下标)**。
+    - 通过简单的数学运算，快速找到任意元素。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果一个数组的起始地址是1000，且每个元素占2个字节，那么array[4]的地址是多少？
+</div>
+</div>
+
+<aside class="notes"><p>大家有没有想过，为什么我们能通过一个简单的下标，就能准确地访问到数组中的任何一个元素呢？原因就在于它的内存存储方式。</p>
+<p>数组的一个关键特性是，它在内存中是<strong>连续存储</strong>的。也就是说，数组的第一个元素、第二个元素、第三个元素……它们在内存中的地址是紧挨着的，一个接一个。</p>
+<p>正是这种连续性，让我们可以通过一个简单的数学计算来找到任何一个元素。我们只需要知道数组的<strong>首地址</strong>（也就是第一个元素的地址），然后加上<strong>（元素大小 × 下标）</strong>，就能快速定位到目标元素的地址，从而进行访问。</p>
+<p>举个例子，如果一个<code>int</code>型数组的起始地址是2000，每个<code>int</code>占4个字节。那么，<code>array[0]</code>的地址就是2000，<code>array[1]</code>的地址就是<code>2000 + 4</code>，<code>array[2]</code>的地址就是<code>2000 + 4 × 2</code>，以此类推。</p>
+<p>所以，是这种<strong>物理上的连续存储</strong>，保证了我们能通过下标这种<strong>逻辑上的索引</strong>，实现高效、直接的元素访问。</p>
+<p><strong>提问：</strong> 如果一个数组的起始地址是1000，且每个元素占2个字节，那么<code>array[4]</code>的地址是多少？</p>
+<p><strong>解答：</strong> <code>array[4]</code>的地址是<strong>1008</strong>。计算公式是：<strong>起始地址 + 元素大小 × 下标 = 1000 + 2 × 4 = 1008</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.1 数组的概念及应用：数组在数码管显示上的实践
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+```C
+unsigned char LedChar[16] = {
+	0xC0, 0xF9, 0xA4, 0xB0,
+	0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83,
+	0xC6, 0xA1, 0x86, 0x8E
+};	
+```
+```C
+unsigned char code LedChar[16] = {
+	0xC0, 0xF9, 0xA4, 0xB0,
+	0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83,
+	0xC6, 0xA1, 0x86, 0x8E
+};	
+```
+数组定义数码管显示
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **`unsigned char LedChar[16]`**
+    - 存储在 **RAM**。
+    - 特点：读写快、断电数据丢失。
+    - 用途：存放运行时需要修改的数据。
+- **`unsigned char code LedChar[16]`**
+    - `code` 关键字将数据存储在 **FLASH/ROM**。
+    - 特点：非易失性、断电数据不丢失。
+    - 用途：存放固定的、不需要改变的常量数据（如查表数据）。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：注意这两段代码的区别
+</div>
+</div>
+
+<aside class="notes"><p>现在，让我们把这些理论知识应用到实际的单片机编程中。大家看PPT上的这段代码。这是一个非常经典的单片机应用场景：<strong>用数组来驱动数码管显示</strong>。</p>
+<ul>
+<li><strong>数组名称与数据</strong>：我们定义了一个名为 <code>LedChar</code> 的数组，它就像一个“字典”，里面存放着我们控制数码管显示所需的十六进制编码。这些数据都是 <code>unsigned char</code> 类型。</li>
+<li><strong>存储位置</strong>：在单片机中，这段代码本身（也就是<strong>程序指令</strong>）通常会存储在 <strong>FLASH（闪存）</strong> 中。但是，代码中定义的 <code>LedChar</code> <strong>数据</strong>，它的存储位置取决于具体的声明方式。<ul>
+<li>**<code>unsigned char LedChar[16]</code>**：这种声明方式通常会将数组数据存储在 <strong>RAM（随机存取存储器）</strong>中。RAM 读写速度快，但断电后数据会丢失，适合存储运行时需要改变的数据。</li>
+<li><strong><code>unsigned char code LedChar[16]</code><strong>：这里的 <code>code</code> 是一个针对特定单片机编译器的</strong>扩展关键字</strong>。它的作用是强制编译器将数组数据存储在 <strong>FLASH/ROM（只读存储器）</strong> 中。FLASH 是非易失性存储器，断电后数据不会丢失，适合存储像数码管编码这类不需要改变的常量数据。</li>
+</ul>
+</li>
+<li><strong>连续存储</strong>：正是这种物理上的连续存储，保证了我们可以通过 <code>LedChar[0]</code> 来获取数字0的编码，<code>LedChar[1]</code> 来获取数字1的编码，以此类推，非常方便。</li>
+</ul>
+<p>正是因为数组的这些特性，我们才能用短短几行代码，就实现复杂的数码管显示功能，大大提高了编程效率。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.1 数组的概念及应用：二维数组
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+```C
+unsigned char LedChar_2D[4][4] = {
+    {0xC0, 0xF9, 0xA4, 0xB0}, // 第一行：0-3
+    {0x99, 0x92, 0x82, 0xF8}, // 第二行：4-7
+    {0x80, 0x90, 0x88, 0x83}, // 第三行：8-B
+    {0xC6, 0xA1, 0x86, 0x8E}  // 第四行：C-F
+};
+```
+二维数组
+</div>
+
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **一维数组**：只有一个下标，视为线性数据。
+    - 例如：`unsigned char LedChar[16]`。
+- **多维数组**：有两个或更多下标，最常见的是**二维数组**。
+    - 视为表格或矩阵。
+    - 例如：`unsigned char LedChar_2D[4][4]`，表示4行4列。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 那么，如果有一个二维数组 `b[3][4]`，它总共能存储多少个元素？
+</div>
+</div>
+
+<aside class="notes"><p>我们用的 <code>LedChar</code> 数组，它只有一个下标，我们称之为<strong>一维数组</strong>。除了这种形式，数组还有其他类型吗？</p>
+<p>答案是肯定的。数组根据其下标的数量，可以分为不同的维度。当数组有两个或更多下标时，我们就称之为<strong>多维数组</strong>。其中，最常见的是<strong>二维数组</strong>，它有两个下标，可以看作是一个表格，或者说一个矩阵。</p>
+<p>比如，<code>unsigned char LedChar_2D[4][4]</code> 这段代码就定义了一个二维数组。它表示一个<strong>4行4列</strong>的表格，总共有16个元素。</p>
+<p><strong>提问：</strong> 那么，如果有一个二维数组 <code>b[3][4]</code>，它总共能存储多少个元素？
+<strong>解答：</strong> 这是一个3行4列的数组，所以总元素个数是 <code>3 × 4 = 12</code> 个。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.1 数组的概念及应用：数组的声明
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 17%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+```
+unsigned char led_buffer[8];
+```
+声明数组
+
+```
+int scores[5] = {90, 85, 92, 78, 88};
+```
+声明数组+赋值
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+- **简单方式**：只开辟空间
+    - `unsigned char led_buffer[8];`
+- **带初值列表**：开辟空间并初始化
+    - `int scores[5] = {90, 85, 92, 78, 88};`
+- **声明要点**
+    - **命名规范**：使用有意义的名称。
+    - **长度要求**：必须是**正整数常量**或常量表达式。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 那么，`int data[10+5];` 这种声明方式合法吗？
+</div>
+</div>
+
+<aside class="notes"><p>我们已经理解了数组的维度，接下来我们看看如何实际地去<strong>声明</strong>一个一维数组。声明数组就像是给它开辟一块内存空间，告诉编译器我们要用它来干什么。</p>
+<h3 id="一维数组的声明"><strong>一维数组的声明</strong></h3>
+<p>大家看PPT，声明一维数组通常有两种方式：</p>
+<ul>
+<li><strong>第一种，简单方式</strong>：我们只需要指定<strong>数组类型</strong>、<strong>数组名</strong>和<strong>数组长度</strong>。语法格式是：<code>数组类型 数组名[数组长度];</code> 例如，<code>unsigned char led_buffer[8];</code> 这就声明了一个名为<code>led_buffer</code>的数组，它有8个元素，每个元素都是一个无符号字符。</li>
+<li><strong>第二种，带初值列表</strong>：这种方式在声明的同时，我们就可以给数组里的每个元素赋一个初始值。语法格式是：<code>数组类型 数组名[数组长度] = {初值列表};</code>比如，<code>int scores[5] = {90, 85, 92, 78, 88};</code> 这不仅声明了一个<code>int</code>型数组，还直接把前5个同学的成绩存了进去。</li>
+</ul>
+<p>在声明时，有几个需要注意的地方：</p>
+<ul>
+<li><strong>命名规范</strong>：数组名要符合C语言的命名规则，只能由字母、数字和下划线组成，并且不能以数字开头。在实际项目中，我们强烈建议大家给数组取一个有意义的名字，比如<code>LedData</code>或<code>sensor_readings</code>，这样在团队合作时，代码的维护性会大大提高。</li>
+<li><strong>长度要求</strong>：方括号中的<strong>数组长度</strong>必须是一个<strong>正整数</strong>，可以是像<code>16</code>这样的常量，也可以是像<code>8 + 8</code>这样的常量表达式，但不能是变量。</li>
+</ul>
+<p>掌握了这两种声明方式，我们就可以根据项目的具体需求，灵活地定义和使用一维数组了。</p>
+<p><strong>提问：</strong> 那么，<code>int data[10+5];</code> 这种声明方式合法吗？
+<strong>解答：</strong> 这种声明方式是<strong>合法</strong>的。因为 <code>10+5</code> 是一个常量表达式，它的结果 <code>15</code> 是一个正整数常量，完全符合数组长度的要求。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.1 数组的概念及应用：数组的初始化
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 20%; height: 30%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+```C
+数据类型 数组名[数组长度] = {初值列表};
+```
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 40%; height: 30%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+```C
+unsigned char LedChar[16] = {
+	0xC0, 0xF9, 0xA4, 0xB0,
+	0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83,
+	0xC6, 0xA1, 0x86, 0x8E
+};	
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+- **初始化规则**
+    - 初值之间用逗号分隔。
+    - 初值数量可以少于数组长度，未赋值元素自动为 `0`。
+- **省略数组长度**
+    - 若所有元素都赋初值，可以省略数组长度。
+    - 编译器会根据初值数量自动确定数组大小。
+- **内存分配**
+    - 数组元素是按下标顺序在内存中**连续排列**的。
+    - 这种连续性是高效访问的基础。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>接着我们来深入探讨一下关于<strong>初值列表</strong>的几个关键细节，这些细节在实际编程中非常重要。</p>
+<h3 id="数组的初始化与内存分配"><strong>数组的初始化与内存分配</strong></h3>
+<p>首先，大家看PPT上的要点：</p>
+<ol>
+<li><strong>数据分隔</strong>：在初值列表里，每一个数据之间都必须用<strong>逗号</strong>隔开。这是C语言的语法规则，就像我们平时写句子需要标点符号一样，不能省略。</li>
+<li><strong>初值数量</strong>：初值列表中的数据个数，必须<strong>小于或等于</strong>数组的长度。<ul>
+<li>当两者数量相等时，所有元素都会被我们指定的值初始化。</li>
+<li>当初值数量少于数组长度时，数组后面的元素，那些没有被我们指定初值的，系统会**自动将它们赋值为 <code>0</code>**。这一点在单片机编程中尤其重要，可以帮助我们节省代码量。</li>
+</ul>
+</li>
+<li><strong>省略长度</strong>：如果我们要给数组的所有元素都赋初值，那么数组的长度<strong>可以省略</strong>。编译器会根据初值列表中的数据个数，自动推算出数组的长度。我们上节课的例子，<code>LedChar</code> 数组就是这种情况，我们没有显式地写出 <code>[16]</code>，但编译器知道它有16个元素。</li>
+</ol>
+<p>最后，我们再次强调一个核心概念：当系统为数组分配连续的存储单元时，数组元素的<strong>相对次序</strong>是由它们的<strong>下标</strong>决定的。<code>LedChar[0]</code>、<code>LedChar[1]</code>、<code>LedChar[2]</code>...它们在内存中是<strong>紧挨着</strong>依次排列的。正是这种连续性，才让我们可以通过下标高效地访问每个元素。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.1 数组的概念及应用：数组的使用和赋值
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+```C
+// 作为赋值语句的右值（提供值）
+a = LedChar[0];
+
+// 作为赋值语句的左值（接收值）
+LedChar[0] = a;
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+- **基本原则**：
+    - **不能一次性操作整个数组**。
+    - 只能**逐个操作数组中的单个元素**。
+- **元素操作**：
+    - 一个数组元素相当于一个独立的变量。
+    - 可作为赋值语句的**右值（提供值）**：`变量 = 数组元素;`
+        - 示例：`a = LedChar[0];`    
+    - 可作为赋值语句的**左值（接收值）**：`数组元素 = 变量;`  
+        - 示例：`LedChar[0] = a;`
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>在程序中，我们该<strong>如何使用数组</strong>？</p>
+<p>请大家注意一个关键点：在 C 语言程序中，我们<strong>不能一次性操作整个数组</strong>。我们只能像使用普通变量一样，<strong>逐个使用数组中的单个元素</strong>。</p>
+<ul>
+<li><strong>将数组元素赋值给变量</strong>：一个数组元素就相当于一个独立的变量。比如我们之前定义的 <code>LedChar</code> 数组，如果它没有 <code>code</code> 关键字（即存储在RAM中），它是可读可写的。我们可以用 <code>a = LedChar[0];</code> 这样的代码，将数组中第一个元素的值，赋给变量 <code>a</code>。</li>
+<li><strong>将变量赋值给数组元素</strong>：反过来也一样，我们可以通过 <code>LedChar[0] = a;</code> 这样的代码，将变量 <code>a</code> 的值，赋给数组中的第一个元素。这说明数组的每个元素都可以作为赋值语句的左值（接收值）或右值（提供值）。</li>
+</ul>
+<p>总之，数组为我们提供了一个有序的集合，但我们操作的最小单位始终是它的<strong>单个元素</strong>。理解这一点，对于编写正确的数组操作代码至关重要。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.1 数组的概念及应用：方括号的两种意义
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+### **数组：方括号的两种意义**
+- **引用数组元素**
+    - 方括号中为**下标**。
+    - 下标可以是：
+        - **整型常量**：`LedChar[2]`
+        - **整型变量**：`LedChar[i]`
+        - **表达式**：`LedChar[i+2]`
+- **初始化数组**
+    - 方括号中为**元素总数**。
+    - 必须是**常量**，不能是变量。
+    - 例如：`int scores[5]`
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+### **数组的赋值**
+
+- **整体赋值**：
+    - 仅在**初始化时**进行。
+- **程序中赋值**：
+    - 只能对**单个元素**逐一赋值。
+    - 不允许：`data = {1, 2, 3, 4, 5};`
+    - 允许：`data[0] = 1;`
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 10%; height: 75%; width: 1%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们继续深入，来区分一下在使用数组时，两种看似相同但意义完全不同的方括号。</p>
+<h3 id="数组的引用与赋值"><strong>数组的引用与赋值</strong></h3>
+<p>首先，我们来区分两个关键概念：<strong>引用</strong>和<strong>初始化</strong>。</p>
+<ul>
+<li>在<strong>引用数组元素</strong>的时候，方括号里的数字代表的是元素的<strong>下标</strong>。比如 <code>LedChar[0]</code>，这个 <code>[0]</code> 代表的是数组中的第一个元素。这里的下标可以是<strong>整型常数</strong>（如<code>[2]</code>），也可以是<strong>整型变量</strong>（如<code>[i]</code>），甚至是<strong>表达式</strong>（如<code>[i+2]</code>）。</li>
+<li>但当<strong>数组初始化</strong>时，方括号里的数字代表的是<strong>数组的元素总数</strong>。比如 <code>int scores[5]</code>，这个 <code>[5]</code> 表示这个数组有5个元素。需要注意的是，这里的数字<strong>必须是常量</strong>，不能是变量。</li>
+</ul>
+<p>其次，我们再强调一下数组的赋值。</p>
+<ul>
+<li><strong>数组的整体赋值</strong>，<strong>只能在初始化的时候进行</strong>。</li>
+<li>在程序执行过程中，我们只能对<strong>单个元素进行赋值</strong>。</li>
+</ul>
+<p>举个例子，假设我们有一个数组 <code>int data[5];</code>，我们不能写 <code>data = {1, 2, 3, 4, 5};</code> 这样的代码。但我们可以通过循环，逐个对每个元素进行赋值：<code>data[0] = 1; data[1] = 2;</code>...</p>
+<p>总之，理解方括号在不同场景下的意义，以及数组赋值的规则，是避免C语言编程错误的关键</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.2 if和swith语句的用法
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20250912181630079.png" alt="" style="width: 400px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+- **循环与选择的区别**
+    - **循环语句**（for, while）：**重复执行**代码块。
+    - **选择语句**（if, switch）：根据条件**选择性地执行**代码块。
+- **选择语句的核心思想**
+    - **判断与执行**：如同岔路口，根据条件决定程序路径。
+    - 能够实现**二选一、多选一**等多种逻辑。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>好的，同学们，在前面的课程中，我们已经掌握了 <strong>for 循环</strong>和 <strong>while 循环</strong>，它们的核心思想是<strong>重复执行</strong>。只要条件满足，程序就会一直循环下去。</p>
+<p>今天，我们要学习的是另一种非常重要的程序控制结构，叫做<strong>选择语句</strong>。与循环不同，选择语句不会重复执行代码，而是根据不同的条件来<strong>选择性地执行</strong>不同的代码块。</p>
+<h3 id="选择语句：if-与-switch"><strong>选择语句：if 与 switch</strong></h3>
+<p>大家看PPT，选择语句的核心思想是“<strong>做判断，再执行</strong>”。它就像一个岔路口，程序会根据我们设定的条件，决定走哪条路。</p>
+<ul>
+<li><strong>if 语句</strong>和 <strong>switch 语句</strong>都属于选择语句。</li>
+<li>它们可以实现<strong>二选一</strong>，<strong>多选一</strong>，甚至<strong>有条件才执行</strong>的逻辑。</li>
+<li>简单来说，如果条件成立，就执行特定的代码；如果条件不成立，就执行另一段代码，或者什么都不做，直接跳过。</li>
+</ul>
+<p>这两种语句在我们的程序中非常常见，因为很多时候，程序都需要根据外部输入或内部状态的变化来做出不同的响应。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.2 if和swith语句的用法：if语句
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+
+```C
+while (1) {
+    if (TF0 == 1) { // 判断T0是否溢出
+        TF0 = 0; // T0溢出后，清零中断标志
+        TH0 = 0xB8; // 并重新赋初值
+        TL0 = 0x00;
+        cnt++; // 计数值自加1
+        if (cnt >= 50) { // 判断T0溢出是否达到50次
+            cnt = 0; // 达到50次后计数值清零
+            P0 = LedChar[sec]; // 当前秒数对应的真值表中的值
+            sec++;
+            if (sec >= 16) { // 当秒数超过0x0F（15）后重新开始
+                sec = 0;
+            }
+        }
+    }
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+- **核心功能**：有条件地执行代码。
+    - 根据条件表达式的真假来决定是否执行特定语句。
+- **语法结构**：`if (条件表达式) { 执行语句; }`
+- **执行逻辑**：
+    - **条件成立**：执行大括号中的语句。
+    - **条件不成立**：直接跳过大括号中的语句。
+- **示例**：
+    - `if (sec >= 16) sec = 0;`
+    - **含义**：如果 `sec` 大于等于16，就将 `sec` 清零。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>好的，同学们，既然我们已经知道了选择语句的基本概念，下面我们首先来深入学习最常用的一种：<strong>if 语句</strong>。</p>
+<h3 id="if-语句的基本用法"><strong>if 语句的基本用法</strong></h3>
+<p>大家还记得我们之前做静态显示数码管的例子吗？当时我们写了这样一段代码：<code>if (second &gt;= 16) second = 0;</code>。</p>
+<p>这就是一个典型的 <strong>if 选择语句</strong>。它的语法非常直观：</p>
+<ul>
+<li><code>if</code> 后面跟着一对括号，里面是我们的<strong>条件表达式</strong>，也就是 <code>second &gt;= 16</code>。</li>
+<li>如果这个条件<strong>成立</strong>（<code>second</code> 的值确实大于或等于16），程序就会执行紧跟着的语句，也就是 <code>second = 0;</code>。</li>
+<li>如果条件<strong>不成立</strong>，那么程序会<strong>直接跳过</strong>大括号里的语句，执行后面的代码。</li>
+</ul>
+<p>简单来说，<code>if</code> 语句就是一个<strong>有条件才执行</strong>的判断。它决定了某一段代码是否会被运行。这种机制是编写各种逻辑程序的基础，因为它让我们的程序能够根据不同的情况做出不同的反应。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.2 if和swith语句的用法：if-else
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+```C
+while (1) {
+    if (TF0 == 1) { // 判断T0是否溢出
+        TF0 = 0; // T0溢出后，清零中断标志
+        TH0 = 0xB8; // 并重新赋初值
+        TL0 = 0x00;
+        cnt++; // 计数值自加1
+        if (cnt >= 50) { // 判断T0溢出是否达到50次
+            cnt = 0; // 达到50次后计数值清零
+            P0 = LedChar[sec]; // 当前秒数对应的真值表中的值
+            if (sec >= 15) { // 如果秒数达到15，则清零
+                sec = 0;
+            } else { // 否则，秒数自增
+                sec++;
+            }
+        }
+    }
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+- **核心功能**: 实现**二选一**的逻辑判断。
+    - `if` 后的条件成立，执行 `if` 块。
+    - 条件不成立，执行 `else` 块。
+- **语法**:
+    - `if (条件表达式) { 语句1; } else { 语句2; }`
+- **逻辑优势**:
+    - 保证 `if` 块或 `else` 块**有且只有一个**会被执行。
+    - 使程序逻辑更完整、清晰。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：注意条件表达式内 16 到 15 的变化，想一下为什么？
+</div>
+</div>
+
+<aside class="notes"><p>我们刚才了解了最基本的 <code>if</code> 语句，它是一个“有条件才执行”的单向判断。现在，我们来看一看 <code>if</code> 语句的第一个变体，它让我们的程序可以处理一个完美的<strong>二选一</strong>。</p>
+<h3 id="if-else-语句"><strong>if-else 语句</strong></h3>
+<p><code>if-else</code> 语句的核心是<strong>要么……要么……</strong>。</p>
+<ul>
+<li>它的语法是：<code>if (条件表达式) { 语句1 } else { 语句2 }</code>。</li>
+<li>这里的 <code>else</code> 就像“否则”的意思。如果 <code>if</code> 后面的<strong>条件成立</strong>，就执行<code>语句1</code>；如果条件<strong>不成立</strong>，就直接执行<code>else</code>后面的<code>语句2</code>。</li>
+<li>这种结构保证了无论如何，<code>语句1</code>和<code>语句2</code>中总有一段会被执行。</li>
+</ul>
+<p>为了更直观地理解，我们可以把之前的代码进行改造。之前的 <code>if</code> 语句只在秒数超过15时执行清零。但如果我们希望在秒数没有达到15时，它也能做点什么，比如继续自增，就可以用 <code>if-else</code> 语句来实现：</p>
+<p><code>if (second &gt;= 15) { second = 0; } else { second++; }</code></p>
+<p>这段代码的意思是：<strong>如果</strong>秒数大于等于15，就将秒数清零；<strong>否则</strong>，秒数继续自增。通过这个简单的改造，程序逻辑变得更加完整和清晰。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.2 if和swith语句的用法：if-else if
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+
+```C
+int score = 85;
+
+if (score > 80) {
+    // 满足此条件，执行这里的代码
+    // ...
+} else if (score > 70) {
+    // 此分支不会被执行
+    // ...
+} else {
+    // 此分支也不会被执行
+    // ...
+}
+```
+</div>
+
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **`if-else if` 的作用**
+	- 处理**“多选一”**的复杂条件判断。
+- **2. 核心执行逻辑**
+	- **按顺序判断：** 程序从上到下依次检查每个条件。
+	- **找到即停：** 一旦某个条件为真，就执行其对应的代码，然后**立即跳出**。
+	- **`else` 分支：** 所有条件都不满足时，执行 `else` 中的代码（可选）
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们已经掌握了 <code>if</code> 语句和 <code>if-else</code> 语句，它们分别处理“有条件执行”和“二选一”的场景。但如果我们需要处理<strong>多个条件</strong>，比如根据一个数值的不同范围来执行不同的操作，那该怎么办呢？</p>
+<p>这就是我们要讲的 <strong>if-else if 语句</strong>，它能够完美地实现<strong>多选一</strong>的逻辑。它的执行过程就像一个逐级筛选的过程：</p>
+<ol>
+<li>程序会<strong>依次判断</strong>每一个 <code>if</code> 和 <code>else if</code> 后面的条件表达式。</li>
+<li>当找到第一个值为<strong>“真”</strong>的条件时，程序就会执行其对应的代码块。</li>
+<li>一旦该代码块执行完毕，程序会<strong>立即跳出</strong>整个 <code>if...else if</code> 语句，不再检查后续的条件，直接执行后面的代码。</li>
+</ol>
+<p>如果所有的 <code>if</code> 和 <code>else if</code> 条件都为<strong>“假”</strong>，程序就会执行最后的 <code>else</code> 分支中的代码。这个 <code>else</code> 分支是可选的，但它为我们提供了一个“所有条件都不满足”时的默认处理方案。</p>
+<p><strong>提问：</strong> 如 PPT 左侧的代码，当 <code>score</code> 的值为 <code>85</code> 时，程序会执行哪个分支的代码？</p>
+<p>这段代码会执行 <strong><code>if (score &gt; 80)</code></strong> 这个分支。</p>
+<p>虽然 <code>score</code> (<code>85</code>) 也大于 <code>70</code>，但 <code>if-else if</code> 语句是<strong>按顺序</strong>进行判断的。当第一个 <code>if</code> 条件 <code>(score &gt; 80)</code> 满足后，程序会执行它内部的代码，然后<strong>立即跳出</strong>整个 <code>if-else if</code> 结构，后面的 <code>else if</code> 和 <code>else</code> 分支将不再被检查或执行。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.2 if和swith语句的用法：switch语句
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+```C
+switch (表达式)
+{
+    case 常量表达式1:
+        语句1;
+        break;
+    case 常量表达式2:
+        语句2;
+        break;
+    ...
+    default:
+        语句n+1;
+        break;
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 35%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **为什么要使用 switch 语句？**
+	- 当 if...else if 语句分支过多时，代码会变得冗长且难以阅读。
+	- switch 语句能使多分支选择的逻辑更加清晰、简洁。
+- **注意点：**
+	- **表达式**：可以是整型、字符型或枚举型。
+	- **常量表达式**：case 后的值必须是常量。
+	- **break 语句**：**非常重要**。若没有 **break**，程序将继续执行下一个 case 中的语句，直到遇到 **break** 或 **switch**语句结束。
+	- **default**：可选。当表达式的值与所有 case 都不匹配时，执行 **default** 中的语句。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我在一个 `case` 分支的最后，没有加上 `break` 语句，程序会怎么执行？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，前面我们学习了 <code>if...else</code> 语句来处理条件分支，但当分支情况变得非常多时，代码會变得很臃肿，而且容易因为 <code>if</code> 和 <code>else</code> 的配对错误而导致逻辑混乱。</p>
+<p>为了解决这个问题，C 语言提供了一个更加简洁、清晰的多分支选择结构，就是我们今天介绍的 <strong>switch 语句</strong>。</p>
+<p>大家请看左边的 PPT，这就是 <strong>switch</strong> 语句的基本语法格式。它的结构非常直观：</p>
+<ul>
+<li>首先，我们在 <code>switch</code> 括号里放一个 <strong>表达式</strong>。这个表达式的值通常是一个整数或字符。</li>
+<li>接着，在 <code>switch</code> 的大括号里，我们用 <strong>case</strong> 关键字来定义不同的分支。<code>case</code> 后面跟着一个 <strong>常量表达式</strong>，比如一个数字或一个字符。如果 <code>switch</code> 里的表达式值与某个 <code>case</code> 后面的常量表达式匹配，那么程序就会执行该 <code>case</code> 后面的语句。</li>
+<li><code>default</code> 是一个可选的分支。当表达式的值与所有 <code>case</code> 的值都不匹配时，程序就会执行 <code>default</code> 后面的语句。</li>
+</ul>
+<p><strong>那么，我问大家一个问题：</strong> 如果我在一个 <code>case</code> 分支的最后，没有加上 <code>break</code> 语句，程序会怎么执行？</p>
+<p><strong>答案是：</strong> 程序会继续“穿透”到下一个 <code>case</code> 分支，继续执行后续的语句，直到遇到 <code>break</code> 或整个 <code>switch</code> 语句结束。这通常被称为 <strong>“case 穿透”</strong>。在实际编程中，我们通常会在每个 <code>case</code> 的末尾加上 <code>break</code>，以确保只执行预期的分支代码。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.3 数码管动态显示
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250906195834231.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 56%; top: 15%; height: 65%; width: 44%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 什么是动态显示？
+	- **目的：** 让多个数码管看起来同时亮起。
+	- **原理：** 利用人眼的**视觉暂留**效应。
+	- **方法：** 快速地轮流点亮每一个数码管，每次只点亮一个
+- 动态显示的工作过程
+	- **过程：** 以极快的速度，依次扫描每个数码管，并显示对应数字。
+	- **结果：** 扫描速度快到人眼无法分辨，最终看到所有数码管同时亮着。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问： 6 个数码管，如果每个数码管的扫描周期是 2 毫秒，扫描完总共需要多长时间？
+</div>
+</div>
+
+<aside class="notes"><p>在上一章我们讲到，用 74HC138 译码器来控制数码管，它一次只能让一个三极管导通，也就是说，一次只能点亮一个数码管。但我们有 6 个数码管，那怎么才能让它们都亮起来呢？这就引出了我们今天要讲的 <strong>动态显示</strong>，也叫做 <strong>动态扫描</strong>。</p>
+<h3 id="数码管动态显示原理"><strong>数码管动态显示原理</strong></h3>
+<p>动态显示的核心思想是利用了我们人眼的<strong>视觉暂留</strong>现象，也叫<strong>余晖效应</strong>。简单来说，人眼在看到一个图像后，这个图像的印象会短暂地在视网膜上停留。</p>
+<p>利用这个特性，我们就可以让多个数码管看起来是同时亮的。具体的做法是，<strong>我们以极快的速度轮流点亮每一个数码管，但每次只点亮一个</strong>。</p>
+<ul>
+<li>比如，我们要显示数字“12”在两个数码管上。</li>
+<li>首先，我们让高位的数码管导通，并显示数字“1”。</li>
+<li>然后，我们快速地关掉它，并让低位的数码管导通，显示数字“2”。</li>
+<li>接着，我们再回到第一个数码管，重复这个过程。</li>
+</ul>
+<p>只要这个切换的速度足够快，快到超过人眼可以分辨的速度，我们看到的就会是“1”和“2”这两个数字同时亮着。就像电影一样，高速播放的静止画面，在人眼看来就是流畅的动态影像。</p>
+<p><strong>现在，我来问大家一个问题：</strong> 假设我们有 6 个数码管，如果每个数码管的扫描周期是 2 毫秒，那么这 6 个数码管完成一轮显示，总共需要多长时间？</p>
+<p><strong>答案是：</strong> 6 个数码管乘以每个 2 毫秒，总共需要 12 毫秒。这个 12 毫秒就是我们常说的一轮<strong>刷新周期</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.3 数码管动态显示：单个数码管点亮时间
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20240925092756757.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **为什么要控制扫描速度？**
+	- 为了利用人眼的**视觉暂留**效应，实现无闪烁的显示效果。
+- **硬性指标：10ms 规则**
+	- **标准：** 所有数码管完成一轮扫描的**总时间**必须**小于 10 毫秒**。 
+	- **原因：**：10ms 对应 100Hz 的刷新率，这是人眼无法察觉闪烁的临界值。
+- **计算公式**
+	- **总扫描时间 = 单个数码管点亮时间 × 数码管个数**
+	- 该总时间必须 **< 10ms**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们讲到了数码管动态显示的基本原理，就是利用人眼的视觉暂留效应，通过快速轮流点亮数码管来达到看似同时显示的效果。那么，这个“快速”到底有多快呢？</p>
+<p>这里有一个非常关键的指标：<strong>整体扫描时间必须小于 10 毫秒</strong>。这意味着，所有数码管完成一轮显示的时间，必须控制在 10 毫秒以内。为什么是 10 毫秒呢？这和我们人眼的生理特性有关。</p>
+<p>大家可能听说过以前的 CRT 电视和显示器，那时候有一句很著名的广告语叫做 <strong>“100Hz 无闪烁”</strong>。这里的 <strong>100Hz</strong>，其实指的就是屏幕的<strong>刷新率</strong>。100Hz 换算成时间就是 1/100 秒，也就是 10 毫秒。</p>
+<p>当屏幕的刷新频率超过 100Hz，也就是刷新时间小于 10 毫秒时，人眼就感觉不到画面的闪烁了。同样的原理也适用于我们的数码管动态扫描。只要我们的整体扫描时间能控制在 10 毫秒以内，就能保证数码管显示稳定，不会出现闪烁现象。</p>
+<p>所以，大家记住这个硬性指标：<strong>整体扫描时间 = 单个数码管点亮时间 × 数码管个数</strong>。这个总时间必须小于 10 毫秒，才能实现理想的动态显示效果。</p>
+<p><strong>现在，我来问大家一个问题：</strong> 假设我们要动态扫描 8 个数码管，如果希望达到无闪烁的效果，那么每个数码管最长可以点亮多长时间？
+<strong>答案是：</strong> 根据公式，我们知道： 整体扫描时间 = 单个数码管点亮时间 × 8 个数码管 由于整体扫描时间必须小于 10ms，所以： 单个数码管点亮时间 × 8 小于10ms 因此，每个数码管最长点亮时间约为 10ms/8=1.25ms。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.3 数码管动态显示：if-else if扫描程序
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 11%; height: 72%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+
+unsigned char code LedChar [ ] = {
+//数码管显示字符转换表
+	0xC0, 0xF9, 0xA4, 0xB0,
+	0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83,
+	0xC6, 0xA1, 0x86, 0x8E
+};
+
+
+```
+```C
+unsigned char LedBuff[6] = {
+//数码管显示缓冲区，初值 0xFF 确保启动时都不亮
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+};
+
+void main(){
+	unsigned char i = 0; //  动态扫描的索引
+	unsigned int cnt = 0; //记录T0中断次数
+	unsigned long sec = 0; //记录经过的秒数
+	ENLED = 0; //使能U3，选择控制数码管
+	ADDR3 = 1; //因为需要动态改变ADDR0-2的值，所以不需要再初始化
+	TMOD = 0x01; //设置T0为模式1
+	TH0 = 0xFC; //为T0赋初值0xFC67，定时1ms
+	TL0 = 0x67;
+	TR0 = 1;  //启动T0
+
+```
+</div>
+
+
+<div class="" style="position: absolute; left: 50%; top: 11%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+	while (1){
+		if (TF0 == 1)  {  //判断T0是否溢出
+			TF0 = 0; //T0溢出后，清零中断标志
+			TH0 = 0xFC; //并重新赋初值
+			TL0 = 0x67;
+			cnt++;  //计数值自加1
+			if (cnt >= 1000) {  //判断T0溢出是否达到1000次
+				cnt = 0; //达到1000次后计数值清零
+				sec++;  //秒计数自加1
+				LedBuff[0] = LedChar[sec%10];
+				LedBuff[1] = LedChar[sec/10%10];
+				LedBuff[2] = LedChar[sec/100%10];
+				LedBuff[3] = LedChar[sec/1000%10];
+				LedBuff[4] = LedChar[sec/10000%10];
+				LedBuff[5] = LedChar[sec/100000%10];
+			}
+```
+```C
+			if (i == 0)   //数码管动态扫描刷新
+			{ ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=LedBuff[0]; }
+			else if (i == 1)
+			{ ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=LedBuff[1]; }
+			else if (i == 2)
+			{ ADDR2=0; ADDR1=1; ADDR0=0; i++; P0=LedBuff[2]; }
+			else if (i == 3)
+			{ ADDR2=0; ADDR1=1; ADDR0=1; i++; P0=LedBuff[3]; }
+			else if (i == 4)
+			{ ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=LedBuff[4]; }
+			else if (i == 5)
+			{ ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=LedBuff[5]; }
+		}
+	}
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>前面我们学习了数码管的静态显示和动态显示原理，现在，我们来将这些理论知识转化为实际的代码，实现一个动态扫描的秒表计时器。</p>
+<p>大家请看 PPT 上的代码，我将它分为三个部分来讲解：</p>
+<h3 id="代码详解：数码管动态扫描计时器"><strong>代码详解：数码管动态扫描计时器</strong></h3>
+<p><strong>1. 变量与硬件初始化</strong></p>
+<ul>
+<li>首先，在代码顶部，我们定义了数码管的<strong>段选编码表</strong> <code>LedChar</code>。这是一个查表法，用于将 0-9 等数字和字符转换为对应的段码。</li>
+<li>接着，我们定义了一个<strong>数码管显示缓冲区</strong> <code>LedBuff</code>。这是一个 6 位的数组，用于暂存我们要显示在 6 个数码管上的数字。</li>
+<li>在 <code>main</code> 函数里，我们首先<strong>使能数码管</strong>（<code>ENLED=0</code>），并配置了 <strong>定时器 T0</strong>。我们将 T0 设置为模式 1，并赋初值 0xFC67，让它每隔 <strong>1 毫秒</strong>溢出一次。</li>
+</ul>
+<p><strong>2. 主循环中的计时与刷新</strong></p>
+<ul>
+<li>在 <code>while(1)</code> 的主循环中，我们不断**监测定时器 T0 的溢出标志位 <code>TF0</code>**。</li>
+<li>每当 <code>TF0</code> 变为 1，表示 1 毫秒过去了。<ul>
+<li>我们首先**清零 <code>TF0</code>**，并重新给定时器赋初值，让它继续计时。</li>
+<li>然后，我们让<strong>计数器 <code>cnt</code> 自增</strong>。</li>
+<li>当 <code>cnt</code> 达到 1000 时（也就是过去了 1000 毫秒，即 1 秒），我们让<strong>秒计数器 <code>sec</code> 自增</strong>。</li>
+<li>同时，我们通过<strong>取模和除法</strong>运算，将 <code>sec</code> 的值分解成个位、十位、百位等，并将它们对应的数码管段码存入 <code>LedBuff</code> 数组，更新显示内容。</li>
+</ul>
+</li>
+</ul>
+<p><strong>3. 动态扫描实现</strong></p>
+<ul>
+<li>在主循环中，我们还用一个<strong>索引变量 <code>i</code></strong> 来实现动态扫描。</li>
+<li>每当定时器溢出一次（1ms），<code>if-else if</code> 结构就会<strong>轮流选择</strong>一个数码管。</li>
+<li>通过<strong>改变 <code>ADDR0</code> 到 <code>ADDR2</code> 的电平</strong>来切换位选，然后将 <code>LedBuff</code> 数组中对应位置的段码发送到 <code>P0</code> 口，点亮该数码管。</li>
+<li>这个过程非常快，6 个数码管在 6 毫秒内就完成了一次完整的刷新，远小于 10 毫秒，从而实现了无闪烁的动态显示。</li>
+</ul>
+<p><strong>现在，我来问大家一个问题：</strong> 在这段代码中，如果我们将定时器赋初值的 0xFC67 更改为 0xFE00，会对秒表的计时产生什么影响？</p>
+<p><strong>答案是：</strong> 0xFE00 是 65024，而 0xFC67 是 64615。初值越大，定时器溢出所需的时间越短。因此，将初值改为 0xFE00 后，定时器会更快地溢出，导致 <code>cnt</code> 和 <code>sec</code> 的计数速度加快，秒表走得更快。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.3 数码管动态显示：关键点
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 49%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+#### **数码管刷新机制**
+- **核心：** 利用定时器中断，每 **1ms** 执行一次刷新。
+- **实现方式：**
+    - 使用 `if-else if` 语句，每次执行时轮流选择一个数码管。 
+    - 通过改变位选引脚（`ADDR0-2`）来切换数码管。
+- **效果：**
+    - 6 个数码管一轮刷新只需 **6ms**，远低于人眼可察觉的闪烁阈值（10ms）。
+    - 达到无闪烁的“同时显示”效果。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 10%; height: 80%; width: 1%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 51%; top: 15%; height: 65%; width: 49%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+#### **数字分解技巧**
+- **目的：** 将多位数分解成单个数字，以便分别显示在每个数码管上。
+- **关键运算符：**
+    - **取余数 `%`：** 用于获取**个位**数字。（如：`123 % 10` 结果为 `3`）
+    - **除法 `/`：** 用于**去掉个位**，将数字右移一位。（如：`123 / 10` 结果为 `12`）
+- **应用：** 通过组合使用除法和取余运算，依次分解出每一位数字。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们已经看到了动态扫描的整体代码框架。现在我们来深入了解代码中两个非常关键的部分：<strong>如何实现快速的数码管刷新</strong>，以及<strong>如何分解数字</strong>以便在数码管上显示。</p>
+<h3 id="1-动态扫描的实现"><strong>1. 动态扫描的实现</strong></h3>
+<p>大家看代码中 <code>if...else if</code> 的那一部分，这就是我们实现动态扫描的核心。</p>
+<ul>
+<li>这段代码是放在一个每隔 1 毫秒就会执行一次的定时器溢出函数里。</li>
+<li>每一次执行，程序就会进入一个 <code>if-else if</code> 分支，通过改变 <strong><code>ADDR0</code> 到 <code>ADDR2</code> 的电平</strong>来<strong>选择</strong>一个数码管，并把我们希望显示的数字（从 <code>LedBuff</code> 数组中取出）发送给它。</li>
+<li>这样，6 个数码管会轮流被点亮，完成一轮完整的刷新<strong>只需要 6 毫秒</strong>。这个时间远小于我们之前说的 10 毫秒，所以从视觉上看，所有数码管都是同时亮着的，完全没有闪烁。</li>
+</ul>
+<h3 id="2-数字分解的技巧"><strong>2. 数字分解的技巧</strong></h3>
+<p>接下来，我们来看看如何将一个大数字（比如 123456）分解成一个个独立的数字，然后显示在不同的数码管上。</p>
+<ul>
+<li>这里我们用到两个非常重要的数学运算符：<strong>除法 <code>/</code></strong> 和**取余数 <code>%</code>**。</li>
+<li><strong>取余数 <code>%</code></strong> 总是能帮我们得到一个数字的<strong>个位</strong>。比如 <code>123456 % 10</code>，结果就是 <code>6</code>。</li>
+<li><strong>除法 <code>/</code></strong> 则可以帮我们<strong>去掉个位</strong>，把数字向右移动一位。比如 <code>123456 / 10</code>，结果就是 <code>12345</code>。</li>
+<li>我们可以<strong>组合使用</strong>这两个运算。比如，要获取十位数字，我们先用 <code>123456 / 10</code> 得到 <code>12345</code>，然后再对它取余数，<code>12345 % 10</code>，结果就是 <code>5</code>。</li>
+</ul>
+<p>通过这种“先除后取余”的方法，我们就可以依次分解出百位、千位、万位等，然后将这些数字分别赋值给 <code>LedBuff</code> 数组，最终显示在对应的数码管上。</p>
+<p><strong>现在，我来问大家一个问题：</strong> 如果我们想把一个三位数 <code>258</code> 的个位、十位和百位分别存储到三个变量中，你会怎么写代码？</p>
+<p><strong>答案是：</strong></p>
+<ul>
+<li>个位：<code>unsigned char ge = 258 % 10;</code></li>
+<li>十位：<code>unsigned char shi = 258 / 10 % 10;</code></li>
+<li>百位：<code>unsigned char bai = 258 / 100 % 10;</code></li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.3 数码管动态显示：动态扫描 switch 优化
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 12%; height: 70%; width: 42%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+unsigned char code LedChar [ ] = {
+	0xC0, 0xF9, 0xA4, 0xB0,
+	0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83,
+	0xC6, 0xA1, 0x86, 0x8E
+};
+unsigned char LedBuff[6] = {
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+};
+```
+```C
+
+void main()
+{
+	unsigned char i = 0; //  动态扫描的索引
+	unsigned int cnt = 0; //记录T0中断次数
+	unsigned long sec = 0; //记录经过的秒数
+	
+	ENLED = 0; //使能U3，选择控制数码管
+	ADDR3 = 1; //因为需要动态改变ADDR0-2的值，所以不需要再初始化
+	TMOD = 0x01; //设置T0为模式1
+	TH0 = 0xFC; //为T0赋初值0xFC67，定时1ms
+	TL0 = 0x67;
+	TR0 = 1;  //启动T0
+
+```
+</div>
+
+<div class="" style="position: absolute; left: 40%; top: 12%; height: 70%; width: 60%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+	while (1){
+		if (TF0 == 1) {    //判断T0是否溢出
+			TF = 0;   //T0溢出后，清零中断标志
+			TH0 = 0xFC;  //并重新赋初值
+			TL0 = 0x67;
+			cnt++;  //计数值自加1
+			if (cnt >= 1000) { //判断T0溢出是否达到1000次
+				cnt = 0; //达到1000次后计数值清零
+				sec++;  //秒计数自加1
+				LedBuff[0] = LedChar[sec%10];
+				LedBuff[1] = LedChar[sec/10%10];
+				LedBuff[2] = LedChar[sec/100%10];
+				LedBuff[3] = LedChar[sec/1000%10];
+				LedBuff[4] = LedChar[sec/10000%10];
+				LedBuff[5] = LedChar[sec/100000%10];
+			}
+```
+```C
+			switch (i)   //数码管动态扫描刷新
+			{
+				case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=LedBuff[0]; break;
+				case 1: ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=LedBuff[1]; break;
+				case 2: ADDR2=0; ADDR1=1; ADDR0=0; i++; P0=LedBuff[2]; break;
+				case 3: ADDR2=0; ADDR1=1; ADDR0=1; i++; P0=LedBuff[3]; break;
+				case 4: ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=LedBuff[4]; break;
+				case 5: ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=LedBuff[5]; break;
+				default: break;
+			}
+		}
+	}
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：在 `switch` 语句的每个 `case` 后面，为什么必须加上 `break`？
+</div>
+</div>
+
+<aside class="notes"><p>上一页我们通过 <code>if...else if</code> 语句实现了数码管的动态扫描。现在我们来看看如何用另一种更简洁、高效的方式来实现同样的功能。</p>
+<h3 id="代码优化：使用-switch-语句"><strong>代码优化：使用 <code>switch</code> 语句</strong></h3>
+<p>大家请看右侧的代码，这是我们对之前动态扫描程序的优化版本。我们把原来冗长的 <code>if...else if</code> 结构，替换成了 <strong><code>switch</code> 语句</strong>。</p>
+<p><strong>1. 代码结构</strong></p>
+<ul>
+<li><strong>变量定义与定时器设置：</strong> 代码的开头部分和之前一样，我们定义了数码管的显示表 <code>LedChar</code>、显示缓冲区 <code>LedBuff</code>，并配置了定时器 T0，让它每 1 毫秒溢出一次。</li>
+<li><strong>主循环 (<code>while(1)</code>)：</strong> 循环里不断检测 <code>TF0</code> 标志位。每当定时器溢出，我们都会执行两个核心操作：<ol>
+<li><strong>计时功能：</strong> <code>cnt</code> 计数器自增。当 <code>cnt</code> 达到 1000 时，代表 1 秒过去了，<code>sec</code> 计数器自增，并且我们利用之前讲过的<strong>除法和取余</strong>，将秒数分解，更新到 <code>LedBuff</code> 数组中。</li>
+<li><strong>数码管刷新：</strong> 这是代码的优化部分。我们用一个 <code>switch</code> 语句，根据索引变量 <code>i</code> 的值来选择要点亮的数码管。</li>
+</ol>
+</li>
+</ul>
+<p><strong>2. <code>switch</code> 语句的优势</strong></p>
+<ul>
+<li><strong>简洁高效：</strong> 相比于 <code>if...else if</code> 结构，<code>switch</code> 语句的逻辑更清晰，代码也更紧凑。</li>
+<li><strong>可读性强：</strong> 每一个 <code>case</code> 对应一个特定的数码管，让代码逻辑一目了然。</li>
+</ul>
+<p><strong>3. 动态扫描实现</strong></p>
+<ul>
+<li>在 <code>switch</code> 语句中，我们用变量 <code>i</code> 作为选择条件。</li>
+<li>当 <code>i</code> 为 <code>0</code> 时，执行 <code>case 0</code> 的代码，点亮第一个数码管，然后 <code>i</code> 自增为 <code>1</code>。</li>
+<li>下一个 1 毫秒，<code>i</code> 变为 <code>1</code>，程序会执行 <code>case 1</code>，点亮第二个数码管，依此类推。</li>
+<li>当 <code>i</code> 达到 <code>5</code> 时，点亮第六个数码管后，我们将 <code>i</code> 重置为 <code>0</code>，从而实现<strong>循环扫描</strong>。</li>
+</ul>
+<p><strong>现在，我来问大家一个问题：</strong> 在 <code>switch</code> 语句的每个 <code>case</code> 后面，为什么必须加上 <code>break</code>？</p>
+<p><strong>答案是：</strong> <strong><code>break</code></strong> 的作用是跳出当前的 <code>switch</code> 语句。如果没有 <code>break</code>，程序在执行完一个 <code>case</code> 的代码后，会继续“穿透”到下一个 <code>case</code>，继续执行后面的代码，直到遇到 <code>break</code> 或 <code>switch</code> 语句结束。这会导致所有数码管同时显示错误的数字，或者出现混乱的显示效果，无法实现正确的动态扫描。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.3 数码管动态显示：关键点
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 49%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### **`switch` 语句的优势**
+
+- **更简洁：** 替代冗长的 `if-else if` 结构，代码更紧凑。
+- **可读性强：** 逻辑清晰，每个 `case` 对应一个特定动作。
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 10%; height: 80%; width: 1%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 51%; top: 15%; height: 65%; width: 49%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### **动态扫描实现**
+
+- **扫描逻辑：** `switch` 语句根据索引 `i` 依次执行 `case 0` 到 `case 5`，轮流点亮 6 个数码管。
+- **循环扫描：** 当 `i` 达到 `5` 时，将其重置为 `0`，从而实现不间断的循环扫描。
+- **重要提示：**
+    - 每个 `case` 后必须加上 **`break`** 语句。
+    - 缺少 `break` 会导致“**case 穿透**”，使程序执行后续所有 `case` 的代码，造成显示混乱。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>为什么推荐使用 <code>switch</code> 语句来重构这段程序?
+正如大家在左边看到的，<code>switch</code> 语句带来的第一个巨大优势就是<strong>更简洁</strong>。它能彻底替代原来那种冗长的、层层嵌套的 <code>if-else if</code> 结构，让我们的代码变得更加<strong>紧凑</strong>和<strong>优雅</strong>。</p>
+<p>第二，是<strong>可读性强</strong>。在 <code>switch</code> 结构中，逻辑非常清晰，每一个 <code>case</code> 后面都对应着一个特定的动作，比如 <code>case 0</code> 对应点亮第一个数码管，<code>case 1</code> 对应点亮第二个数码管。这种结构让我们能<strong>一目了然</strong>地知道程序在每一步做了什么。”</p>
+<p>我们的<strong>扫描逻辑</strong>非常直接：<code>switch</code> 语句会根据一个索引变量 <code>i</code> 的值，依次执行 <code>case 0</code> 到 <code>case 5</code> 的代码。在每个 <code>case</code>中，程序会点亮对应的数码管，并快速切换到下一个。</p>
+<p>为了实现<strong>不间断的显示</strong>，当索引 <code>i</code> 达到 <code>5</code>、即点亮完第六个数码管后，我们会将其<strong>重置为 <code>0</code><strong>，从而实现了</strong>循环扫描</strong>，让整个显示过程平滑流畅。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.4 数码管显示消隐
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 20%; height: 60%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20240925111050623.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 20%; height: 60%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **问题：什么是“鬼影”？**：在数码管动态扫描时，不该亮的段位出现微弱的光。
+- **原因：为什么会有“鬼影”？**：位选和段选在切换时有**短暂的延迟**。当位选信号改变时，段选信号还没来得及更新，导致错误组合，产生微弱的光。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>上节课我们已经成功用代码实现了数码管的动态扫描，并且让它看起来同时亮起来了。但如果大家仔细观察，会发现一个并不完美的小问题。</p>
+<h3 id="数码管的鬼影现象"><strong>数码管的“鬼影”现象</strong></h3>
+<p>大家看，是不是在不应该亮的段上，似乎有微弱的光亮？这种现象就叫做<strong>“鬼影”</strong>。它虽然很弱，但会影响我们显示的清晰度。那么，这个“鬼影”是怎么产生的，我们又该如何解决呢？</p>
+<p><strong>“鬼影”产生的原因</strong>：这主要是因为我们的程序在切换数码管时，位选和段选之间存在一个<strong>瞬态</strong>。位选和段选在切换时有<strong>短暂的延迟</strong>。当位选信号改变时，段选信号还没来得及更新，导致错误组合，产生微弱的光。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.4 数码管显示消隐：消除鬼影
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+
+```C
+case 5: ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=LedBuff[5]; break;
+case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=LedBuff[0]; break;
+```
+理想状态
+
+```C
+case 5: ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=LedBuff[5]; break;
+中间态 1: ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=LedBuff[5]; break;
+中间态 2: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=LedBuff[5]; break;
+case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=LedBuff[0]; break;
+```
+实际状态
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **正常状态：**
+    - `case 5`：位选 `101`，段码 LedBuff[5]。
+    - `case 0`：位选 `000`，段码 LedBuff[0]。
+- **切换过程中的瞬态：**
+    - 程序先改变 `ADDR2`，但 `ADDR0` 未变，此时位选变为 `001`（对应 `case 1` 的数码管）。
+    - 此时 P0 口还保持着上一个 `case 5` 的段码LedBuff[5]。
+    - 结果：`case 1` 的数码管在一瞬间被错误点亮。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们就着代码进行解释，程序是一行一行、一句一句执行的，每条指令都需要时间，哪怕只是微秒级的。当程序在切换数码管时，位选和段选的信号更新不是完全同步的。</p>
+<p>让我们以从 <code>case 5</code> 切换到 <code>case 0</code> 为例：</p>
+<ul>
+<li><p><strong>初始状态：</strong> <code>case 5</code> 对应的位选地址是 <code>101</code>，P0 口的段码是 LedBuff[5]。</p>
+</li>
+<li><p><strong>目标状态：</strong> <code>case 0</code> 对应的位选地址是 <code>000</code>，P0 口的段码是 LedBuff[0]。</p>
+</li>
+<li><p><strong>切换过程：</strong></p>
+<ol>
+<li>程序首先改变 <code>ADDR2</code> 的状态（从1变为0），但 <code>ADDR0</code> 还没有来得及改变，所以位选变成了 <code>001</code>。</li>
+<li>在这个极短的瞬间，P0 口还没来得及更新为 LedBuff[5]，它依然保持着上一个 LedBuff[0] 的值。</li>
+<li>结果，位选 <code>001</code>（对应 <code>case 1</code> 的数码管）与旧的段码 LedBuff[5]发生了错误的组合，导致 <code>case 1</code> 的数码管在一瞬间被点亮。</li>
+</ol>
+</li>
+</ul>
+<p>由于这种错误的组合会多次出现，比如在 <code>ADDR0</code> 改变时又会产生一次，所以我们人眼看到的是一种不稳定的、微弱的光，这就是所谓的“鬼影”。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.4 数码管显示消隐：消除鬼影
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```
+P0 = 0xFF; // 消隐：关闭所有段
+switch (i) { 
+    case 0:
+        ADDR2 = 0; ADDR1 = 0; ADDR0 = 0;
+        i++;
+        P0 = LedBuff[0];
+        break;
+    // ... 其他 case
+}
+```
+```C
+ENLED = 1; // 消隐：关闭位选
+switch (i) {
+    case 0:
+        ADDR2 = 0; ADDR1 = 0; ADDR0 = 0;
+        i++;
+        P0 = LedBuff[0];
+        break;
+    // ... 其他 case
+}
+ENLED = 0; // 恢复位选，点亮数码管
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 48%; top: 15%; height: 65%; width: 53%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **方法一：关闭段**
+	- **原理：** 刷新前先关闭所有段码。
+	- **代码：** 在 `switch` 语句前加上 `P0 = 0xFF;`
+- **方法二：关闭位**
+	- **原理：** 刷新期间暂时关闭位选。
+	- **代码：**
+	    - 刷新前：`ENLED = 1;`
+	    - 刷新后：`ENLED = 0;`
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>现在，我们来看一下这两种方法在实际代码中是如何实现的。</p>
+<h3 id="方法一：关闭段"><strong>方法一：关闭段</strong></h3>
+<p>这种方法的核心是在刷新前，先将所有的段都关闭。具体来说，我们可以在 <code>switch(i)</code> 这句程序之前，加上一句 <code>P0=0xFF;</code>。</p>
+<ul>
+<li><strong>为什么要这样做？</strong> 因为 <code>P0=0xFF</code> 这条指令会把数码管所有的段都关闭。</li>
+<li><strong>然后呢？</strong> 当我们把位选地址（<code>ADDR</code>）的值全部设置好之后，再给 <code>P0</code> 赋上对应的段码值，数码管就会正常显示了。</li>
+</ul>
+<h3 id="方法二：关闭位"><strong>方法二：关闭位</strong></h3>
+<p>第二种方法是在刷新期间，暂时关闭数码管的位选。如果我们的电路中有一个总的使能引脚 <code>ENLED</code>，我们就可以利用它。</p>
+<ul>
+<li><strong>首先，</strong> 在 <code>switch(i)</code> 这句程序之前，加上一句 <code>ENLED=1;</code>。这相当于暂时切断了数码管的电源。</li>
+<li><strong>然后，</strong> 当我们把刷新程序，例如 <code>ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=LedBuff[0];</code> 等全部执行完毕后，再加上一句 <code>ENLED=0;</code>。</li>
+<li><strong>最后，</strong> 再进行 <code>break</code> 操作。</li>
+</ul>
+<p>这两种方法都能有效地避免新旧信号切换时产生的“鬼影”，让显示效果更清晰。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.5 中断系统的学习
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20250916182050304.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **现象：** 当数码管显示数字变化时，某个位置会**闪烁或亮度不均**。
+- **原因：**
+    - 程序在更新数字时，需要进行**耗时的计算**。
+    - 这段计算会**中断正常的刷新**，导致部分数码管的显示时间变长。
+- **结论：** 刷新时间不一致，造成了视觉上的“抖动”。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>同学们，上一节课我们解决了数码管的“鬼影”问题。现在，我希望大家仔细观察一下 Keil 开发板上的秒表程序。有没有人发现一个新问题？没错，就是当数字每增加一秒时，总有一个数码管会微微“抖动”一下。</p>
+<p>为什么会出现这种抖动呢？我们来分析一下程序。</p>
+<ul>
+<li><strong>常规刷新：</strong> 我们的程序每 1 毫秒就会进入一次动态扫描，轮流刷新数码管。</li>
+<li><strong>异常情况：</strong> 然而，在每 1 秒这个特殊时刻，程序会额外执行一段<strong>耗时的计算</strong>，来更新秒数并转换成显示字符。</li>
+<li><strong>问题所在：</strong> 单片机的除法和乘法运算速度较慢。当程序运行这些计算时，它会暂停正常的刷新流程。这就导致了负责显示的数码管（例如 <code>case 5</code>）的刷新时间被延长了，从正常的 1 毫秒变成了 <strong>1 毫秒 + 计算时间</strong>。</li>
+</ul>
+<p>由于刷新时间变得不均匀，某些数码管的点亮时间比其他数码管长，这在我们人眼看来，就会造成明显的亮度差异，从而形成了“抖动”的视觉效果。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.5 中断系统的学习：中断背景
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20250916223046459.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **中断是什么？**
+	- 一种让单片机暂停当前任务，去处理紧急事件的机制。
+	- 类似于**“闹钟”**。
+- **中断的作用**
+	- **及时响应：** 立即处理突发事件。
+	- **提高效率：** 避免被耗时的任务阻塞。
+	- **解决问题：**
+	    - 当计算任务进行时，中断让单片机暂停计算。
+	    - 优先进行数码管刷新，消除“抖动”。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果闹钟响了，但你决定不理会它，继续看电视，这在单片机中断系统中，相当于什么操作？
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们分析了数码管“抖动”现象的原因，找到了问题的症结所在——主程序被耗时的计算任务阻塞了。那么，有没有一种机制能让我们既能处理主任务，又能在紧急情况发生时及时响应呢？</p>
+<p>答案就是<strong>中断</strong>。中断，可以理解为单片机的“报警器”或“闹钟”。</p>
+<h3 id="中断概念与原理">中断概念与原理</h3>
+<p>中断的原理，我们可以用一个生活中的场景来类比：<strong>烧水与看电视</strong>。</p>
+<p>在这个场景中，你是唯一能处理任务的主体，就如同单片机一样。看电视是你的<strong>主任务</strong>，而水开了则是需要你立即处理的<strong>突发任务</strong>。在没有中断的情况下，你必须一直守在厨房，直到水烧开，才能去看电视。这显然效率低下。</p>
+<p>但如果有了中断机制，情况就完全不同了。你可以安心地去看电视，同时设置一个闹钟（这就像是单片机中的<strong>中断信号</strong>）。当闹钟响了，它会打断你看电视的任务，提醒你水开了。你立即暂停看电视，去处理烧水这个更紧急的任务，处理完后再回来继续看电视。</p>
+<h3 id="中断的意义"><strong>中断的意义</strong></h3>
+<p>中断机制赋予了单片机以下能力：</p>
+<ul>
+<li><strong>及时响应</strong>：单片机在执行主程序时，可以及时响应突发事件，并暂停当前任务。</li>
+<li><strong>提高效率</strong>：单片机不需要傻等一个耗时任务完成，可以利用中断信号及时处理更紧急、更重要的任务。</li>
+</ul>
+<p>回到我们的程序中，单片机在进行<strong>耗时计算</strong>时，如果定时器发出<strong>刷新信号</strong>（即中断请求），它会立即暂停计算，去完成动态刷新，完成后再返回继续计算。这使得计算和刷新可以“同时”进行，从根本上解决了“抖动”问题。</p>
+<p>现在，我来问大家一个问题：</p>
+<p><strong>在烧水和看电视的例子中，如果闹钟响了，但你决定不理会它，继续看电视，这在单片机中断系统中，相当于什么操作？</strong></p>
+<p><strong>答案：</strong> 这相当于<strong>关闭了总中断</strong>或<strong>禁用了特定的中断源</strong>。在单片机中，只有当总中断和相应的中断源都打开时，单片机才会响应中断请求，否则它会忽略中断信号，继续执行主程序。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.5 中断系统的学习：怎么用
+</div>
+<div class="" style="position: absolute; left: 10%; top: 55%; height: 30%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20240925122009239.png" alt="" style="width: 1600px; object-fit: fill">
+
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 10%; top: 15%; height: 35%; width: 80%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **寄存器功能**
+	- 控制单片机中断的开关，地址为`0xA8`。
+- **关键位**
+	- **EA**：总中断开关，必须为1才能启用任何中断。
+	- **分中断位**：如`ET0`（定时器0）、`ET1`（定时器1），需要哪个就将哪个设为1。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们用生活中的例子理解了中断的原理。现在，我们把这个概念落实到代码中，看看在51单片机里，如何具体地使用中断。</p>
+<h3 id="如何使用单片机中断？"><strong>如何使用单片机中断？</strong></h3>
+<p>中断系统和我们之前学习的定时器一样，也需要通过<strong>特殊功能寄存器（SFR）来控制。中断的核心寄存器是 <code>IE</code>，也就是中断使能寄存器</strong>，它的可寻址地址是 <code>0xA8</code>。</p>
+<ul>
+<li><strong><code>IE</code> 寄存器</strong><ul>
+<li><code>IE</code> 寄存器就像一个控制中断的“总开关”。</li>
+<li>它有7个可以控制的位，每个位负责不同的中断功能。</li>
+<li><strong>最高位 <code>EA</code>：</strong> 这是<strong>总中断使能位</strong>，相当于家里的总电闸。只有当 <code>EA</code> 置1时，所有的中断才能生效。如果 <code>EA</code> 没有打开，即使其他分中断都打开了，中断系统也无法工作。</li>
+<li><strong>其他分中断位：</strong> 在 <code>EA</code> 之后，还有 <code>ET2</code>（定时器2）、<code>ES</code>（串口）、<code>ET1</code>（定时器1）、<code>EX1</code>（外部中断1）、<code>ET0</code>（定时器0）、<code>EX0</code>（外部中断0）等分中断。我们需要用到哪个中断，就把对应的位设为1。</li>
+</ul>
+</li>
+<li><strong>本节课应用</strong><ul>
+<li>在我们这次的实验中，我们主要应用的是<strong>定时器0中断</strong>，所以我们需要将 <code>ET0</code> 位设置为1。</li>
+</ul>
+</li>
+</ul>
+<p>简单来说，要使用中断，第一步是<strong>打开总中断</strong> (<code>EA = 1;</code>)，第二步是<strong>打开你所需要的分中断</strong> (<code>ET0 = 1;</code>)。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.5 中断系统的学习：中断位描述
+</div>
+<div class="" style="position: absolute; left: 10%; top: 15%; height: 65%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20240925131909433.png" alt="" style="width: 1600px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>好的，通过上一个表格，我们对 IE 寄存器有了一个宏观认识，即它就是中断使能的<strong>总控制台</strong>。现在，让我们把视野拉近，来深入看看这个 IE 寄存器的<strong>8个位</strong>，每一个位到底扮演着什么角色</p>
+<p>IE 寄存器是<strong>8位</strong>的，其地址为 <strong>0xA8</strong>。在这个寄存器中，<strong>位 7</strong> 是最关键的，它对应的符号是 <strong>EA</strong>，被称为<strong>总中断使能位</strong>。就像我们之前强调的，EA 相当于<strong>总开关</strong>。只有当我们将 EA 置 1 时，所有的中断才能被允许响应；如果 EA 为 0，下面所有的分中断开关即使被打开，中断系统也无法工作。同时，我们注意到<strong>位 6</strong> 是一个<strong>保留位</strong>，一般情况下我们将其保持为 0 即可。</p>
+<p>接下来是 IE 寄存器的<strong>分控位</strong>，它们从<strong>位 5 到位 0</strong>，分别控制着特定的中断源。例如，<strong>位 5 (ET2)</strong> 控制着<strong>定时器 2 中断</strong>的使能；<strong>位 4 (ES)</strong> 控制着<strong>串口中断</strong>的使能，这在进行通信时非常重要。而我们本课重点应用的<strong>定时器 0</strong> 中断，则由<strong>位 1 (ET0)</strong> 来控制。此外，51单片机还有两个<strong>外部中断</strong>，它们分别由 <strong>位 2 (EX1)</strong> 和 <strong>位 0 (EX0)</strong> 控制，用于响应单片机引脚上的外部信号变化。简单来说，你需要用到哪个中断功能，就将它对应的位设置为 <strong>1</strong> 即可。</p>
+<p><strong>【总结与过渡】</strong></p>
+<p>总而言之，使用中断的关键步骤就是：<strong>先打开总开关 EA，再打开你需要的分开关</strong>（例如 ET0 或 ES）。通过这个位定义表，我们就能精确地知道在代码中应该操作哪一位，来实现相应的中断功能。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.5 中断系统的学习：改写程序
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 12%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+unsigned char i = 0; //  动态扫描的索引
+unsigned int cnt = 0; //记录T0中断次数
+unsigned char flag1s = 0; //1秒定时标志
+unsigned char code LedChar [ ] = {
+	0xC0, 0xF9, 0xA4, 0xB0,
+	0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83,
+	0xC6, 0xA1, 0x86, 0x8E
+};
+```
+
+```C
+unsigned char LedBuff[6] = {
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+};
+void main()
+{
+	unsigned long sec = 0; //记录经过的秒数
+
+	EA = 1; //使能总中断
+	ENLED = 0; //使能U3，选择控制数码管
+	ADDR3 = 1; //因为需要动态改变ADDR0-2的值，所以不需要再初始化
+	TMOD = 0x01; //设置T0为模式1
+	TH0 = 0xFC; //为T0赋初值0xFC67，定时1ms
+	TL0 = 0x67;
+	ET0 = 1;  //使能T0中断
+	TR0 = 1;  //启动T0
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 12%; height: 35%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+	while (1)
+	{
+		if (flag1s == 1)  //判断T0是否溢出
+		{
+			flag1s = 0;   //1秒定时标志清零
+			sec++;  //秒计数自加1
+			LedBuff[0] = LedChar[sec%10];
+			LedBuff[1] = LedChar[sec/10%10];
+			LedBuff[2] = LedChar[sec/100%10];
+			LedBuff[3] = LedChar[sec/1000%10];
+			LedBuff[4] = LedChar[sec/10000%10];
+			LedBuff[5] = LedChar[sec/100000%10];
+		}
+	}
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 54%; height: 35%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **`while(1)` 主循环**
+	- **逻辑：** 仅检查 `flag1s` 标志位。
+	- **执行：** 当 `flag1s=1` 时，更新秒数及显示数据。
+	- **关键点：** 动态刷新代码已移至**中断服务函数**，保证流畅显示
+</div>
+</div>
+
+<aside class="notes"><p>现在在程序中运用中断服务来解决数码管的“抖动”问题。</p>
+<h3 id="中断在秒表程序中的应用"><strong>中断在秒表程序中的应用</strong></h3>
+<p>让我们来看这段代码，这是我们秒表程序的主函数部分。</p>
+<ul>
+<li><p><strong>头文件与变量定义</strong></p>
+<ul>
+<li>首先，我们引入了 <code>&lt;reg52.h&gt;</code> 头文件来使用单片机的寄存器。</li>
+<li>我们定义了 <code>ADDR</code> 和 <code>ENLED</code> 等位选引脚，以及用于动态扫描的 <code>i</code> 和用于计数的 <code>cnt</code> 变量。</li>
+<li><code>flag1s</code> 是一个关键的<strong>标志位</strong>，用来标记是否经过了1秒。</li>
+<li><code>LedChar</code> 数组存储了0-F的数码管段码，<code>LedBuff</code> 则是我们的数码管显示缓冲区。</li>
+</ul>
+</li>
+<li><p><strong><code>main</code> 函数</strong></p>
+<ul>
+<li>我们定义了一个 <code>unsigned long sec</code> 变量来记录经过的秒数。</li>
+<li><strong>中断使能：</strong> <code>EA = 1;</code> 这一句是我们的<strong>总中断开关</strong>，必须打开。</li>
+<li><strong>数码管使能：</strong> <code>ENLED = 0;</code> 和 <code>ADDR3 = 1;</code> 是为了使能数码管和选择合适的位选。</li>
+<li><strong>定时器配置：</strong> <code>TMOD = 0x01;</code>、<code>TH0 = 0xFC;</code> 和 <code>TL0 = 0x67;</code> 这三行代码将定时器0配置为模式1，并设置初值，使其<strong>每1毫秒</strong>产生一次中断。</li>
+<li><strong>中断使能与启动：</strong> <code>ET0 = 1;</code> 开启了<strong>定时器0中断</strong>，而 <code>TR0 = 1;</code> 则<strong>启动了定时器</strong>。</li>
+</ul>
+</li>
+<li><p><strong><code>while(1)</code> 主循环</strong></p>
+<ul>
+<li>主循环非常简洁，它不再直接进行耗时操作。</li>
+<li><code>if (flag1s == 1)</code> 这一句是关键，它<strong>不断检查 <code>flag1s</code> 标志位</strong>。</li>
+<li>一旦 <code>flag1s</code> 被设置为1（表示1秒已到），程序就会进入 <code>if</code> 语句内部，执行耗时的<strong>秒数计算</strong>和<strong>数码管缓冲区更新</strong>操作。</li>
+<li>需要注意的是，<strong>数码管的动态刷新代码已经转移到了中断服务函数中</strong>，这样就可以保证刷新操作不会被主循环中的计算所影响。</li>
+</ul>
+</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.5 中断系统的学习：中断服务
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* 定时器0中断服务函数 */
+void InterruptTimer0() interrupt 1
+{
+	TH0 = 0xFC; //重新加载初值
+	TL0 = 0x67;
+	cnt++; //中断次数计数值加1
+	if (cnt >= 1000) //中断1000次即1秒
+	{
+		cnt = 0;  //清零计数值以重新开始下1秒计时
+		flag1s = 1; //设置1秒定时标志为1
+	}
+```
+```
+	P0 = 0xFF;  // 显示消隐
+	switch (i)   
+	{
+		case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=LedBuff[0]; break;
+		case 1: ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=LedBuff[1]; break;
+		case 2: ADDR2=0; ADDR1=1; ADDR0=0; i++; P0=LedBuff[2]; break;
+		case 3: ADDR2=0; ADDR1=1; ADDR0=1; i++; P0=LedBuff[3]; break;
+		case 4: ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=LedBuff[4]; break;
+		case 5: ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=LedBuff[5]; break;
+		default: break;
+	}
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 11%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **函数核心**
+	- `void InterruptTimer0() interrupt 1`：该函数是定时器0中断的**入口**。
+	- `interrupt 1`：特殊的关键字，指定该函数为**定时器0中断服务函数**。
+- **内部功能**
+	- **定时与计数：** 每1ms重载定时器初值并计数，1000次后设置1秒标志位 `flag1s`。
+- **数码管刷新：**
+    - **消隐：** `P0 = 0xFF`，消除“鬼影”。
+    - **动态扫描：** 执行 `switch` 语句，每1ms刷新一个数码管。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么在中断服务函数中，我们不再需要 `TF0 = 0;` 这条语句来手动清零中断标志位？
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们分析了主函数，现在让我们来看一下中断的核心——<strong>中断服务函数</strong>。正是这个函数，解决了我们数码管的“抖动”问题。</p>
+<h3 id="定时器0中断服务函数解析"><strong>定时器0中断服务函数解析</strong></h3>
+<ul>
+<li><p><strong>函数定义：</strong> <code>void InterruptTimer0() interrupt 1</code></p>
+<ul>
+<li><code>interrupt 1</code> 是一个特殊的关键字，它告诉编译器这是一个<strong>定时器0的中断服务函数</strong>。单片机在接收到定时器0的中断请求时，会自动跳转到这里执行代码。</li>
+</ul>
+</li>
+<li><p><strong>定时与计数：</strong></p>
+<ul>
+<li><code>TH0 = 0xFC;</code> 和 <code>TL0 = 0x67;</code>：每次进入中断后，都<strong>重新加载定时器初值</strong>，确保下一次中断仍然是1毫秒后发生。</li>
+<li><code>cnt++;</code>：中断次数加1。</li>
+<li><code>if (cnt &gt;= 1000)</code>：当中断次数达到1000次（即1秒）时，<code>cnt</code> 清零，并将<strong>1秒标志位 <code>flag1s</code> 置1</strong>。</li>
+</ul>
+</li>
+<li><p><strong>数码管动态扫描与消隐：</strong></p>
+<ul>
+<li><code>P0 = 0xFF;</code>：这一行就是我们之前讲到的<strong>“消隐”操作</strong>，它在切换数码管之前，先关闭所有段，避免了“鬼影”现象。</li>
+<li><code>switch (i)</code>：这部分代码就是我们之前的主循环动态扫描代码，现在被<strong>完整地移植到中断服务函数</strong>中。它确保了每1毫秒都会进行一次数码管刷新。</li>
+</ul>
+</li>
+</ul>
+<h3 id="核心思想"><strong>核心思想</strong></h3>
+<p>通过将<strong>耗时的计算</strong>（在主循环中）与<strong>及时的刷新</strong>（在中断函数中）分开，我们成功地解决了抖动问题。无论主循环中的计算需要多长时间，每1毫秒，单片机都会暂停计算，进入中断服务函数进行数码管刷新，确保了显示时间的均匀。</p>
+<p><strong>现在，我来问大家一个问题：</strong></p>
+<p><strong>为什么在中断服务函数中，我们不再需要 <code>TF0 = 0;</code> 这条语句来手动清零中断标志位？</strong></p>
+<p><strong>答案：</strong> 因为在51单片机中，当定时器中断被响应并进入中断服务函数时，<strong>硬件会自动将相应的中断标志位清零</strong>。所以，我们不再需要通过软件代码来完成这一操作。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.6 中断优先级
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20240925135414326.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 53%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **中断优先级：**
+    - **定义：** 决定了当多个中断同时发生时，哪一个**先被处理**。
+    - **原则：** 优先级高的中断优先执行。 
+- **中断嵌套：**
+    - **定义：** 一个中断被**更高优先级**的另一个中断打断
+    - **处理：** 单片机暂停当前任务，转而执行高优先级中断，完成后再返回。
+    - **目的：** 确保最紧急的任务总是能被**及时响应**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+如果定时器0中断正在执行，此时更高优先级的外部中断0也发生了，单片机会如何处理？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，我们已经知道中断能让我们在执行主任务的同时，及时处理突发事件。但如果同时有多个突发事件发生，单片机应该先处理哪一个呢？</p>
+<h3 id="中断优先级与中断嵌套"><strong>中断优先级与中断嵌套</strong></h3>
+<ul>
+<li><strong>优先处理紧急事件：</strong> 当有多个中断同时发生时，单片机不会随意选择。它会根据事件的<strong>紧急程度</strong>，决定先处理哪一个。这就像我们生活中，如果水烧开了，同时门铃响了，我们通常会优先去处理更紧急的“水开”问题。</li>
+<li><strong>中断优先级：</strong> 在单片机中，每个中断源都有一个<strong>优先级</strong>。这个优先级决定了当多个中断请求同时出现时，单片机先响应哪一个。优先级高的中断会得到优先处理。</li>
+<li><strong>中断嵌套：</strong> 中断嵌套指的是在一个中断服务函数执行期间，又发生了另一个优先级更高的中断。在这种情况下，单片机会<strong>暂停当前的中断服务函数</strong>，转而去执行优先级更高的那个，等处理完后再返回继续执行之前的任务。这保证了最高优先级的任务总能得到最及时的响应。</li>
+</ul>
+<p><strong>现在，我来问大家一个问题：</strong></p>
+<p><strong>如果定时器0中断正在执行，此时外部中断0也发生了，并且外部中断0的优先级高于定时器0。请问，单片机会如何处理？</strong></p>
+<p><strong>答案：</strong> 单片机会<strong>暂停</strong>正在执行的定时器0中断服务函数，转而立即执行外部中断0的中断服务函数。等外部中断0处理完毕后，它才会返回来，继续执行定时器0中断服务函数中剩下的代码。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.6 中断优先级
+</div>
+<div class="" style="position: absolute; left: 10%; top: 55%; height: 30%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20240925135644100.png" alt="" style="width: 1500px; object-fit: fill">
+
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 10%; top: 12%; height: 38%; width: 80%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **固有优先级：**
+    - **硬件预设**，不可更改。
+    - 决定了默认的中断响应顺序。
+- **抢占优先级：**
+    - 通过**IP寄存器**编程设置。
+    - 将对应位设为1，可**提高优先级**。
+    - 高抢占优先级的中断可以**打断**低优先级中断，实现**中断嵌套**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我想让定时器1中断的优先级高于定时器0中断，我应该如何设置 IP 寄存器的相关位？
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们讨论了中断的优先级和嵌套，现在我们来深入了解一下，单片机是如何实现这种优先级的。</p>
+<h3 id="中断优先级设置"><strong>中断优先级设置</strong></h3>
+<p>在单片机中，中断优先级主要分为两种：<strong>固有优先级</strong>和<strong>抢占优先级</strong>。</p>
+<ul>
+<li><p><strong>固有优先级</strong> 这是单片机硬件预设的优先级。例如，外部中断0的固有优先级通常高于定时器1，如果它们同时发生，没有经过任何设置，外部中断0会先被响应。</p>
+</li>
+<li><p><strong>抢占优先级</strong> 这个优先级是我们可以通过编程来改变的。它由一个特殊的寄存器——<strong>IP（中断优先级寄存器）</strong>控制。IP 寄存器的每一位对应一个中断源。默认情况下，这些位的值都是 0。</p>
+<ul>
+<li>当我们把 IP 寄存器的某一位设置为 <strong>1</strong> 时，该位对应的中断源就获得了<strong>更高的抢占优先级</strong>。</li>
+<li>这意味着，即使一个低抢占优先级的中断正在执行，一个高抢占优先级的中断也可以<strong>打断</strong>它，从而实现<strong>中断嵌套</strong>。</li>
+</ul>
+</li>
+</ul>
+<p>简单来说，固有优先级是天生的，而抢占优先级是我们通过 IP 寄存器赋予的。</p>
+<p><strong>现在，我来问大家一个问题：</strong></p>
+<p><strong>如果我想让定时器1中断的优先级高于定时器0中断，我应该如何设置 IP 寄存器的相关位？</strong>
+<strong>答案：</strong> 要实现这个目的，我们需要将 IP 寄存器中对应定时器1中断的位设置为 1，而对应定时器0中断的位保持为 0。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 6.6 中断优先级：特殊功能寄存器IP位描述
+</div>
+
+<div class="" style="position: absolute; left: 10%; top: 15%; height: 65%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第6章 中断与数码管动态显示/file-20240925135839013.png" alt="" style="width: 1400px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>单片机中的中断优先级，是通过 <strong>IP（中断优先级）寄存器</strong>来控制的。IP 寄存器的每一位都对应一个特定的中断源，我们可以通过设置这些位来改变中断的优先级。</p>
+<p>在 51 单片机中，中断的固有优先级和 IP 寄存器的位分配如下：</p>
+<ul>
+<li><strong><code>PX0</code></strong> (外部中断 0)：顺序位是 0，优先级<strong>最高</strong>。</li>
+<li><strong><code>PT0</code></strong> (定时器 0)：顺序位是 1，优先级其次。</li>
+<li><strong><code>PX1</code></strong> (外部中断 1)：顺序位是 2，优先级再次。</li>
+<li><strong><code>PT1</code></strong> (定时器 1)：顺序位是 3，优先级再次。</li>
+<li><strong><code>PS</code></strong> (串口)：顺序位是 4。</li>
+<li><strong><code>PT2</code></strong> (定时器 2)：顺序位是 5。</li>
+</ul>
+<p>IP 寄存器中的每一位都可以通过编程设置为 0 或 1。当设置为 1 时，该中断的优先级就会高于同级别的其他中断。例如，如果 <code>PX0</code> 和 <code>PT0</code> 同时为 0，那么外部中断 0 会优先响应。但如果我们将 <code>PT0</code> 设置为 1，那么定时器 0 的优先级就会高于外部中断 0。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 15%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **数组**：是**连续存储**的同类型数据集合，通过**下标**访问，`code` 关键字可将数据存入 **FLASH**。
+- **选择语句**：`if` 和 `switch` 用于根据条件**选择性地执行**代码。
+- **数码管**：利用**视觉暂留**原理实现动态显示，总扫描时间需**小于10ms**，并使用**显示消隐**消除“鬼影”。
+- **中断**：使单片机能**及时响应**紧急事件，通过 `IE` 寄存器启用，高优先级中断可**嵌套**执行。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>好，同学们，今天我们完成了本章的学习。让我们一起回顾一下，本章我们都学到了哪些重要的知识点。</p>
+<h3 id="本章小结">本章小结</h3>
+<ul>
+<li><strong>数组</strong>：是内存中<strong>连续存储</strong>的<strong>同类型</strong>数据集合，通过<strong>下标</strong>进行访问。使用 <code>code</code> 关键字可以将数据存储在 <strong>FLASH</strong> 中，从而节省RAM空间。</li>
+<li><strong>选择语句</strong>：<code>if</code> 和 <code>switch</code> 用于根据条件<strong>选择性地执行</strong>代码。<code>if</code> 适用于简单的二选一，而 <code>switch</code> 适用于多分支选择，代码更清晰。</li>
+<li><strong>数码管</strong>：利用人眼的<strong>视觉暂留</strong>效应实现动态显示，确保一轮扫描的总时间<strong>小于10毫秒</strong>，以消除闪烁。同时，我们通过<strong>显示消隐</strong>技术来消除“鬼影”。</li>
+<li><strong>中断</strong>：它是一种让单片机<strong>及时响应</strong>紧急事件的机制，通过设置 <code>IE</code> 寄存器启用。高优先级的中断可以<strong>嵌套</strong>执行，确保最紧急的任务总是能被优先处理。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1200,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>

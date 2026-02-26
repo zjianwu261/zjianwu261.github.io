@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 40%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/Step_by_Step_learning.webp" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 55%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第4章 C语言基础以及流水灯的实现
+</div>
+
+<div class="" style="position: absolute; left: 10%; top: 70%; height: 20%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《单片机原理与应用》<br><br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div>
+
+<aside class="notes"><p>同学们，大家好！欢迎来到《单片机原理与应用》的第四章。我是张建武。在之前的课程中，我们已经对单片机有了初步的认识，并学习了一些必要的硬件电路知识。今天，我们将正式踏入单片机编程的核心领域，深入学习C语言的基础知识，并应用它们来实现一个经典的入门项目——流水灯。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本次课主要内容
+</div>
+
+<div class="" style="line-height: 2.5; font-size: 45px; position: absolute; left: 5%; top: 25%; height: 50%; width: 44%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 4.1 C语言变量和运算符
+- 4.2 C语言循环语句和函数的初步认识
+- 4.3 51单片机常用延时办法
+- 4.4 流水灯程序编写
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 20%; height: 66%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250813212244785.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用 》
+</div>
+</div>
+
+<aside class="notes"><p>本次课我们将重点学习C语言的变量和运算符，这是编程的基础工具，就像学习任何一门语言都要先学单词和语法一样。</p>
+<p>接着，我们会初步认识循环和函数，这两个重要的程序结构。</p>
+<p>然后，我将介绍单片机编程中几种常用的延时方法，因为延时在控制硬件设备时至关重要。</p>
+<p>最后，我们将把这些知识融会贯通，亲手编写一个流水灯程序，让大家看到代码如何控制硬件，实现有趣的功能。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1 C语言变量和运算符：前情回顾
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 33%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250814214411423.png" alt="" style="width: 600px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250814214508865.png" alt="" style="width: 400px; object-fit: fill">
+
+</div>
+
+<div class="" style="position: absolute; left: 33%; top: 12%; height: 35%; width: 33%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250818235747484.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 33%; top: 55%; height: 30%; width: 33%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 第1章 单片机学习方法论
+- 第2章 单片机基本概念
+- 第3章 单片机本质面向硬件编程
+</div>
+
+<div class="" style="position: absolute; left: 66%; top: 15%; height: 65%; width: 33%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250814214742803.png" alt="" style="width: 550px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250814214808353.png" alt="" style="width: 550px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：数字信号有几种状态码？
+</div>
+</div>
+
+<aside class="notes"><p>好，在正式开始之前，我们先简单回顾一下。</p>
+<ul>
+<li>第一章，我们聊了学习单片机的方法论。</li>
+<li>第二章，我们进入了单片机的世界，了解了单片机内部三大资源、最小系统等基本概念。</li>
+<li>第三章，我们建立了一个核心思想：单片机编程的本质，就是根据硬件电路来编写控制代码。</li>
+</ul>
+<p>那么问题来了，我们用什么语言来编写代码呢？就是我们这章要深入学习的C语言，它就是我们和单片机沟通的工具。</p>
+<p>在开始之前，我先问大家一个问题：“有同学还记得我们在第3章学的，数字信号有几种状态吗？”</p>
+<p>（稍作停顿，等待学生回答）</p>
+<p>对，就是<strong>高电平</strong>和<strong>低电平</strong>，我们通常用<strong>1</strong>和<strong>0</strong>来表示。这正好引出了我们今天要讲的第一个基础知识——<strong>进制</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1 C语言变量和运算符：进制基础知识
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250816173449869.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 60%; top: 15%; height: 65%; width: 38%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **十进制**：生活习惯，逢十进一。
+- **二进制**：计算机基础，逢二进一，由0和1组成。
+- **十六进制**：编程常用，是二进制的简写形式，逢十六进一，用0-9和A-F表示。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：数字4用二进制怎么表示？
+</div>
+</div>
+
+<aside class="notes"><p>我们生活中最习惯的是<strong>十进制</strong>，规则是“逢十进一”。</p>
+<p>但在计算机的世界里，它只认识0和1，也就是<strong>二进制</strong>，规则是“逢二进一”。比如数字1就是1，数字2在二进制里是10，3是11。<strong>那大家想一想，数字4用二进制怎么表示？</strong></p>
+<p>（稍作停顿）</p>
+<p>没错，是100。但是二进制写起来太长了，不方便，所以我们程序员更常用的是<strong>十六进制</strong>。大家可以把它看作是二进制的一种简写，因为一位十六进制数，正好能表示四位二进制数。它的规则是“逢十六进一”，用0到9，还有A到F来表示。在C语言里，我们用<code>0x</code>前缀来表示一个十六进制数，比如<code>0xFF</code>。</p>
+<p>大家不要觉得复杂，它们只是表示同一个数值的不同方式。就像中文的“三”、阿拉伯数字“3”和罗马数字“Ⅲ”，本质上都是一个东西。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1 C语言变量和运算符：变量与常量
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250814213758644.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 45%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **常量:** 在程序中值固定不变的量。
+- **变量:** 值可以根据程序需要灵活改变的符号。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>在编程中，我们会处理各种数据。这些数据分为两类：<strong>常量</strong>和<strong>变量</strong>。</p>
+<ul>
+<li><strong>常量</strong>，顾名思义，就是在程序运行期间，值固定不变的量。就像你的银行卡号，是固定不变的。</li>
+<li><strong>变量</strong>，则是程序里值可以灵活改变的符号。就像你银行卡里的余额，存钱、取钱都会让它变化。</li>
+</ul>
+<p>在单片机里，变量非常重要，我们可以用它来存储传感器的读数、按键按下的次数，或者某个LED灯的状态等等。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1 C语言变量和运算符：数据类型
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20240921122613405.png" alt="" style="width: 1500px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 78%; top: 15%; height: 65%; width: 20%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- `char`: 1字节
+- `int`: 2字节
+- `long`: 4字节
+- `float`: 4字节
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：`unsigned char`它的范围中255是怎么来的吗？变量溢出会怎么样？
+</div>
+</div>
+
+<aside class="notes"><p>既然要存储数据，我们就需要给数据找一个“窝”。这个“窝”就是变量，而“窝”的大小和类型，就是<strong>数据类型</strong>。就像我们用小盒子装首饰，用大箱子装被子一样。</p>
+<p>C语言里有几种基本的数据类型，大家看屏幕：<code>char</code>（字符型）占1个字节，<code>int</code>（整型）占2个字节，<code>long</code>（长整型）和<code>float</code>（浮点型）占4个字节。</p>
+<p>这里有一个非常重要的概念，就是<strong>有符号（signed）</strong>和<strong>无符号（unsigned）</strong>。</p>
+<ul>
+<li>有符号的类型，就像能显示零下温度的温度计，可以表示负数。</li>
+<li>而无符号类型，只能表示0和正数。</li>
+</ul>
+<p>比如一个<code>unsigned char</code>，它的范围是0到255。<strong>那么大家知道这个255是怎么来的吗？</strong> 因为1个字节是8位，每一位都有0或1两种可能，所以是256种状态，从0开始计数就是0到255。</p>
+<p>大家想一下，如果我往一个最大容量是255毫升的杯子里，倒入256毫升的水，会怎么样？对，会<strong>溢出</strong>。程序里也一样，一个值为255的<code>unsigned char</code>变量，你再给它加1，它不会变成256，而是会像汽车里程表一样翻转，变回到0。这就是<strong>变量溢出</strong>，是编程里一个常见的错误来源。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1 C语言变量和运算符：溢出示例
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+```C
+#include<reg52.h>
+
+sbit LED = P0^0;
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+
+void main()  //void即函数类型
+{
+	//以下为声明语句部分
+	
+	unsigned int i = 0; //定义一个无符号整型变量i， 并赋初值0
+
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+```C
+	//以下为执行语句部分
+	ENLED = 0;  //U3、U4两片74HC138总使能
+	ADDR3 = 1;  //使能U3使之正常输出
+	ADDR2 = 1;  //经U3的Y6输出开启三极管Q16
+	ADDR1 = 1; 
+	ADDR0 = 0;
+	while(1)
+	{
+		LED = 0;   //点亮小灯
+		for (i=0; i<30000; i++); //延时一段时间
+		LED = 1;
+		for (i=0; i<30000; i++); //延时一段时间	
+	}
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果把`unsigned int`改成`unsigned char`，会发生什么？
+</div>
+</div>
+
+<aside class="notes"><p>我们来看个具体的例子。这是一个让LED闪烁的程序，大家看这个<code>for</code>循环，用了一个<code>unsigned int</code>类型的变量<code>i</code>来计数，一直数到30000。<code>unsigned int</code>的范围是0到65535，所以数到30000完全没问题。</p>
+<p>现在我问大家：“如果我把<code>unsigned int</code>改成<code>unsigned char</code>，会发生什么？”</p>
+<p>（稍作停顿）</p>
+<p>我们刚才说了，<code>unsigned char</code>最大只能到255。当<code>i</code>加到255，再加1，它就溢出变回0了。所以，这个循环条件 i 小于 30000 将永远为真，i永远也到不了30000。程序就会卡在这里，变成一个死循环。这就是选错数据类型的严重后果。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1 C语言变量和运算符：算术运算符
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+|      名称      | 运算符号 |        举例        |
+|:--------------:|:--------:|:------------------:|
+|   加法运算符   |    +     |      2+10=12       |
+|   减法运算符   |    -     |      10-3=7        |
+|   乘法运算符   |    *     |      2*10=20       |
+|   除法运算符   |    /     |      30/10=3       |
+| 求余运算符（模运算符） |    %     |      23%7=2       |
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 60%; top: 15%; height: 65%; width: 38%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- 整数除法(`/`)会舍弃任何小数部分。
+- 取模(`%`)运算返回除法的余数
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：`15 % 4` 的结果是多少？
+</div>
+</div>
+
+<aside class="notes"><p>好了，了解了数据怎么存储，我们再来看看怎么对数据进行运算。这就是<strong>运算符</strong>。</p>
+<p>最基本的就是算术运算符：<code>+</code> (加)、<code>-</code> (减)、<code>*</code> (乘)、<code>/</code> (除)，还有一个 <code>%</code> (取模)，也就是求余数。</p>
+<p>我来考考大家：“<code>15 % 4</code> 的结果是多少？”</p>
+<p>（稍作停顿）</p>
+<p>对，是3。因为15除以4商3余3。这里注意一点，C语言里的整数除法会直接扔掉小数部分，比如 <code>7 / 2</code> 的结果是3，不是3.5。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1 C语言变量和运算符：自增和自减运算符
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 64%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+ 
+| 运算表达式 |             说明             |     运算规则     |
+|:----------:|:----------------------------:|:----------------:|
+|    ++a     | a自增1后，再取值             | 先运算，再取值   |
+|    --a     | a自减1后，再取值             | 先运算，再取值   |
+|    a++     | a取值后，a的值再自增1        | 先取值，再运算   |
+|    a--     | a取值后，a的值再自减1        | 先取值，再运算   |
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 64%; top: 15%; height: 65%; width: 36%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **后缀 (`a++`):** 先使用变量当前的值，然后再将其加1（先用后加）。
+- **前缀 (`++a`):** 先将变量的值加1，然后再使用这个新值（先加后用）。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：`b = a++; b = ++a;`，当a=5，a和b等于多少？
+</div>
+</div>
+
+<aside class="notes"><p>有两个非常常用的运算符：<code>++</code>（自增）和<code>--</code>（自减），就是加1和减1。</p>
+<p>它们俩有个有趣的区别，就是可以放在变量前面（前缀），也可以放在后面（后缀）。</p>
+<ul>
+<li><strong>后缀 <code>a++</code></strong> 是“先用后加”：先使用a的当前值，然后再给a加1。</li>
+<li><strong>前缀 <code>++a</code></strong> 是“先加后用”：先给a加1，然后再使用这个新的值。</li>
+</ul>
+<p>我们看例子：<code>b = a++;</code>，如果a是5，那么先把5赋给b，然后a自己变成6。如果是 <code>b = ++a;</code>，a先从5变成6，再把这个新的值6赋给b。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1 C语言变量和运算符：赋值运算符
+</div>
+
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+| 运算表达式 |           说明           |       运算规则       |
+|:----------:|:------------------------:|:--------------------:|
+|   a = b    | 将 b 的值赋给 a          | a 的值变为 b         |
+|  a += b    | a = a + b 的简写         | 先计算 a+b，再赋给 a |
+|  a -= b    | a = a - b 的简写         | 先计算 a-b，再赋给 a |
+|  a *= b    | a = a * b 的简写         | 先计算 a*b，再赋给 a |
+|  a /= b    | a = a / b 的简写         | 先计算 a/b，再赋给 a |
+|  a %= b    | a = a % b 的简写         | 先计算 a%b，再赋给 a |
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **简单赋值 (`=`)**: 核心是“存入”动作，将右侧的计算结果存入左侧的变量中。
+- **复合赋值 (`+=`, `-=`)**: 是“运算+赋值”的简写形式，让代码更简洁，用于变量的自我更新。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：C语言中的等于符号是什么？
+</div>
+</div>
+
+<aside class="notes"><p>好的，同学们，我们继续。</p>
+<p>到目前为止，我们已经学习了如何定义变量，也了解了如何使用各种运算符（如 <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>++</code>）对这些变量进行计算。但计算出结果后，我们如何将这个结果保存起来呢？这就需要用到我们接下来要讲的，在编程中最为核心和基础的操作之一——**赋值 (Assignment)**。</p>
+<p>这里大家一定要记住一个核心概念：在C语言里，单个等号不是数学上的“等于”，而是一个<strong>动作</strong>，一个指令！它的意思是，把右边的值，“装到”左边的变量里去。数据的流向永远是<strong>从右到左</strong>。</p>
+<p>我们还有一些复合赋值运算符，比如 <code>+=</code>、<code>-=</code> 等。<code>a += 5;</code> 就是 <code>a = a + 5;</code> 的简写。<strong>那么，<code>a *= 3;</code> 展开来应该是什么样的呢？</strong> 对，就是<code>a = a * 3;</code>。注意，运算符中间不能有空格。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1 C语言变量和运算符：关系运算符
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 40%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+| 符号  |    意义    |   举例    | 结果 |
+|:-----:|:----------:|:---------:|:----:|
+|   >   |    大于    | 10 > 5    |  1   |
+|  >=   | 大于等于   | 10 >= 10  |  1   |
+|   <   |    小于    | 10 \< 5    |  0   |
+|  <\=   | 小于等于   | 10 \<= 10  |  1   |
+|  =\=   |    等于    | 10 == 5   |  0   |
+|  !=   |   不等于   | 10 != 5   |  1   |
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 40%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- 关系运算的结果是布尔值（1代表真，0代表假）。
+- 在C语言中，任何非零值都被视为“真”，而零值则被视为“假”。
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 62%; height: 30%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```C
+int temperature = 35;
+int button_state = 0; 
+void main() {
+    while (1) {
+        if (temperature > 30) {
+            // 在这里执行你需要的操作，比如打开风扇。
+        }
+        if (button_state == 0) {
+            // 在这里执行你需要的操作，比如切换模式。
+        }
+    }
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 62%; height: 30%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- temperature > 30，结果是什么 
+- 如果代码中的while(-10)，是否成立？
+</div>
+</div>
+
+<aside class="notes"><p>“好的，同学们。我们已经学会了如何给变量赋值和进行算术运算。但到目前为止，我们的程序还只会像计算器一样，按照我们写好的顺序一步一步往下走。真正的智能程序是需要具备<strong>判断能力</strong>和<strong>决策能力</strong>的。比如，当温度高于30度时，就打开风扇；当按键被按下时，就点亮LED灯。”</p>
+<p>“要实现这种智能控制，我们的程序就必须能够回答‘是’或‘否’的问题。‘温度是不是高于30度了？’、‘按键是不是被按下了？’。要回答这些问题，我们就必须学习一套全新的工具——<strong>关系运算符</strong>。”</p>
+<p>在单片机编程中，这套工具是我们编写所有智能逻辑的绝对基础。无论是控制程序的流程、还是判断传感器数据是否达到阈值，都离不开它。可以说，掌握了它，才能让我们的程序真正‘活’起来。”</p>
+<p>“那么，到底什么是关系运算符呢？其实顾名思义，它就是用来<strong>比较两个值之间的关系</strong>的，说白了，就是比大小、比是否相等。”</p>
+<p>“这里它和我们之前学的加减乘除有一个本质区别。<code>a + b</code> 会得到一个具体的数字，但 <code>a &gt; b</code> 这样的关系运算，它得到的结果只有两种可能：‘条件成立’或者‘条件不成立’。我们专业一点，称之为真 (True)或 假 (False)。”</p>
+<p>在C语言的规则里，它并不会直接返回一个叫‘真’或‘假’的东西，而是用我们熟悉的整数来代表：</p>
+<ul>
+<li>如果条件成立，也就是**真 (True)**，就用整数 <strong><code>1</code></strong> 来表示。</li>
+<li>如果条件不成立，也就是**假 (False)**，就用整数 <strong><code>0</code></strong> 来表示。</li>
+</ul>
+<p>C语言为我们提供了这六种常见的关系运算符，它们最终的值，要么是<code>1</code>，要么是<code>0</code>。”</p>
+<p>以左下角的代码为例。
+核心是两个 <code>if</code> 语句，它们在不断地做“是”或“否”的判断。而这些判断，都离不开我们今天要讲的两个问题。</p>
+<ul>
+<li>第一个问题：<code>temperature &gt; 30</code> 的结果是什么？</li>
+</ul>
+<p>这是一个<strong>关系运算表达式</strong>，它不是一个操作，而是一个“提问”。它在问：“变量 <code>temperature</code> 的值是否大于 30？”</p>
+<ul>
+<li>在这个例子中，<code>temperature</code> 的值是 <strong>35</strong>。</li>
+<li>35 大于 30，所以这个问题的答案是“是”。</li>
+</ul>
+<p>在 C 语言中，这种“是”或“否”的结果是用<strong>整数 1 和 0</strong> 来表示的。<strong>“真”（是）用 1 表示，“假”（否）用 0 表示</strong>。因此，<code>temperature &gt; 30</code> 这个表达式的最终结果就是 <strong>1</strong>。<code>if</code> 语句看到这个 1，就知道条件成立，于是执行大括号里的代码。</p>
+<ul>
+<li>第二个问题：如果把 <code>while(1)</code> 改成 <code>while(-10)</code>，是否成立？</li>
+</ul>
+<p>答案是：<strong>成立</strong>。</p>
+<p>这是 C 语言中一个非常重要的规则：<strong>任何非零值都被视为“真”，只有 0 被视为“假”</strong>。</p>
+<p><code>while</code> 循环正是基于这个规则来工作的。它会检查括号里的值。只要这个值不是 0，它就认为条件成立，循环就会一直执行下去。</p>
+<ul>
+<li><code>while(1)</code>：1 是非零值，条件成立，无限循环。</li>
+<li><code>while(-10)</code>：-10 也是一个非零值，条件同样成立，也会无限循环。</li>
+<li><code>while(0)</code>：只有当括号里是 0 时，条件才不成立，循环才会终止。</li>
+</ul>
+<p>所以，在单片机编程中，我们通常用 <code>while(1)</code> 来创建无限循环，因为 1 永远是非零值，这个循环也永远不会停止。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 C语言循环语句和函数的初步认识：for循环
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+#include <reg52.h>
+sbit LED = P1^0;
+sbit KEY = P1^1;
+void main() {
+    unsigned int i; // 声明一个用于延时的变量
+    LED = 0;
+    while(1) {
+        // 1. 检测按键是否被按下（低电平）
+        if (KEY == 0) {
+            // 2. 延时，消除按键抖动
+            for (i = 0; i < 30000; i++);
+```
+```C
+            // 3. 再次检测，确认按键稳定按下
+            if (KEY == 0) {
+                // 4. 切换LED状态
+                LED = !LED;
+                // 5. 等待按键释放
+                while(KEY == 0);
+            }
+        }
+    }
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **语法:** `for (初始化; 条件; 更新) { 循环体 }`
+- **执行流程:**
+    1. `初始化` 执行一次。
+    2. 检查 `条件`。若为真，继续；若为假，退出循环。
+    3. 执行循环体。
+    4. 执行 `更新`。
+    5. 回到第2步。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果想要让单片机控制的一个 LED 灯，反复亮灭10次，我们应该如何用 `for` 循环来实现呢？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，在学习了算术、自增自减、赋值、关系运算符后，我们已经掌握了 C 语言中许多核心的“工具”。今天，我们要学习一个非常强大的控制结构——<strong>for 语句</strong>。在单片机编程中，for 语句是实现循环的“主力军”，常用于重复执行任务，比如控制 LED 闪烁、读取传感器数据、或处理数组。接下来，我们一起看看 for 语句的用法和魅力！</p>
+<p>for 语句是 C 语言中最常用的循环结构之一，它允许我们以一种<strong>可控的方式重复执行一段代码</strong>。它的语法结构非常清晰，适合需要明确循环次数的场景。</p>
+<p><strong>执行过程</strong>：</p>
+<ol>
+<li><strong>初始化表达式</strong>：在循环开始前执行一次，通常用于初始化循环变量（比如 int i = 0）。</li>
+<li><strong>条件表达式</strong>：在每次循环开始前判断是否为真（非 0 为真，0 为假）。如果为真，执行循环体；如果为假，退出循环。</li>
+<li><strong>循环体</strong>：执行要重复的代码。</li>
+<li><strong>更新表达式</strong>：在每次循环体执行后更新循环变量（比如 i++ 或 i--）。</li>
+<li>回到步骤 2，重复判断条件，直到条件为假，循环结束。</li>
+</ol>
+<p>在单片机里，<code>for</code>循环有两个特殊应用：</p>
+<ol>
+<li>延时作用：一个空的<code>for</code>循环，比如<code>for(i=0; i&lt;30000; i++);</code>，它什么有用的事都不干，就是让CPU在这里空转，从而消耗掉一段时间。但这种延时不精确。</li>
+<li>死循环：如果把括号里的三个部分都省略掉，写成<code>for( ; ; )</code>，它就成了一个无限循环。这在单片机程序里非常常见，因为我们的设备通常需要上电后就一直运行，永不停止。</li>
+</ol>
+<p>在编写单片机程序时，我们几乎总会看到一个 <code>for( ; ; )</code> 或者 <code>while(1)</code> 循环，它是我们程序的主循环，确保设备能持续执行任务。</p>
+<p>现在，请大家思考一个问题：如果我们将一个 LED 灯接到单片机的 P1.0 引脚，并希望它以每秒闪烁一次的频率持续工作，我们应该怎样用 <code>for</code> 循环来实现呢？请大家试着写出伪代码或 C 语言代码。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 C语言循环语句和函数的初步认识：while循环
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```C
+#include <reg52.h>
+sbit LED = P1^0;
+sbit KEY = P1^1;
+void main() {
+    LED = 1; // 初始LED灯熄灭
+    // 这是一个无限循环，确保程序持续运行
+    while(1) {
+    // while 循环的条件是：当按键处于按下状态（KEY == 0）时，执行循环体
+        while(KEY == 0) {
+            // 当按键按下时，将LED设置为低电平，点亮LED
+            LED = 0;
+        }
+```
+```C
+        // 当按键松开时，while循环的条件不满足，程序跳出循环
+        // 将LED设置为高电平，熄灭LED
+        LED = 1;
+    }
+}
+```
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **语法:** `while (条件) { ... }`
+- **概念:** 只要`条件`为真，循环体就会重复执行。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果把这个 `while` 循环改成 `if (KEY == 0)`，会发生什么？简单描述一下改动后的程序行为。
+</div>
+</div>
+
+<aside class="notes"><p><code>while</code>循环比<code>for</code>循环更简单：<code>while (条件) { ... }</code>。</p>
+<p>只要条件为真，就一直重复执行大括号里的代码。</p>
+<p>在嵌入式编程中，最经典的结构就是 **<code>while(1)</code>**。因为1在C语言中被认为是“真”，所以这个循环将永远执行下去，构成了我们程序的主循环框架。</p>
+<p>如果将 <code>while(KEY == 0)</code> 改成 <code>if (KEY == 0)</code>，当满足条件后，<code>LED = 0;</code> 这行代码即使被执行了，LED 亮起的时间也只有极短的一瞬间，紧接着就会被 <code>LED = 1;</code> 熄灭。</p>
+<p>所以，从我们的肉眼来看，LED <strong>几乎不会有任何变化</strong>，它会一直处于熄灭状态。这就是 <code>if</code> 和 <code>while</code> 循环在程序流程控制上的关键区别：<code>if</code> 只判断一次，而 <code>while</code> 只要条件满足就会一直执行。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 C语言循环语句和函数的初步认识：函数的构成
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250819231311251.png" alt="" style="width: 1000px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 2.2; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **函数定义**：
+	- 将复杂程序分解为独立、可复用的模块。
+- **函数构成**：
+    - **返回值类型**（`void` 表示无返回值）
+    - **函数名**
+    - **形式参数列表**（也称形参，用于数据传递）
+    - **函数体**（包含声明和执行语句）
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：我们在单片机编程中写的 `delay_ms()` 函数，它的返回值类型通常是 `void`。请问，这是为什么？
+</div>
+</div>
+
+<aside class="notes"><p>当程序变得越来越复杂时，我们将所有代码堆在一起会变得难以管理。为了解决这个问题，我们需要将代码<strong>模块化</strong>，而这正是<strong>函数</strong>的作用。</p>
+<p>一个函数就像一个功能独立的小“工厂”。你给它一些“原材料”（<strong>参数</strong>），它就帮你完成一个特定的任务，最后可能会给你一个“成品”（<strong>返回值</strong>）。</p>
+<p>一个函数通常由以下部分组成：</p>
+<ul>
+<li><strong>返回值类型</strong>：指定函数完成任务后返回的数据类型。如果没有返回值，则使用 <code>void</code>。</li>
+<li><strong>函数名</strong>：给函数起一个易于理解的名称。</li>
+<li><strong>形式参数列表</strong>：函数接受的输入数据。如果没有参数，也需要写空括号 <code>()</code>。</li>
+<li><strong>函数体</strong>：包含执行特定任务的具体代码。</li>
+</ul>
+<p>我们编写的所有程序，其实都运行在一个最特殊的函数里，它就是 <code>main</code> 函数**。<code>main</code> 函数是整个程序的入口，一个程序中必须有且只能有一个 <code>main</code> 函数。所有代码都被包裹在 <code>main</code> 函数里，从这里开始执行。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 C语言循环语句和函数的初步认识：函数名
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250819231311251.png" alt="" style="width: 1000px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 2.2; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **函数名组成**：字母、数字、下划线，但不能以数字开头。
+- **唯一性**：不能与其它函数或变量重名。
+- **限制**：不能使用 C 语言**关键字**作为函数名（如 `char`）
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>关于函数名，它需要遵循一些明确的规则。</p>
+<p>首先，函数名可以由字母、数字和下划线自由组合。但请记住，<strong>数字不能作为函数名的开头</strong>。例如，<code>delay_ms</code>是一个合法的函数名，但 <code>2_delay_ms</code> 则不行。其次，函数名必须是唯一的，它<strong>不能与你程序中任何其他函数或变量重名</strong>，否则编译器会不知道你到底想调用哪个。</p>
+<p>最后，也是最重要的一点，你绝对不能使用 C 语言的<strong>关键字</strong>作为函数名。关键字是我们程序中已经具备特殊功能的“保留字”，比如 <code>char</code>、<code>int</code>、<code>while</code>、<code>for</code> 等。如果你尝试将一个函数命名为 <code>char()</code>，编译器会把它误认为是变量类型定义，从而导致语法错误。理解并遵守这些规则，是写出专业、高质量代码的第一步。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 C语言循环语句和函数的初步认识：形式参数列表
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250819231311251.png" alt="" style="width: 1000px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 2.2; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **形式参数列表作用**：在函数调用时传递数据。
+- **无参数**：可以使用 `void` 或直接留空，但**括号 `()` 不能省略**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>函数的参数列表，也叫形参列表，是函数调用时用来在不同部分之间传递数据的通道。它就像是小工厂的“进料口”，你通过这个口把需要处理的原材料（数据）送进去。</p>
+<p>如果一个函数不需要任何外部数据就能完成任务，那么它的参数列表里可以写一个 void 来表示“无参数”。不过，在 C 语言中，这个 void 也可以省略不写。但是，请注意，无论如何那个括号 () 是绝对不能省略的。编译器就是通过这对括号来识别这是一个函数，而不是一个变量。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 C语言循环语句和函数的初步认识：函数体
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250819231311251.png" alt="" style="width: 1000px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 2.2; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **函数体组成**：
+    - **声明语句**：用于声明函数内部变量。
+    - **执行语句**：函数需要执行的具体操作。
+- **注意**：所有**变量声明必须在执行语句之前**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>一个函数的<strong>函数体</strong>，包含了<strong>声明语句</strong>部分和<strong>执行语句</strong>部分。</p>
+<p><strong>声明语句</strong>部分主要用于声明函数内部使用的所有变量。你可以把它想象成在正式工作前，先准备好所需的工具和材料。而<strong>执行语句</strong>部分，就是完成具体任务的代码。</p>
+<p>特别需要注意的是，在 C 语言中，你必须将<strong>所有变量声明放在执行语句之前</strong>。如果顺序颠倒，编译器就会报错，因为它无法识别一个没有预先声明的变量。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 C语言循环语句和函数的初步认识：main函数
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250819231311251.png" alt="" style="width: 1000px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 2.2; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **程序入口**：main函数是程序执行的起点。
+- **要求**：一个工程文件**必须且只能有一个** `main` 函数。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>每一个C语言程序都从一个特殊的函数开始执行，它就是 <strong><code>main</code> 函数</strong>。一个完整的工程文件中，<code>main</code> 函数是必不可少的，并且只能有一个。它是整个程序的<strong>入口</strong>，所有代码的执行都是从 <code>main</code> 函数开始的。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 C语言循环语句和函数的初步认识：LED闪烁程序
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+```C
+#include<reg52.h>
+
+sbit LED = P0^0;
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+
+void main()  //void即函数类型
+{
+	//以下为声明语句部分
+	
+	unsigned int i = 0; //定义一个无符号整型变量i， 并赋初值0
+
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+```C
+	//以下为执行语句部分
+	ENLED = 0;  //U3、U4两片74HC138总使能
+	ADDR3 = 1;  //使能U3使之正常输出
+	ADDR2 = 1;  //经U3的Y6输出开启三极管Q16
+	ADDR1 = 1; 
+	ADDR0 = 0;
+	while(1)
+	{
+		LED = 0;   //点亮小灯
+		for (i=0; i<30000; i++); //延时一段时间
+		LED = 1;
+		for (i=0; i<30000; i++); //延时一段时间	
+	}
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我们将 `unsigned int i = 0;` 这行代码移动到 `main` 函数的外面。程序还能正常运行吗？
+</div>
+</div>
+
+<aside class="notes"><p>这段代码中的<strong>函数体</strong>属于 <code>main</code> 函数，它被大括号 <code>{</code> 和 <code>}</code> 包围。函数体内部结构清晰，分为两个主要部分：</p>
+<p><strong>1. 声明语句部分</strong></p>
+<p>这个部分位于函数体的开头，用于定义函数内部使用的变量。在你的代码中，**<code>unsigned int i = 0;</code>** 就是一个声明语句。它告诉编译器，我们要在 <code>main</code> 函数中使用一个名为 <code>i</code> 的无符号整型变量，并给它一个初始值0。在C语言中，所有的变量都必须在使用前进行声明。</p>
+<p><strong>2. 执行语句部分</strong></p>
+<p>这个部分包含函数要执行的所有具体任务。在你的代码中，这部分首先通过一系列赋值语句来初始化硬件引脚（<code>ENLED = 0;</code>、<code>ADDR3 = 1;</code> 等），然后进入一个**<code>while(1)</code>**无限循环。这个循环就是函数的主要执行部分，它会反复地将LED点亮、延时，然后熄灭、再延时，实现了LED持续闪烁的功能。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 51单片机常用延时办法
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20240921142851108.png" alt="" style="width: 1000px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 50%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 非精确延时：`for` / `while` 循环：利用空循环消耗时间，简单但不精确。
+- 精确延时：
+	1. `_nop_()` 函数：插入一条空指令，延时为一个机器周期。
+	2. 定时器：利用专用硬件产生精确时钟信号，是最精确的方法。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么说for/while 循环产生的延迟不精确？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，在单片机编程中，延时是一个核心概念，它帮助我们控制任务的执行时序。C 语言里实现延时的方法很多，我们可以大致分为<strong>非精确延时</strong>和<strong>精确延时</strong>两大类。</p>
+<p>关于非精确延时，这类延时方法简单直接，但无法保证精确的时间长度。</p>
+<p>for 和 while 循环。这是最常见的延时方法，通过一个空循环来消耗 CPU 时间，比如 for循环。你可以通过改变 i 的范围来调整延时，但需要注意，循环的执行时间无法从代码中直接判断，它受编译器优化和单片机主频等多种因素影响。</p>
+<p>而当我们需要稳定、可靠的延时时，就需要依赖硬件或专用的函数。</p>
+<ol>
+<li><p><em>nop</em>(); 函数，这是一个简单的库函数，用于插入一条“空操作”指令（No Operation）。它的延时时间非常短，正好是一个机器周期。虽然单次延时极短，但可以用来进行非常精细的时间控制。</p>
+</li>
+<li><p>定时器，这是最强大、最精确的延时方法。定时器是单片机内部专用的硬件，它能产生精确的时钟信号。我们可以通过配置定时器来产生定时中断，从而实现高精度的延时控制，这在后续课程中会详细介绍，也是单片机编程的一个重点。</p>
+</li>
+</ol>
+<p>总的来说，非精确延时简单快速，适合一般应用；而要实现精准控制，我们则需要依赖 <code>_nop_()</code>, 或更强大的<strong>定时器</strong>。</p>
+<p>为什么说for/while 循环产生的延迟不精确：是一种<strong>软件延时</strong>。它依赖于CPU执行指令的速度，而这个速度受到多种不可控因素的影响。相比之下，定时器则是一种<strong>硬件延时</strong>，它不受CPU指令执行速度的影响，从而能够提供更高的精度。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 51单片机常用延时办法：人眼最低分辨能力
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+while(1)
+{
+	LED = 0;   //点亮小灯
+	for (i=0; i<100; i++); //延时一段时间
+	LED = 1;
+	for (i=0; i<100; i++); //延时一段时间	
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **现象**：当`for`循环延时次数过少（例如`100`次）时，LED看起来是常亮的，而非闪烁。
+- **原因**：当延时极短，LED的亮灭切换频率超出了人眼的感知能力。
+- **原理**：人眼对闪烁光线有最低分辨能力，当闪烁频率高于**50Hz**时，人眼会将闪烁视为持续的常亮光线。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：电影本质上不是连续的动态画面，而是一系列快速切换的静态图像。最低需要多少帧？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，我们上节课编写的 LED 闪烁程序，使用的是 <code>for(i=0; i&lt;30000; i++);</code> 这种方式来延时。</p>
+<p>大家有没有尝试把这里的 <code>i</code> 范围改小，比如只循环到 <code>100</code>？如果这么做了，并把程序下载到单片机里，你会发现一个有趣的现象：LED 小灯似乎一直亮着，而不是我们预期的闪烁状态。</p>
+<p>这是为什么呢？</p>
+<p>这是因为我们人类的眼睛有一个生理特性，叫做<strong>视觉暂留</strong>。简单来说，我们的肉眼对闪烁的光线有一个最低的分辨能力。当闪烁的频率高于约 <strong>50Hz</strong> 时，也就是每秒闪烁超过50次，我们的眼睛就会把这种闪烁看作是持续的、常亮的光线。</p>
+<p>如果转换成时间，这意味着当延时时间低于 <strong>20毫秒</strong>（1秒 ÷ 50次 = 0.02秒 = 20毫秒）时，我们的肉眼是无法分辨出小灯是在闪烁的。</p>
+<p>所以，当你将延时循环的 <code>i</code> 范围改小到 <code>100</code>，延时时间会变得非常短，远远小于20毫秒，从而超出了我们眼睛的分辨能力，小灯看起来就像是常亮的了。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 51单片机常用延时办法：Keil仿真调试
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20240921144116292.png" alt="" style="width: 1200px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20240921144301027.png" alt="" style="width: 1000px; object-fit: fill">
+
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 49%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### 调试准备工作<br><br>
+- **配置晶振频率**：在项目设置中，将**晶振频率**设置为与你实际硬件一致的值，例如 `11.0592MHz`。
+- **启用软件仿真**：在调试设置中，选择**使用软件仿真**模式。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们为什么需要延时呢？比如控制LED闪烁，如果闪得太快，人眼是看不出来的。因为人眼有<strong>视觉暂留</strong>效应，频率高于约50Hz（周期小于20ms），我们就会感觉灯是常亮的。</p>
+<p>那么，我们怎么知道一段延时代码到底执行了多久呢？我们可以用<strong>Keil软件的仿真调试功能</strong>来精确测量。</p>
+<ol>
+<li>在项目设置里，把<strong>晶振(Xtal)频率</strong>设置成和你的硬件一样，比如11.0592MHz。</li>
+<li>在Debug设置里选择<strong>使用软件仿真</strong>。</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 51单片机常用延时办法：Keil仿真调试
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20240921144508018.png" alt="" style="width: 1200px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20251016175939914.png" alt="" style="object-fit: scale-down">
+
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### 利用断点测量延时<br><br>
+
+1. **设置断点**：在延时函数的前后各设置一个断点。
+2. **记录时间**：程序在第一个断点处暂停时，记下**寄存器窗口**中的时间。
+3. **计算差值**：继续运行程序，在第二个断点处再次记录时间。两次时间的差值，就是代码的精确执行时间。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>进入调试界面后，我们可以在延时函数的前后各设一个<strong>断点</strong>。程序运行到第一个断点停下时，我们记下<strong>寄存器窗口</strong>里的已用时间<code>sec</code>。然后点运行，程序会跑到第二个断点停下，我们再看一眼时间。两个时间的差值，就是这段代码的精确执行时间。我们还可以用<strong>Watch窗口</strong>来实时监控变量值的变化，这对于调试程序非常有帮助。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 51单片机常用延时办法：工程调试界面
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 46%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250820003923887.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 46%; top: 15%; height: 65%; width: 54%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **界面布局**
+    - **左侧**：显示单片机**寄存器**的当前值和系统信息。
+    - **顶部**：显示由C语言编译成的**汇编代码**。
+    - **底部**：显示我们编写的**C语言源代码**。
+- **调试元素**
+    - **黄色箭头**：指示程序当前运行到的位置。
+    - **反汇编代码**：由我们的源代码编译生成。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>关于 Keil 工程调试界面，它是我们的“X光机”，能让我们看清代码在单片机内部是如何运行的。它主要分为三大区域：</p>
+<ul>
+<li><strong>左侧：</strong> 显示单片机<strong>寄存器</strong>的当前值和系统信息。通过这里，我们可以看到代码是如何影响硬件状态的。</li>
+<li><strong>顶部：</strong> 显示 Keil 将 C 语言编译成的<strong>汇编代码</strong>。一个黄色的箭头会指示程序当前运行到的位置，让你能追踪代码的执行路径。</li>
+<li><strong>底部：</strong> 则是我们熟悉的<strong>C 语言源代码</strong>。我们在这里编写程序，然后在调试界面观察它的实际运行情况。</li>
+</ul>
+<p>掌握这个调试界面，意味着我们不再是盲人摸象，而是真正能够掌控和理解单片机的运行。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 51单片机常用延时办法：工程调试界面
+</div>
+
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 46%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250820003830945.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 49%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### **调试控制按钮**<br><br>
+
+- 复位 (RST)：点击该按钮，程序会立即重置并回到最开始的位置。
+- 全速运行：点击该按钮，程序将以最高速度执行，直到遇到断点或结束。 
+- 停止：点击该按钮，可以暂停正在全速运行的程序，方便观察程序当前执行到的位置和状态。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>在左上角的工具栏里有这样三个按钮：第一个标注有 RST 字样的是复位，点击一下之后程序就会跑到最开始的位置运行。右侧紧挨着的按钮是全速运行，点击一下程序就会全速跑起来 。再右边打叉的是停止按钮，当程序全速运行起来后，我们可以通过点击第三个图标来让程序停止，观察程序运行到哪里了</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 51单片机常用延时办法：工程调试界面
+</div>
+
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 46%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250820004114018.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 49%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### **复位与断点设置**<br><br>
+
+- **设置断点**
+    - 在复位后，C语言代码左侧会出现灰色区域。
+    - 双击该区域即可在任意行设置**断点**。
+- **断点功能**
+    - 当点击**全速运行**时，程序会运行到断点处自动停止。
+    - 这便于我们观察程序在特定位置的运行状态。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>在调试界面中，当你点击<strong>复位</strong>按钮后，你会发现C语言代码的左侧会出现一列灰色或绿色的区域。这个区域就是我们设置<strong>断点</strong>的地方。你可以在任意的灰色区域双击鼠标，为程序设置一个断点。</p>
+<p>例如，如果你的程序总共有20行代码，你在第10行设置了一个断点，然后点击<strong>全速运行</strong>按钮，程序就会从头开始执行，直到运行到第10行时自动暂停。这为你提供了一个绝佳的机会，来观察程序运行到这一特定位置时，所有的变量和寄存器的状态，从而方便地进行代码调试和问题排查。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 51单片机常用延时办法：工程调试界面
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20240921145855770.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### **为什么有的地方不能设置断点** <br><br>
+
+- **原因**：由于编译器默认开启**代码优化**。
+- **现象**：部分代码行被优化，导致无法设置断点。
+- **解决**：将**优化等级设置为 0**即可。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>同学们在设置断点时，可能会发现一个现象：有的位置可以设置断点，而有的地方却不行。这是为什么呢？</p>
+<p>这是因为 Keil 编译器本身具备<strong>程序优化</strong>的功能。为了让代码执行得更快、占用更小的内存，编译器可能会对一些代码进行改写或合并。在这种优化过的代码中，你双击的位置可能并没有对应的实际汇编指令，所以断点也就无法设置了。</p>
+<p>如果大家希望能在所有代码位置都能设置断点，可以在工程选项里把<strong>优化等级设置为 0</strong>。这相当于告诉 Keil 编译器：“不要进行任何优化。” 这样，每一行 C 语言代码都会有对应的汇编指令，从而允许你在任何位置设置断点，方便你进行更细致的调试。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 51单片机常用延时办法：工程调试界面
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250901152955114.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### **利用调试器测量延时** <br>
+
+- **工具**：Keil调试器中的`sec`计时器。
+- **步骤**：
+    1. 点击**复位**，将`sec`值清零。
+    2. 在延时代码**前后**各设一个**断点**。
+    3. 点击**全速运行**，程序将在第一个断点处暂停，记录`sec`值。
+    4. 再次点击**全速运行**，程序在第二个断点处暂停，再次记录`sec`
+- **结论**：两次`sec`值的差值，即为代码执行时间。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>在最左侧的 register 那个框内有一个  sec 选项，这个选项显示就是单片机运行了多少时间</p>
+<p>单击一下复位按钮，会发现这个 sec 变 成了 0，然后我们在 LED = 0;这一句加一个断点，在 LED = 1;这个位置加一个断点，我们点击全速运行按钮，会直接停留在 LED = 0; 我们会看到我们的时间变化成 0.00042752 秒</p>
+<p>再点一下全速运行，会发现 sec 变成了 0.16342556，那么减去上次的值就是程序在这两个断点之间执行所经历的时间，也就是这个 for 循环的执行时间，大概是 163ms</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.4 流水灯程序编写
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20240921150824627.png" alt="" style="width: 900px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **流水灯**的概念：让8个LED依次点亮，形成“流动”效果。
+- **核心电路图**：展示实现流水灯的电路基础。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>同学们，我们前面已经掌握了如何点亮一个LED小灯，以及让它闪烁。现在，让我们来学习如何让更多的灯动起来，创造出更酷炫的效果！</p>
+<p>今天，我们要学习的是<strong>流水灯</strong>。流水灯是什么呢？简单来说，就是让8个LED小灯按照特定的顺序，一个接一个地亮起来，形成一种“流动”的视觉效果，就像水流一样。</p>
+<p>请看左边的核心电路图，这就是我们实现流水灯的基础。接下来，我们将一步步学习如何编写程序，让这些LED灯像真正的“水流”一样动起来！</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.4 流水灯程序编写
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 46%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20250820010418682.png" alt="" style="width: 800px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第4章 C语言基础以及流水灯的实现/file-20240921150824627.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 46%; top: 15%; height: 65%; width: 54%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### 字节控制8个LED <br><br>
+
+- **P0口与LED对应**：P0.0到P0.7依次控制8个LED。
+- **一个字节=8位**：用**P0**这个整体，可以同时控制8个LED。
+- **代码示例**：`P0 = 0xFE;`
+    - `0xFE`转为二进制是`0b11111110`。
+    - **0**让灯亮，**1**让灯灭。
+    - 效果：**第一个灯亮**，其他7个灯灭。
+- **总结**：一行代码就能控制8个LED，非常高效。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：中间的两个LED小灯亮起来（即DB3和DB4），其他灯都熄灭，那么`P0`应该等于多少？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，在之前的课程中，我们已经知道如何用单片机的<strong>P0口</strong>来控制LED小灯。</p>
+<p>看这里，我们的<strong>P0.0引脚</strong>通过74HC245芯片控制着<strong>DB0</strong>，而DB0就连接着第一个LED小灯。以此类推，P0.1控制DB1，直到P0.7控制DB7，正好对应我们8个LED小灯。</p>
+<p>这意味着，P0口的每一个位，都对应着一个LED小灯！</p>
+<p>现在，我们再复习一个重要的概念：<strong>一个字节等于8个位</strong>。</p>
+<p>因此，当我们用<strong>P0</strong>这个整体来编程时，实际上我们是在同时控制P0.0到P0.7这8个引脚。</p>
+<p>举个例子，如果我们写下<code>P0 = 0xFE;</code> 这行代码，它是什么意思呢？</p>
+<p>将<code>0xFE</code>这个十六进制数转换为二进制，就是<code>0b11111110</code>。</p>
+<p>在这个二进制数中，<code>0</code>代表低电平，可以用来点亮我们的LED小灯；而<code>1</code>代表高电平，让LED熄灭。所以，<code>0b11111110</code>这个数值，就会让我们的<strong>第一个LED小灯亮起来</strong>，而<strong>剩下的7个灯都处于熄灭状态</strong>。</p>
+<p>通过这种方式，我们只需要一行代码，就能轻松控制8个LED小灯的亮灭，是不是非常高效？</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.4 流水灯程序编写
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+```C
+#include<reg52.h>
+
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+
+void main()  
+{
+```
+```C
+	ENLED = 0;
+	ADDR3 = 1;
+	ADDR2 = 1;
+	ADDR1 = 1;
+	ADDR0 = 0;
+	
+	P0 = 0xFE;  // 向P0写入数据来控制LED小灯
+	while (1);     //程序停止在这里
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 通过P0口赋值，实现第一盏小灯的点亮
+- 以此类推，逐个赋值点亮。”笨拙“但有效。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>这是让第一个小灯点亮的代码实现</p>
+<p>以此类推，我们可以把8个值都写出来，一个一个地赋值给P0口，中间加上延时。这是一种方法，我们叫它“<strong>暴力法</strong>”，能实现功能，但不够优雅。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.4 流水灯程序编写：更好的流水灯程序
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+
+void main()  
+{
+	unsigned int i  = 0;   //定义循环变量i，用于软件延时
+	unsigned char cnt = 0;  // 定义计数变量cnt，用于移位控制
+	ENLED = 0;
+	ADDR3 = 1;
+```
+```C
+	ADDR2 = 1;
+	ADDR1 = 1;
+	ADDR0 = 0;
+	while (1)  // 主循环，程序无限循环执行该循环体语句
+	{
+		P0 = ~(0x01 << cnt); //P0等于1左移cnt位，控制8个LED
+		for (i=0; i<20000; i++);  //软件延时
+		cnt++;
+		if (cnt >= 8)   //移动计数超过7后，再重新从0开始
+		{
+			cnt = 0;
+		}
+	}
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 左移运算符 `<<`：
+    - 将一个基础值 `0x01` (`00000001`) 左移，来控制 `0` 的位置。
+    - 例如：`0x01 << 2` 得到 `00000100`。
+- 按位取反运算符 `~`：
+    - 将左移后的结果取反，把 `0` 变成 `1`，把 `1` 变成 `0`。
+    - 例如：`~(0x01 << 2)` 得到 `11111011`，即十六进制的 `0xFB`。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么左移之后还要取反，再赋值给P0口？
+</div>
+</div>
+
+<aside class="notes"><p>有没有更聪明的办法呢？当然有。</p>
+<p>我们观察一下这些数值的规律，每次都是把那个唯一的“0”向左移动了一位。<strong>大家想想我们刚刚学过的运算符，有哪几个可以帮我们实现这种“移动”和“反转”的操作呢？</strong></p>
+<p>（稍作停顿，引导学生思考）</p>
+<p>没错，就是位移和取反。</p>
+<p>我们可以这样做：</p>
+<ol>
+<li><p>先定义一个基础值 <code>0x01</code>，也就是二进制的 <code>00000001</code>。</p>
+</li>
+<li><p>用<strong>左移运算符<code>&lt;&lt;</code></strong> 把它移动到我们想要的位置。比如想点亮第3个灯（从第0个开始数），就把它左移2位，变成<code>00000100</code>。</p>
+</li>
+<li><p>但我们是要低电平点亮，需要的值是<code>11111011</code>。大家看，这两个数正好是每一位都相反。所以，我们只需要再用<strong>按位取反<code>~</code>运算符</strong>，就能得到我们想要的值了！</p>
+</li>
+</ol>
+<p>例如：<code>~(0x01 &lt;&lt; 2)</code> 就得到了 <code>0xFB</code>。这样，我们就不需要写死8个数值了，而是通过计算动态生成它们。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 15%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **4.1 C语言基础**：介绍了变量、数据类型、进制转换，并重点讲解了包括算术、关系、赋值、自增自减等多种运算符的用法和特性，强调了位运算符在硬件控制中的关键作用。
+- **4.2 循环与函数**：初步介绍了`for`和`while`循环的语法及应用，并讲解了函数的构成和作用，强调了`main`函数作为程序入口的重要性。
+- **4.3 延时方法**：区分了非精确延时（软件延时）和精确延时（硬件延时），并通过Keil仿真调试功能演示了如何精确测量代码的执行时间。
+- **4.4 流水灯实现**：将所学知识应用于实践，指导学生编写流水灯程序，展示了如何利用C语言的位运算技巧高效控制8个LED，实现“流水”效果。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>到这里，本章的主要内容就告一段落了，现在我们做一个简单的总结。</p>
+<p>首先回顾了C语言的变量、常量以及进制基础知识，并深入讲解了算术运算符、自增和自减运算符、赋值运算符和关系运算符的用法和特性。</p>
+<p>随后，初步介绍了循环语句（<code>for</code>和<code>while</code>）和函数的构成与作用，并通过一个LED闪烁的例子来展示其应用。接着，课程探讨了51单片机常用的延时方法，区分了非精确延时（<code>for</code>/<code>while</code>空循环）和精确延时（<code>_nop_()</code>、定时器），并利用Keil软件的仿真调试功能演示了如何测量延时。最后，课程将所学知识融会贯通，指导学生编写了一个流水灯程序，展示了如何利用C语言的位运算技巧来高效控制硬件，从而实现“流水”效果。</p>
+<p>内容很多，希望大家课后一定要动手去实践，把代码敲一遍，用调试器去观察，这样才能真正掌握。</p>
+<p>今天的课就到这里，谢谢大家！</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1200,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>

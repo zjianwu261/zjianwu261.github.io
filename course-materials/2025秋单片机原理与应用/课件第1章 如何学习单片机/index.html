@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 40%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/Step_by_Step_learning.webp" alt="" style="object-fit: scale-down">
+
+</div>´´
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 55%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第1章 如何学习单片机
+</div>
+
+<div class="" style="position: absolute; left: 10%; top: 70%; height: 20%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《单片机原理与应用》<br><br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div>
+
+<aside class="notes"><p>各位同学大家好，欢迎来到《单片机原理与应用》课堂，我是来自合肥大学人工智能与大数据学院的张建武老师。
+从今天起，我将与大家共同踏上单片机探索之旅。期待通过这门课程，帮助你夯实单片机核心概念，并亲手完成从原理到工程的代码落地。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## Overview
+</div>
+
+<div class="" style="line-height: 2.5; font-size: 45px; position: absolute; left: 0%; top: 20%; height: 60%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### 今天的核心问题<br><br>
+
+- Q1 单片机是什么？
+- Q2 为什么要学习它？
+- Q3 如何开始学习？
+</div>
+
+<div class="" style="line-height: 2.5; font-size: 45px; position: absolute; left: 48%; top: 20%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### 本课内容大纲<br><br>
+
+- 答疑解惑：深入探讨以上三个关键问题。 
+- 准备工作：学习前你需要准备些什么？ 
+- 实战演示：环境搭建与基础操作流程演示。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>在正式开始之前，我想请大家思考三个核心问题，也是我们今天课程的主线。</p>
+<p>首先，<strong>单片机到底是什么？</strong> 它在我们日常生活中扮演着怎样的角色？</p>
+<p>其次，<strong>我们为什么要学习它？</strong> 学习单片机能为我们带来什么？而且，为什么我们选择从<strong>51单片机</strong>开始？</p>
+<p>最后，也是大家最关心的，<strong>我们该如何开始学习？</strong> 对于一个完全的初学者来说，应该如何迈出第一步？</p>
+<p>带着这些问题，让我们一起来看一看今天的课程安排。</p>
+<p><strong>本课内容安排</strong></p>
+<p>今天，我们将分为三个部分来展开。</p>
+<ol>
+<li><strong>答疑解惑</strong>：首先，我会系统地解答这三个核心问题，帮助大家建立一个清晰的认知框架。</li>
+<li><strong>准备工作</strong>：其次，我会告诉大家在学习前需要准备哪些硬件和软件，做到“工欲善其事，必先利其器”。</li>
+<li><strong>实战演示</strong>：最后，我会现场演示如何搭建开发环境，并进行一个基础的操作流程演示，让大家对学习过程有一个直观的感受。</li>
+</ol>
+<p>希望大家能从今天的课程中有所收获，让我们一起踏上这趟精彩的单片机之旅吧！</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## Q1 单片机是什么
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 17%; height: 66%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/file-20250820114615882.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 48%; top: 20%; height: 55%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心：** 一个微型计算机系统，集成在一块小小的芯片上。
+- **构成：** 芯片里包含**CPU**、**内存**、**定时器**、**输入/输出接口**等所有核心部件。
+- **作用：** 它的存在让各种电子设备变得“智能”。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：在我们的日常生活中，大家觉得还有哪些设备里面藏着单片机呢？
+</div>
+</div>
+
+<aside class="notes"><p>各位同学，现在我们来回答今天的第一个核心问题：“单片机是什么？”</p>
+<p>我们可以把单片机想象成一个<strong>微型的计算机系统</strong>，但它有一个最大的特点：<strong>所有核心部件都集成在一块小小的芯片上</strong>。</p>
+<p>这块小小的芯片里，包含了计算机运行所需的所有关键组件，比如负责运算的<strong>中央处理器（CPU）</strong>、用于存储数据的<strong>内存</strong>、用于计时的<strong>定时器</strong>，以及和外界设备沟通的<strong>输入/输出（I/O）接口</strong>等等。</p>
+<p>正是因为有了这个小小的“大脑”，我们身边的各种电子设备，比如遥控器、洗衣机、智能玩具，甚至电饭煲，才能变得“智能”，听从我们的指令，完成各种复杂的操作。简单来说，<strong>单片机就是让电子设备拥有“智慧”的核心</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## Q2 为什么要学它
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 17%; height: 60%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/file-20250714133816410.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 20%; height: 55%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **主流技术：** 单片机是自动化、电子电气、通信等多个领域的核心技术。
+- **技术基础：** 它是学习**ARM嵌入式**、**FPGA**等更高级技术的基础。
+- **就业优势：** 掌握单片机是求职的**敲门砖**，是未来安身立命的**核心技能**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：你们为什么学习单片机？
+</div>
+</div>
+
+<aside class="notes"><p>各位同学，我们已经知道单片机是什么了。现在，让我们来回答第二个问题：<strong>我们为什么要学习单片机？</strong></p>
+<p>首先，从专业角度看，<strong>单片机是自动化、电子电气、通信等许多主流领域的核心技术</strong>。无论你将来是想做硬件工程师、嵌入式开发、还是物联网相关的工作，单片机都是你绕不开的基础。掌握了它，你就掌握了这些领域的一把金钥匙。</p>
+<p>其次，<strong>单片机是学习更高级技术的垫脚石</strong>。大家都听过ARM嵌入式、FPGA这些酷炫的技术吧？这些技术看似高深，但它们的底层思想和很多基础概念都源于单片机。只有打牢了单片机的基础，你才能更顺利地进入这些更广阔、更前沿的技术领域。</p>
+<p>最后，回到我们个人身上，学习单片机能为我们提供<strong>安身立命的本领，是毕业生找工作的一块“敲门砖”</strong>。在如今这个技术日新月异的时代，具备动手能力和实践经验的工程师，永远是最抢手的。当你能向面试官展示你用单片机做出的实际项目时，那将比任何简历上的描述都更有说服力。</p>
+<p>所以，学习单片机不仅仅是一门课程，更是为你的未来职业发展打下坚实的基础。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## Q2 为什么要学它
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 20%; height: 55%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/file-20250714151817721.png" alt="" style="width: 1000px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 58%; top: 20%; height: 55%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **高薪机会：** 掌握单片机技术，能获得**月薪过万**的稳定收入。
+- **前景广阔：** 国产化趋势下，嵌入式领域需求旺盛，职业发展**周期长**。
+- **技术积累：** 工程师越资深越吃香，**无惧“35岁危机”**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：未来希望自己成为一个什么样的工程师？是专注于硬件设计，还是更偏向于软件开发？
+</div>
+</div>
+
+<aside class="notes"><p>首先，让我们直面现实：学习单片机能带来<strong>高薪机会</strong>。在当前市场上，掌握单片机技术的工程师，能够获得相当不错的收入，比如<strong>月薪过万</strong>是很常见的，而且收入会随着你的经验增长而稳步提升。</p>
+<p>其次，选择单片机，就意味着选择了<strong>前景广阔</strong>的职业道路。在“国产替代”的浪潮下，无论是智能家电、工业自动化，还是物联网设备，对本土嵌入式工程师的需求都在持续增长。这个领域不像某些行业那样，风口一过就急速萎缩。相反，它是一个<strong>职业发展周期很长</strong>的稳定赛道。</p>
+<p>最后，我想告诉大家，这是一个可以<strong>越老越吃香</strong>的行业。单片机和嵌入式技术非常注重经验和项目的积累，你的技术沉淀会成为你最宝贵的财富。当你能解决别人解决不了的复杂问题时，你的价值就会得到充分体现。所以，只要持续学习和实践，你完全可以<strong>无惧“35岁危机”</strong>。</p>
+<p>那么，大家有没有想过，未来希望自己成为一个什么样的工程师？比如，是专注于硬件设计，还是更偏向于软件开发？或者，是希望进入某个具体的行业，比如智能家居或者工业控制？</p>
+<p>希望大家能花点时间思考一下，这也会帮助我们更有针对性地规划未来的学习方向。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## Q2 为什么要学它，以及为什么是51单片机
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 17%; height: 66%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/file-20250714145253985.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 25%; height: 50%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **入门首选**：8位架构，简单易学，帮助你快速建立学习信心。
+- **资料丰富**：作为主流型号，海量教程和社区资源让你轻松解决问题。
+- **成本低廉**：开发板价格亲民，适合初学者低成本入门。
+- **打好基础**：掌握51单片机后，能更快、更好地学习其他更复杂的32位单片机。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>好，现在我们来聊聊一个关键问题：<strong>为什么我们的第一课要从51单片机开始？</strong> 市面上有那么多强大的单片机，比如STM32、ARM，为什么我们不直接学更高端的呢？</p>
+<p>原因主要有以下几点：</p>
+<p>首先，<strong>51是入门首选，简单易学</strong>。它采用8位架构，结构相对简单，没有太多复杂的寄存器和功能。这就像学开车，我们总得先从自动挡或者手动挡的简单车型开始，而不是直接去开F1赛车。通过51的学习，你可以快速掌握单片机的核心概念，点亮一盏灯，控制一个按键，很快就能看到成果，这会极大地<strong>增强你的学习信心</strong>。</p>
+<p>其次，<strong>51单片机资料非常丰富</strong>。作为最经典的入门型号，市面上关于它的教程、书籍、视频和开源项目数不胜数。当你遇到问题时，随便在网上搜索一下，几乎都能找到答案。这让你在学习的道路上不会感到孤立无援，可以<strong>轻松解决各种疑难问题</strong>。</p>
+<p>第三，<strong>它的成本非常低廉</strong>。一块51单片机的开发板价格非常亲民，对于我们初学者来说，可以<strong>以很低的成本</strong>进行学习和实践。你可以放心大胆地去尝试各种项目，不用担心因为操作失误而造成昂贵的损失。</p>
+<p>最后，也是最重要的一点，<strong>学习51单片机是为未来打下坚实的基础</strong>。虽然它功能相对简单，但其核心的编程思想和硬件控制逻辑是相通的。当你熟练掌握了51单片机后，再转去学习功能更强大的32位单片机，你会发现很多概念都是熟悉的，学习起来会快得多，也更容易理解。</p>
+<p>所以，一步一个脚印，从51开始，是我们最明智的选择。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## Q3 如何开始学习：在实践中成长
+</div>
+<div class="" style="line-height: 1.8; font-size: 150px; position: absolute; left: 0%; top: 15%; height: 60%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+在实践中成长！
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>同学们，学单片机，最重要的一点就是六个字：<strong>在实践中成长！</strong></p>
+<p>理论知识固然重要，但它只是基础。单片机是一门非常注重动手的学科，光靠听课和看书是远远不够的。只有当你亲手连接电路、编写代码、然后将程序烧录进芯片，看到你设计的灯亮起来、马达转动起来，你才能真正理解每一个知识点背后的原理。</p>
+<p>所以，我希望大家在接下来的学习中，大胆地去尝试，去犯错，去解决问题。因为每一个小小的成功，都会给你带来巨大的成就感；每一次遇到的困难，都将是你成长路上最宝贵的财富。</p>
+<p>记住，<strong>“纸上得来终觉浅，绝知此事要躬行。”</strong> 让我们一起动手，用代码去点亮属于我们的世界！</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## Q3 如何开始学习：重视动手实践
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 17%; height: 66%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/file-20250708174657669.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 20%; height: 60%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **摆脱传统思维：** 单片机不是理论考试，它是一门实践技术。
+- **注重动手实践：** 像学游泳和开车一样，必须**动手**才能真正学会。
+- **正确使用书籍：** 书籍是**辅助工具**，是用来查阅和答疑的，不是全部。
+- **核心原则：** **重视编写代码，在实践中学习。**
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+什么是工程能力？把抽象知识付诸实践，通过亲自操作解决问题
+</div>
+</div>
+
+<aside class="notes"><p>现在我们来讨论一个非常重要的问题：<strong>我们应该怎么学习单片机？</strong></p>
+<p>我想，很多同学从小到大，习惯了通过看书、背诵来应对考试。但是，我想请大家<strong>摆脱这种传统的学习思维</strong>。单片机不是一门纯理论的课程，它是一门彻头彻尾的<strong>实践技术</strong>。</p>
+<p>这就好比学习游泳或者开车。你不可能坐在沙发上看书就能学会，你必须亲自跳进泳池、握住方向盘，通过不断地<strong>动手实践</strong>才能真正掌握。同样，学习单片机也一样，你必须亲自连接电路、编写代码、调试程序，才能真正掌握它的精髓。</p>
+<p>这并不是说我们不需要书。恰恰相反，<strong>书籍是我们的辅助工具</strong>。在实践过程中遇到不明白的地方，我们可以回过头来查书、找资料，弄懂后再回到实践中去。书本是用来解决问题的，而不是用来死记硬背的。</p>
+<p>所以，我希望大家务必记住这个核心原则：<strong>一定要重视编写代码，在实践中学习</strong>。只有把理论和实践结合起来，你才能真正掌握这门技术，成为一名合格的工程师。</p>
+<p>现在，大家有没有对自己的学习方法有新的想法？希望我们能一起，通过双手，创造出属于自己的作品！</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## Q3 如何开始学习：四步走战略
+</div>
+
+
+<div class="" style="position: absolute; left: 0%; top: 17%; height: 66%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/file-20250714155032319.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 20%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 鹦鹉学舌——先抄再懂
+- 照葫芦画瓢——默写＋理解
+- 借力打力——先借后创
+- 回头看，再拔高——让书和脑子一起“二次开机”
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：在你们未来的学习中，你觉得哪一步是最困难的？为什么？
+</div>
+</div>
+
+<aside class="notes"><p>为了让大家更好地理解如何实践，我总结了四个步骤，大家可以称之为“单片机学习的四部曲”：</p>
+<ol>
+<li><strong>鹦鹉学舌——先抄再懂。</strong> 刚开始学习时，不要怕抄代码。就像学语言要先模仿一样，你跟着老师或教程敲下第一行代码，让程序跑起来，点亮一个灯。在这个过程中，你不需要完全理解每一行代码的含义，而是先建立起感性的认知。</li>
+<li><strong>照葫芦画瓢——默写 + 理解。</strong> 当你对某段代码有了初步的印象后，试着脱离教程，自己默写一遍。在这个过程中，你会遇到很多问题。每当你解决一个问题，你对这段代码的理解就会加深一层。</li>
+<li><strong>借力打力——先借后创。</strong> 当你掌握了基础知识后，可以尝试“借用”别人的代码或项目。比如，你看到一个跑马灯程序，你可以思考如何在此基础上修改，让灯闪烁的速度变快或变慢。通过这种“借力”，你可以更快地实现自己的创意。</li>
+<li><strong>回头看，再拔高——让书和脑子一起“二次开机”。</strong> 当你通过实践掌握了一定的知识后，再回头看书，你会发现很多之前看不懂的理论变得清晰了。这个过程就像是给你的大脑和书本都进行了一次“二次开机”，将实践经验和理论知识完美结合起来。</li>
+</ol>
+<p>希望大家能遵循这四个步骤，相信你们很快就能成为一名出色的单片机工程师！</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 学习单片机的准备：信心、恒心、耐心
+</div>
+<div class="" style="position: absolute; left: 0%; top: 17%; height: 66%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/file-20250714161938673.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 20%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **战略上** ：它并不难。任何人都能学会，关键是捅破那层窗户纸。
+- **战术上** ：它需要时间。想成为专业技能，必须耐心投入。        
+- **成功秘诀** ：自信 + 耐心。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：你们在学习单片机时最担心的问题是什么？
+</div>
+</div>
+
+<aside class="notes"><p>很多人一听到“单片机”这三个字，就觉得很难，觉得这是只有大神才能玩转的东西。但我想告诉大家，这是一种错觉。</p>
+<p><strong>从战略上看，学习单片机一点也不难。</strong> 相信我，它就像一层窗户纸，看起来神秘，但只要你找对了方法，勇敢地去触碰，这层窗户纸就会被轻易捅破。它不像高等数学那样需要极强的抽象思维，也不像复杂的算法那样需要严密的逻辑推导。单片机更像是一门手艺活，只要你愿意动手，愿意实践，就一定能学会。所以，请大家首先在心里建立一个信念：<strong>单片机，我能学得会！</strong></p>
+<p><strong>但从战术上看，单片机又确实需要我们投入时间和耐心。</strong> 它不是那种一两天就能速成的技能。想真正掌握它，需要我们一步一个脚印，从最基础的GPIO（通用输入输出端口）开始，到中断、定时器，再到各种通信协议，每个模块都需要我们花时间去理解、去敲代码、去调试。</p>
+<p>这个过程就像盖房子，地基必须打牢。你可能会遇到各种各样的报错，代码可能怎么写都不对，硬件连接可能怎么都搞不通。这个时候，请不要气馁。这些困难都是正常的，正是通过解决这些问题，你的知识体系才会变得更加坚固，你的技能才会真正内化为自己的东西。</p>
+<p>所以，学习单片机的成功秘诀就是：<strong>自信心</strong>和<strong>耐心</strong>。</p>
+<p><strong>首先，要有自信。</strong> 相信自己可以捅破那层窗户纸，可以解决任何遇到的问题。
+<strong>其次，要有耐心。</strong> 给自己足够的时间去成长，去犯错，去积累。不要急于求成，也不要与别人比较进度。</p>
+<p>总结就是教员的那句话，在战略上我们要藐视它，在战术上我们要重视它！</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 学习单片机的准备：教材
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 20%; height: 60%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/file-20250714162203566.png" alt="" style="width: 500px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 35%; top: 20%; height: 60%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+### 《手把手教你学51单片机——C语言版》<br><br>
+- 作者：宋雪松
+- 出版社：清华大学出版社
+- 教材亮点：荣获中国大学出版社优秀畅销书一等奖
+	- 超10万册销量，被300多所高校选用
+	- 内容通俗易懂，适合零基础入门
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>教材选用的是清华大学出版社出版的《手把手教你学51单片机——C语言版》作者宋雪松老师
+曾荣获第四届中国大学出版社优秀畅销书一等奖
+300多所高校选用，累计销售10万多用册</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 学习单片机的准备：开发板和电脑
+</div>
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/file-20250714162752321.png" alt="" style="object-fit: scale-down">
+
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>电脑自不必说，开发板我们选用宋老师团队开发的KST-51学习板
+宋老师在b站上也开设了课程，大家感兴趣的话可以关注。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 搭建环境：Keil uVision
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 70%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/file-20250714165358230.png" alt="" style="width: 1200px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 68%; top: 20%; height: 60%; width: 32%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **工程管理区（左侧）：** 组织和管理项目文件。
+- **程序代码区（中间）：** 核心编程区域。
+- **信息输出窗口（下方）：** 显示编译和调试结果。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+工欲善其事必先利其器
+</div>
+</div>
+
+<aside class="notes"><p>大家请看，左侧就是我们常用的<strong>单片机集成开发环境——Keil uVision</strong>的主界面。</p>
+<p>主要分为三个区域：</p>
+<p>首先，在左边是<strong>工程管理区</strong>。这里就像一个目录，管理着我们项目的所有文件，比如你的源程序、头文件等等。在这里，你可以清晰地看到整个项目的结构，方便你快速找到并管理文件。</p>
+<p>中间这个最大的区域是<strong>程序代码区</strong>。顾名思义，我们所有的代码编写工作都在这里完成。它提供了代码高亮、自动补全等功能，能大大提高我们的编程效率。</p>
+<p>最后，在下方是<strong>信息输出窗口</strong>。这个区域非常重要，它会显示编译、调试过程中的各种信息。比如，你的代码有没有语法错误，程序编译成功了没有，都会在这里给出提示。如果出现问题，这个窗口就是我们排查错误的第一站。</p>
+<p>这三个区域相互配合，构成了我们高效开发单片机程序的基础。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 搭建环境：烧录工具STC-ISP
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 70%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/file-20250714164632664.jpg" alt="" style="width: 1300px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 60%; top: 20%; height: 60%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### 操作步骤：
+
+1. **选型号：** 选择正确的单片机型号。
+2. **选串口：** 选择连接开发板的COM口（通常含CH340）。
+3. **开文件：** 打开编译好的.hex程序文件。
+4. **下程序：** 点击“下载”，并给开发板上电（或重启）。
+5. **烧录成功：** 软件显示“操作成功”。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+如果下载失败，提示“正在检测目标单片机...”或者“连接失败”的状态，该如何排查和解决这个问题呢？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，我们写好的单片机程序，不能像在电脑上运行普通软件那样直接双击运行。它必须被“烧录”到单片机芯片的硬件中才能工作。</p>
+<p>这个过程需要一个专门的工具，我们通常使用<strong>STC-ISP</strong>。它就像一个“搬运工”，负责把我们编写好的程序代码，准确无误地写入到单片机芯片里。</p>
+<p>具体的操作步骤很简单，总共分五步：</p>
+<ol>
+<li><strong>选择型号：</strong> 首先，在软件里找到并选择我们开发板上用的单片机型号，比如STC89C52RC。</li>
+<li><strong>选择串口：</strong> 接下来，找到并选择带有<strong>CH340</strong>字样的COM口。这个COM口就是电脑和单片机开发板连接的“通道”。</li>
+<li><strong>打开文件：</strong> 然后，点击“打开程序文件”，找到并选择我们编译好的程序文件。记住，我们要找的是以<code>.hex</code>结尾的文件。</li>
+<li><strong>开始下载：</strong> 接下来是最关键的一步，点击软件上的“下载”按钮。然后，请给你的开发板上电。如果你的开发板已经上电了，请先关闭电源开关，再重新打开一次。</li>
+<li><strong>完成烧录：</strong> 最后，当软件显示“操作成功”时，就说明我们的程序已经成功下载到单片机里了。</li>
+</ol>
+<p>这样，你就可以看到你的程序在硬件上跑起来了！</p>
+<p>同学们，如果我们在使用STC-ISP软件下载程序时，点击“下载”按钮后，软件界面一直没有显示“操作成功”，反而一直停留在“正在检测目标单片机...”或者“连接失败”的状态，你们觉得可能是什么原因导致的？我们应该如何排查和解决这个问题呢？</p>
+<p>通常可以从以下几个方面进行排查：</p>
+<ol>
+<li>硬件连接问题**</li>
+</ol>
+<p>首先，检查硬件连接是解决问题的关键。</p>
+<ul>
+<li><strong>USB线连接：</strong> 确保电脑与开发板之间的USB线连接稳固。可以尝试更换一根USB线或换一个电脑USB接口。</li>
+<li><strong>驱动安装：</strong> 检查<strong>CH340</strong>芯片的驱动是否正确安装。如果驱动未安装或安装错误，电脑将无法识别开发板。你可以在电脑的设备管理器中查看是否有带黄色感叹号的设备。</li>
+<li><strong>开发板供电：</strong> 确保开发板已经正确上电。有些开发板可以通过USB供电，但最好还是接上外部电源，并确保电源开关处于“ON”状态。</li>
+</ul>
+<p><strong>2. 软件设置问题</strong></p>
+<p>其次，检查STC-ISP软件的设置。</p>
+<ul>
+<li><strong>单片机型号：</strong> 确认软件中选择的单片机型号与你开发板上实际使用的芯片型号完全一致。</li>
+<li><strong>COM口选择：</strong> 确保选择了正确的COM口。你可以在设备管理器中查看CH340芯片对应的COM口编号，然后与STC-ISP软件中的选择进行比对。</li>
+<li><strong>操作顺序：</strong> 严格按照“点击下载按钮 <strong>→</strong> 给开发板上电或重启”的顺序进行操作。如果顺序错误，软件可能无法捕捉到单片机进入下载模式的瞬间。</li>
+</ul>
+<p><strong>3. 其他潜在问题</strong></p>
+<p>如果以上两点都排查无误，那么还可能存在以下情况：</p>
+<ul>
+<li><strong>程序文件问题：</strong> 确保你选择的是正确编译生成的<code>.hex</code>文件，而不是其他格式的文件。</li>
+<li><strong>开发板故障：</strong> 极少数情况下，可能是开发板本身的下载电路或单片机芯片损坏。</li>
+</ul>
+<p>通常情况下，90%以上的问题都可以通过检查硬件连接和驱动来解决。下次遇到类似问题，不妨按照这个步骤逐一排查，一定会事半功倍。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 演示基本流程
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+<div class="" style="font-size: 1.4em; line-height: 1.8; position: absolute; left: 10%; top: 20%; height: 60%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+- **宏观认知：** 认识了单片机作为“微型计算机”的本质。
+- **软件工具：** 熟悉了Keil uVision和STC-ISP的使用。
+- **核心流程：** 掌握了从代码编写到程序烧录的全过程。
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>同学们，今天这堂课虽然是入门，但内容非常重要。我们从宏观和微观两个层面，打下了坚实的基础：</p>
+<p><strong>1. 宏观认知：</strong> 我们不再把单片机看作一个陌生的词汇，而是明白了它<strong>作为微型计算机系统的本质</strong>，以及它在万千电子设备中扮演的“大脑”角色。</p>
+<p><strong>2. 软件工具：</strong> 我们熟悉了未来会经常打交道的两个核心软件——<strong>Keil uVision</strong>和<strong>STC-ISP</strong>，它们分别是我们编写代码和下载程序的得力助手。</p>
+<p><strong>3. 核心流程：</strong> 我们第一次走通了<strong>从编写代码到烧录程序的全过程</strong>，这标志着我们正式踏入了单片机开发的门槛。</p>
+<p>下节课，我们将正式开始课程的学习，一起<strong>点亮你的LED小灯</strong>。</p>
+<p>准备好见证奇迹了吗？期待下节课和大家一起，让理论知识在硬件上变成现实！</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1200,"margin":0.04,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>

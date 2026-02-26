@@ -1,0 +1,2516 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 0%; height: 55%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第1章 Android Studio环境搭建/file-20241114161819034.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 60%; height: 25%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+
+## 第5章 中级控件
+#### 《Android嵌入式软件开发》
+</div>
+
+<div class="" style="position: absolute; left: 10%; top: 80%; height: 10%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+Overview
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 3%; top: 15%; height: 75%; width: 44%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="position: absolute; left: 5%; top: 17%; height: 66%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+### 本次课主要内容
+
+- 5.1 图形定制
+	- 图形Drawable
+	- 形状图形
+	- 九宫格图片
+	- 状态列表图形
+- 5.2 选择按钮
+	- 复选框CheckBox
+	- 开关按钮Switch
+	- 单选按钮RadioButton
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 15%; height: 75%; width: 44%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="position: absolute; left: 50%; top: 17%; height: 66%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 5.3 文本输入
+	- 编辑框EditText
+	- 焦点变更监听器
+	- 文本变化监听器
+- 5.4 对话框
+	- 提醒对话框AlertDialog
+	- 日期对话框DatePickerDialog
+	- 时间对话框TimePickDialog
+- 5.5 实战项目：找回密码
+	- 需求描述
+	- 界面设计
+	- 关键代码
+- 5.6 小结
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 94%; height: 6%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+###### 合肥大学 2025年春<!-- .element: style="font-weight: 300" -->
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 本章介绍App开发常见的几类中级控件的用法，主要包括：如何定制几种简单的图形、如何使用几种选择按钮、如何高效地输入文本、如何利用对话框获取交互信息等，然后结合本章所学的知识，演示了一个实战项目“找回密码”的设计与实现。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1 图形定制
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 本节介绍Android图形的基本概念和几种常见图形的使用办法，包括：形状图形的组成结构及其具体用法、九宫格图片（点九图片）的制作过程及其适用场景、状态列表图形的产生背景及其具体用法。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.1 图形 Drawable
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- Android把所有能够显示的图形都抽象为Drawable类（可绘制的）。这里的图形不止是图片，还包括色块、画板、背景等。
+- 包含图片在内的图形文件放在res目录的各个drawable目录下，其中drawable目录一般保存描述性的XML文件，而图片文件一般放在具体分辨率的drawable目录下。例如：
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.1 图形 Drawable
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 15%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 15%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- drawable-ldpi里面存放低分辨率的图片（如240x320），现在基本没有这样的智能手机了。
+- drawable-mdpi里面存放中等分辦率的图片（如320x480），这样的智能手机已经很少了。
+- ﻿drawable-hdpi里面存放高分辨率的图片（如480x800），一般对应4英寸～4.5英寸的手机（但不绝对，同尺寸的手机有可能分辨率不同，手机分辨率就高不就低，因为分辦率低了屏幕会有模糊的感觉）。
+- ﻿﻿drawable-xhdpi里面存放加高分辦率的图片（如720x1280），一般对应5英寸～5.5英寸的手机。
+- drawable-xxhdpi里面存放超高分辨率的图片（如1080x1920），一般对应6英寸～6.5英寸的手机。
+- ﻿﻿drawable-xx xhdpi里面存放超超高分辨率的图片（如1440x2560），一般对应7英寸以上的平板计算机。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.1 图形 Drawable
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 15%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 15%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 基本上，分辨率每加大一级，宽度和高度就要增加二分之一或三分之一像素。如果各目录存在同名图片，Android就会根据手机的分辨率分别适配对应文件夹里的图片。在开发App时，为了兼容不同的手机屏幕，在各目录存放不同分辨率的图片，才能达到最合适的显示效果。例如，在drawable-hdpi里放了一张背景图片bgpng（分辨率为480X800），其他目录没放，使用分辨率为480X800的手机查看该App界面没有问题，但是使用分辨率为720X1280的手机查看该App会发现背景图片有点模糊，原因是Android为了让bgpng适配高分辨率的屏幕，强行把bg.png拉伸到了720X1280，拉伸的后果是图片变模糊了。
+- 在xml 布局文件中引用图形文件可使用“@drawable/不含扩展名的文件名称”这种形式，如各视图的background属性、ImageView 和ImageButton的src属性、TextView 和Button四个方向的drawable***系列属性都可以引用图形文件。
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.2 形状图形
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- Shape图形又称形状图形，用来描述常见的几何形状，包括矩形、圆角矩形、圆形、椭圆等。用好形状图形可以让App页面不再呆板，还可以节省美工不少工作量。
+- 形状图形的定义文件放在drawable目录下，它是以shape标签根节点的XML描述文件。根节点下定义了6个节点，分别是size（尺寸）、stroke（描边）、corners（圆角）、solid（填充）、padding（间隔）、gradient（渐变），各节点的属性值主要是宽和高、半径、角度以及颜色等。下面是形状图形各个节点及其属性的简要说明。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.2 形状图形
+</div>
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228154852508.png" alt="" style="object-fit: scale-down">
+
+- shape是形状图形文件的根节点，它描述了当前是哪种几何图形。下面是shape节点的常用属说明。
+- shape：字符串类型，表示图形的形状。形状类型的取值说明见表5-1。
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.2 形状图形
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- size是shape的下级节点，它描述了形状图形的宽高尺寸。若无size节点，则表示宽高与宿主视图一样大小。下面是size节点的常用属性说明。
+	- ﻿﻿height：像素类型，图形高度。
+	- ﻿﻿width：像素类型，图形宽度。
+- stroke是shape的下级节点，它描述了形状图形的描边规格。若无stroke节点，则表示不存在描边。下面是stroke节点的常用属性说明。
+	- color：颜色类型，描边的颜色。
+	- ﻿﻿dashGap：像素类型，每段虚线之间的间隔。
+	- ﻿﻿dashWidth：像素类型，每段虚线的宽度。若dashGap和dashWidth有一个值0，则描边为实线。
+	- ﻿﻿width：像素类型，描边的厚度
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.2 形状图形
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- corners是shape的下级节点，它描述了形状图形的圆角大小。若无corers节点，则表示没有角。下面是corners节点的常用属性说明。
+	- ﻿﻿bottomLefRadius：像素类型，左下圆角的半径。
+	- ﻿﻿bottomRightRadius：像素类型，右下圆角的半径。
+	- ﻿﻿topLefRadius：像素类型，左上圆角的半径。
+	- ﻿﻿topRightRadius：像素类型，右上圆角的半径。
+	- ﻿﻿radius：像素类型，4个圆角的半径（若有上面4个圆角半径的定义，则不需要radius定义
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.2 形状图形
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- solid是shape的下级节点，它描述了形状图形的填充色彩。若无solid节点，则表示无填充颜色。下面是solid节点的常用属性说明。
+	- color：颜色类型，内部填充的颜色
+- padding是shape的下级节点，它描述了形状图形与周围边界的间隔。若无padding节点，则表示四周不设问隔。下面是padding节点的常用属性说明。
+	- ﻿﻿top：像素类型，与上方的问隔。
+	- ﻿﻿bottom：像素类型，与下方的间隔。
+	- ﻿﻿left：像素类型，与左边的间隔。
+	- ﻿﻿right：像素类型，与右边的间隔。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.2 形状图形
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 12%; height: 85%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 12%; height: 85%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- gradient是shape的下级节点，它描述了形状图形的颜色渐变。若无gradient节点，则表示没有渐变效果。下面是gradient节点的常用属性说明。
+	- ﻿﻿angle：整型，渐变的起始角度。为0时表示时钟的9点位置，值增大表示往逆时针方向旋转。  例如，值 90表示6点位置，值为180表示3点位置，值为270表示0点/12点位置。
+	- ﻿﻿type：字符串类型，渐变类型。渐变类型的取值说明见表5-2。
+	- ﻿centerX：浮点型，圆心的X坐标。当android:type="linear"时不可用。
+	- ﻿centerY：浮点型，圆心的Y坐标。当android:type="linear"时不可用。
+	- gradientRadius：整型，渐变的半径。当android:type="radial"时需要设置该属性。 
+	- centerColor：颜色类型，渐变的中间颜色。
+	- ﻿startColor：颜色类型，渐变的起始颜色。
+	- endColor：颜色类型，渐变的终止颜色。
+	- useLevel：布尔类型，设置为true为无渐变色、false为有渐变色
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.2 形状图形
+</div>
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228155630355.png" alt="" style="width: 1500px; object-fit: fill">
+
+- 在实际开发中，形状图形主要使用3个节点：stroke（描边）、corners（圆角）和solid（填充）。至于shape根节点的属性一般不用设置（默认矩形即可）。
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.2 形状图形
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```xml
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 指定了形状内部的填充颜色 -->
+    <solid android:color="#ffdd66" ></solid>
+
+    <!-- 指定了形状轮廓的粗细与颜色 -->
+    <stroke
+        android:width="1dp"
+        android:color="#aaaaaa" ></stroke>
+
+    <!-- 指定了形状4个圆角的半径 -->
+    <corners android:radius="10dp" ></corners>
+</shape>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 接下来演示一下形状图形的界面效果，首先右击drawable 目录，并依次选择右键菜单的New一Drawable resource file，在弹窗中输入文件名称再单击OK按钮，即可自动生成一个XML描述文件。往该文件填入下面的圆角矩形内容定义：完整代码见chapter05\src\main\res\
+drawablelshape_rect_gold.xml
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.2 形状图形
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 25%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```Java
+// 从布局文件中获取名为 v_content 的视图
+View v_content = findViewById(R.id.v_content);
+// v_content 的背景设置为圆角矩形
+v_content.setBackgroundResource(R.drawable.shape_rect_gold);
+```
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 40%; height: 35%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228160300797.png" alt="" style="width: 500px; object-fit: fill">
+
+图5-1圆角矩形效果
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 接着创建一个测试页面，并在页面的XML文件中添加名为v_content的View标签，再给Java代码补充以下的视图背景设置代码：完整代码见chapter05\src\main\java\com\example\
+chapter05\DrawableshapeActivity.java
+- 然后运行测试App，观察到对应的形状图形如图5-1所示。该形状为一个圆角矩形，内部填充色为土黄色，边缘线为灰色。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.2 形状图形
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 35%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- 指定了形状内部的填充颜色 -->
+    <solid android:color="#ff66aa" / >
+
+    <!-- 指定了形状轮廓的粗细与颜色 -->
+    <stroke
+        android:width="1dp"
+        android:color="#aaaaaa" / >
+
+</shape>
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 50%; height: 35%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228160506192.png" alt="" style="object-fit: scale-down">
+
+图5-2 椭圆图形效果
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 再来一个椭圆的XNL描述文件，示例代码如下：完整代码见chapter05\src\main\res\
+drawablelshape_oval_rose.xml
+- 把前述的视图对象v_content背景改为R.drawable.shape_oval_rose，运行App观察到对应的形状图形如图5-2所示。该形状为一个椭圆，内部填充色为玫红色，边缘线灰色。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.3 九宫格图片
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228161106337.png" alt="" style="object-fit: scale-down">
+
+图5-3 普通图片与九宫格图片的拉伸效果对比
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 将某张图片设置成视图背景时，如果图片尺寸太小，则系统会自动拉伸图片使之填满背景。可是一旦图片拉得过大，其画面容易变得模糊，如图5-3所示，上面按钮的背景图片被拉得很宽，此时左右两边的边缘线既变宽又变模糊了。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.3 九宫格图片
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 50%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 50%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 为了解决这个问题，Android专门设计了点九图片。点九图片的扩展名是.png，文件名后面常带有“9”字样。因为该图片划分了3×3的九宫格区域，所以得名点九图片，也叫作九宫格图片。如果背景是一个形状图形，其stroke节点的width属性已经设置了固定数值（如1dp），那么无论该图形被拉到多大，描边宽度始终是1dp。九宫格图片的实现原理与之类似，即拉伸图形时，只拉伸内部区域，不拉伸边缘线条。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.3 九宫格图片
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228161352670.png" alt="" style="object-fit: scale-down">
+
+图5-4 点九图片的制作菜单路径
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 为了演示九宫格图片的展示效果，利用Android Studio制作一张点九图片。首先在drawable 目录下找到待加工的原始图片button_pressed_orig.png，右击它弹出右键菜单，如图5-4所示。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.3 九宫格图片
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228161443170.png" alt="" style="object-fit: scale-down">
+
+图5-5 点九图片的加工窗口界面
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 选择右键菜单下面的Create 9-Patch files..，并在随后弹出的对话框中单击OK按钮。接着drawable目录自动生成一个名为“button_pressed_orig.9.png”的图片，双击该文件，主界面右侧弹出如图5-5所示的点九图片的加工窗口
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.3 九宫格图片
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228161723588.png" alt="" style="object-fit: scale-down">
+
+图5-6 点九图片上边的黑线
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 注意图5-5的左侧窗口是图片加工区域，右侧窗口是图片预览区域，从上到下依次是纵向拉伸预览、横向拉伸预览、两方向同时拉伸预览。在左侧窗口图片四周的马赛克处单击会出现一个黑点，把黑点左右或上下拖动会拖出一段黑线，不同方向上的黑线表示不同的效果。
+- 如图5-6所示，界面上边的黑线指的是水平方向的拉伸区域。在水平方向拉伸图片时，只有黑线区域内的图像会被拉伸，黑线以外的图像保持原状，从而保证左右两侧的边框厚度不变
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.3 九宫格图片
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228161843994.png" alt="" style="object-fit: scale-down">
+
+图5-7 点九图片左边的黑线
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 如图5-7所示，界面左边的黑线指的是垂直方向的拉伸区域。在垂直方向拉伸图片时，只有黑线区域内的图像会被拉伸，黑线以外的图像保持原状，从而保证上下两侧的边框厚度不变。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.3 九宫格图片
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228162002527.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228162009154.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 如图5-8所示，界面下边的黑线指的是该图片作为控件背景时，控件内部的文字左右边界只能放在黑线区域内。这里Horizontal Padding的效果就相当于android:paddingLeft 与android:paddingRight。
+- 如图5-9所示，界面右边的黑线指的是该图片作为控件背景时，控件内部的文字上下边界只能放在黑线区域内。这里Vertical Padding的效果就相当于android:paddingTop与android:paddingBottom。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.3 九宫格图片
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 如果点九图片被设置为视图背景，且该图片指定了 Horizontal Padding 和 Vertical Padding，那么视图内部将一直与视图边缘保持固定间距，无论怎么调整 XIL 文件和 Java代码都无法缩小间隔，缘由是点九图片早已在水平和垂直方向都设置了 padding。
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.4 状态列表图形
+</div>
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 50%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 50%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 常见的图形文件一般为静态图形，但有时会用到动态图形，比如按钮控件的背景在正常情况下是凸起的，在按下时是凹陷的，从按下到弹起的过程，用户便知道点击了该按钮。根据不同的触摸情况变更图形状态，这种情况用到了Drawable的一个子类StateListDrawable（状态列表图形），它在XMIL文件中规定了不同状态所呈现的图形列表。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.4 状态列表图形
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```xml
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true"
+          android:drawable="@drawable/button_pressed" / >
+    <item android:drawable="@drawable/button_normal" / >
+</selector>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 接下来演示一下状态列表图形的界面效果，右击drawable目录，并依次选择右键菜单的New一Drawable resource file，在弹窗中输入文件名称再单击OK按钮，即可自动生成一个XML描述文件。往该文件填入下面的状态列表图形定义：完整代码见chapter05\src\main\res\
+drawable\btn_nine_selector.xml
+- 上述XML文件的关键点是state_pressed属性，该属性表示按下状态，值true表示按下时显示button_pressed图像，其余情况显示button_normal图像。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.4 状态列表图形
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228162815859.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228162824023.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 为方便理解，接下来做个实验，首先将“定制样式的按钮”这一按钮控件的background属性设置为@drawable/btn_nine_selector，然后在屏幕上点击该按钮，观察发现按下按钮时的界面如图5-10所示，而松开按钮时的界面如图5-11所示，可见按下与松开时果然显示不同的图片
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.1.4 状态列表图形
+</div>
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228162858814.png" alt="" style="object-fit: scale-down">
+
+- 状态列表图形不仅用于按钮控件，还可用于其他拥有多种状态的控件，这取决于开发者在XML文件中指定了哪种状态类型。各种状态类型的取值说明详见表5-3。
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2 选择按钮
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 本节介绍几个常用的特殊控制按钮，包括：如何使用复选框CheckBox及其勾选监听器、如何使用开关按钮Switch、如何借助状态列表图形实现仿iOS的开关按钮、如何使用单选按钮RadioButton和单选组RadioGroup及其选中监听器。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.1 复选框 CheckBox
+</div>
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228163057939.png" alt="" style="width: 1200px; object-fit: fill">
+
+- 在学习复选框之前，先了解一下CompoundButton类。在Android体系中，CompoundButton类是抽象的复合按钮，因为是抽象类，所以它不能直接使用。在实际开发中用的是CompoundButton的几个派生类，主要有复选框CheckBox、单选按钮RadioBufton以及开关按钮Switch，这些派生类均可使用CompoundButton的属性和方法。加之CompoundButton本身继承了Button类，故以上几种按钮同时具备Button的属性和方法，它们之间的继承关系如图5-12所示。
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.1 复选框 CheckBox
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- CompoundButton 在XML文件中主要使用下面两个属性。
+	- ﻿﻿checked：指定按钮的勾选状态，true表示勾选，false则表示未勾选。默认为未勾选。
+	- ﻿﻿button：指定左侧勾选图标的图形资源，如果不指定就使用系统的默认图标。
+- CompoundButton在Java代码中主要使用下列4个方法。
+	- ﻿﻿setChecked：设置按钮的勾选状态。
+	- ﻿﻿setButtonDrawable：设置左侧勾选图标的图形资源。
+	- ﻿﻿setOnCheckedChangeListener： 设置勾选状态变化的监听器。
+	- ﻿﻿isChecked：判断按钮是否勾选。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.1 复选框 CheckBox
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/
+		apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <CheckBox
+        android:id="@+id/ck_system"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="这是系统的CheckBox" / >
+
+</LinearLayout>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 复选框CheckBox是CompoundButton一个最简单的实现控件，点击复选框将它勾选，再次点击取消勾选。复选框对象调用setOnCheckedChangeListener方法设置勾选监听器，这样在勾选和取消勾选时就会触发监听器的勾选事件。
+- 接下来演示复选框的操作过程，首先编写活动页面的XML文件，代码如下：完整代码见chapter05\src\main\
+res\layout\activity_check_box.xml
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.1 复选框 CheckBox
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```Java
+// 该页面实现了接口 onCheckedChangeListener，
+// 要重写监听器的 onCheckedChanged 方法
+public class CheckBoXActivity extends AppCompatActivity 
+		implements CompoundButton.OnCheckedChangeListener {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_check_box);
+        // 从布局文件中获取名为 ck_system 的复选框
+        CheckBox ckSystem = findViewById(R.id.ck_system);
+```
+```
+        // 设置勾选监听器，一旦点击复选框，就触发监听器的 
+        // onCheckedChanged 方法
+        ckSystem.setOnCheckedChangeListener(this);
+    }
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, 
+		    boolean isChecked) {
+        String desc = String.format("您%s了这个CheckBox", 
+		        isChecked ? "勾选" : "取消勾选");
+        buttonView.setText(desc);
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 接着编写对应的Java代码，主要是如何处理勾选监听器，具体代码如下：完整代码见chapter05\src\main\java\com\
+example\chapter05\CheckBoxActivity.java）
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.1 复选框 CheckBox
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228163916356.png" alt="" style="width: 500px; object-fit: fill">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228163921748.png" alt="" style="width: 500px; object-fit: fill">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228163928612.png" alt="" style="width: 500px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 然后运行测试App，一开始的演示界面如图5-13所示，此时复选框默认未勾选。首次点击复选框，此时复选框的图标及文字均发生变化，如图5-14所示；再次点击复选框，此时复选框的图标及文字又发生变化，如图5-15所示；可见先后触发了勾选与取消勾选事件。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.2 开关按钮 Switch
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 55%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- Switch是开关按钮，它像一个高级版本的CheckBox，在选中与取消选中时可展现的界面元素比复选框丰富。Switch控件新添加的XNL属性说明如下：
+	- ﻿﻿textOn：设置右侧开启时的文本。
+	- ﻿﻿textOff：设置左侧关闭时的文本。
+	- ﻿﻿track：设置开关轨道的背景。
+	- ﻿﻿thumb：设置开关标识的图标。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.2 开关按钮 Switch
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228172456614.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228172502090.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 虽然开关按钮是升级版的复选框，但它在实际开发中用得不多。原因之一是大家觉得Switch的默认界面不够大气，如图5-16和图5-17所示，小巧的开关图标显得有些拘谨原因之二是大家觉得iPhone的界面很漂亮，无论用户还是客户，都希望App实现iOS那样的控件风格，于是iOS的开关按钮UISwitch就成了安卓开发者仿照的对象。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.2 开关按钮 Switch
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```xml
+<selector xmlns:android="http://schemas.android.com
+		/apk/res/android">
+    <item android:state_checked="true"
+          android:drawable="@drawable/switch_on" / >
+    <item android:drawable="@drawable/switch_off" / >
+</selector>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 现在要让Android实现类似iOS的开关按钮，主要思路是借助状态列表图形，首先创建一个图形专用的XML文件，给状态列表指定选中与未选中时的开关图标，代码如下：(完整代码见chapter05\src\main\res\
+drawable\switch selector. xml)
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.2 开关按钮 Switch
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```
+<CheckBox
+    android:id="@+id/ck_status"
+    android:layout_width="60dp"
+    android:layout_height="30dp"
+    android:background="@drawable/switch_selector"
+    android:button="@null" ></CheckBox>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 然后把CheckBox标签的background属性设置为@drawable/switch_selector，同时将button属性设置为@null。完整的CheckBox标签内容示例如下：
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.2 开关按钮 Switch
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228173037921.png" alt="" style="width: 600px; object-fit: fill">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228173046180.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 为什么这里修改background属性，而不直接修改button属性呢？因为button属性有局限，无论多大的图片，都只显示一个小小的图标，可是小小的图标一点都不大气，所以这里必须使用background属性，要它有多大就能有多大，这样才够炫够酷。
+- 最后看看这个仿iOS开关按钮的效果，分别如图5-18和图5-19所示。这下开关按钮脱胎换骨，又圆又鲜艳，比原来的Switch好看了很多。
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.3 单选按钮 RadioButton
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 所谓单选按钮，指的是在一组按钮中选择其中一项，并且不能多选，这要求有个容器确定这组按钮的范围，这个容器便是单选组RadioGroup。单选组实质上是个布局，同一组RadioButton都要放在同一个RadioGroup节点下。RadioGroup提供了orientation属性指定下级控件的排列方向，该属性为horizontal时，单选按钮在水平方向排列；该属性为vertical时，单选按钮在垂直方向排列。RadioGroup 下面除了RadioButton，还可以挂载其他子控件（如TextView、ImageView等）。如此看来，单选组相当于特的线性布局，它们主要有以下两个区别：
+	- （1）单选组多了管理单选按钮的功能，而线性布局不具备该功能。
+	- （2）如果不指定orientation属性，那么单选组默认垂直排列，而线性布局默认水平排列。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.3 单选按钮 RadioButton
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 12%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 下面是RadioGroup在Java代码中的3个常用方法。
+	- ﻿﻿check：选中指定资源编号的单选按钮。
+	- ﻿﻿getCheckedRadioButtonId：获取已选中单选按钮的资源编号。
+	- ﻿﻿setOnCheckedChangeListener：设置单选按钮勾选变化的监听器。
+- 与CheckBox不同的是，RadioButton默认未选中，点击后显示选中，但是再次点击不会取消选中。只有点击同组的其他单选按钮时，原来选中的单选按钮才会取消选中。另需注意，单选按钮的选中事件不是由RadioButton处理，而是由RadioGroup处理。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.3 单选按钮 RadioButton
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 10%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="请选择您的性别" ></TextView>
+    <RadioGroup
+        android:id="@+id/rg_sex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+```
+```xml
+        <RadioButton
+            android:id="@+id/rb_male"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="男" ></RadioButton>  
+        <RadioButton
+            android:id="@+id/rb_female"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="女" ></RadioButton> 
+    </RadioGroup>
+```
+```xml
+    <TextView
+        android:id="@+id/tv_sex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+</LinearLayout>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 接下来演示单选按钮的操作过程，首先编写活动页面的XML文件，代码如下：完整代码见chapter05\src\main\res\
+layout\ activity radio horizontal.xml
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.3 单选按钮 RadioButton
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```Java
+public class RadioHorizontalActivity extends AppCompatActivity 
+		implements RadioGroup.OnCheckedChangeListener {
+    private TextView tv_sex; // 声明一个文本视图对象
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+	    super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_radio_horizontal);
+        // 从布局文件中获取名为tv_sex的文本视图
+        tv_sex = findViewById(R.id.tv_sex);
+        // 从布局文件中获取名为rg_sex的单选组
+        RadioGroup rg_sex = findViewById(R.id.rg_sex);
+        // 设置单选监听器，一旦点击组内的单选按钮，就触发监听器的onCheckedChanged方法
+        rg_sex.setOnCheckedChangeListener(this);
+    }
+```
+```Java
+    // 在用户点击组内的单选按钮时触发
+    @Override
+    public void onCheckedChanged(RadioGroup group, 
+		    int checkedId) {
+        if (checkedId == R.id.rb_male) {
+            tv_sex.setText("哇哦，你是个帅气的男孩");
+        } else if (checkedId == R.id.rb_female) {
+            tv_sex.setText("哇哦，你是个漂亮的女孩"); 
+        }
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 20%; height: 55%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 20%; height: 55%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 接着编写对应的Java代码，主要是如何处理选中监听器，具体代码如下：
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.2.3 单选按钮 RadioButton
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228174130709.png" alt="" style="width: 400px; object-fit: fill">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228174137076.png" alt="" style="width: 400px; object-fit: fill">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250228174145973.png" alt="" style="width: 400px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 然后运行测试App，一开始的演示界面如图5-20所示，此时两个单选按钮均未选中。先点击左边的单选按钮，此时左边按钮显示选中状态，如图5-21所示；再点击右边的单选按钮，此时右边按钮显示选中状态，同时左边按钮取消选中，如图5-22所示；可见果然实现了组内只能选中唯一按钮的单选功能。
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3 文本输人
+</div>
+
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 45%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 45%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 本节介绍如何在编辑框EditText上高效地输入文本，包括：
+	- 如何改变编辑框的控件外观，
+	- 如何利用焦点变更监听器提前校验输入位数，
+	- 如何利用文本变化监听器自动关闭软键盘。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.1 编辑框 EditText
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 编辑框EditText用于接收软键盘输入的文字，例如用户名、密码、评价内容等，它由文本视图派生而来，除了TextView已有的各种属性和方法之外，EditText还支持下列XML属性。
+	- inputType：指定输入的文本类型。输入类型的取值说明见表5-4，若同时使用多种文本类型，则可使用竖线（|）把多种文本类型拼接起来。
+	- maxLength：指定文本允许输入的最大长度。
+	- hint：指定提示文本的内容
+	- textColorHint： 指定提示文本的颜色。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.1 编辑框 EditText
+</div>
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303154721621.png" alt="" style="width: 1500px; object-fit: fill">
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.1 编辑框 EditText
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="下面是登录信息" ></TextView>
+```
+```xml
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:maxLength="10"
+        android:hint="请输入用户名" ></EditText>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:maxLength="9"
+        android:hint="请输入密码" ></EditText>
+
+</LinearLayout>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 接下来通过XML布局观看编辑框界面效果，演示用的XML文件内容如下：完整代码见chapter05\src\main\
+res\layout\activity edit simple.xml
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.1 编辑框 EditText
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303155106181.png" alt="" style="width: 520px; object-fit: fill">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303155113174.png" alt="" style="width: 500px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 运行测试App，进入初始的编辑框页面，如图5-23所示。然后往用户名编辑框输入文字，输满10个字后发现不能再输入，于是切换到密码框继续输入，直到输满8位密码，此时编辑框页面如图5-24所示。
+- 根据以上图示可知编辑框的各属性正常工作。不过编辑框有根下划线，未输入时显示灰色，正在输入时显示红色，这种效果是怎么实现的呢？
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.1 编辑框 EditText
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```xml
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 指定了形状内部的填充颜色 -->
+    <solid android:color="#ffffff" / >
+    <!-- 指定了形状轮廓的粗细与颜色 -->
+    <stroke
+        android:width="1dp"
+        android:color="#aaaaaa" / >
+```
+```xml
+    <!-- 指定了形状4个圆角的半径 -->
+    <corners android:radius="5dp" / >
+
+    <!-- 指定了形状4个方向的间距 -->
+    <padding
+        android:left="2dp"
+        android:top="2dp"
+        android:right="2dp"
+        android:bottom="2dp" / >
+</shape>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 其实下划线没用到新属性，而用了已有的背景属性background；至于未输入与正在输入两种情况的颜色差异，乃是因为使用了状态列表图形，编辑框获得焦点时（正在输入）显示红色的下划线，其余时候显示灰色下划线。当然EditText默认的下划线背景不甚好看，下面将利用状态列表图形将编辑框背景改为更加美观的圆角矩形。
+- 首先编写圆角矩形的形状图形文件，它的XML定义文件示例如下：完整代码见chapter05\src\main\res\drawable
+\shape_edit_normal.xml
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.1 编辑框 EditText
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 上述的shape_edit_normal.xml定义了一个灰色的圆角矩形，可在未输入时展示该形状。正在输入时候的形状要改为蓝色的圆角矩形，其中轮廓线条的色值从aaaaaa（灰色）改成0000ff（蓝色），具体定义放在shape_edit _focus.xml.
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.1 编辑框 EditText
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```xml
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true"
+        android:drawable="@drawable/shape_edit_focus" / >
+    <item android:drawable="@drawable/shape_edit_normal" / >
+</selector>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 接着编写编辑框背景的状态列表图形文件，主要在selector节点下添加两个item：一个item设置了获得焦点时（android:state_focused="true"）的图形为@drawable/shape_edit_ focus； 
+- 另一个item设置了图形@drawable/shape_edit_nomal但未指定任何状态，表示其他情况都展示该图形。完整的状态列表图形定义示例如下：完整代码见chapter05\src\main\
+res\drawableleditext selector.xml
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.1 编辑框 EditText
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="这是默认边框" / >
+```
+```xml
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="我的边框不见了"
+        android:background="@null" / >
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="我的边框是圆角"
+        android:background="@drawable/editext_selector" / > 
+
+</LinearLayout>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 然后编写测试页面的XNL布局文件，一共添加3个EditText标签：第一个EditText采用默认的编辑框背景：第二个EditText将backgroud属性值设为@null，此时编辑框不显示任何背景；第三个EditText将background属性值设为@drawable/editext_selector，其背景由editext_selector.xml所定义的状态列表图形决定。详细的XML文件内容如下：完整代码见chapter05\src\res\layout
+\activity edit border.xml
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.1 编辑框 EditText
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303161004092.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 最后运行测试App，更换背景之后的编辑框界面如图5-25所示，可见第三个编辑框的背景成功变为了圆角矩形边框。
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.2 焦点变更监听器
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303161050845.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 虽然编辑框EditText提供了maxLength属性，用来设置可输入文本的最大长度，但是它没提供对应的miniLength属性，也就无法设置可输入文本的最小长度。
+- 譬如手机号码为固定的11位数字，用户必须输满11位才是合法的，然而编辑框不会自动检查手机号码是否达到11位，即使用户少输入一位，编辑框依然认为这是合法的手机号。比如图5-26所示的登录页面，有手机号码编辑框，有密码编辑框，还有登录按钮。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.2 焦点变更监听器
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 既然编辑框不会自动校验手机号是否达到11位，势必要求代码另行检查。一种想法是在用户点击“登录”按钮时再判断，不过通常此时己经输完手机号与密码了。为什么不能在输入密码之前就判断手机号码的位数呢？早点检查可以帮助用户早点发现错误，特别是表单元素较多的时候，更能改善用户的使用体验。就上面的登录例子而言，手机号编辑框下方密码框，那么能否给密码框注册点击事件，以便在用户准备输入密码时就校验手机号的位数呢？
+- 然而实际运行App却发现，先输入手机号码再输入密码，一开始并不会触发密码框的点击事件，再次点击密码框才会触发点击事件。缘由是编辑框比较特殊，要点击两次后才会触发点击事件，因为第一次点击只触发焦点变更事件，第二次点击才触发点击事件。编辑框的焦点，直观上就看那个闪动的光标，哪个编辑框有光标，焦点就落在哪里。光标在编辑框之间切换，便产生了焦点变更事件，所以对于编辑框来说，应当注册焦点变更监听器，而非注册点击监听器。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.2 焦点变更监听器
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```Java
+// 从布局文件中获取名为 et_password 的编辑框
+EditText et_password = findViewById(R.id.et_password);
+
+// 给编辑框注册一个焦点变化监听器，一旦焦点发生变化，
+// 就触发监听器的 onFocusChange 方法
+et_password.setOnFocusChangeListener(this);
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 焦点变更监听器来自接口View.OnFocusChangeListener，若想注册该监听器，就要调用编辑框对象的setOnFocusChangeListener方法，即可在光标切换之时（获得光标和失去光标）触发焦点变更事件。下面是给密码框注册焦点变更监听器的代码例子：完整代码见chapter05\src\main\java\com\
+example\chapter05\EditFocusActivity.java
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.2 焦点变更监听器
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```Java
+// 焦点变更事件的处理方法，hasFocus表示当前控件是否获得焦点
+// 为什么光标进入事件不选onClick？因为要点两下才会触发
+// onClick（第一下是切换焦点动作）
+@Override
+public void onFocusChange(View v, boolean hasFocus) {
+    // 判断密码编辑框是否获得焦点。hasFocus为true表示获得焦点，
+    // 为false表示失去焦点
+    if (v.getId() == R.id.et_password && !hasFocus) { 
+    // 检查是否是 et_password 失去焦点
+        EditText et_phone = findViewById(R.id.et_phone); 
+        // 获取手机号码编辑框
+        String phone = et_phone.getText().toString();
+```
+```Java
+        if (TextUtils.isEmpty(phone) || phone.length() < 11) { 
+        // 手机号不足11位
+		// 手机号码编辑框请求焦点，也就是把光标移回手机号码编辑框
+            et_phone.requestFocus();
+            Toast.makeText(this, "请输入11位手机号码", 
+		            Toast.LENGTH_SHORT).show();
+        }
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 以上代码把焦点变更监听器设置到当前页面，则还需让活动页面实现接口View.OnFocusChangeListener，并重写该接口定义的onFocusChange方法，判断如果是密码框获得焦点，就检查输入的手机号码是否达到11位。具体的焦点变更处理方法如下
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.2 焦点变更监听器
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303161904435.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 改好代码重新运行App，当手机号不足11位时点击密码框，界面底部果然弹出了相应的提示文字，如图5-27所示，并且光标仍然留在手机号码编辑框，说明首次点击密码框的确触发了焦点变更事件。
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.3 文本变化监听器
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 输入法的软键盘往往会遮住页面下半部分，使得“登录”“确认”“下一步”等按钮看不到了，用户若想点击这些按钮还得再点一次返回键才能关闭软键盘。为了方便用户操作，最好在满足特定条件时自动关闭软键盘，比如手机号码输入满11位后自动关闭软键盘，又如密码输入满6位后自动关闭软键盘，等等。达到指定位数便自动关闭键盘的功能，可以再分解为两个独立的功能点：一个是如何关闭软键盘，另一个是如何判断己输入的文字是否达到指定位数。分别说明如下。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.3 文本变化监听器
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```Java
+public static void hideOneInputMethod(Activity act, View v) {
+    // 从系统服务中获取输入法管理器
+    InputMethodManager imm = (InputMethodManager) 
+		    act.getSystemService(Context.INPUT_METHOD_SERVICE);
+    // 关闭屏幕上的输入法软键盘
+    if (imm != null && v != null) { // 增加null检查
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 1、如何关闭软键盘
+	- 诚然按下返回键就会关闭软键盘，但这是系统自己关闭的，而非开发者在代码中关闭的。因为输入法软键盘由系统服务INPUT_METHOD_SERVICE管理，所以关闭软键盘也要由该服务处理，下面是使用系统服务关闭软键盘的代码例子：完整代码见chapter05\src\main\java\
+	com\example\chapter05\util\viewUtil.java
+	- 注意上述代码里面的视图对象v，虽然控件类型为View，但它必须是EditText类型才能正常关
+闭软键盘。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.3 文本变化监听器
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 2、如何判断已输入的文字是否达到指定位数
+	- 该功能点要求实时监控当前已输入的文本长度，这个监控操作用到文本监听器接口TextWatcher，该接口提供了3个监控方法，具体说明如下：
+		- ﻿﻿beforeTextChanged：在文本改变之前触发。
+		- ﻿﻿onTextChanged：在文本改变过程中触发。
+		- ﻿﻿afterTextChanged： 在文本改变之后触发。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.3 文本变化监听器
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```Java
+// 定义一个编辑框监听器，在输入文本达到指定长度时自动隐藏输入法软键盘
+private class HideTextWatcher implements TextWatcher {
+    private EditText mView; // 声明一个编辑框对象
+    private int mMaxLength; // 声明一个最大长度变量
+    public HideTextWatcher(EditText v, int maxLength) {
+        super();
+        mView = v;
+        mMaxLength = maxLength;
+    }
+
+    // 在编辑框的输入文本变化前触发
+    @Override
+    public void beforeTextChanged(CharSequence s, 
+		    int start, int count, int after) {
+    }
+```
+```
+    // 在编辑框的输入文本变化时触发
+    @Override
+    public void onTextChanged(CharSequence s, 
+		    int start, int before, int count) {
+    }
+
+    // 在编辑框的输入文本变化后触发
+    @Override
+    public void afterTextChanged(Editable s) {
+        String str = s.toString(); // 获得已输入的文本字符串
+        // 输入文本达到11位（如手机号码），或者达到6位
+		//（如登录密码）时关闭输入法软键盘
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 具体到编码实现，需要自己写个监听器实现接口 TextWatcher，再调用编辑框对象的addTextChangedListener方法注册文本监听器。监听操作建议在afterTextChanged方法中完成，如果同时监听11位的手机号码和6位的密码，一旦输入文字达到指定长度就关闭软键盘，则详细的监听器代码如下：完整代码见chapter05\src\main\java\com\example
+\chapter05\EditHideActivity.java
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.3 文本变化监听器
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```
+        if ((str.length() == 11 && mMaxLength == 11)
+                || (str.length() == 6 && mMaxLength == 6)) {
+            // 隐藏输入法软键盘
+            if (mView != null && EditHideActivity.this != null ) { 
+            // 增加 null 检查, 并修正 Activity 引用
+                ViewUtil.hideOneInputMethod(EditHideActivity.
+		                this, mView);
+            }
+        }
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 具体到编码实现，需要自己写个监听器实现接口 TextWatcher，再调用编辑框对象的addTextChangedListener方法注册文本监听器。监听操作建议在afterTextChanged方法中完成，如果同时监听11位的手机号码和6位的密码，一旦输入文字达到指定长度就关闭软键盘，则详细的监听器代码如下：完整代码见chapter05\src\main\java\com\example
+\chapter05\EditHideActivity.java
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.3 文本变化监听器
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```Java
+// 从布局文件中获取名为et_phone的手机号码编辑框
+EditText et_phone = findViewById(R.id.et_phone);
+// 从布局文件中获取名为et_password的密码编辑框
+EditText et_password = findViewById(R.id.et_password);
+// 给手机号码编辑框添加文本变化监听器
+et_phone.addTextChangedListener(new 
+		HideTextWatcher(et_phone, 11));
+// 给密码编辑框添加文本变化监听器
+et_password.addTextChangedListener(new 
+		HideTextWatcher(et_password, 6));
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 写好文本监听器代码，还要给手机号码编辑框和密码编辑框分别注册监听器，注册代码示例如下：
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.3.3 文本变化监听器
+</div>
+
+<div class="flex-even" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303163859774.png" alt="" style="width: 400px; object-fit: fill">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303163909873.png" alt="" style="width: 400px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 然后运行测试App，先输入手机号码的前10位，因为还没达到11位，所以软键盘依然展示，如图5-28所示。接着输入最后一位手机号，总长度达到11位，于是软键盘自动关闭，如图5-29所示。
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4 对话柜
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 本节介绍几种常用的对话框控件，包括：如何使用提醒对话框处理不同的选项，如何使用日期对话框获取用户选择的日期，如何使用时间对话框获取用户选择的时间。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4.1 提醒对话框 AlertDialog
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 15%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 15%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- AlertDialog名为提醒对话框，它是Android中最常用的对话框，可以完成常见的交互操作，例如提示、确认、选择等功能。由于AlertDialog没有公开的构造方法，因此必须借助建造器AlertDialog.Builder才能完成参数设置，AlertDialog.Builder的常用方法说明如下。
+	- ﻿﻿setlcon：设置对话框的标题图标。
+	- ﻿﻿setTitle： 设置对话框的标题文本。
+	- ﻿﻿setMessage：设置对话框的内容文本。
+	- ﻿﻿setPositiveButton：设置肯定按钮的信息，包括按钮文本和点击监听器。
+	- ﻿﻿setNegativeButton：设置否定按钮的信息，包括按钮文本和点击监听器。
+	- ﻿﻿setNeutralButton：设置中性按钮的信息，包括按钮文本和点击监听器，该方法比较少用。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4.1 提醒对话框 AlertDialog
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```Java
+// 创建提醒对话框的建造器
+AlertDialog.Builder builder = new AlertDialog.Builder(this);
+builder.setTitle("尊敬的用户"); // 设置对话框的标题文本
+builder.setMessage("你真的要卸载我吗？"); // 设置对话框的内容文本
+// 设置对话框的肯定按钮文本及其点击监听器
+builder.setPositiveButton("残忍卸载", new DialogInterface.
+		OnClickListener() { // 更友好的按钮文本
+    public void onClick(DialogInterface dialog, int which) {
+        // 确保在你的 Activity 中定义并初始化了 tv_alert：
+        if (tvAlert != null) {  // 增加null检查
+           tvAlert.setText("虽然依依不舍，但是只能离开了");
+        }
+        dialog.dismiss(); // 关闭对话框 (通常需要)
+    }
+});
+```
+```Java
+// 设置对话框的否定按钮文本及其点击监听器
+builder.setNegativeButton("我再想想", new DialogInterface.
+		OnClickListener() { // 更友好的按钮文本
+    public void onClick(DialogInterface dialog, int which) {
+        if (tvAlert != null) { // 增加null检查
+            tvAlert.setText("让我再陪你三百六十五个日夜");
+        }
+        dialog.dismiss(); // 关闭对话框
+    }
+});
+AlertDialog alert = builder.create(); 
+// 根据建造器构建提醒对话框对象
+alert.show(); // 显示提醒对话框
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 通过AlertDialog.Builder设置完对话框参数，还需调用建造器的create方法才能生成对话框实例。最后调用对话框实例的show方法，在页面上弹出提醒对话框。下面是构建并显示提醒对话框的Java代码例子：完整代码见chapter05\src\main\java\com\
+example\chapter05\AlertDialogActivity.java
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4.1 提醒对话框 AlertDialog
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303164528067.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 提醒对话框的弹窗效果如图5-30所示，可见该对话框有标题和内容，还有两个按钮。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4.1 提醒对话框 AlertDialog
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303164614877.png" alt="" style="width: 520px; object-fit: fill">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303164623233.png" alt="" style="width: 500px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 点击不同的对话框按钮会触发不同的处理逻辑。例如，图5-31为点击“我再想想” 按钮后的页面，图5-32为点击“残忍卸载”按钮后的页面。
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4.2 日期对话框 DatePickerDialog
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 75%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 虽然EditText提供了inputType="date"的日期输入，但是很少有人会手工输入完整日期，况且EditText还不支持“****年**月**日”这样的中文日期，所以系统提供了专门的日期选择器DatePicker，供用户选择具体的年、月、日。不过，DatePicker并非弹窗模式，而是在当前页面占据一块区域，并且不会自动关闭。按习惯来说，日期控件应该弹出对话框，选择完日期就要自动关闭对话框。因此，很少直接在界面上显示DatePicker，而是利用已经封装好的日期选择对话框DatePickerDialog。
+- DatePickerDialog相当于在AlertDialog上装载了DatePicker，编码时只需调用构造方法设置当前的年、月、日，然后调用show方法即可弹出日期对话框。日期选择事件则由监听器OnDateSetListener负责响应，在该监听器的onDateSet方法中，开发者获取用户选择的具体日期，再做后续处理。特别注意onDateSet的月份参数，它的起始值不是1而是0。也就是说，一月份对应的参数值为0，十二月份对应的参数值为11，中间月份的数值以此类推。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4.2 日期对话框 DatePickerDialog
+</div>
+
+<div class="flex-even" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303164855353.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250303164901900.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 在界面上内嵌显示DatePicker的效果如图5-33所示，其中，年、月、日通过上下滑动选择。单独弹出日期对话框的效果如图5-34所示，其中年、月、日按照日历风格展示。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4.2 日期对话框 DatePickerDialog
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```Java
+// 该页面类实现了接口OnDateSetListener，
+// 意味着要重写日期监听器的onDateSet方法
+public class DatePickerActivity extends AppCompatActivity 
+		implements View.OnClickListener, 
+		DatePickerDialog.OnDateSetListener {
+    private TextView tvDate; // 声明一个文本视图对象  // 修正变量名
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_date_picker); 
+        // 确保布局文件正确
+        tvDate = findViewById(R.id.tv_date); 
+        // 初始化 TextView, 修正变量名
+        findViewById(R.id.btn_date).setOnClickListener(this);
+    }
+```
+```
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_date) {
+            // 获取日历的一个实例，里面包含了当前的年月日
+            Calendar calendar = Calendar.getInstance();
+            // 构建一个日期对话框，该对话框已经集成了日期选择器。
+            // DatePickerDialog的第二个构造参数指定了日期监听器
+            DatePickerDialog dialog = new DatePickerDialog(this, this,
+                    calendar.get(Calendar.YEAR), // 年份
+                    calendar.get(Calendar.MONTH), // 月份
+                    calendar.get(Calendar.DAY_OF_MONTH)); // 日
+            dialog.show(); // 显示日期对话框
+        }
+    }
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 下面是使用日期对话框的Java代码例子，包括弹出日期对话框和处理日期监听事件：完整代码见chapter05\src\main\java\com\example
+\chapter05\DatePickerActivity.java
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4.2 日期对话框 DatePickerDialog
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```Java
+    // 一旦点击日期对话框上的确定按钮，就会触发监听器的onDateSet方法
+    @Override
+    public void onDateSet(DatePicker view, int year, 
+		    int monthOfYear, int dayOfMonth) {
+        // 获取日期对话框设定的年份、月份、日
+        String desc = String.format("您选择的日期是%d年%d月%d日",
+                year, monthOfYear + 1, dayOfMonth);
+                 // 注意月份要 + 1
+        tvDate.setText(desc); // 更新 TextView, 修正变量名
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 下面是使用日期对话框的Java代码例子，包括弹出日期对话框和处理日期监听事件：完整代码见chapter05\src\main\java\com\example
+\chapter05\DatePickerActivity.java
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4.3 时间对话框 TimePickerDialog
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 既然有了日期选择器，还得有对应的时间选择器。同样，在实际开发中也很少直接用TimePicker，而是用封装好的时间选择对话框TimePickerDialog。该对话框的用法类似DatePickerDialog，不同之处主要有两个：
+	- 构造方法传入的是当前的小时与分钟，最后一个参数表示是否采取24小时制，一般力true表示小时的数值范围为0~23；若为false则表示采取12小时制。
+	- 时间选择监听器为OnTimeSetListener，对应需要实现onTimeSet方法，在该方法中可获得用户选择的小时和分钟。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4.3 时间对话框 TimePickerDialog
+</div>
+
+<div class="flex-even" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250304144118835.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250304144127386.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 在界面上内嵌显示TimePicker的效果如图5-35所示，其中，小时与分钟可通过上下滑动选择。单独弹出时间对话框的效果如图5-36所示，其中小时与分钟按照钟表风格展示。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.4.3 时间对话框 TimePickerDialog
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```Java
+// 该页面类实现了接口OnTimeSetListener, 
+// 意味着要重写时间监听器的onTimeSet方法
+public class TimePickerActivity extends AppCompatActivity 
+		implements View.OnClickListener, 
+		TimePickerDialog.OnTimeSetListener {
+    private TextView tv_time; // 声明一个文本视图对象
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_time_picker);
+        tv_time = findViewById(R.id.tv_time); 
+        // 修改了变量名和findViewById
+        findViewById(R.id.btn_time).setOnClickListener(this); 
+        // 修改了按钮的id
+    }
+```
+```
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btn_time) { // 修改了按钮的id
+            // 获取日历的一个实例,里面包含了当前的时, 分, 秒
+            Calendar calendar = Calendar.getInstance();
+            // 构建一个时间对话框,该对话框已经集成了时间选择器
+            // TimePickerDialog的第二个构造参数指定了时间监听器
+            TimePickerDialog dialog = new TimePickerDialog(this, this,
+                    calendar.get(Calendar.HOUR_OF_DAY), // 小时
+                    calendar.get(Calendar.MINUTE), // 分钟
+                    true); // true表示24小时制,false表示12小时制
+            dialog.show(); // 显示时间对话框
+        }
+    }
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 35%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```Java
+    // 一旦点击时间对话框上的确定按钮, 就会触发监听器的onTimeSet方法
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, 
+		    int minute) { // 获取时间对话框设定的小时和分钟
+        String desc = String.format("您选择的时间是%d时%d分",
+		         hourOfDay, minute); //更正了变量名
+        tv_time.setText(desc); // 修改了变量名
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 50%; height: 35%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 50%; height: 35%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 下面是使用时间对话框的Java代码例子，包括弹出时间对话框和处理时间监听事件.完整代码见chapter05\src\main\java\com\example
+\chapter05\TimePickerActivity.java
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5 实战项目：找回密码
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 在移动互联网时代，用户是每家IT企业最宝贵的资源，对于App而言，吸引用户注册并登录是万分紧要之事，因为用户登录之后才有机会产生商品交易。登录校验通常是用户名＋密码组合，可是每天总有部分用户忘记密码，为此要求App提供找回密码的功能。如何简化密码找回步骤，同时兼顾安全性，就是一个值得认真思考的问题。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.1 需求描述
+</div>
+
+<div class="flex-even" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250304150015904.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250304150026178.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 各家电商App的登录页面大同小异，要么是用户名与密码组合登录，要么是手机号码与验证码组合登录，若是做好一点的，还会提供找回密码与记住密码等功能。先来看一下登录页面是什么样，因为有两种组合登录方式，所以登录页面也分成两个效果图。如图5－37所示，这是选中密码登录时的界面；如图5－38所示，这是选中验证码登录时的界面。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.1 需求描述
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 从以上两个登录效果图可以看到，密码登录与验证码登录的界面主要存在以下几点区别：
+	- 密码输入框和验证码输入框的左侧标题以及输入框内部的提示语各不相同。
+	- 如果是密码登录，则需要支持找回密码：如果是验证码登录，则需要支持向用户手机发送验证码。
+	- 密码登录可以提供记住密码功能，而验证码的数值每次都不一样，无须也没法记住验证码。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.1 需求描述
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250304150453796.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 对于找回密码功能，一般直接跳转到找回密码页面，在该页面输入和确认新密码，并校验找回密码的合法性（通过短信验证码检查），据此勾勒出密码找回页面的轮廓概貌，如图5－39
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.1 需求描述
+</div>
+
+<div class="flex-even" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250304150606520.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第5章 中级控件/file-20250304150611448.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 在找回密码的操作过程当中，为了更好地增强用户体验，有必要在几个关键节点处提醒用户。比如成功发送验证码之后，要及时提示用户注意查收短信，这里暂且做成提醒对话框的形式，如图 5－40所示。又比如密码登录成功之后，也要告知用户己经修改成功登录，注意继续后面的操作，登录成功的提示弹窗如图5－41所示。
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.2 界面设计
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 用户登录与找回密码界面看似简单，用到的控件却不少。按照之前的界面效果图，大致从上到下，从左到右分布着下列Android控件：
+	- 单选按钮RadioButton：用来区分是密码登录还是验证码登录。
+	- 文本视图TextView：输入框左侧要显示此处应该输入什么信息。
+	－编辑框EditText：用来输入手机号码，密码和验证码。
+	- 复选框CheckBox：用于判断是否记住密码。
+	- 按钮Button：除了＂登录＂按钮，还有＂忘记密码＂和＂获取验证码＂两个按钮。
+	- 线性布局LinearLayout：整体界面从上往下排列，用到了垂直方向的线性布局。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.2 界面设计
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 用户登录与找回密码界面看似简单，用到的控件却不少。按照之前的界面效果图，大致从上到下，从左到右分布着下列Android控件：
+	- 相对布局RelativeLayout：忘记密码的按钮与密码输入框是叠加的，且＂忘记密码＂与上级视图右对齐。
+	- 单选组RadioGroup：密码登录和验证码登录这两个单选按钮，需要放在单选组之中。
+	- 提醒对话框AlertDialog：为了演示方便，获取验证码与登录成功都通过提醒对话框向用户反馈结果。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.2 界面设计
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 另外，由于整个登录模块由登录页面和找回密码页面组成，因此这两个页面之间需要进行数据交互，也就是在页面跳转之时传递参数。譬如，从登录页面跳转到找回密码页面，要携带唯一标识的手机号码作为请求参数，不然密码找回页面不知道要给哪个手机号码修改密码。同时，从找回密码页面回到登录页面，也要将修改之后的新密码作为应答参数传回去，否则登录页面不知道密码被改成什么了。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.3 关键代码
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 11%; height: 85%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 11%; height: 85%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 为了方便读者更好更快地完成登录页面与找回密码页面，下面列举几个重要功能的代码片段。 1、关于自动清空错误的密码
+	- 这里有个细微的用户体验问题：用户会去找回密码，肯定是发现输入的密码不对；那么修改密码后回到登录页面，如果密码框里还是刚才的错误密码，用户只能先清空错误密码，然后才能输入新密码。一个App要想让用户觉得好用，就得急用户之所急，想用户之所想，像刚才那个错误密码的情况，应当由App在返回登录页面时自动清空原来的错误密码。自动清空密码框的操作，放在onActivityResult方法中处理是个办法，但这样有个问题，如果用户直接按返回键回到登录页面，那么onActivityResult方法发现数据为空便不做处理。因此应该这么处理：判断当前是否为返回页面动作，只要是从找回密码页面返回到当前页面，则不管是否携带应答参数，都要自动清空密码输入框。对应的Java代码则为重写登录页面的onRestart方法，在该方法中强制清空密码。这样一来，不管用户是修改密码完成回到登录页面，还是点击返回键回到登录页面，App都会自动清空密码框了
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.3 关键代码
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```Java
+// 从修改密码页面返回登录页面, 要清空密码的输入框
+@Override
+protected void onRestart() {
+    super.onRestart();
+    et_password.setText(""); 
+    // 假设你的 EditText 变量名是 et_password
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 下面是重写onRestart方法之后的代码例子：完整代码见chapter05\src\main\java\com\
+example\chapter05\LoginMainActivity.java
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.3 关键代码
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 2、关于自动隐藏输入法面板
+	- 在输入手机号码或者密码的时候，屏幕下方都会弹出输入法面板，供用户按键输入数字和字母。但是输入法面板往往占据屏幕下方大块空间，很是碍手碍脚，用户输入完 11 位的手机号码时，还得再按一下返回键来关闭输入法面板，接着才能继续输入密码。
+	- 理想的做法是：一旦用户输完 11位手机号码，App就要自动隐藏输入法面板。同理，一旦用户输完6位密码或者6位验证码，App也要自动隐藏输入法面板。要想让App具备这种智能的判断功能，就得给文本编辑框添加监听器，只要当前编辑框输入文本长度达到 11 位或者和 6 位，App就自动隐藏输入法面板。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.3 关键代码
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```Java
+// 定义一个编辑框监听器,在输入文本达到指定长度时自动隐藏输入法软键盘
+private class HideTextWatcher implements TextWatcher {
+    private EditText mView; // 声明一个编辑框对象
+    private int mMaxLength; // 声明一个最大长度变量
+    public HideTextWatcher(EditText v, int maxLength) {
+        super();
+        mView = v;
+        mMaxLength = maxLength;
+    }
+    @Override // 在编辑框的输入文本变化前触发
+    public void beforeTextChanged(CharSequence s, int start, 
+		    int count, int after) {}
+```
+```Java
+    @Override  // 在编辑框的输入文本变化时触发
+    public void onTextChanged(CharSequence s, int start, 
+		    int before, int count) {} // 更正了方法名
+    @Override // 在编辑框的输入文本变化后触发
+    public void afterTextChanged(Editable s) {
+		    String str = s.toString(); // 获得已输入的文本字符串
+        // 输入文本达到11位(如手机号码),或者达到6位(如登录密码)时
+        // 关闭输入法软键盘
+        if ((str.length() == 11 && mMaxLength == 11)
+                || (str.length() == 6 && mMaxLength == 6)) {
+            // 隐藏输入法软键盘
+            ViewUtil.hideOneInputMethod(LoginMainActivity.this, 
+		            mView); // 假设你的工具类是 ViewUtil
+        }
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 下面是实现自动隐藏软键盘的监听器代码例子：完整代码见chapter05\src\main\java\com\
+example\chapter05\LoginMainActivity.java
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.3 关键代码
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 20%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 3．关于密码修改的校验操作
+	- 由于密码对于用户来说是很重要的信息，因此必须认真校验新密码的合法性，务必做到万无一失。具体的密码修改校验可分作下列 4 个步骤：
+		- 新密码和确认输入的新密码都要是6位数字。
+		- 新密码和确认输入的新密码必须保持一致。
+		- 用户输入的验证码必须和系统下发的验证码一致。
+		- 密码修改成功，携带修改后的新密码返回登录页面。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.5.3 关键代码
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```Java
+String passwordFirst = et_password_first.getText().
+		toString(); // 假设变量名是 et_password_first
+String passwordSecond = et_password_second.
+		getText().toString(); // 假设变量名是 et_password_second
+if (passwordFirst.length() < 6 || passwordSecond.length() < 6) {
+    Toast.makeText(this, "请输入正确的新密码", 
+		    Toast.LENGTH_SHORT).show();
+    return;
+}
+if (!passwordFirst.equals(passwordSecond)) {
+    Toast.makeText(this, "两次输入的新密码不一致", 
+		    Toast.LENGTH_SHORT).show();
+    return;
+}
+
+```
+```Java
+if (!et_verifycode.getText().toString().equals(mVerifyCode)) { 
+// 假设变量名是 et_verifycode
+    Toast.makeText(this, "请输入正确的验证码", 
+		    Toast.LENGTH_SHORT).show();
+    return; // 验证码错误也需要 return
+} else {
+    Toast.makeText(this, "密码修改成功", Toast.LENGTH_SHORT).show(); 
+    // show() 方法名小写
+    // 以下把修改好的新密码返回给上一个页面
+    Intent intent = new Intent(); // 创建一个新意图
+    intent.putExtra("new_password", passwordFirst); // 存入新密码
+    setResult(Activity.RESULT_OK, intent); // 携带意图返回上一个页面
+    finish(); // 结束当前的活动页面
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 12%; height: 75%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 根据以上的校验步骤，对应的代码逻辑示例如下：完整代码见chapter05\src\main\java\com\
+example\chapter05\LoginForgetActivity.java
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+5.6 小 结
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 5%; top: 11%; height: 80%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 11%; height: 80%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 本章主要介绍了App开发的中级控件的相关知识，包括：定制简单的图形（图形的基本概念，形状图形，九宫格图片，状态列表图形），操纵几种选择按钮（复选框CheckBox，开关按钮Switch，单选按钮RadioButton），高效地输入文本（编辑框EditText，焦点变更监听器，文本变化监听器），获取对话框的选择结果（提醒对话框AlertDialog，日期对话框DatePickerDialog，时间对话框 TimePickerDialog）。最后设计了一个实战项目＂找回密码＂，在该项目的App编码中用到了前面介绍的大部分控件，从而加深了对所学知识的理解。
+- 通过本章的学习，读者应该能掌握以下 4 种开发技能：
+	- 学会定制几种简单的图形。
+	- 学会操纵常见的选择按钮。
+	- 学会高效且合法地输入文本。
+	- 学会通过对话框获取用户选项。
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="C0归纳总结/C02儿子成长/关于教育/assets/小飞英语/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+# Thanks!
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1080,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":false,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>

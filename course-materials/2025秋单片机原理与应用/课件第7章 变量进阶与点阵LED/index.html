@@ -1,0 +1,2337 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 40%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/Step_by_Step_learning.webp" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 55%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第7章 变量进阶与点阵LED
+</div>
+
+<div class="" style="position: absolute; left: 10%; top: 70%; height: 20%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《单片机原理与应用》<br><br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div>
+
+<aside class="notes"><p>欢迎大家再次来到《单片机原理与应用》的课程，我是你们的张建武老师。</p>
+<p>上一章我们通过关闭位选或段选与中断函数完美解决了数码管的动态显示问题，学会了利用动态显示刷新技术去“骗”过我们的眼睛。</p>
+<p>随着我们对显示需求的提高，例如需要显示汉字、复杂的图形或滚动字幕，数码管显然不够用了。这就需要更复杂的显示设备——点阵LED。</p>
+<p>同时，程序变得越来越复杂，对于单片机有限的内存资源（RAM）的管理就显得尤为关键。因此，本章我们将学习如何通过变量进阶的知识，配合点阵LED的驱动原理，来实现复杂而高效的显示功能。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本次课主要内容
+</div>
+
+<div class="" style="line-height: 2.5; font-size: 45px; position: absolute; left: 5%; top: 20%; height: 65%; width: 44%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 7.1 变量的作用域和存储类别
+- 7.2 认识 LED 点阵
+- 7.3 点阵的图形显示
+- 7.4 点阵的纵向动画显示
+- 7.5 点阵的横向动画显示
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 17%; height: 66%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240923181057870.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>本次课程，我们将具体深入到本章的<strong>核心内容</strong>。请大家看屏幕上的提纲：</p>
+<ul>
+<li><p><strong>第一部分</strong>，我们将学习<strong>7.1 变量的作用域和存储类别</strong>，这是我们进行高效单片机编程的<strong>理论基础</strong>。</p>
+</li>
+<li><p><strong>第二部分</strong>，从<strong>7.2 认识 LED 点阵</strong>开始，直到<strong>7.5 横向动画显示</strong>，我们将会把理论应用于实践，学习如何实现炫酷的<strong>动态显示效果</strong>。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.1 变量的作用域和存储类别
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925141050592.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 55%; top: 20%; height: 50%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **局部变量**
+	- **位置：** 在函数内部。
+	- **范围：** 只在当前函数内有效。
+- **全局变量**
+	- **位置：** 在所有函数外部。
+	- **范围：** 在整个程序中都有效。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 80%; height: 15%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.2; position: absolute; left: 0%; top: 80%; height: 15%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：定义了一个全局变量 `int value = 10;`，又在一个函数内部定义了一个同名的局部变量 `int value = 20;`，那么在这个函数内部，`value` 的值是多少？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，前面我们已经学会了如何编写一些简单的单片机程序。现在，让我们更深入地了解一个重要的概念：<strong>变量的作用域</strong>。简单来说，它决定了我们定义的变量能在程序的哪些地方被使用。</p>
+<h3 id="变量的作用域"><strong>变量的作用域</strong></h3>
+<p>变量的作用域，就是指变量有效的范围。根据作用域的不同，变量可以分为两类：<strong>局部变量</strong>和<strong>全局变量</strong>。</p>
+<p><strong>1. 局部变量</strong></p>
+<ul>
+<li><strong>定义：</strong> 在一个函数内部声明的变量。</li>
+<li><strong>特点：</strong> * 仅在声明它的函数内部有效。<ul>
+<li>函数的形参也属于局部变量。</li>
+</ul>
+</li>
+<li><strong>举例：</strong> 比如这里的 int a, b; 只在 <code>main</code> 函数里声明，所以它只能在 <code>main</code> 函数内部使用。如果我们想在中断函数里访问它，就会报错。</li>
+</ul>
+<p><strong>2. 全局变量</strong></p>
+<ul>
+<li><strong>定义：</strong> 在所有函数外部声明的变量。</li>
+<li><strong>特点：</strong> * 它的作用范围从声明位置开始，直到程序结束。<ul>
+<li>程序中的所有函数都可以访问和修改这个变量。</li>
+</ul>
+</li>
+<li><strong>举例：</strong> 我们这里的 int age，就属于全局变量，因此它们可以被 <code>main</code> 函数和中断函数共同使用。为了编程规范，我们通常把全局变量声明在所有函数的最前面。</li>
+</ul>
+<p>问题：<strong>如果在一个程序中，我定义了一个全局变量 <code>int value = 10;</code>，又在一个函数内部定义了一个同名的局部变量 <code>int value = 20;</code>，那么在这个函数内部，<code>value</code> 的值是多少？</strong></p>
+<p><strong>答案：</strong> 在这个函数内部，<code>value</code> 的值是 <strong>20</strong>。这是因为在局部变量的作用域内，它会“遮蔽”同名的全局变量，使局部变量优先被使用。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.1 变量的作用域和存储类别：全局变量的缺点
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925141050592.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 55%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **降低代码独立性：** 一个函数修改全局变量，会影响所有其他函数。
+- **难以复用：** 依赖全局变量的函数，不能单独拿去其他地方使用。
+- **代码难懂：** 无法轻易追踪变量的值，代码逻辑变得混乱。
+- **浪费内存：** 内存被永久占用，直到程序运行结束。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么我们不建议将全局变量和局部变量命名相同？
+</div>
+</div>
+
+<aside class="notes"><p>相信很多初学者会觉得全局变量特别方便，因为它可以在任何地方被使用。但实际上，这种方便的背后隐藏着许多潜在的“坑”。</p>
+<p>过多地使用全局变量会带来以下几个主要问题：</p>
+<ol>
+<li><strong>降低独立性：</strong> 全局变量让不同的函数之间产生了紧密的联系。当一个函数修改了全局变量的值，可能会无意中影响到其他函数的执行结果，使得程序难以维护和调试。</li>
+<li><strong>通用性差：</strong> 如果一个函数依赖于特定的全局变量，那么这个函数就很难被“拿来即用”，在其他程序中重复使用时，你需要连同这个全局变量一起复制，这降低了函数的通用性。</li>
+<li><strong>可读性下降：</strong> 在一个复杂的程序中，任何函数都可能在任何时间修改全局变量的值。这使得我们很难追踪变量在某个特定时刻的具体数值，降低了代码的清晰度和可读性。</li>
+<li><strong>占用内存：</strong> 全局变量会永久占据内存空间，直到程序运行结束才释放。这对于内存资源有限的单片机来说，是一种不必要的浪费。</li>
+</ol>
+<p>因此，我们的编程原则是：<strong>能用局部变量，就不要用全局变量</strong>。虽然局部变量的使用范围有限，但它能让你的代码更健壮、更易于维护和复用。</p>
+<p><strong>为什么我们不建议将全局变量和局部变量命名相同？</strong></p>
+<p><strong>答案：</strong> 因为在一个函数内部，如果局部变量和全局变量同名，局部变量会“遮蔽”全局变量。这很容易让程序员混淆，误以为自己访问的是全局变量，但实际上操作的是局部变量，从而导致难以发现的逻辑错误。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.1 变量的作用域和存储类别：代码示例
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+unsigned char LedBuff[6] = {
+//数码管显示缓冲区，初值 0xFF 确保启动时都不亮
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+};
+void main(){
+	unsigned char i = 0; //  动态扫描的索引
+	unsigned int cnt = 0; //记录T0中断次数
+	unsigned long sec = 0; //记录经过的秒数
+	ENLED = 0; //使能U3，选择控制数码管
+	ADDR3 = 1; //因为需要动态改变ADDR0-2的值，所以不需要再初始化
+	TMOD = 0x01; //设置T0为模式1
+	TH0 = 0xFC; //为T0赋初值0xFC67，定时1ms
+	TL0 = 0x67;
+	TR0 = 1;  //启动T0
+}
+```
+</div>
+
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **全局变量**
+	- **位置：** 函数外部
+	- **示例：** `unsigned char LedBuff[6]`。
+	- **作用域：** 整个程序，从声明位置到程序结束。任何函数都可以访问和修改。
+- **局部变量**
+	- **位置：** 函数内部
+	- **示例：** `unsigned char i;`、`unsigned int cnt;`、`unsigned long sec;`。
+	- **作用域：** 仅限于声明它的函数内部，出了函数作用域，变量将失效。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我想在定时器中断函数中，让秒数 sec 每一秒加1，我可以直接在中断函数中修改它吗？为什么？
+</div>
+</div>
+
+<aside class="notes"><p>以上节课我们编写的数码管的示例为例，<code>main</code> 函数之外的部分，这里定义了一个名为 <code>LedBuff</code> 的数组：</p>
+<ul>
+<li><code>unsigned char LedBuff[6] = { ... };</code><ul>
+<li>这个数组是在所有函数<strong>外部</strong>定义的，因此它是一个<strong>全局变量</strong>。</li>
+<li><strong>作用域：</strong> 它的作用范围从声明位置开始，直到整个程序结束。这意味着 <code>LedBuff</code> 可以在程序中的任何地方（包括 <code>main</code> 函数、中断函数或其他自定义函数）被访问和修改。</li>
+</ul>
+</li>
+</ul>
+<p>接下来，我们看 <code>main</code> 函数内部定义的三个变量：</p>
+<ul>
+<li><code>unsigned char i = 0;</code></li>
+<li><code>unsigned int cnt = 0;</code></li>
+<li><code>unsigned long sec = 0;</code><ul>
+<li>这三个变量都是在 <code>main</code> 函数<strong>内部</strong>声明的，因此它们都是<strong>局部变量</strong>。</li>
+<li><strong>作用域：</strong> 它们只在 <code>main</code> 函数内部有效。如果我们在其他函数，比如定时器中断函数中，尝试直接使用或修改 <code>i</code>、<code>cnt</code> 或 <code>sec</code>，程序就会报错。</li>
+</ul>
+</li>
+</ul>
+<p><strong>如果我想在定时器中断函数中，让秒数 <code>sec</code> 每一秒加1，我可以直接在中断函数中修改它吗？为什么？</strong></p>
+<p><strong>答案：</strong> <strong>不能。</strong> 因为 <code>sec</code> 是一个<strong>局部变量</strong>，它的作用域仅限于 <code>main</code> 函数。要实现在中断函数中修改 <code>sec</code> 的值，需要将 <code>sec</code> 声明为<strong>全局变量</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.1 变量的作用域和存储类别：静态局部变量
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20250917153723877.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **定义**：在局部变量前加上 `static` 关键字。
+- **特点**：
+    - 只在程序运行期间赋一次初值。
+    - 第一次调用函数时，取初始值。
+    - 之后每次调用，保留上次函数执行结束后的值。
+- **作用**：
+    - 可用于统计函数调用次数。
+    - 在函数内部保存上一次的状态。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+如果我们想用一个局部变量来统计某个函数被调用了多少次，应该使用普通局部变量，还是静态局部变量
+</div>
+</div>
+
+<aside class="notes"><p>前面我们讲到全局变量的生命周期贯穿整个程序，而普通的局部变量则在函数调用时创建，在函数执行结束后自动释放。为了<strong>节省内存</strong>，我们通常推荐优先使用局部变量。</p>
+<p>但是，除了全局变量是静态的，还有一种特殊的局部变量也具有静态特性——那就是<strong>静态局部变量</strong>。</p>
+<p>当我们给局部变量加上 <code>static</code> 这个关键字时，它就变成了一个静态局部变量。它有一个非常重要的特性：<strong>在它的整个生命周期中，只会赋一次初始值。</strong></p>
+<ul>
+<li>第一次调用该函数时，它的值是你在定义时给定的那个初始值。</li>
+<li>之后每一次再调用这个函数，它的值都会是<strong>上一次函数执行结束后的值</strong>。它会像一个“记忆器”一样，保持前一次的执行结果。</li>
+</ul>
+<p>这种特性让静态局部变量在某些情况下非常有用，比如你需要统计一个函数被调用了多少次，或者需要在一个函数内保存上一次的状态。</p>
+<p>问题：请大家思考一下，如果我们想用一个局部变量来统计某个函数被调用了多少次，应该使用普通局部变量，还是静态局部变量？为什么？</p>
+<p><strong>答案：</strong> 我们应该使用<strong>静态局部变量</strong>。</p>
+<p>因为普通局部变量在函数每次调用结束后都会被销毁，下次调用时又会重新创建并初始化，无法保留上一次的计数结果。而静态局部变量的值会保留下来，每次调用函数时，我们只需要对它进行加一操作，就能准确地统计出函数的调用次数。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.1 变量的作用域和存储类别：静态局部变量
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20250917153723877.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **普通局部变量**
+    - **存储位置**：**栈**（Stack）
+    - **生命周期**：函数调用时创建，函数结束时销毁。
+- **静态局部变量**
+	- **关键字**：在变量前加 `static`。
+	- **存储位置**：**静态常量区**。
+	- **生命周期**：从程序启动到程序结束。
+	- **初始化**：只在程序第一次执行到定义时进行一次。
+	- **作用域**：保持不变，仍然仅限于当前函数。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么静态局部变量只会在第一次被定义时进行初始化，而不是每次函数调用时都重新初始化呢？
+</div>
+</div>
+
+<aside class="notes"><p>我们知道，<strong>局部变量</strong>是定义在函数内部的，它的<strong>作用域</strong>仅限于这个函数，一旦函数执行结束，局部变量就会失效。</p>
+<p>这是因为局部变量通常存储在<strong>栈（Stack）</strong>上。当函数被调用时，系统会为它开辟一个栈帧，局部变量就在这个栈帧上分配空间。函数执行完毕，这个栈帧就会被销毁，内存空间也随之被系统回收。</p>
+<p>但是，当我们使用 <code>static</code> 关键字来修饰局部变量时，会发生一些有趣的变化：</p>
+<ul>
+<li><strong>存储区域的改变</strong>：它不再存储在栈上，而是被分配到<strong>静态常量区</strong>。</li>
+<li><strong>生命周期的延长</strong>：它的生命周期从“局部”变为了“全局”。也就是说，它只在程序第一次执行到定义时进行初始化，并会一直存在，直到整个程序运行结束才被释放。</li>
+<li><strong>作用域的保持</strong>：尽管生命周期延长了，但它的<strong>作用域</strong>依然保持不变，仍然只在它所在的函数内部有效。</li>
+</ul>
+<p>因此，<code>static</code> 就像一个“长生不老药”，让局部变量拥有了全局的生命，同时又保留了局部的作用域，既能避免全局变量可能带来的命名冲突问题，又能让函数在不同次调用之间保持一些“记忆”。</p>
+<p>问：为什么静态局部变量只会在第一次被定义时进行初始化，而不是每次函数调用时都重新初始化呢？</p>
+<p>答案：这是因为它的存储区域已经从栈变为了静态常量区。静态常量区的变量在程序开始运行之前就已经分配了内存并进行了初始化。在后续的函数调用中，程序不会再次为它分配内存或重新初始化，而是直接使用该内存地址上保存的旧值，这正是它能够保持上一次执行结果的关键所在。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.1 变量的作用域和存储类别：从全局变量到静态局部变量
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+unsigned char i = 0; //  动态扫描的索引
+unsigned int cnt = 0; //记录T0中断次数
+unsigned char flag1s = 0; //1秒定时标志
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **问题**：过去，我们用全局变量来保存数码管例程中的 `i` 和 `cnt` 的状态。
+- **缺点**：全局变量暴露，代码不安全。
+- **优化**：将 `i` 和 `cnt` 改为**静态局部变量**。
+- **结果**：变量值能被记住，但只在函数内部可见。
+- **好处**：代码更安全，更易管理。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>大家还记得我们第六章最后的那个例程吗？我们用它来控制数码管动态扫描和显示。当时，为了让控制数码管的索引变量 <code>i</code> 和实现秒定时的计数变量 <code>cnt</code> 在函数调用之间保持状态，我们把它们都定义成了<strong>全局变量</strong>。</p>
+<p>现在我们知道，这种方法虽然能实现功能，但它让这些变量暴露在整个程序中，增加了代码耦合度，也可能导致意想不到的修改。</p>
+<p>今天，我们有了更好的选择：<strong>静态局部变量</strong>。</p>
+<p>我们可以把当时定义的全局变量 <code>i</code> 和 <code>cnt</code>，改为函数内部的<strong>静态局部变量</strong>。这样，它们既能保留上一次函数调用的值，又把它们的作用域限制在了函数内部，避免了对全局命名空间的污染，让代码更安全、更模块化。</p>
+<p>这种代码优化是单片机编程中一个非常实用的技巧，能帮助我们写出更健壮、更易于维护的程序。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.1 变量的作用域和存储类别：从全局变量到静态局部变量
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 12%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+unsigned char code LedChar [ ] = {
+	0xC0, 0xF9, 0xA4, 0xB0,
+	0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83,
+	0xC6, 0xA1, 0x86, 0x8E
+};
+unsigned char LedBuff[6] = {
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+};
+```
+
+```C
+unsigned char flag1s = 0; //1秒定时标志
+void main()
+{
+	unsigned long sec = 0; //记录经过的秒数
+	
+	EA = 1; //使能总中断
+	ENLED = 0; //使能U3，选择控制数码管
+	ADDR3 = 1; //因为需要动态改变ADDR0-2的值，所以不需要再初始化
+	TMOD = 0x01; //设置T0为模式1
+	TH0 = 0xFC; //为T0赋初值0xFC67，定时1ms
+	TL0 = 0x67;
+	ET0 = 1;  //使能T0中断
+	TR0 = 1;  //启动T0
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 11%; height: 40%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+	while (1)
+	{
+		if (flag1s == 1)  //判断T0是否溢出
+		{
+			flag1s = 0;   //1秒定时标志清零
+			sec++;  //秒计数自加1
+			LedBuff[0] = LedChar[sec%10];
+			LedBuff[1] = LedChar[sec/10%10];
+			LedBuff[2] = LedChar[sec/100%10];
+			LedBuff[3] = LedChar[sec/1000%10];
+			LedBuff[4] = LedChar[sec/10000%10];
+			LedBuff[5] = LedChar[sec/100000%10];
+		}
+	}
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 46%; height: 40%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 定义引脚和数据。
+- 启动定时器，设置好1毫秒的“滴答声”。
+- 设定一个“闹钟”变量 `flag1s`。
+- `while` 循环不断检查“闹钟”。 “闹钟”一响（`flag1s` 变为1），就说明1秒到了。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么这个程序中需要使用一个 `flag1s` 的全局变量，而不是直接在 `while` 循环中等待定时器溢出？
+</div>
+</div>
+
+<aside class="notes"><p>大家请看这段代码，它是一个基于 51 单片机的定时器程序。</p>
+<p>我们先看代码的开头部分：</p>
+<ul>
+<li>我们定义了一些引脚变量，比如 <code>ADDR0-3</code> 和 <code>ENLED</code>，用于控制数码管。</li>
+<li><strong><code>LedChar</code></strong> 是一个 <code>code</code> 类型的数组，存储了 0 到 15 的数码管段码，<code>code</code> 意味着这些数据被存放在<strong>程序存储器</strong>（ROM）中，节省了宝贵的 RAM 空间。</li>
+<li><strong><code>LedBuff</code></strong> 是一个用于存储数码管显示内容的缓冲区。</li>
+<li><strong><code>flag1s</code></strong> 是一个全局变量，用作<strong>1 秒定时标志</strong>，它将在中断服务程序中被修改。</li>
+<li>在 <code>main</code> 函数中，我们初始化了定时器 <code>T0</code>，并开启了中断。我们将 <code>T0</code> 配置为模式 1，并赋初值使其每 1 毫秒溢出一次。</li>
+</ul>
+<p>接下来是程序的核心逻辑：</p>
+<ul>
+<li>在 <code>while(1)</code> 循环中，我们不断地检测 <code>flag1s</code> 标志。</li>
+<li>当定时器中断服务程序将 <code>flag1s</code> 置为 1 时，表明已经过去了 1 秒。</li>
+<li>我们清零 <code>flag1s</code>，然后让秒数计数变量 <code>sec</code> 自加 1。</li>
+<li>随后，我们通过一系列取模 (<code>%</code>) 和除法 (<code>/</code>) 运算，将 <code>sec</code> 的值分解成个、十、百等位，并根据 <code>LedChar</code> 数组获取对应的数码管段码，存入 <code>LedBuff</code> 缓冲区中。</li>
+</ul>
+<p><strong>提问：</strong></p>
+<p>请大家思考一下，为什么这个程序中需要使用一个 <code>flag1s</code> 的全局变量，而不是直接在 <code>while</code> 循环中等待定时器溢出？</p>
+<p><strong>答案：</strong></p>
+<p>这是因为定时器溢出是一个<strong>中断事件</strong>，它发生在后台，并且与主程序<strong>异步</strong>。主循环无法直接“感知”到中断的发生。因此，我们使用一个全局标志变量 <code>flag1s</code> 来作为主程序和中断服务程序之间的“通信桥梁”。当定时器在后台溢出时，中断服务程序会修改这个标志，主程序通过检查这个标志来得知“时间到了”，从而执行相应的逻辑，实现了<strong>异步处理</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.1 变量的作用域和存储类别：定时器中断服务函数 (`InterruptTimer0`)
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 13%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* 定时器0中断服务函数 */
+void InterruptTimer0() interrupt 1
+{
+	static unsigned char i = 0; //动态扫描索引
+	static unsigned int cnt = 0; //记录 T0 中断次数
+	TH0 = 0xFC; //重新加载初值
+	TL0 = 0x67;
+	cnt++; //中断次数计数值加1
+	if (cnt >= 1000) //中断1000次即1秒
+	{
+		cnt = 0;  //清零计数值以重新开始下1秒计时
+		flag1s = 1; //设置1秒定时标志为1
+	}
+```
+```C
+//以下代码完成数码管动态扫描刷新
+	P0 = 0xFF;  // 显示消隐
+	switch (i)   
+	{
+		case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=LedBuff[0]; break;
+		case 1: ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=LedBuff[1]; break;
+		case 2: ADDR2=0; ADDR1=1; ADDR0=0; i++; P0=LedBuff[2]; break;
+		case 3: ADDR2=0; ADDR1=1; ADDR0=1; i++; P0=LedBuff[3]; break;
+		case 4: ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=LedBuff[4]; break;
+		case 5: ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=LedBuff[5]; break;
+		default: break;
+	}
+}
+
+```
+</div>
+
+<div class="" style="line-height: 1.7; position: absolute; left: 55%; top: 13%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **关键变量**：
+	- `static i`：记住数码管扫到第几位。
+	- `static cnt`：累加计时，每1000次（1秒）就清零。
+- **做了什么**：
+	1. **继续计时**：重新设置定时器。
+	2. **判断时间**：`cnt` 到1000，就通知主程序“1秒到了”。
+	3. **动态显示**：
+	    - 消除残影。
+	    - 按照 `i` 的值，依次显示数码管。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：在中断服务函数里使用 `static` 关键字来修饰 `i` 和 `cnt`？如果不用 `static`，会有什么问题？
+</div>
+</div>
+
+<aside class="notes"><p>现在让我们把目光转向中断服务函数。这个函数就是实现所有“幕后工作”的关键。</p>
+<h3 id="定时器0中断服务函数">定时器0中断服务函数</h3>
+<p>这个中断服务函数主要做了两件重要的事情：<strong>一秒定时</strong>和<strong>数码管动态扫描</strong>。</p>
+<p>我们先看最开始的部分：</p>
+<ul>
+<li>**<code>static unsigned char i = 0;</code>**：<code>i</code> 是一个静态局部变量，作为数码管扫描的索引。它被定义为静态，是因为它需要记住上一次扫描的位置，以便下次中断时能接着往下扫描。</li>
+<li>**<code>static unsigned int cnt = 0;</code>**：<code>cnt</code> 同样是静态局部变量，用来记录定时器的中断次数。因为我们把定时器设置为每1毫秒溢出一次，所以当 <code>cnt</code> 达到 1000 时，就正好过去了 1 秒。</li>
+<li>接着，我们重新给定时器 <code>T0</code> 赋初值，让它继续计时。</li>
+<li>然后 <code>cnt</code> 自加1。当 <code>cnt</code> 等于 1000 时，我们将其清零，同时将<strong>全局标志变量</strong> <code>flag1s</code> 置为1，向主程序发出“一秒已到”的信号。</li>
+</ul>
+<p>接下来看数码管的动态扫描：</p>
+<ul>
+<li>我们首先执行 <code>P0 = 0xFF;</code>，这是一种<strong>显示消隐</strong>操作，避免在切换数码管时出现残影。</li>
+<li>然后，我们使用 <code>switch</code> 语句，根据静态局部变量 <code>i</code> 的值，依次点亮不同的数码管，并显示 <code>LedBuff</code> 中对应位置的数据。</li>
+<li>每次显示一个数码管后，<code>i</code> 都会自加，直到显示完最后一个数码管后，<code>i</code> 又被重置为0，进入下一次循环扫描。</li>
+</ul>
+<p><strong>提问：</strong>
+大家想一想，为什么在这个中断服务函数里，我们需要使用 <code>static</code> 关键字来修饰 <code>i</code> 和 <code>cnt</code>？如果不用 <code>static</code>，会有什么问题？</p>
+<p><strong>答案：</strong>
+如果不用 <code>static</code>，<code>i</code> 和 <code>cnt</code> 都会变成普通的局部变量。每次进入中断服务函数，它们都会被重新创建并初始化为0。这样一来，它们无法保存上一次的值，<code>i</code> 无法实现动态扫描的索引递增，<code>cnt</code> 也无法累积到1000次，这会导致我们的数码管动态显示和秒定时功能都无法正常工作。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.2 认识 LED 点阵
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20250918104142191.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **特点**：
+    - 由密集的 LED 小灯组成。
+    - 显示面积灵活，亮度高，寿命长。
+    - 应用广泛。
+- **基本结构**：
+    - 一个数码管 = 8 个 LED。
+    - 一个 8x8 点阵 = 64 个 LED。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：一个 16x16 的点阵显示屏，是由多少个 LED 小灯组成的？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，前面我们学习了数码管显示，现在我们来认识一种更高级、更灵活的显示器件——<strong>LED 点阵显示屏</strong>。</p>
+<p><strong>点阵 LED 的基本概念</strong></p>
+<p><strong>点阵 LED 显示屏</strong>是一种现代电子媒体，它由密集的 LED 小灯组成，可以灵活地拼接，具有高亮度、长寿命和实时性等优点，应用非常广泛。</p>
+<p>我们可以把数码管看作是由 8 个 LED 组成的。同理，一个 8x8 的点阵，就是由 64 个 LED 小灯组成的。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.2 认识 LED 点阵：内部结构原理
+</div>
+
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20250918110254105.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心方法**：**行列扫描法**。
+- **基本结构** (以 8x8 共阳极点阵为例)：
+    - **行**：8个引脚连接每行LED的**阳极**。
+    - **列**：8个引脚连接每列LED的**阴极**。
+- **点亮一个 LED**：
+    1. 将对应行的**阳极**设置为**高电平**。
+    2. 将对应列的**阴极**设置为**低电平**。
+    - 这样，电流从阳极流向阴极，LED 被点亮。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果要点亮第一行的 1、3 列小灯，该如何做？
+</div>
+</div>
+
+<aside class="notes"><h3 id="点阵-led-的点亮原理：行列扫描法">点阵 LED 的点亮原理：行列扫描法</h3>
+<p>点亮 LED 点阵的原理非常简单，就是我们熟悉的<strong>行列扫描法</strong>。</p>
+<p>请看这个 8x8 点阵的示意图。在共阳极的点阵中：</p>
+<ul>
+<li>左侧的 8 个引脚连接着每一行 LED 的<strong>阳极</strong>。</li>
+<li>上侧的 8 个引脚连接着每一列 LED 的<strong>阴极</strong>。</li>
+</ul>
+<p>要点亮任意一个小灯，我们只需要为它对应的行和列提供正确的电压。例如，图中左上角的 LED，它的阳极接在 9 脚，阴极接在 13 脚。如果我们把 9 脚设置为<strong>高电平</strong>，同时把 13 脚设置为<strong>低电平</strong>，电流就会流过小灯，把它点亮。</p>
+<p>这种通过控制特定行列引脚来点亮单个 LED 的方法，是实现复杂图形和字符显示的基础。</p>
+<p>问：如果要点亮第一行的 1、3 列小灯，该如何做？
+答：第一行对应的<strong>阳极</strong>引脚设置为<strong>高电平</strong>，将第 1、3 列对应的<strong>阴极</strong>引脚设置为<strong>低电平</strong>，而将其他所有列的阴极引脚保持在<strong>高电平</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.2 认识 LED 点阵：硬件连接
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 46%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20250918113757224.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 46%; top: 15%; height: 65%; width: 54%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **行控制**：
+    - 点阵的 8 个**行引脚** → 连接到 **74HC138** 译码器的 Y0-Y7 输出。
+    - 74HC138 负责**行选择**，用3个输入控制8行中的任意一行。
+- **列控制**：
+    - 点阵的 8 个**列引脚** → 直接连接到单片机的 **P0 口**
+    - P0 口负责**列数据**，用一个字节的数据控制一行的8个LED的亮灭。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我们想点亮第一行的所有灯，具体如何设置 74HC138 的输入端和 P0 口
+</div>
+</div>
+
+<aside class="notes"><p>好的，同学们，既然我们已经了解了点阵 LED 的行列扫描原理，现在就让我们来看看如何用程序来具体实现它。</p>
+<h3 id="点阵-led-的硬件连接与程序控制">点阵 LED 的硬件连接与程序控制</h3>
+<p>为了控制 8x8 点阵，我们需要同时控制它的行和列。在我们的硬件连接中，是这样实现的：</p>
+<ul>
+<li><strong>左侧的 8 个行引脚</strong>，我们把它连接到 <strong>74HC138</strong> 译码器的 <strong>Y0 到 Y7</strong> 输出端。</li>
+<li><strong>上侧的 8 个列引脚</strong>，则直接连接到我们单片机的 <strong>P0 口</strong>。</li>
+</ul>
+<p><strong>为什么要这么连接呢？</strong></p>
+<p>这是因为，74HC138 是一个<strong>3-8译码器</strong>。它能用 3 个输入（通常是单片机的几个引脚），来控制 8 个输出中的一个变为低电平。在这里，我们用它来控制点阵的<strong>行选</strong>。通过改变这 3 个输入引脚的状态，我们就能激活<strong>8行中的任意一行</strong>。</p>
+<p>而 P0 口呢，我们用它来控制<strong>8列的显示数据</strong>。P0 是一个 8 位的端口，正好对应点阵的 8 列。我们可以向 P0 口写入一个字节的数据，比如 <code>0xFE</code>，来决定这一行中哪一个灯是亮的。</p>
+<p><strong>提问：</strong></p>
+<p>请大家思考一下，如果我们想点亮第一行的所有灯，应该如何操作？具体需要设置 74HC138 的输入端和 P0 口为什么值？</p>
+<p><strong>答案：</strong></p>
+<ol>
+<li><strong>行控制</strong>：要选择第一行（对应 74HC138 的 Y0 输出），我们需要将 74HC138 的三个输入引脚设置为 <code>000</code>。这样，Y0 引脚就会被选中并输出低电平（假设是低电平有效）。</li>
+<li><strong>列控制</strong>：要点亮该行的所有灯，我们需要将所有列都置为低电平（因为点阵是共阳极的），所以需要向 P0 口写入**<code>0x00</code>**。</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.2 认识 LED 点阵：点亮一盏 
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+sbit LED = P0^0;
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+```
+```C
+void main ()
+{
+	ENLED = 0; 
+	ADDR3 = 0;
+	ADDR2 = 0;
+	ADDR1 = 0;
+	ADDR0 = 0;
+	LED = 0; // 向P0.0写入0来点亮左上角的一个点
+	while(1);
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **目标**：点亮点阵左上角一个点。
+- **硬件定义**：
+    - **行控制**：`ADDR0` 到 `ADDR3` 和 `ENLED` 控制 74HC138 译码器。
+    - **列控制**：`LED` (`P0.0`) 控制第一列。
+- **程序步骤**：
+    1. `ENLED = 0;`：**使能** 74HC138 译码器。
+    2. `ADDR3-0 = 0000;`：**选择第一行** (`Y0` 输出被选中并拉低)。
+    3. `LED = 0;`：**点亮第一列**（将 `P0.0` 拉低）。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我只想点亮点阵左上角第二行、第一列的灯，那么在代码中我应该如何修改 ADDR 的值？
+</div>
+</div>
+
+<aside class="notes"><p>我们来看一个非常简单的点阵 LED 控制程序，它能帮助我们更直观地理解刚刚讲的<strong>行列扫描法</strong>。</p>
+<p>大家看这段代码，它实现了点亮点阵左上角一个点的功能。</p>
+<p>首先是硬件定义部分：</p>
+<ul>
+<li>我们定义了 <code>LED</code> 变量，它指向 <code>P0.0</code> 口，用来控制第一列的显示数据。</li>
+<li><code>ADDR0</code> 到 <code>ADDR3</code> 和 <code>ENLED</code> 则用来控制 74HC138 译码器，进而控制点阵的行。</li>
+</ul>
+<p>接着看主函数 <code>main()</code> 的操作：</p>
+<ol>
+<li>**<code>ENLED = 0;</code>**：首先使能 74HC138，让它可以正常工作。</li>
+<li><strong><code>ADDR3 = 0; ADDR2 = 0; ADDR1 = 0; ADDR0 = 0;</code><strong>：这四行代码非常关键。<code>ADDR0</code> 到 <code>ADDR3</code> 决定了 74HC138 的输出。当它们都为 0 时，74HC138 的</strong><code>Y0</code></strong> 输出（也就是点阵的第一行）会被选中并输出低电平（假设是低电平有效）。</li>
+<li>**<code>LED = 0;</code>**：<code>LED</code> 指向 <code>P0.0</code>，也就是点阵的第一列。我们将 <code>P0.0</code> 设置为 0。因为点阵是共阳极的，列引脚为低电平时 LED 才会亮。</li>
+</ol>
+<p>结合以上三步，我们选择<strong>第一行</strong>，并让<strong>第一列</strong>导通，所以左上角那个 LED 灯就会被点亮。</p>
+<p><strong>提问：</strong></p>
+<p>如果我只想点亮点阵左上角<strong>第二行</strong>、<strong>第一列</strong>的灯，那么在代码中我应该如何修改 <code>ADDR</code> 的值？</p>
+<p><strong>答案：</strong></p>
+<p>要点亮第二行，我们需要让 74HC138 的 <code>Y1</code> 输出被选中。要做到这一点，我们需要将它的输入引脚设置为二进制的 <code>0001</code>。所以，你需要修改代码为：<code>ADDR3 = 0; ADDR2 = 0; ADDR1 = 0; ADDR0 = 1;</code>。而 <code>LED = 0;</code> 这句代码保持不变，因为它控制的是第一列。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.2 认识 LED 点阵：点亮一行
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+```
+```C
+void main ()
+{
+	ENLED = 0; 
+	ADDR3 = 0;
+	ADDR2 = 0;
+	ADDR1 = 0;
+	ADDR0 = 0;
+	P0 = 0x00; // 向P0写入0来点亮一行
+	while(1);
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **目标**：点亮 8x8 点阵的第一行所有灯。
+- **控制方法**：
+    - **行选择**：通过 `ADDR0`-`ADDR3` 控制 `74HC138`。
+    - **列数据**：通过 `P0` 端口。
+- **步骤**：
+	1. `ENLED = 0;`：**使能** `74HC138`。
+	2. `ADDR3-0 = 0000;`：**选择第一行**（`Y0` 对应）。
+	3. `P0 = 0x00;`：**点亮所有列**（因为 `0x00` 将所有8个引脚拉低）。
+</div>
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我只想点亮第一行的**第 1、2、3 列**，应该如何修改 `P0 = 0x00;` 这行代码？
+</div>
+</div>
+
+<aside class="notes"><p>这个例子比上一个稍微复杂一点，但原理是完全相同的，它实现了点亮<strong>点阵第一行所有灯</strong>的功能。</p>
+<p>首先是硬件定义部分，这部分和刚才的代码一样，我们定义了 <code>ADDR</code> 和 <code>ENLED</code> 引脚来控制 74HC138 译码器，进而控制点阵的行。</p>
+<p>接着看 <code>main()</code> 函数：</p>
+<ol>
+<li>**<code>ENLED = 0;</code>**：首先使能 74HC138，让它能够正常工作。</li>
+<li><strong><code>ADDR3 = 0; ADDR2 = 0; ADDR1 = 0; ADDR0 = 0;</code><strong>：这四行代码是用来</strong>选择行</strong>的。当 <code>ADDR</code> 这四个引脚都设置为 0 时，74HC138 的<strong>Y0</strong> 输出端会被选中，也就是我们点阵的<strong>第一行</strong>。</li>
+<li><strong><code>P0 = 0x00;</code><strong>：这行代码非常关键。</strong>P0</strong> 端口连接着点阵的 8 个列引脚。我们向 P0 口写入 <code>0x00</code>。在二进制中，<code>0x00</code> 就是 <code>00000000</code>。由于点阵是共阳极的，列引脚为<strong>低电平</strong>时 LED 才会亮。所以，<code>P0 = 0x00</code> 意味着我们将<strong>所有 8 个列都拉低</strong>。</li>
+</ol>
+<p>结合这三步，我们选择了第一行，并让第一行的所有列都导通，所以点阵的<strong>第一行所有灯</strong>都会被点亮。</p>
+<p><strong>提问：</strong></p>
+<p>如果我只想点亮第一行的<strong>第 1、2、3 列</strong>，应该如何修改 <code>P0 = 0x00;</code> 这行代码？</p>
+<p><strong>答案：</strong></p>
+<p>要让前三列为低电平，而其他列为高电平，需要写入的值是**<code>0b11111000</code><strong>，也就是</strong><code>0xF8</code>**。所以，你需要将代码修改为 <code>P0 = 0xF8;</code>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.2 认识 LED 点阵：态显示点亮全部点阵
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+```
+```C
+void main ()
+{
+	EA = 1; //使能总中断
+	ENLED = 0;  //使能38译码器
+	
+	ADDR3 = 0; 
+	TMOD = 0x01; //设置T0为模式1
+	TH0 = 0xFC; //为T0赋初值0xFC67，定时1ms
+	TL0 = 0x67;
+	ET0 = 1; //使能T0中断
+	TR0 = 1; // 启动T0
+	while (1); //程序停在这里，等待定时器中断
+}
+```
+</div>
+
+<div class="" style="position: absolute; left: 42%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* 定时器0中断服务函数*/
+
+void InterruptTimer0 () interrupt 1
+{
+	static unsigned char i = 0; //动态扫描的索引
+	TH0 = 0xFC; //重新加载初值
+	TL0 = 0x67
+```
+```C
+	//以下代码完成LED点阵动态扫描刷新
+	P0 = 0xFF;  // 显示消隐
+	switch (i)   
+	{
+		case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=0x00; break;
+		case 1: ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=0x00; break;
+		case 2: ADDR2=0; ADDR1=1; ADDR0=0; i++; P0=0x00; break;
+		case 3: ADDR2=0; ADDR1=1; ADDR0=1; i++; P0=0x00; break;
+		case 4: ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=0x00; break;
+		case 5: ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=0x00; break;
+		default: break;
+	}
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问 ：`P0 = 0x00;` 为什么能点亮整行，而 `P0 = 0xFF;` 却能实现显示消隐？
+</div>
+</div>
+
+<aside class="notes"><p>好的，同学们，现在让我们将之前学到的知识结合起来，看一个完整的点阵 LED 动态扫描程序。这个程序让点阵屏幕逐行点亮，形成一种“全屏闪烁”的效果。</p>
+<h3 id="点阵-led-动态扫描程序">点阵 LED 动态扫描程序</h3>
+<p>大家看这段代码，它由主函数和中断服务函数两部分组成，完美地展示了“后台计时+前台显示”的工作模式。</p>
+<p><strong>首先是主函数 <code>main()</code>：</strong></p>
+<ul>
+<li>我们在这里完成了<strong>硬件的初始化</strong>。</li>
+<li><code>ENLED = 0;</code> 和 <code>ADDR3 = 0;</code> 确保了 74HC138 译码器能正常工作，并控制行选。</li>
+<li>接着，我们配置了<strong>定时器 T0</strong>。我们把它设置为模式1，并赋初值使其<strong>每 1 毫秒</strong>溢出一次。</li>
+<li>最后，我们启动了定时器和总中断。<code>while(1)</code> 循环让程序停在这里，进入一个空循环，等待定时器中断发生。</li>
+</ul>
+<p><strong>然后是定时器0中断服务函数 <code>InterruptTimer0()</code>：</strong></p>
+<ul>
+<li><strong><code>static unsigned char i = 0;</code><strong>：这是一个</strong>静态局部变量</strong>，它作为动态扫描的索引。每次中断，它的值都会递增，以此来记住当前扫描到了第几行。</li>
+<li><strong><code>TH0 = 0xFC; TL0 = 0x67;</code><strong>：这里</strong>重新加载了定时器初值</strong>，确保每毫秒都触发一次中断，从而保证动态扫描的速度。</li>
+<li><strong><code>P0 = 0xFF;</code><strong>：这一步是</strong>显示消隐</strong>，目的是在切换行时防止出现残影。</li>
+<li>**<code>switch(i)</code>**：这个 <code>switch</code> 语句是动态扫描的核心。<ul>
+<li><strong><code>case</code></strong> 分支通过改变 <code>ADDR0</code>、<code>ADDR1</code>、<code>ADDR2</code> 的值，来<strong>选择不同的行</strong>。</li>
+<li><code>i++</code> 让索引递增，确保下次中断时扫描到下一行。</li>
+<li><strong><code>P0 = 0x00;</code><strong>：这里是</strong>点亮整行</strong>的关键。我们将 P0 口所有位都拉低，点亮了当前被选中的那一行的所有灯。</li>
+<li>当 <code>i</code> 递增到5时，也就是显示完第6行（0-5），<code>i</code> 又被重置为0，重新开始新一轮的扫描。</li>
+</ul>
+</li>
+</ul>
+<p>问：请大家想一想，这个程序中，<code>P0 = 0x00;</code> 为什么能点亮整行，而 <code>P0 = 0xFF;</code> 却能实现显示消隐？</p>
+<p><strong>答案：</strong></p>
+<p>这是因为我们的点阵是<strong>共阳极</strong>的。</p>
+<ul>
+<li>当列引脚为<strong>低电平</strong>时，LED 才能导通发光。<code>P0 = 0x00</code> 意味着所有列引脚都为低电平，所以点亮了整行所有灯。</li>
+<li>而当列引脚为<strong>高电平</strong>时，LED 不会发光。<code>P0 = 0xFF</code> 意味着所有列引脚都为高电平，所有灯都被关灭，从而实现了显示消隐。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.3 点阵的图形显示
+</div>
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925154945139.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **回顾基础：**
+    - 独立 LED：实现流水灯
+    - 数码管：显示多位数字
+- **点阵 LED 的新可能：**
+    - 显示更丰富的图形与花样
+- **图像显示步骤：**
+    1. **创建图形：** 设计想要显示的小图形。
+    2. **数据转换：** 将图形数据转换成程序可识别的格式。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么我们需要字模提取软件，而不能手动输入数据来显示图形？
+</div>
+</div>
+
+<aside class="notes"><p>上节课我们已经成功实现了点阵 LED 的全亮效果，这节课，我们将在此基础上，利用<strong>字模提取软件</strong>，让点阵 LED 显示出各种各样的图像。</p>
+<h3 id="点阵-led-的图像显示"><strong>点阵 LED 的图像显示</strong></h3>
+<p>独立的 LED 小灯可以实现流水灯，数码管可以显示多位数字，而点阵 LED 则能用来显示更丰富的花样。</p>
+<p>要显示这些花样，我们首先要<strong>创建好小图形</strong>。但光有图形还不够，我们需要将这些图形的<strong>数据转换成程序能够识别的格式</strong>。这时，就轮到<strong>字模提取软件</strong>登场了。它能将我们设计的图形数据，快速高效地转换成程序所需的代码。</p>
+<p>现在，让我们思考一个简单的问题：<strong>为什么我们需要字模提取软件，而不能手动输入数据来显示图形？</strong></p>
+<p><strong>答案：</strong></p>
+<p>手动输入数据既费时又容易出错。一个 8x8 的点阵 LED 就有 64 个发光点，如果需要显示一个复杂的图案，手动计算并输入每个发光点的亮灭状态，将是一个巨大的工作量，并且很难保证数据的准确性。而字模提取软件可以自动、快速地完成这个转换过程，大大提高了我们的工作效率。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.3 点阵的图形显示：使用字模软件创建图形
+</div>
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925155043434.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **步骤一：打开软件**
+- **步骤二：新建画布**
+    - 点击“**新建图像**”
+    - 将**宽度**和**高度**都设置为 **8**（与硬件规格匹配）
+    - 点击“**确定**”
+- **步骤三：绘制图案**
+    - 在 8x8 的空白画板上绘制自定义图案
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么我们要将宽度和高度都设置为 8，而不是其他数值？
+</div>
+</div>
+
+<aside class="notes"><p>首先，我们打开字模提取软件。</p>
+<ol>
+<li><strong>新建图形：</strong> 在软件界面中，找到并点击“<strong>新建图像</strong>”按钮。</li>
+<li><strong>设置尺寸：</strong> 根据我们单片机板上的点阵 LED 规格，将图形的<strong>宽度</strong>和<strong>高度</strong>都修改为 <strong>8</strong>。</li>
+<li><strong>确认设置：</strong> 点击“<strong>确定</strong>”，即可创建一个 8x8 像素的空白画板。</li>
+</ol>
+<p>接下来，我们就可以在这个画板上自由绘制自己想要的图案了。</p>
+<p>现在，请大家思考一个简单的问题：<strong>为什么我们要将宽度和高度都设置为 8，而不是其他数值？</strong></p>
+<p><strong>答案：</strong></p>
+<p>这个数值是根据我们所使用的硬件决定的。我们这块单片机板上的点阵 LED 是 <strong>8x8</strong> 的矩阵，这意味着它有 8 行和 8 列，总共有 64 个发光点。为了确保我们创建的图形数据能完美匹配硬件，我们必须将软件中的画布尺寸设置为和硬件相同的 <strong>8x8</strong>。如果尺寸不匹配，绘制的图案将无法正确显示在点阵 LED 上。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.3 点阵的图形显示：绘制点阵 LED 图形
+</div>
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925155153142.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **步骤一：进入绘制模式**
+    - 点击左侧菜单中的“**模拟动画**”  
+- **步骤二：放大视图**
+    - 选择“**放大格点**”
+    - 重复点击至最大，以便精准操作
+- **步骤三：开始绘制**
+    - 在 8x8 画板上，用鼠标点击填充黑点
+    - 绘制你想要的自定义图案
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>要更方便、更精确地绘制图案，我们可以利用软件的放大功能。</p>
+<ol>
+<li><strong>打开模拟动画：</strong> 首先，请点击软件左侧的“<strong>模拟动画</strong>”菜单。</li>
+<li><strong>放大格点：</strong> 然后，选择“<strong>放大格点</strong>”选项，并重复点击，直到将画板放大到最大。</li>
+<li><strong>开始绘制：</strong> 放大后，你就可以清晰地看到每一个小点。现在，拿起你的鼠标，在 8x8 的点阵图形中点击，填充黑点来画出你想要的图案。</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.3 点阵的图形显示：绘制结果与图像数据提取
+</div>
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925155254222.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **绘制完成：**
+    - 在画板上完成图案设计（如心形）。
+- **数据生成：**
+    - 软件自动生成对应图案的数据。
+- **理解模数据：**
+    - 生成的代码即为“**模数据**”。
+    - 这是单片机控制点阵 LED 发光所需的程序代码。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么在绘制完成后，软件会自动生成一系列十六进制数据？
+</div>
+</div>
+
+<aside class="notes"><p>经过我们的一番精心设计，一个漂亮的<strong>心形图案</strong>已经呈现在画板上。</p>
+<p>当你的图案绘制完成后，软件会自动生成对应的数据。这些数据，也就是我们常说的<strong>模数据</strong>，就是单片机能识别并用来控制点阵 LED 发光的代码。正是有了这些数据的支持，我们才能在硬件上看到自己设计的图形。</p>
+<p>现在，请大家思考一个简单的问题：<strong>为什么在绘制完成后，软件会自动生成一系列十六进制数据？</strong></p>
+<p><strong>答案：</strong></p>
+<p>单片机的工作原理是基于二进制的，但二进制数据对于我们来说非常长且难以记忆。因此，软件会将每一个 8x8 像素的图案，转换成更紧凑、更易于读写的<strong>十六进制</strong>数据。这些数据其实就是点阵 LED 上每个发光点亮灭状态的数字化表示，为我们后续的编程提供了便利。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.3 点阵的图形显示：图像数据反显与保存
+</div>
+
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925155417962.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **重要提示：**
+    - **软件默认：** 黑色 = 1，白色 = 0
+    - **硬件要求：** LED 亮 = 0，LED 灭 = 1
+- **解决方案：**
+    - **黑白反显：**
+        - 点击“**修改图像**”菜单 
+        - 选择“**黑白反显图像**”选项 
+    - **保存：**
+        - 点击“**基本操作**”菜单
+        - 选择“**保存图像**”
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我们在保存时忘记进行“黑白反显”，最终会在点阵 LED 上看到什么效果？
+</div>
+</div>
+
+<aside class="notes"><p>很好，大家已经成功绘制并保存了心形图案的模数据。不过，在将数据应用到单片机之前，我们还需要处理一个非常重要的细节，这关系到我们最终能否在点阵屏上看到发光的心形。</p>
+<h3 id="图像数据反显与保存"><strong>图像数据反显与保存</strong></h3>
+<p>这里我们需要特别注意一个细节：</p>
+<ul>
+<li><strong>取模软件的默认设置：</strong> 我们的取模软件默认将黑色（实心点）取值为 <strong>1</strong>，而将白色（空白点）取值为 <strong>0</strong>。</li>
+<li><strong>硬件的控制逻辑：</strong> 然而，我们单片机的点阵 LED 控制逻辑是相反的——当引脚电平为 <strong>1</strong> 时，LED <strong>熄灭</strong>；当电平为 <strong>0</strong> 时，LED <strong>点亮</strong>。</li>
+</ul>
+<p>为了让软件中绘制的黑色“心形”在硬件上正确点亮，我们需要将数据进行<strong>黑白反显</strong>。</p>
+<ol>
+<li><strong>黑白反显：</strong> 在软件中找到“<strong>修改图像</strong>”菜单，选择“<strong>黑白反显图像</strong>”选项。</li>
+<li><strong>保存图像：</strong> 反显后，再点击“<strong>基本操作</strong>”菜单里的“<strong>保存图像</strong>”，将最终正确的模数据保存下来。</li>
+</ol>
+<p>现在，请大家思考一个简单的问题：<strong>如果我们在保存时忘记进行“黑白反显”，最终会在点阵 LED 上看到什么效果？</strong></p>
+<p><strong>答案：</strong></p>
+<p>你会看到一个<strong>空白的屏幕</strong>。由于软件生成的“心形”数据中，代表心形的点是 1，而硬件上 1 对应的结果是 LED 熄灭，因此心形图案无法点亮。只有进行了反显操作，将 1 变为 0，才能让心形正确显示出来。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.3 点阵的图形显示：参数设置
+</div>
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925162032750.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **文件保存**
+    - **非必须，但强烈建议**：方便二次使用。
+- **参数设置**
+    - 进入“参数设置”→“其他选项”。
+- **取模方式**
+    - **横向取模**：P0口控制一行。
+    - **纵向取模**：P0口控制一列。
+- **字节倒序**
+    - **必须勾选**：使字模数据符合单片机驱动要求。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么点阵字模软件需要区分“横向取模”和“纵向取模”？
+</div>
+</div>
+
+<aside class="notes"><p>上一步我们已经生成了我们需要的字模数据，接下来要做的就是保存并进行一些参数设置。</p>
+<p>大家可能会问，保存文件这一步是不是必须的？其实不保存也可以，但为了以后方便再次使用或者修改，强烈建议大家养成保存的习惯。它就像我们写完文档随手按一下 Ctrl+S 一样，是个好习惯。</p>
+<p><strong>参数设置</strong></p>
+<p>保存之后，我们进入下一步：参数设置。在“参数设置”菜单里，大家找到并点击“其他选项”。</p>
+<p><strong>横向与纵向取模</strong></p>
+<p>进入其他选项后，大家会看到一个“取模”设置。这里要根据我们的硬件连接来选择。</p>
+<ul>
+<li><strong>横向取模：</strong> 就像我们屏幕上看到的，如果P0口控制的是显示屏的一整行，那么我们就选择“横向取模”。</li>
+<li><strong>纵向取模：</strong> 同样的道理，如果你的硬件设计中，P0口控制的是显示屏的一列，那就要选择“纵向取模”。</li>
+</ul>
+<p><strong>字节倒序</strong></p>
+<p>接下来，还有一个很关键的选项：<strong>“字节倒序”</strong>。大家可以看到，软件生成的字模数据中，左边是低位（DB0），右边是高位（DB7）。这与我们通常习惯的“左高右低”的字节顺序是相反的。为了让单片机正确识别并驱动显示屏，我们需要将这个字节顺序进行倒置，因此必须选中“字节倒序”这个选项。</p>
+<p>现在，我们来思考一个简单的问题：</p>
+<p><strong>为什么点阵字模软件需要区分“横向取模”和“纵向取模”？</strong></p>
+<p><strong>解答：</strong> 这是因为点阵显示屏的驱动方式不同。有些驱动方式是按行控制，即一次点亮一行；另一些则是按列控制。为了让软件生成的字模数据与硬件的驱动方式相匹配，我们必须根据实际的硬件连接来选择正确的取模方式，否则显示出来的图案就会是错误的。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.3 点阵的图形显示：
+</div>
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925162546409.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 53%; top: 15%; height: 65%; width: 47%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **取模方式选择**
+    - 在“取模方式”菜单中，选择 **“C51 格式”**。
+- **生成字模数据**
+    - 点击 **“C51 格式”** 后，软件自动生成 **8 个字节**的数据。
+    - 这 8 个字节的数据即为所需的 **“模”**。
+- **字模数据作用**
+    - 每个字节代表点阵中的一行或一列。
+    - 单片机通过这些数据驱动LED点阵，显示汉字或图形。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>在“取模方式”里，我们选择<strong>“C51 格式”</strong>。这是我们单片机开发中最常用的格式。</p>
+<p>当你们点击“C51 格式”后，会发现在右边的“点阵生成区”<strong>自动生成了 8 个字节的数据</strong>。这 8 个字节的数据就是我们需要的<strong>“模”</strong>。</p>
+<p>这 8 个字节数据，每一个都代表了汉字点阵中的一列或一行。通过这些数据，单片机就能知道如何点亮或熄灭对应的LED点，最终在屏幕上显示出我们想要的汉字或图形。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.3 点阵的图形显示：字模数据解析
+</div>
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925162546409.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 51%; top: 15%; height: 65%; width: 49%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **黑白与二进制对应关系**
+    - **黑格** = **1**（灭）
+    - **白格** = **0**（亮）
+- **字模数据解析示例**
+    - **0xFF**
+        - 二进制：`1111 1111`
+        - 对应：8x8点阵第一行，全为黑格。
+    - **0x99**
+        - 二进制：`1001 1001`
+        - 对应：低位在左，高位在右的黑白排列
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果一个字节的字模数据是 0x00，在点阵上会呈现出什么效果？
+</div>
+</div>
+
+<aside class="notes"><p>好了，上一步我们已经生成了字模数据。接下来，我们来深入理解一下这些看似杂乱的十六进制数据，它们是如何与我们看到的图形对应起来的。</p>
+<p><strong>二进制与颜色对应</strong></p>
+<p>大家请看这张图。在这里，每个小格子都代表一位二进制数。</p>
+<ul>
+<li><strong>黑色格子</strong>：表示 <strong>1</strong>。</li>
+<li><strong>白色格子</strong>：表示 <strong>0</strong>。</li>
+</ul>
+<p><strong>字模数据的解析</strong></p>
+<p>我们来看两个例子，你就明白了：</p>
+<ul>
+<li><p><strong>第一个字节 0xFF：</strong></p>
+<ul>
+<li>0xFF 转换成二进制就是 <code>1111 1111</code>。</li>
+<li>这正好对应了我们 8x8 图形的第一行。因为这一行<strong>全都是黑色的</strong>，也就是8个1，所以其值就是 0xFF。</li>
+</ul>
+</li>
+<li><p><strong>第二个字节 0x99：</strong></p>
+<ul>
+<li>0x99 转换成二进制是 <code>1001 1001</code>。</li>
+<li>请大家注意看，<strong>低位在左边</strong>，<strong>高位在右边</strong>。我们可以看到对应的黑白格子排列：一个黑、两个白、两个黑、两个白、一个黑。这种排列正好组成了 <code>1001 1001</code> 这个二进制数，也就是十六进制的 0x99。</li>
+</ul>
+</li>
+</ul>
+<p>通过这种方式，每一个字节的数据都精确地描述了点阵图形中的一行或一列的亮灭状态。</p>
+<p>现在，我们来思考一个简单的问题：</p>
+<p><strong>如果一个字节的字模数据是 0x00，在点阵上会呈现出什么效果？</strong></p>
+<p><strong>解答：</strong> 如果一个字节的数据是 0x00，那么转换成二进制就是 <code>0000 0000</code>。由于白色格子表示0，这意味着这一整行（或一列）的LED点都将是<strong>白色</strong>，也就是<strong>全部点亮</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.3 点阵的图形显示：代码示例
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+
+unsigned char code image [ ] = { //图片的字模表
+	0xFF, 0x99, 0x00, 0x00,
+	0x00, 0x81, 0xC3, 0xE7
+}
+
+```
+
+```C
+void main ()
+{
+	EA = 1; // 使能总中断
+	ENLED = 0;  
+	ADDR3 = 0;
+	TMOD = 0x01; //设置T0为模式1
+	TH0 = 0xFC;  //为 T0 赋初值 0xFC67，定时 1ms
+	TL0 = 0x67;
+	ET0 = 1; //使能 T0 中断
+	TR0 = 1; //启动 T0
+	
+	while (1);
+}
+```
+</div>
+
+<div class="" style="position: absolute; left: 43%; top: 15%; height: 65%; width: 56%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* 定时器 0 中断服务函数 */
+
+void InterruptTimer0() interrupt 1
+{
+	static unsigned char i = 0; //动态扫描的索引
+	 //重新加载初值
+	TH0 = 0xFC;  
+	TL0 = 0x67;
+
+	//以下代码完成 LED 点阵动态扫描刷新
+	//显示消隐
+	P0 = 0xFF; 
+```
+
+```C
+	switch (i)   
+	{
+		case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=image[0]; break;
+		case 1: ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=image[1]; break;
+		case 2: ADDR2=0; ADDR1=1; ADDR0=0; i++; P0=image[2]; break;
+		case 3: ADDR2=0; ADDR1=1; ADDR0=1; i++; P0=image[3]; break;
+		case 4: ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=image[4]; break;
+		case 5: ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=image[5]; break;
+		case 6: ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=image[6]; break;
+		case 7: ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=image[7]; break;
+		default: break;
+	}
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问题：** `unsigned char code image [ ]` 这句代码中的 **`code`** 关键字有什么作用？
+</div>
+</div>
+
+<aside class="notes"><p>大家看这页幻灯片，我们展示了一段基于 51 单片机的 LED 点阵屏动态扫描程序。这段代码实现了在一个 8x8 的 LED 点阵屏上显示预设的图形。</p>
+<h3 id="核心思路与代码分析"><strong>核心思路与代码分析</strong></h3>
+<p>首先，让我们从 <strong>main 函数</strong> 看起。</p>
+<ul>
+<li><code>EA = 1;</code> 这句是使能总中断，是整个中断系统的“总开关”。</li>
+<li>接着，我们初始化了控制 LED 点阵的引脚。</li>
+<li>随后，我们配置了 <strong>定时器 T0</strong>。我们将 <code>TMOD</code> 设置为 <code>0x01</code>，这表示将定时器 0 设置为工作方式 1，也就是 16 位定时器。</li>
+<li>重点来了，<code>TH0 = 0xFC; TL0 = 0x67;</code> 这两句给定时器赋了初值。对于 16 位定时器来说，它的最大计数是 65536。如果单片机的晶振是 12MHz，那么一个机器周期是 1微秒。我们给它赋初值 <code>0xFC67</code>，也就是十进制的 64615，这意味着它每计数到 65536 时就会溢出。这样一来，<code>65536 - 64615 = 921</code>，再乘以 1微秒，也就是大约 1毫秒就会产生一次中断。</li>
+<li>最后，<code>ET0 = 1;</code> 使得定时器 0 的中断被单独使能，<code>TR0 = 1;</code> 启动了定时器。</li>
+</ul>
+<p>接下来，我们看 <strong>定时器 0 的中断服务函数</strong>。</p>
+<ul>
+<li><code>void InterruptTimer0() interrupt 1</code> 这句定义了中断服务函数，<code>interrupt 1</code> 指定了它是定时器 0 的中断。</li>
+<li>函数内部，我们首先重新给定时器赋初值，这是为了确保下一次中断依然在 1毫秒后发生。</li>
+<li>关键点在于，我们用一个 <strong>静态变量 <code>i</code></strong> 来实现动态扫描。每次中断，<code>i</code> 的值都会递增，并在 <code>switch</code> 语句中根据 <code>i</code> 的值来控制 LED 点阵的哪一行亮。</li>
+<li>比如，当 <code>i</code> 是 0 时，我们通过 <code>ADDR2=0; ADDR1=0; ADDR0=0;</code> 选中第 0 行，然后将 <code>image[0]</code> 的数据送入 <code>P0</code> 口，这样第一行的 LED 就会根据 <code>image[0]</code> 的数据亮灭。</li>
+<li>之后 <code>i++</code>，下一次中断发生时，<code>i</code> 变为 1，就会选中第 1 行并显示 <code>image[1]</code> 的数据，如此循环往复。由于这个过程非常快，人眼就会看到一个连续、稳定的图像。</li>
+</ul>
+<p>现在，我给大家提一个简单的问题，并现场解答一下。</p>
+<p><strong>问题：</strong> <code>unsigned char code image [ ]</code> 这句代码中的 <strong><code>code</code></strong> 关键字有什么作用？</p>
+<p><strong>解答：</strong> 在 51 单片机中，**<code>code</code>** 关键字用于指示编译器，将这个数组（<code>image</code>）存储在单片机的程序存储区（也就是 ROM）中。这样做的好处是，程序存储区是只读的，可以节省宝贵的 RAM 空间。由于 LED 点阵的字模数据是固定不变的，将其存放在 ROM 中是最合适的选择。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.3 点阵的图形显示：大屏点阵显示
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20250918222611287.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **8x8 点阵的显示限制**
+	- 可显示内容：简单的图形、英文字母、数字和符号。
+	- 汉字显示：仅能显示笔画简单的汉字，清晰度较低。
+- **大屏显示的基本原理**
+	- **核心思想：** 沿用小屏的动态扫描原理，并进行扩展。
+	- **实现步骤：**
+		- **扩展硬件：** 增加 LED 点阵的行数和列数。
+		- **获取字模：** 准备更大的汉字字模数据（如 16x16）
+		- **增加扫描：** 扩展动态扫描的循环，以刷新所有行
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问： 为什么 LED 点阵的动态扫描需要非常高的刷新频率，比如每秒扫描几十次甚至上百次？
+</div>
+</div>
+
+<aside class="notes"><p>好了，现在我们已经了解了如何使用单片机驱动一个 8x8 的 LED 点阵来显示简单的图案。但如果我们的目标是显示更复杂的，比如汉字，该怎么办呢？</p>
+<p>首先，让我们思考一个问题：对于 <strong>8x8 的点阵</strong>，我们能显示什么样的内容？</p>
+<ul>
+<li>它可以显示一些简单的图形，比如笑脸、箭头，甚至是像我们之前演示的桃心。</li>
+<li>也可以显示一些简单的英文字母、数字和符号。</li>
+<li>理论上，8x8 的点阵也能显示一些笔画非常简单的汉字，但这通常需要牺牲一些清晰度。大家可以自己用取模软件试试看，会发现效果可能并不理想。</li>
+</ul>
+<p>那么，要想清晰地显示汉字，就需要更大的点阵了。</p>
+<ul>
+<li>大部分汉字通常需要 <strong>16x16</strong> 个点，甚至更大，才能保证笔画的完整性和可读性。</li>
+<li>如果想要在更大的屏幕上显示汉字，比如一个 32x32 或者 64x64 的点阵屏，它的原理和我们之前讲的 <strong>8x8 点阵的动态扫描</strong> 是完全一样的。</li>
+</ul>
+<p>我们要做的事情其实很简单：</p>
+<ol>
+<li><strong>扩展行数和列数：</strong> 如果是 16x16 的点阵，你需要控制 16 行和 16 列。</li>
+<li><strong>获取更多的字模数据：</strong> 一个 16x16 的汉字字模数据会比 8x8 的多得多。</li>
+<li><strong>增加扫描周期：</strong> 动态扫描的原理依然是每次只点亮一行，然后快速切换到下一行，只不过你需要让这个循环在更多的行之间进行</li>
+</ol>
+<p>换句话说，<strong>实现大屏汉字显示，核心思想就是将小屏的动态扫描原理进行扩展和重复。</strong></p>
+<p>现在，我给大家提一个简单的问题。</p>
+<p><strong>问题：</strong> 为什么 LED 点阵的动态扫描需要非常高的刷新频率，比如每秒扫描几十次甚至上百次？</p>
+<p><strong>解答：</strong> 这是利用了人眼的 <strong>视觉暂留</strong> 特性。如果刷新频率足够高，人眼就无法分辨出 LED 是在逐行点亮的，而是会把每一行的亮灭状态“叠加”在一起，从而看到一个连续、稳定的完整图像。如果刷新频率过低，我们就会看到明显的闪烁，甚至能看清逐行扫描的过程。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.4 点阵的纵向动画显示：点阵动画原理
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925165314837.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 48%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **动画核心思想**
+	- **原理：** 利用**视觉暂留**，快速切换静态图片。
+- **实现方法**
+	- **数据准备：** 为动画每一帧**取模**。
+	- **程序控制：**
+	    - 用一个变量（如 `index`）标记当前图片位置
+	    - 每隔固定时间（如 250ms）改变 `index`，切换到下一张图片。
+	- **效果：** 持续切换图片，形成流畅的动态效果。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：在这个动画程序中，如果我们把图片切换的时间间隔从 250 毫秒改为 50 毫秒，会看到什么样的变化？
+</div>
+</div>
+
+<aside class="notes"><p>现在我们已经掌握了在 LED 点阵上显示静态图片的方法。那么，如果想让它动起来，显示动画效果，又该如何实现呢？</p>
+<h3 id="点阵动画的实现原理"><strong>点阵动画的实现原理</strong></h3>
+<p>点阵动画的本质，其实和我们看动画片、玩游戏的基本原理是一样的。它并非真正的连续运动，而是利用了人眼的 <strong>视觉暂留</strong> 特性，通过快速切换一系列静态图片，来造成动态的假象。</p>
+<p>具体到我们的 LED 点阵屏上，这个过程可以分解为以下几个步骤：</p>
+<ul>
+<li><strong>多张图片取模：</strong> 首先，我们需要为动画的每一帧（也就是每一张静态图片）分别进行取模，生成相应的字模数据。</li>
+<li><strong>巧妙切换图片：</strong> 接着，我们编写程序，按照预定的顺序，以一定的速度快速切换这些图片数据。多张图片组合在一起，就形成了一段流畅的动画。</li>
+</ul>
+<p>我们看一个具体的例子。以这张幻灯片上的代码为例：</p>
+<ul>
+<li>这段代码实现了一个向上滚动的动画效果。整个动画数据共有 <strong>40 行</strong>。</li>
+<li>这 40 行数据实际上是由 <strong>33 张</strong> 8x8 的点阵图片组成的。</li>
+<li>它通过一个变量 <strong><code>index</code></strong> 来标记当前图片的起始位置。</li>
+<li>每次显示时，程序会从 <code>index</code> 处开始，向下连续读取 8 行数据，然后进行动态扫描刷新。</li>
+<li><strong>关键在于</strong>，每隔 <strong>250 毫秒</strong>，我们改变一次 <code>index</code> 的值，让它向下移动一行，这样就相当于切换到了下一张图片。</li>
+<li>如此反复，随着 <code>index</code> 的不断改变，点阵屏上显示的图片也会持续切换，最终就形成了我们所看到的滚动动画效果。</li>
+</ul>
+<p>现在，我给大家提一个简单的问题，在这个动画程序中，如果我们把图片切换的时间间隔从 250 毫秒改为 50 毫秒，会看到什么样的变化？</p>
+<p><strong>解答：</strong> 如果把切换时间间隔改为 50 毫秒，动画的速度会明显加快。因为图片切换得越快，人眼捕捉到的闪烁感就越小，动画的连贯性就越强。这就像我们看电影，每秒播放 24 帧，如果帧数太低，画面就会显得卡顿。所以，<strong>控制好图片切换的时间间隔是实现流畅动画效果的关键</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.4 点阵的纵向动画显示：演示程序
+</div>
+
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+unsigned char code image [ ] = {  //图片的字模表
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	0xC3, 0xE7, 0xE7, 0xE7, 0xE7, 0xE7, 0xC3, 0xFF,
+	0x99, 0x00, 0x00, 0x00, 0x81, 0xC3, 0xE7, 0xFF,
+	0x99, 0x99, 0x99, 0x99, 0x99, 0x81, 0xC3, 0xFF,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+}
+```
+```C
+void main ()
+{
+	EA = 1; // 使能总中断
+	ENLED = 0;  
+	ADDR3 = 0;
+	TMOD = 0x01; //设置T0为模式1
+	TH0 = 0xFC;  //为 T0 赋初值 0xFC67，定时 1ms
+	TL0 = 0x67;
+	ET0 = 1; //使能 T0 中断
+	TR0 = 1; //启动 T0
+	
+	while (1);
+}
+```
+</div>
+
+
+<div class="" style="line-height: 1.8; position: absolute; left: 48%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **中断配置**
+	- **总中断：** `EA = 1;` 开启总中断。
+	- **定时器 0 中断：** `ET0 = 1;` 使能定时器 0 中断。
+- **定时器 0 设置**
+	- **工作模式：** `TMOD = 0x01;` 设置为 16 位定时器。
+	- **定时时长：** `TH0/TL0 = 0xFC67;` 定时 1 毫秒。
+- **启动定时器**
+	- `TR0 = 1;` 启动计时。
+	- **while(1)**; 进入死循环，等待中断发生。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么扫描间隔设定为1ms？
+</div>
+</div>
+
+<aside class="notes"><p>各位同学，现在我们来深入分析一个更复杂的程序，如何利用单片机实现 <strong>LED 点阵的动画效果</strong>。我们都知道，动画是通过快速切换一系列静态图片来产生的，这段代码就是基于这个原理设计的。</p>
+<h3 id="程序核心逻辑"><strong>程序核心逻辑</strong></h3>
+<p>首先，让我们看一下 <strong><code>main</code> 函数</strong>。</p>
+<ul>
+<li><strong>中断使能</strong>：<code>EA = 1;</code> 开启了整个中断系统，这是所有中断能够工作的总前提。</li>
+<li><strong>定时器配置</strong>：我们把 <code>TMOD</code> 设置为 <code>0x01</code>，这表示我们使用 <strong>定时器 0 的工作方式 1</strong>，它是一个 16 位定时器。</li>
+<li><strong>定时器初值</strong>：<code>TH0 = 0xFC; TL0 = 0x67;</code> 这两句给定时器赋了初值，目的是让它每隔 <strong>1 毫秒</strong> 产生一次中断。这个 1ms 的时间间隔对于 LED 点阵的动态扫描来说至关重要，它能保证画面不闪烁。</li>
+<li><strong>启动定时器</strong>：<code>ET0 = 1;</code> 和 <code>TR0 = 1;</code> 分别使能了定时器 0 的中断，并启动了定时器，让它开始计时。</li>
+</ul>
+<p>为什么扫描间隔设定为1ms？</p>
+<p><strong>满足人眼的视觉暂留特性：</strong></p>
+<ul>
+<li>人眼的视觉暂留效应大约是 20ms 到 50ms。也就是说，如果画面的刷新频率高于这个阈值，人眼就会把连续的画面看成一个稳定的图像，而不会感觉到闪烁。</li>
+<li>1ms 的扫描间隔意味着每行 LED 每秒会被刷新 1000 次，整个 8x8 的点阵每秒会被完整扫描 <code>1000 / 8 = 125</code> 次。</li>
+<li>125Hz 的刷新频率远远高于人眼感知的阈值，因此能够确保画面看起来是连续、稳定、无闪烁的。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.4 点阵的纵向动画显示：演示程序
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* 定时器 0 中断服务函数 */
+
+void InterruptTimer0() interrupt 1
+{
+	static unsigned char i = 0; //动态扫描的索引
+	static unsigned char tmr = 0; //250ms 软件定时器
+	static unsigned char index = 0; //图片刷新索引
+
+	TH0 = 0xFC; //重新加载初值
+	TL0 = 0x67;
+	
+	//以下代码完成 LED 点阵动态扫描刷新
+	P0 = 0xFF; //显示消隐
+```
+
+```C
+	switch (i)   
+	{
+		case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=image[index+0]; break;
+		case 1: ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=image[index+1]; break;
+		case 2: ADDR2=0; ADDR1=1; ADDR0=0; i++; P0=image[index+2]; break;
+		case 3: ADDR2=0; ADDR1=1; ADDR0=1; i++; P0=image[index+3]; break;
+		case 4: ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=image[index+4]; break;
+		case 5: ADDR2=1; ADDR1=0; ADDR0=1; i++; P0=image[index+5]; break;
+		case 6: ADDR2=1; ADDR1=1; ADDR0=0; i++; P0=image[index+6]; break;
+		case 7: ADDR2=1; ADDR1=1; ADDR0=1; i=0; P0=image[index+7]; break;
+		default: break;
+	}
+```
+</div>
+
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 30%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+	//以下代码完成每 250ms 改变一帧图像
+	tmr++;
+	if (tmr >= 250) //达到 250ms 时改变一次图片索引
+	{
+		tmr = 0;
+		index++;
+		if (index > 32) //图片索引达到 32 后归零
+		{
+			index = 0;
+		}
+	}
+	
+}
+```
+</div>
+
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 50%; height: 30%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- `tmr` 每累计到 **250**（即 250ms）。
+- 重置 `tmr` 并让 `index` 递增。
+- 实现每 **250ms** 切换一帧的动画效果，当索引达到最大值后循环。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我们希望动画的播放速度快一倍，应该如何修改代码？
+</div>
+</div>
+
+<aside class="notes"><p>接下来，我们来看实现动画效果的<strong>核心部分</strong>：定时器 0 中断服务函数。这块代码是整个程序的“大脑”，负责让 LED 点阵动起来。</p>
+<h3 id="中断服务函数分析"><strong>中断服务函数分析</strong></h3>
+<ul>
+<li><p><strong>静态变量</strong>：大家可以看到，我们声明了三个 <strong><code>static</code></strong> 类型的变量：<code>i</code>、<code>tmr</code> 和 <code>index</code>。这非常关键，因为 <code>static</code> 变量的值在函数被多次调用时会保留下来，这样才能实现连续的计数和状态保持。</p>
+<ul>
+<li><code>i</code> 用来控制 <strong>动态扫描</strong>。每当 1 毫秒中断到来，<code>i</code> 就会递增，负责逐行点亮 LED。</li>
+<li><code>tmr</code> 是一个 <strong>软件定时器</strong>。它每累加一次就代表过了 1 毫秒，当它达到 250 时，就说明 250 毫秒过去了。</li>
+<li><code>index</code> 则是 <strong>图片索引</strong>，它决定了当前显示的是哪一帧动画。</li>
+</ul>
+</li>
+<li><p><strong>动态扫描</strong>：<code>switch</code> 语句负责具体的动态扫描任务。它根据 <code>i</code> 的值来选择点阵的哪一行，同时从 <code>image</code> 数组中，根据当前的 <code>index</code> 值和行号，取出对应的字模数据并送给 P0 口。这个过程非常快，人眼就感觉不到闪烁。</p>
+</li>
+<li><p><strong>动画切换</strong>：这部分是实现动画效果的关键。当 <code>tmr</code> 的值达到 250 时，代表 250 毫秒的切换时间到了。程序会清零 <code>tmr</code>，并让 <code>index</code> 增加 1，指向下一帧图片。如果 <code>index</code> 超过了最大值 32，就让它回到 0，实现循环播放。</p>
+</li>
+</ul>
+<p>这样，通过每 1 毫秒进行一次动态扫描，并每 250 毫秒切换一次图片，我们就能在点阵屏上看到流畅的动画效果了。</p>
+<p>现在，我给大家提一个简单的问题，如果我们希望动画的播放速度快一倍，应该如何修改代码？</p>
+<p><strong>解答：</strong> 想要让动画快一倍，我们只需要将图片切换的时间间隔缩短一半。在代码中，就是把 <code>if (tmr &gt;= 250)</code> 改为 <code>if (tmr &gt;= 125)</code>。这样，每 125 毫秒就会切换一次图片，播放速度自然就快了一倍。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.5 点阵的横向动画显示
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20250918113757224.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 48%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **硬件现状**
+    - P0口控制整行，利于**纵向动画**
+- **设计原则**
+    - **硬件设计**应考虑**软件编程**的便利性
+- **问题与思路**
+    - Q：硬件已定，无法实现横向？
+    - A：可以。利用**多维思维**解决问题
+    - 技巧：**把板子侧过来**（物理思维）
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果想实现横向动画，但P0口只能控制行，我们应该如何编写程序来模拟“移动”的效果？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，上节课我们已经学习了<strong>点阵屏的纵向动画显示</strong>，相信大家对它的原理已经有了一定的了解。这节课，我们将挑战一个新任务：<strong>实现横向动画</strong>。</p>
+<p>首先，让我们回顾一下我们这块开发板的电路设计：<strong>P0口控制着一整行</strong>。这个设计让纵向动画的实现变得非常直接和简单，因为你只需要控制P0口就能点亮或熄灭一整行LED。这其实也给我们一个重要的启发：在进行电路设计时，我们应该提前考虑好<strong>程序编写的便利性</strong>。</p>
+<p>举个例子，如果你的产品核心功能是实现纵向动画，那么让P0口控制整行就是个绝佳的选择。但如果你的需求是横向动画，那么更理想的电路设计应该是让P0口控制一整列，这样实现起来就会非常方便。</p>
+<p>那么问题来了，如果电路板已经设计好了，P0口就是控制整行，我们难道就不能实现横向显示了吗？当然不是！</p>
+<p>在这里，我要教给大家一个“小窍门”：<strong>把你的板子侧过来</strong>。</p>
+<p>你可能会觉得这个方法有点投机取巧，但这恰恰是我们做技术应该具备的思维。技术本身只是一个工具，我们不能沉溺于它的细节，而是要多角度、多维度地去思考，怎样才能最有效地解决问题，实现我们想要的功能。在做项目开发时，除了熟练掌握技术工具，更重要的是<strong>培养解决问题的思路和创新思维</strong>。</p>
+<p><strong>问：</strong> 在我们的点阵屏电路中，如果想实现横向动画，但P0口只能控制行，我们应该如何编写程序来模拟“移动”的效果？
+<strong>答：</strong> 我们可以通过<strong>逐列扫描</strong>的方式来实现。尽管硬件上P0口控制行，但我们可以在程序中，通过控制每一列的通断来模拟出横向移动的效果。这本质上是将每一列的数据作为一帧，然后快速地依次显示这些“帧”，利用人眼的视觉暂留效应来呈现出连续的横向动画。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.5 点阵的横向动画显示：二维数组
+</div>
+
+<div class="" style="position: absolute; left: 3%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+|        | 第0列   | 第1列   | 第2列   |
+|--------|---------|---------|---------|
+| 第0行  | A[0][0] | A[0][1] | A[0][2] |
+| 第1行  | A[1][0] | A[1][1] | A[1][2] |
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **功能**: 在单片机编程中，用于处理矩阵、图像等数据，是实现复杂动画的基础。
+- **声明方式**: `数据类型 数据名 [数据长度1][数据长度2];`
+    - 例如：`unsigned char A[2][3];`
+- **内存排列**:
+    - 按照行优先的方式在内存中连续存储。
+    - 例如 `unsigned char A[2][3];` 的内存顺序为：`A[0][0]`  、`A[0][1]`、 `A[0][2]`、`A[1][0]`、`A[1][1]`、 `A[1][2]`
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：`unsigned char A[2][3];` 定义了一个2行3列的数组。如何访问这个数组中第一行第三列的元素
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们讨论了如何通过把开发板侧过来实现横向显示。那么，如果我们不想把板子侧过来，还是让板子保持正面，能不能实现横向显示呢？当然是可以的。</p>
+<h3 id="横向显示与二维数组"><strong>横向显示与二维数组</strong></h3>
+<p>从原理上讲，只要硬件设计好了，剩下的其实就是软件编程和算法问题。虽然我们现在这种硬件设计方式，要做横向动画，程序可能会复杂一些，但这绝不是不可能实现的。</p>
+<p>要实现这个动画，我们需要用到一个非常重要的概念——<strong>二维数组</strong>。在单片机编程中，二维数组是处理矩阵、图像等数据的利器。</p>
+<p>首先，我们来看一下二维数组的声明方式：<code>数据类型 数据名 [数据长度1][数据长度2];</code></p>
+<p>举个例子，<code>unsigned char A[2][3];</code> 就定义了一个两行三列的无符号字符型二维数组。它在内存中的排列方式是<code>A[0][0]</code>、<code>A[0][1]</code>、<code>A[0][2]</code>、<code>A[1][0]</code>、<code>A[1][1]</code>、<code>A[1][2]</code>，总共有六个元素。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.5 点阵的横向动画显示：二维数组的特殊写法
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **标准写法**
+    - `unsigned char A[2][3] = {{1,2,3},{4,5,6}};`
+    - 等同于 `unsigned char A[2][3] = {1,2,3,4,5,6};`
+- **不完全赋值**
+    - 当初始化的元素数量不足时，未赋值的元素会自动用 `0` 填充。
+    - **示例1**：`unsigned char A[2][3] = {1,2,{3,4}};`
+        - 等同于 `unsigned char A[2][3] = {1,2,0,3,4,0};`  
+    - **示例2**：`unsigned char A[2][3] = {1,2,3,4};`
+        - 等同于 `unsigned char A[2][3] = {{1,2,3},{4,0,0}};`
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20250919232415359.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我声明一个二维数组 `int B[2][2] = {1,2,3};`，这个数组在内存中的完整排列是什么样的呢？
+</div>
+</div>
+
+<aside class="notes"><p>接下来，我们主要聊聊二维数组的一些<strong>特殊写法</strong>。这些写法大家了解一下就好，平时编程时尽量保持规范，但看到别人这样写时，要能立刻明白它们代表什么意思。</p>
+<ul>
+<li><p><code>unsigned char A[2][3] = {{1,2,3},{4,5,6}};</code> 这是一种标准写法，它等同于 <code>unsigned char A[2][3] = {1,2,3,4,5,6};</code>，编译器会按照内存的顺序自动填充。</p>
+</li>
+<li><p><code>unsigned char A[2][3] = {1,2,{3,4}};</code> 这种写法和我们之前讲的一维数组很相似。它等同于 <code>unsigned char A[2][3] = {1,2,0,3,4,0};</code>。后面的元素会自动用0来填充，这是需要注意的地方。</p>
+</li>
+<li><p><code>unsigned char A[2][3] = {1,2,3,4};</code> 在这种情况下，编译器会将其视为按顺序赋值，不足的元素会用0填充。所以它等同于 <code>unsigned char A[2][3] = {{1,2,3},{4,0,0}};</code>。</p>
+</li>
+</ul>
+<p>那么，我们来想一个简单的问题：如果我声明一个二维数组 <code>int B[2][2] = {1,2,3};</code>，这个数组在内存中的完整排列是什么样的呢？</p>
+<p>答案是：<code>B[0][0] = 1</code>、<code>B[0][1] = 2</code>、<code>B[1][0] = 3</code>、<code>B[1][1] = 0</code>。因为只赋值了3个元素，最后一个元素会自动用0来填充。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.5 点阵的横向动画显示：二维数组初始化方式
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925224834178.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **图片准备**:
+    - 绘制所有30张动画帧图片。
+    - 因为是横向移动，需要对每张图片**分别取模**。
+- **数据存储**:
+    - 每张图片取模后会产生8字节数据。
+    - 总数据量：30×8=240 个字节。
+    - 使用一个**二维数组**来存储这些数据。
+- **程序控制**:
+    - 编写程序，按时间间隔（例如250ms）依次调用并显示数组中的数据，实现动画效果。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：根据我们的设计，这个用来存储所有动画数据的二维数组应该如何声明？
+</div>
+</div>
+
+<aside class="notes"><p>现在，我们把这个知识应用到具体的动画制作中。</p>
+<h3 id="横向动画的实现"><strong>横向动画的实现</strong></h3>
+<p>要制作一个横向移动的动画，我们首先要把动画效果分解成一系列的图片，就像电影的每一帧一样。</p>
+<ul>
+<li><p><strong>图片准备与取模</strong>:</p>
+<ul>
+<li>我们需要<strong>画出</strong>所需的图片，然后<strong>逐一取模</strong>。</li>
+<li>此次我们有30张图片，每张图片都是动画的一帧。</li>
+<li>为了实现横向移动，图片切换时的字模数据并不是连续的，所以我们要对这30张图片<strong>分别取模</strong>。</li>
+<li><strong>取模结果</strong>: 每张图片取模后都会得到8个字节的数据，所以总共是 30×8=240 个数据。</li>
+</ul>
+</li>
+<li><p><strong>动画制作</strong>:</p>
+<ul>
+<li>我们将这240个数据<strong>存储在一个二维数组</strong>中。</li>
+<li>通过程序，每隔<strong>250毫秒</strong>切换一次图片，就能形成连续的动画效果。</li>
+</ul>
+</li>
+</ul>
+<h3 id="思考题">思考题</h3>
+<ul>
+<li><strong>问题</strong>：根据我们的设计，这个用来存储所有动画数据的二维数组应该如何声明？</li>
+<li><strong>答案</strong>：我们可以声明为 <code>unsigned char animation_data[30][8];</code>，其中 <code>30</code> 代表帧数，<code>8</code> 代表每帧的数据量。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.5 点阵的横向动画显示：程序实现
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 13%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+
+unsigned char code image [30] [8] = {
+	{0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF},  //动画帧 1
+	{0xFF,0x7F,0xFF,0xFF,0xFF,0xFF,0xFF,0x7F}, //动画帧 2
+	{0xFF,0x3F,0x7F,0x7F,0x7F,0x7F,0x7F,0x3F}, //动画帧 3
+	{0xFF,0x1F,0x3F,0x3F,0x3F,0x3F,0x3F,0x1F}, //动画帧 4
+	{0xFF,0x0F,0x9F,0x9F,0x9F,0x9F,0x9F,0x0F}, //动画帧 5
+```
+
+```C
+	{0xFF,0x87,0xCF,0xCF,0xCF,0xCF,0xCF,0x87}, //动画帧 6
+	{0xFF,0xC3,0xE7,0xE7,0xE7,0xE7,0xE7,0xC3}, //动画帧 7
+	{0xFF,0xE1,0x73,0x73,0x73,0xF3,0xF3,0xE1}, //动画帧 8
+	{0xFF,0x70,0x39,0x39,0x39,0x79,0xF9,0xF0}, //动画帧 9
+	{0xFF,0x38,0x1C,0x1C,0x1C,0x3C,0x7C,0xF8}, //动画帧 10
+	{0xFF,0x9C,0x0E,0x0E,0x0E,0x1E,0x3E,0x7C}, //动画帧 11
+	{0xFF,0xCE,0x07,0x07,0x07,0x0F,0x1F,0x3E}, //动画帧 12
+	{0xFF,0x67,0x03,0x03,0x03,0x07,0x0F,0x9F}, //动画帧 13
+	{0xFF,0x33,0x01,0x01,0x01,0x03,0x87,0xCF}, //动画帧 14
+	{0xFF,0x99,0x00,0x00,0x00,0x81,0xC3,0xE7}, //动画帧 15
+	{0xFF,0xCC,0x80,0x80,0x80,0xC0,0xE1,0xF3}, //动画帧 16
+	{0xFF,0xE6,0xC0,0xC0,0xC0,0xE0,0xF0,0xF9}, //动画帧 17	
+```
+</div>
+
+<div class="" style="position: absolute; left: 48%; top: 13%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+```C
+	{0xFF,0x73,0x60,0x60,0x60,0x70,0x78,0xFC}, //动画帧 18
+	{0xFF,0x39,0x30,0x30,0x30,0x38,0x3C,0x7E}, //动画帧 19
+	{0xFF,0x9C,0x98,0x98,0x98,0x9C,0x1E,0x3F}, //动画帧 20
+	{0xFF,0xCE,0xCC,0xCC,0xCC,0xCE,0x0F,0x1F}, //动画帧 21
+	{0xFF,0x67,0x66,0x66,0x66,0x67,0x07,0x0F}, //动画帧 22
+	{0xFF,0x33,0x33,0x33,0x33,0x33,0x03,0x87}, //动画帧 23
+	{0xFF,0x99,0x99,0x99,0x99,0x99,0x81,0xC3}, //动画帧 24
+	{0xFF,0xCC,0xCC,0xCC,0xCC,0xCC,0xC0,0xE1}, //动画帧 25
+	{0xFF,0xE6,0xE6,0xE6,0xE6,0xE6,0xE0,0xF0}, //动画帧 26
+	{0xFF,0xF3,0xF3,0xF3,0xF3,0xF3,0xF0,0xF8}, //动画帧 27
+	{0xFF,0xF9,0xF9,0xF9,0xF9,0xF9,0xF8,0xFC}, //动画帧 28
+	{0xFF,0xFC,0xFC,0xFC,0xFC,0xFC,0xFC,0xFE}, //动画帧 29
+	{0xFF,0xFE,0xFE,0xFE,0xFE,0xFE,0xFE,0xFF} //动画帧 30  
+}
+```
+```C
+void main ()
+{
+	EA = 1; //使能总中断
+	ENLED = 0;
+	ADDR3 = 0;
+	TMOD = 0x01; //设置 T0 为模式 1
+	TH0 = 0xFC; //为 T0 赋初值 0xFC67,定时 1ms
+	TL0 = 0x67;
+	ET0 = 1; //使能 T0 中断
+	TR0 = 1; //启动 T0
+	while (1);
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 在主函数 `main()` 中，为什么要配置定时器 `T0`？
+</div>
+</div>
+
+<aside class="notes"><p>现在我们来看下<strong>点阵横向动画</strong>的程序实现。大家可以看到，在代码最开始，我们定义了一个二维数组 <code>image[30][8]</code>。</p>
+<h3 id="程序详解">程序详解</h3>
+<p>这个数组就是我们点阵动画的核心。为什么是<strong>二维</strong>的呢？</p>
+<ul>
+<li>第一维 <code>[30]</code> 表示的是<strong>动画的帧数</strong>，也就是这个动画总共有30个画面。</li>
+<li>第二维 <code>[8]</code> 表示<strong>每一帧的图案</strong>，正好对应点阵的8行。数组里的每一个十六进制数，比如<code>0xFF</code>，<code>0x7F</code>等等，都代表着一行LED的亮灭状态。</li>
+</ul>
+<p>我们可以看到，第一帧<code>image[0]</code>里所有数据都是<code>0xFF</code>，这表示所有灯都灭，也就是一个全黑的画面。接着，从第二帧开始，一些数值逐渐变化，就形成了动画效果。</p>
+<h3 id="简单问答">简单问答</h3>
+<p><strong>问：</strong> 在主函数 <code>main()</code> 中，为什么要配置定时器 <code>T0</code>？</p>
+<p><strong>答：</strong> 配置定时器 <code>T0</code> 的目的是为了<strong>定时刷新显示</strong>。点阵屏的动态显示，本质上是利用了人眼的视觉暂留效应。我们需要不断地、快速地切换显示不同的行，才能让整个画面看起来是同时显示的。而制作动画，则需要在这个基础上，<strong>以一定的时间间隔（比如1毫秒）切换到下一帧</strong>，这样画面才会流畅地播放起来。这里的 <code>TMOD = 0x01</code> 和 <code>TH0 = 0xFC, TL0 = 0x67</code> 就是在设定一个1毫秒的定时器中断，以确保动画的流畅播放。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.5 点阵的横向动画显示：程序实现
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* 定时器 0 中断服务函数 */
+void InterruptTimer0() interrupt 1{
+	static unsigned char i = 0; //动态扫描的索引
+	static unsigned char tmr = 0; //250ms 软件定时器
+	static unsigned char index = 0; //图片刷新索引
+	TH0 = 0xFC; //重新加载初值
+	TL0 = 0x67;
+	P0 = 0xFF; //以下代码完成 LED 点阵动态扫描刷新
+```
+
+```C
+	switch (i)   
+	{
+		case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=image[index][0]; break;
+		case 1: ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=image[index][1]; break;
+		case 2: ADDR2=0; ADDR1=1; ADDR0=0; i++; P0=image[index][2]; break;
+		case 3: ADDR2=0; ADDR1=1; ADDR0=1; i++; P0=image[index][3]; break;
+		case 4: ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=image[index][4]; break;
+		case 5: ADDR2=1; ADDR1=0; ADDR0=1; i++; P0=image[index][5]; break;
+		case 6: ADDR2=1; ADDR1=1; ADDR0=0; i++; P0=image[index][6]; break;
+		case 7: ADDR2=1; ADDR1=1; ADDR0=1; i=0; P0=image[index][7]; break;
+		default: break;
+	}
+```
+```C
+	tmr++;  //以下代码完成每 250ms 改变一帧图像
+	if (tmr >= 250) {      //达到 250ms 时改变一次图片索引
+		tmr = 0;
+		index++;
+		if (index >= 30){    //图片索引达到 30后归零
+			index = 0;
+		}
+	}
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 60%; top: 12%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **定时器中断服务函数（Timer0）**
+	- **功能：** 实现点阵**动态显示**与**动画播放**。
+- **动态扫描：**
+    - 利用变量`i`，**每1ms**循环显示点阵的**8行**。
+    - 高速刷新，利用**视觉暂留**形成完整画面。
+- **动画切换：**
+    - 利用变量`tmr`，实现**软件定时器**。
+    - 每**250ms**切换到下一帧画面，实现循环播放。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>上一页我们设置了定时器和动画数据，那么具体如何利用定时器来驱动点阵，让动画显示出来呢？这一页PPT展示的就是我们整个程序的核心——<strong>定时器0中断服务函数</strong>。</p>
+<h3 id="程序详解：定时器中断服务函数">程序详解：定时器中断服务函数</h3>
+<p>这个函数是每隔1毫秒就会自动执行一次。它主要做了两件事：<strong>动态扫描刷新</strong>和<strong>动画帧切换</strong>。</p>
+<ol>
+<li><strong>动态扫描刷新：</strong> 看这部分的<code>switch</code>语句。我们用一个<code>static</code>变量<code>i</code>作为索引，从0到7循环。每次中断进入时，<code>switch</code>语句根据<code>i</code>的值，设置<code>ADDR0</code>到<code>ADDR2</code>这三个地址线，从而选中点阵的<strong>某一行</strong>，然后把<code>image[index][i]</code>这个值，也就是当前动画帧<strong>对应行的图案数据</strong>，通过<code>P0</code>口送出去。这样，在1毫秒的极短时间内，我们就能以肉眼无法察觉的速度，把8行图案依次快速地刷新一遍，从而形成一个完整的画面。</li>
+<li><strong>动画帧切换：</strong> 紧接着，我们用另一个<code>static</code>变量<code>tmr</code>来实现一个<strong>软件定时器</strong>。因为定时器中断每1毫秒发生一次，当<code>tmr</code>累加到250时，就说明250毫秒过去了。这时，我们把<code>tmr</code>清零，并把<code>index</code>加1，这样就切换到了下一帧动画。当<code>index</code>达到30时，我们再把它归零，从而形成一个完美的循环动画。</li>
+</ol>
+<p><strong>问：</strong> 在中断服务函数中，为什么要把<code>TH0</code>和<code>TL0</code>重新赋初值？
+<strong>答：</strong> 这是因为51单片机的定时器在工作时，它的值会不断累加。当它溢出（达到最大值）时，才会触发中断。为了让下一次中断仍然能在固定的时间（比如1毫秒）后发生，我们需要在每次进入中断服务函数后，立即重新给定时器赋上一个初始值，这样它又可以从这个初值开始向上计数，确保定时周期的准确性和一致性。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 7.5 点阵的横向动画显示：点阵动画的本质
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第7章 变量进阶与点阵LED/file-20240925224834178.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心思想：**
+	- 动画效果 = **静态图片的快速切换**。
+- **工作原理：**
+	- 预先设计好一系列**“动画帧”**（静态图案）。
+	- 单片机以极快的速度**依次显示**每一帧。
+	- 利用人眼的**视觉暂留效应**，将不连续的画面“连接”成连续的动态效果。
+- **程序任务：**
+	- 控制每一帧图片的**显示顺序**和**停留时间**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 如果我想要让一个图案在点阵上移动得更慢一些，应该修改程序中的哪一部分？
+</div>
+</div>
+
+<aside class="notes"><p>好的，同学们，在前面我们看到了点阵的左右移动，或者说横向动画的实现。那上下移动或者其他更复杂的动画，是不是也要用完全不同的逻辑呢？其实不然。</p>
+<h3 id="点阵动画的本质"><strong>点阵动画的本质</strong></h3>
+<p><strong>核心概念：</strong> 所谓的“移动”或“动态效果”，本质上是<strong>静态图片的快速切换</strong>。</p>
+<ul>
+<li>无论是点阵的横向滚动、纵向移动，还是更复杂的动画效果，我们都不是在真正地让图案“动”起来。</li>
+<li>我们所做的，是预先设计好一系列的静态画面（也就是<strong>动画帧</strong>），然后让单片机以极快的速度一帧接一帧地显示它们。</li>
+<li><strong>例如：</strong> 就像我们看电影或动画片，它并不是连续的画面，而是每秒播放几十张静态的图片。由于人眼的<strong>视觉暂留效应</strong>，当这些图片切换得足够快时，我们的大脑就会把它们“连接”起来，形成连续运动的错觉。</li>
+</ul>
+<p>在点阵编程中，我们的程序就是用来控制这些“图片”的显示速度和顺序，从而制造出各种生动的动画效果。</p>
+<h3 id="简单问答"><strong>简单问答</strong></h3>
+<p><strong>问：</strong> 如果我想要让一个图案在点阵上移动得更慢一些，应该修改程序中的哪一部分？</p>
+<p><strong>答：</strong> 要让动画移动得更慢，你需要增加每一帧画面的显示时间。这通常是通过修改<strong>软件定时器</strong>的计数值来实现的。例如，如果原来是每250毫秒切换一帧，你可以把它改为500毫秒或1秒，这样每一帧画面停留的时间变长，动画看起来就更慢了。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 15%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **变量进阶**
+    - **作用域**：了解局部变量和全局变量的有效范围，避免命名冲突。
+    - **存储类别**：掌握 `static` 关键字的作用，让局部变量也能保持状态，实现函数调用间的“记忆”。
+- **LED 点阵**
+    - **原理**：基于**行列扫描**，通过**动态显示**利用视觉暂留实现完整画面。
+    - **编程**：使用**字模提取软件**将图案转换为数据，并进行**黑白反显**和**字节倒序**设置。
+- **点阵动画**
+    - **本质**：**静态图片的快速切换**。
+    - **实现**：使用**定时器**和**二维数组**，控制**动画帧的显示顺序和时间间隔**，实现**纵向**和**横向**动画。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>好，同学们，今天我们来回顾并总结一下本章的重点内容。本章我们深入学习了<strong>变量的进阶用法</strong>和<strong>点阵LED</strong>，并最终实现了复杂的<strong>点阵动画</strong>。</p>
+<h3 id="本章小结">本章小结</h3>
+<ul>
+<li><p><strong>变量进阶</strong></p>
+<ul>
+<li><strong>作用域</strong>：我们学会了如何区分<strong>局部变量</strong>和<strong>全局变量</strong>的有效范围，这有助于我们避免变量命名冲突和写出更健壮的代码。</li>
+<li><strong>存储类别</strong>：我们掌握了 <code>static</code> 关键字的使用，它能让局部变量保持状态，在函数多次调用之间实现“记忆”，这在计数器和扫描程序中非常有用。</li>
+</ul>
+</li>
+<li><p><strong>LED 点阵</strong></p>
+<ul>
+<li><strong>原理</strong>：点阵LED的显示原理是基于<strong>行列扫描法</strong>，并通过<strong>动态显示</strong>利用人眼的<strong>视觉暂留</strong>效应来呈现完整的画面。</li>
+<li><strong>编程</strong>：在编程时，我们使用<strong>字模提取软件</strong>将图形转换为数据，并需要进行<strong>黑白反显</strong>和<strong>字节倒序</strong>等设置，以确保数据能正确驱动硬件。</li>
+</ul>
+</li>
+<li><p><strong>点阵动画</strong></p>
+<ul>
+<li><strong>本质</strong>：点阵动画的本质是<strong>静态图片的快速切换</strong>。</li>
+<li><strong>实现</strong>：我们使用<strong>定时器</strong>和<strong>二维数组</strong>来控制动画帧的显示顺序和时间间隔，从而实现了流畅的<strong>纵向</strong>和<strong>横向</strong>动画效果。</li>
+</ul>
+</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1200,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>

@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 40%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/Step_by_Step_learning.webp" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 55%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第3章 硬件基础知识学习
+</div>
+
+<div class="" style="position: absolute; left: 10%; top: 70%; height: 20%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《单片机原理与应用》<br><br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div>
+
+<aside class="notes"><p>同学们好，欢迎回到《单片机原理与应用》的课堂。我是你们的老师张建武。今天，我们将一起学习第三章的内容——硬件基础知识。这一章非常关键，它将帮助我们理解单片机是如何与外部世界进行交互的，为我们后续的编程实践打下坚实的物理基础。希望大家能跟着我的节奏，一步一个脚印地掌握今天的知识。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本次课主要内容 
+</div>
+
+<div class="" style="line-height: 2.5; font-size: 45px; position: absolute; left: 5%; top: 25%; height: 50%; width: 44%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 3.1 电磁干扰与去耦电容的应用 
+- 3.2 三极管在数字电路中的应用
+- 3.3 74HC138三八译码器的应用
+- 3.4 LED闪烁程序
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 17%; height: 66%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250727200253750.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>在正式开始之前，我们先来快速浏览一下本次课的主要内容。今天我们将围绕四个核心主题展开：</p>
+<ul>
+<li>第一，电磁干扰与去耦电容的应用。我们会了解什么是电磁干扰，以及如何用小小的电容来解决这个大问题。</li>
+<li>第二，三极管在数字电路中的应用。三极管是电子电路的基石之一，我们将学习它的基本原理和两种核心应用：电平转换和驱动。</li>
+<li>第三，74HC138三八译码器的应用。这是一个非常实用的逻辑芯片，可以帮助我们节省宝贵的单片机I/O口资源。</li>
+<li>最后，我们将把前面的硬件知识串联起来，编写一个经典的LED闪烁程序，这也是我们单片机学习的‘Hello World’。</li>
+</ul>
+<p>通过今天的学习，大家会对单片机开发板上的这些元器件有一个更直观、更深入的认识。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.1 电磁干扰与去耦电容的应用：电磁兼容性
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 18%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250727201751763.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 25%; height: 50%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- 干扰实例：雷电、装修时电钻对电视的影响
+- 电磁兼容性定义：设备在电磁环境中能正常工作，且不对该环境中的任何事物构成不能承受的电磁骚扰的能力。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：生活中还遇到过哪些疑似电磁干扰的现象？
+</div>
+</div>
+
+<aside class="notes"><p>好，我们首先进入第一个主题：电磁干扰，简称EMI。大家有没有过这样的经历？冬天穿毛衣，伸手去开金属门把手的时候，突然被‘电’了一下，这就是静电放电，它其实就是一种电磁干扰现象。再比如，外面打雷闪电的时候，家里的收音机或电视可能会出现杂音和雪花；或者装修师傅在用电钻打墙时，旁边的电视画面会剧烈抖动。这些都是电磁干扰的实例。”</p>
+<p>“那么，到底什么是电磁干扰呢？简单来说，就是一个电子设备在工作时，对其他设备产生了不希望的电磁影响。为了解决这个问题，我们引入了一个非常重要的概念，叫做<strong>电磁兼容性</strong>。电磁兼容性指的是设备在电磁环境中能正常工作，且不对该环境中的任何事物构成不能承受的电磁骚扰的能力。通俗地讲，就是既要‘抗干扰’，也要‘不干扰别人’。在任何电子产品的设计中，EMC都是一个必须严格遵守的核心要求，否则产品可能无法稳定工作，甚至无法通过市场准入认证。</p>
+<p>(提问)</p>
+<p>“除了我刚才举的例子，还有没有同学能分享一下，你在生活中还遇到过哪些疑似电磁干扰的现象？”</p>
+<p>(解答与分析)</p>
+<p>“（等待学生回答，如：‘微波炉工作时WiFi会变慢’、‘手机靠近音箱时音箱会发出滋滋声’）…… 大家说的都非常好！微波炉的电磁泄漏会干扰2.4GHz频段的WiFi信号；手机通信时发出的电磁波被音箱的电路捕捉并放大，就形成了噪声。这些都说明电磁干扰无处不在，也凸显了我们学习EMC知识的重要性。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.1 电磁干扰与去耦电容的应用：低频滤波电容
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250727203428259.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **缓冲作用**：
+	- 上电瞬间的电流冲击保护
+	- 水池比喻说明缓冲原理
+- **稳定作用**：
+	- 电路运行过程中的电压稳定
+	- 功耗突变时的电压维持
+- 电容选型要点：
+    - 容值选择依赖经验，通常选择几十到几百微法（μF）的电解电容。
+    - 耐压值选择原则：至少2倍系统工作电压
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：一个大功率电机频繁启动和停止，在电源入口处我们应该选择一个容值更大还是更小的电容来做滤波呢？
+</div>
+</div>
+
+<aside class="notes"><p>了解了电磁兼容性，我们该如何应对呢？在电路设计中，去耦电容是最常用、最有效的手段之一。我们先来看它在低频滤波中的应用。这里的去耦电容，主要扮演两个角色：<strong>缓冲</strong>和<strong>稳定</strong>。”</p>
+<p>“首先是<strong>缓冲作用</strong>。我们可以把电源想象成一个水龙头，电路板想象成一个水池。当我们刚给电路板上电时，瞬间会有一个很大的电流冲击，就像突然把水龙头开到最大，水流会猛地冲出来。如果在水龙头和水池之间再加一个大水池（也就是我们的低频滤波电容），这个冲击就会被大大缓冲，从而保护了后面精密的电路元器件。这个大电容能够瞬间提供电路启动所需的大电流。”</p>
+<p>“其次是<strong>稳定作用</strong>。电路在正常工作时，其功耗并不是一成不变的。比如单片机突然执行一个复杂的计算，功耗会瞬间增大。这时，它会向电源索取更多的电流。如果电源反应不够快，电压就可能瞬间跌落，导致单片机复位或工作异常。此时，并联在电源两端的滤波电容就像一个‘备用小水库’，它能立刻释放存储的电荷，维持电压的稳定，直到远端的电源反应过来。所以，它起到了一个‘削峰填谷’的稳压作用。”</p>
+<p>“那么如何选择这种电容呢？在容值上，很大程度上依赖于经验，通常在电源入口处会放置一个几十到几百微法（μF）的电解电容。在耐压值上，有一个基本原则：<strong>选择的耐压值至少是系统工作电压的2倍</strong>。比如我们的开发板是5V供电，那么选择的电容耐压值至少要是10V，一般我们会选择16V或25V的，以保证足够的安全余量。</p>
+<p>(提问)</p>
+<p>“我们刚刚用了水池的比喻。那么请大家思考一下，如果一个电路的功耗波动非常剧烈，比如一个大功率电机频繁启动和停止，那么在电源入口处，我们应该选择一个容值更大还是更小的电容来做滤波呢？为什么？”</p>
+<p>(解答与分析)</p>
+<p>“应该选择一个容值更大的电容。说得很好！因为更大的容值就像一个更大的蓄水池，它储存的电荷更多，在电机启动这种需要瞬间大电流的时刻，它能提供更强大的瞬时电流支撑，从而更好地维持系统电压的稳定，防止电压被瞬间拉低。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.1 电磁干扰与去耦电容的应用：低频滤波电容
+</div>
+
+<div class="flex-even" style="position: absolute; left: 5%; top: 13%; height: 70%; width: 90%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250727232316426.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250727232546563.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 市面上主流的低频滤波电容有三种：**铝电解电容**、**钽电容**和**陶瓷电容**
+</div>
+</div>
+
+<aside class="notes"><p>市面上主流的低频滤波电容有三种：<strong>铝电解电容</strong>、<strong>钽  tǎn电容</strong>和<strong>陶瓷电容</strong>。大家可以看看屏幕上的实物图，它们外观各不相同。</p>
+<p>从性能上讲，<strong>钽电容和陶瓷电容的性能更优</strong>，它们的等效串联电阻（ESR）更低，滤波效果更好，响应速度也更快。但是，它们的容值一般做不大，且成本较高，特别是钽电容，还有正负极性，接反了容易烧毁。而<strong>铝电解电容</strong>的优点是技术成熟、价格便宜，并且可以轻松做到非常大的容值，比如几百甚至几千微法。因此，在成本不敏感且对性能要求不是极高的场合，铝电解电容是性价比最高的选择。在很多电路中，我们也会将大容量的铝电解电容和小容量的陶瓷电容组合使用，以兼顾低频和高频的滤波需求。</p>
+<p>右侧我们开发板上用的是陶瓷电容。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.1 电磁干扰与去耦电容的应用：高频电容
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 18%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250818012201833.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 16%; height: 70%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+ - **104电容详解**：
+	- 命名规则：10×10⁴ pF = 100nF = 0.1μF(微法)
+	- 经验值选择，适用于大多数数字电路
+- **布局要求**：
+	- 尽可能短距离连接正负极
+	- IC电源旁的去耦电容放置
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：104电容要紧靠芯片引脚放置，如果放远了，滤波效果为什么会变差？
+</div>
+</div>
+
+<aside class="notes"><p>“说完了低频，我们再来看看高频滤波。数字电路中，芯片在进行高速开关时，会产生大量的高频噪声。这些噪声会通过电源线传播，干扰其他芯片。为了滤除这些高频噪声，我们通常会在每个IC芯片的电源引脚（VCC和GND）旁边，紧挨着放置一个<strong>高频去耦电容</strong>。”</p>
+<p>“这个电容的典型值就是大家经常听到的‘<strong>104电容</strong>’。‘104’是一种命名规则，意思是‘10’后面再加‘4’个‘0’，单位是皮法（pF）。所以，104就等于100000 pF，换算一下就是100纳法（nF），也就是0.1微法（μF）。这个0.1μF的容值是一个经验值，它对于滤除大多数数字电路中的高频噪声非常有效。”</p>
+<p>“这里要特别强调它的<strong>布局要求</strong>：这个电容必须<strong>尽可能短距离地连接到芯片的正负极引脚上</strong>。因为引线本身是有电感的，线越长，电感越大，对高频信号的阻碍就越强，滤波效果就会大打折扣。所以，在电路板设计时，我们总能看到每个芯片旁边都有一颗小小的黄色或棕色的贴片电容，那就是为它保驾护航的104去耦电容。比如我们核心的STC89C52芯片，它的VCC和GND引脚旁边就一定会有这样一个电容。”</p>
+<p>(提问)</p>
+<p>“我反复强调104电容要紧靠芯片引脚放置。有没有同学能用更物理的语言解释一下，如果放远了，滤波效果为什么会变差？关键因素是什么？”</p>
+<p>(解答与分析)</p>
+<p>“这位同学提到了‘电感’，非常正确！电路板上的走线（铜箔）本身就具有寄生电感，虽然很小，但在高频信号下影响巨大。高频噪声的本质就是快速变化的电流，电感的作用是阻碍电流的变化。如果电容离芯片远，那么噪声电流就需要经过一段长长的、带有寄生电感的走线才能到达电容。这段电感会阻碍高频噪声流向电容，导致噪声无法被有效滤除，反而会继续在电源网络中传播。所以，‘短路径’就是为了最小化寄生电感的影响，为高频噪声提供一条通畅的、低阻抗的对地泄放路径。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.2 三极管在数字电路中的应用：初步认识
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250818014045681.png" alt="" style="width: 400px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250818014636867.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+ - 全称：半导体三极管，也称双极型晶体管、晶体三极管
+- 功能：具有电流放大功能的半导体器件
+- 结构：三层半导体材料，三个外部连接端子
+- 控制原理：通过一对端子控制另一对端子的电流
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>“好的，电容的部分我们先告一段落。接下来，我们进入第二个重要元件的学习——<strong>三极管</strong>。它的全称是晶体三极管，有时也直接叫晶体管。它是现代电子工业的基石，可以说没有它就没有今天的计算机和各种电子设备。”</p>
+<p>“它的核心功能是什么呢？一句话概括：<strong>它是一个具有电流放大功能的半导体器件</strong>。它的基本结构是由三层半导体材料构成的，并有三个引出的电极。其最神奇的地方在于，我们可以<strong>通过控制其中一对端子之间的小电流，来控制另外一对端子之间的大电流</strong>，这就是所谓的‘以小博大’，也是它放大和开关功能的原理所在。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.2 三极管在数字电路中的应用：分类
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250812115225133.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **分类方式**：
+    - **按材料分类**：锗管和硅管
+    - **按结构分类**：PNP型和NPN型
+- **三个极的定义**：
+    - b：基极（Base）
+    - e：发射极（Emitter）
+    - c：集电极（Collector）
+- **区分方法**：箭头方向判断PNP/NPN类型
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>“三极管有很多分类方式。按<strong>材料</strong>分，有锗<strong>zhě</strong>管和硅管，现在我们基本用的都是硅管。按<strong>结构</strong>分，也是我们最关心的分类，可以分为<strong>PNP型</strong>和<strong>NPN型</strong>两种。”</p>
+<p>“它的三个电极分别叫做：</p>
+<ul>
+<li>**b：基极 (Base)**，这是控制端。</li>
+<li>**e：发射极 (Emitter)**，通常是电流流出的地方。</li>
+<li>**c：集电极 (Collector)**，通常是电流汇集的地方。”</li>
+</ul>
+<p>“如何快速区分PNP和NPN型呢？非常简单，就看电路符号中<strong>发射极e上的箭头方向</strong>。<strong>箭头朝外的是NPN型，箭头朝内的是PNP型</strong>。这个一定要记牢，因为它们的导通条件是完全相反的。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.2 三极管在数字电路中的应用：三种状态
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 42%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+如果`$\beta=100$`，<br>可以计算R47的最大值是143K
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813113720450.png" alt="" style="width: 650px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **截止状态**：当`$I_b ≈ 0$`，则`$I_C ≈ 0$`，电路断开，LED不亮。
+- **放大状态**：当`$I_b$`较小，则`$I_C = β × I_b$`，`$I_C$`随`$I_b$`线性变化，适合模拟电路放大信号。
+- **饱和状态**：当`$I_b$`足够大，`$I_C$`达到电路或三极管的最大值（比如3mA），三极管像导线，LED全亮。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+在我们的数字电路应用中，比如用单片机控制一个LED亮或者灭，我们主要利用的是三极管的哪两种状态？
+</div>
+</div>
+
+<aside class="notes"><p>“三极管的工作原理对于初学者来说可能有点抽象，为了方便大家记忆和理解，我总结了一个口诀：<strong>‘箭头朝内PNP，导通电压顺箭头过，电压控制导通，电流控制状态’</strong>。我们来逐句解释一下。”</p>
+<p>“第一句，<strong>‘箭头朝内PNP’</strong>，这刚才讲过，是用来快速分辨类型的。”</p>
+<p>“第二句，<strong>‘导通电压顺箭头过，0.7V压差导通’</strong>。这句话是关键。对于NPN管，箭头是从基极b指向发射极e的，所以要让它导通，基极b的电压必须比发射极e的电压高0.7V左右（对于硅管）。而对于PNP管，箭头是从发射极e指向基极b的，所以是发射极e的电压要比基极b的电压高0.7V。这个0.7V是硅PN结的正向导通压降。”</p>
+<p>“第三句，<strong>‘电压控制导通’</strong>。这句是第二句的总结，意思是三极管能否导通，是由基极和发射极之间的<strong>电压差</strong>决定的。电压差达到了门槛（0.7V），它就具备了导通的条件。”</p>
+<p>“第四句，<strong>‘电流控制状态’</strong>。一旦三极管导通了，它具体工作在什么状态——是截止、放大还是饱和——则是由流过基极的<strong>电流大小（Ib）</strong>来决定的。这是更深一层的控制。”</p>
+<p>“我们接着上一句口诀，来详细看看三极管的三种工作状态。在数字电路中，我们主要利用它的开关特性，也就是<strong>截止</strong>和<strong>饱和</strong>两种状态。”</p>
+<p>“1. <strong>截止状态</strong>：当基极电流Ib约等于0时（比如基极不加电压或者电压差不够0.7V），集电极电流Ic也几乎为0。此时三极管相当于一个<strong>断开的开关</strong>。在图中的电路里，三极管截止，没有电流流过LED，所以LED不亮。”</p>
+<p>“2. <strong>放大状态</strong>：当给基极一个较小的电流Ib时，集电极会流过一个被放大了β倍的电流，即 I_c=betatimesI_b。β是三极管的电流放大倍数，通常在几十到几百之间。这个状态主要用于模拟电路，比如声音信号的放大。”</p>
+<p>“3. <strong>饱和状态</strong>：当我们继续增大基极电流Ib，集电极电流Ic并不会无限增大，它会受到电源电压和负载电阻的限制，达到一个最大值。当Ic达到这个最大值后，即使再增大Ib，Ic也不会再增加了。这时，三极管就进入了饱和状态。在饱和状态下，集电极和发射极之间的压降非常小，可以近似看作是一根<strong>闭合的导线</strong>。在图中的电路里，三极管饱和导通，电流最大，LED会以最亮的状体点亮。”</p>
+<p>“我们看这个例子，假设β是100，要让三极管饱和，经过计算，基极电阻R47的最大值不能超过143KΩ，这样才能保证有足够的基极电流使三极管完全导通。”</p>
+<p>(提问)</p>
+<p>“我们刚刚讲了三极管的三种工作状态。那么在我们的数字电路应用中，比如用单片机控制一个LED亮或者灭，我们主要利用的是三极管的哪两种状态？可以把它们比作生活中的什么东西？”</p>
+<p>(解答与分析)</p>
+<p>“非常正确！我们主要利用的是截止状态和饱和状态。可以把它们形象地比作一个开关。截止状态就相当于开关断开（OFF），电路不通，LED不亮。饱和状态就相当于开关闭合（ON），电路导通，LED点亮。而放大状态则更常用于模拟电路，比如麦克风的声音放大，我们暂时不多讨论。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.2 三极管在数字电路中的应用：控制应用
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+三极管实现电压转换
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813153252244.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 43%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **电压转换功能**：
+    - 用低电压控制高电压，比如5V单片机控制12V设备
+- **工作原理**：
+    - I/O口输出高电平(5V)时：三极管导通，输出端0V
+    - I/O口输出低电平(0V)时：三极管截止，输出端12V
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>“了解了三极管的开关特性，我们来看看它在数字电路中的一个典型应用：<strong>电压转换</strong>。比如，我们的单片机工作在5V，但需要控制一个12V的继电器或者电机。这时，单片机的I/O口无法直接输出12V，怎么办？就可以用一个三极管来做电平转换。”</p>
+<p>“请看这个电路图。这是一个NPN三极管。</p>
+<ul>
+<li>当单片机I/O口<strong>输出高电平（5V）时，基极电压高于发射极（接地，0V），满足导通条件，三极管饱和导通。此时，输出端（集电极）就相当于直接接地了，所以输出端电压为0V</strong>。</li>
+<li>当单片机I/O口<strong>输出低电平（0V）时，基极和发射极之间没有足够的压差，三极管截止。此时，输出端相当于悬空，通过上拉电阻R2连接到了12V电源，所以输出端电压为12V</strong>。”</li>
+</ul>
+<p>“就这样，我们用一个5V的信号，成功地控制了12V的输出。这就是三极管的电平转换功能，也常被称为‘反相器’，因为输出逻辑和输入是相反的。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.2 三极管在数字电路中的应用：驱动应用
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+LED小灯控制方式对比
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813153340329.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **两种LED控制方案对比**：
+    - **方案一**：I/O口接LED阴极，输出低电平点亮LED（可行）
+    - **方案二**：I/O口接LED阳极，理论上输出高电平点亮LED（实际问题）
+- **问题分析**：
+    - STC89C52普通I/O口电流输出能力仅250微安
+    - 点亮LED需要几毫安电流
+    - 驱动能力不足导致LED无法正常点亮
+</div>
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+单片机I/O口的一个什么设计特点？它是更擅长‘输出电流’还是‘吸收电流’？
+</div>
+</div>
+
+<aside class="notes"><p>“三极管的另一个核心应用是<strong>驱动</strong>，也就是电流放大。我们来看一个非常实际的问题：如何用单片机的I/O口点亮一个LED灯？”</p>
+<p>“我们有两种接法。<strong>方案一</strong>：将LED的阳极接VCC，阴极接到I/O口。当I/O口输出低电平时，形成通路，LED点亮。这种方式是可行的。<strong>方案二</strong>：将LED的阴极接地，阳极接到I/O口。理论上，当I/O口输出高电平时，LED应该点亮。”</p>
+<p>“但是，方案二在很多单片机上会遇到问题。为什么呢？因为像STC89C52这类传统的51单片机，它的普通I/O口（比如P1, P2, P3口）<strong>灌电流能力</strong>（吸入电流的能力）很强，可以达到20mA，足以点亮LED。但它的<strong>拉电流能力</strong>（输出电流的能力）非常弱，内部只有一个微弱的上拉电阻，只能输出大约250微安的电流。而点亮一个LED通常需要几毫安的电流。250微安的电流，LED可能只会发出极其微弱的光，甚至肉眼完全看不到。”</p>
+<p>“这就是<strong>驱动能力不足</strong>的问题。单片机I/O口只是一个信号源，它的‘力气’很小。”</p>
+<p>(提问)</p>
+<p>“我们分析出，STC89C52的I/O口在方案二中点不亮LED，是因为拉电流能力不足。那么，这揭示了这类单片机I/O口的一个什么设计特点？它是更擅长‘输出电流’还是‘吸收电流’？”</p>
+<p>(解答与分析)</p>
+<p>“这个问题问到点子上了。这说明，这类单片机的I/O口设计上更擅长<strong>‘吸收电流’，我们称之为‘灌电流’能力强</strong>。就像一个水槽，往下排水的能力很强。而它<strong>‘输出电流’的能力，我们称为‘拉电流’能力</strong>，则相对很弱。这是很多传统51单片机I/O口的共性。了解这一点，对我们设计外围电路非常重要。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.2 三极管在数字电路中的应用：驱动应用
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 33%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+三极管驱动LED灯
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813153831781.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="position: absolute; left: 33%; top: 15%; height: 65%; width: 33%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+三极管驱动蜂鸣器
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813154437225.png" alt="" style="width: 520px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 64%; top: 15%; height: 65%; width: 33%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **三极管驱动优势**：
+    - 电流放大功能：微安级控制信号→毫安级驱动电流
+    - 扩展I/O口驱动能力
+- **应用实例**：
+    - **LED驱动**：三极管放大电流驱动LED
+    - **蜂鸣器驱动**：提供足够电流使蜂鸣器发声
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>“那么如何解决驱动能力不足的问题呢？答案就是使用三极管。三极管的核心功能之一就是<strong>电流放大</strong>。我们可以用单片机I/O口输出的微安级的小电流，去控制三极管，让三极管导通一个毫安级的大电流来驱动负载。”</p>
+<p>“这就相当于给单片机请了一个‘大力士’。单片机只需要发号施令（输出高低电平），具体的‘体力活’（提供大电流）就交给三极管来完成。这样就极大地<strong>扩展了I/O口的驱动能力</strong>。”</p>
+<p>“除了驱动LED，像<strong>蜂鸣器</strong>、<strong>继电器</strong>、<strong>小型电机</strong>等需要较大电流的器件，我们通常都需要用三极管来驱动，以确保它们能够正常工作。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.2 三极管在数字电路中的应用：驱动应用
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813160707452.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- 八个LED电流较大，采用三极管控制
+- 总阀门控制：LEDS6控制三极管Q16导通
+- 分阀门控制：P0口控制具体LED点亮
+</div>
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>“现在，我们来看看我们开发板上实际的LED驱动电路，来验证一下刚才所学的知识。我们的开发板上有八个LED灯，如果同时点亮，需要的总电流是比较大的，远超单个I/O口能承受的范围。因此，电路设计师就用了一个三极管来做总控制。”</p>
+<p>“大家看图。三极管Q16在这里的作用就像一个‘<strong>总阀门</strong>’。这个总阀门由一个叫LEDS6的信号控制。只有当Q16这个总阀门被打开（导通）时，电源VCC才能流向下面的八个LED灯。而具体哪个灯亮，则由P0口的八个引脚（P0.0到P0.7）分别控制，它们就像是八个‘<strong>分阀门</strong>’。这种‘总阀门+分阀门’的设计，既解决了驱动能力问题，又实现了灵活的独立控制。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.3 74HC138三八译码器的应用
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 58%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+74HC138三八译码器
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813160637670.png" alt="" style="width: 1000px; object-fit: fill">
+
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+八路LED灯
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813160707452.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>“上一小节我们提到了，控制三极管Q16这个‘总阀门’的信号叫做LEDS6。那么，LEDS6这个信号又是从哪里来的呢？这就引出了我们今天要学习的第三个主角——<strong>74HC138三八译码器</strong>。”</p>
+<p>“大家看电路图，LEDS6这个引脚，正好连接到了一个型号为74HC138的芯片的Y6输出引脚上。所以，控制三极管的开关，实际上就是控制74HC138的Y6输出高电平还是低电平。74HC138在这里，就是控制我们LED总阀门的核心器件。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.3 74HC138三八译码器的应用：定义
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813160637670.png" alt="" style="width: 1000px; object-fit: fill">
+
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+其中H=高电平，L=低电平，X=任意</br>
+A=A0, B=A1, C=A2</br>
+G1=E3，G2*=E1+E2
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813162310492.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>“74HC138到底是个什么东西？它是一个‘3线-8线译码器’，顾名思义，就是用3个输入信号，来选择8个输出信号中的一个。我们来看它的真值表，这是理解它工作原理的关键。”</p>
+<p>“首先，我们要注意它的<strong>使能端</strong>。它有三个使能引脚：G1, G2A, G2B (在我们的原理图中分别对应引脚6, 5, 4)。要让这个芯片正常工作，必须满足使能条件：<strong>引脚6（G1）输入高电平，同时引脚4和5（G2A和G2B）输入低电平</strong>。如果这个条件不满足，无论输入是什么，所有的输出端（Y0到Y7）都会被强制为高电平，芯片处于禁用状态。”</p>
+<p>“在使能之后，我们再看它的输入端A、B、C（也就是A0, A1, A2）。这三个输入引脚可以组成从000到111共8种二进制组合。每一种组合，都会唯一对应一个输出端变为<strong>低电平</strong>，而其他七个输出端则保持高电平。比如，当输入CBA为110（也就是6）时，Y6输出端就会输出低电平。这就是它的译码逻辑。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.3 74HC138三八译码器的应用：真值表
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813192959254.png" alt="" style="width: 700px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813160637670.png" alt="" style="width: 900px; object-fit: fill">
+
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+其中H=高电平，L=低电平，X=任意</br>
+A=A0, B=A1, C=A2</br>
+G1=E3，G2*=E1+E2
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813162310492.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+如果我现在想点亮的是连接在Y5输出，那么程序里 ADDR2, ADDR1, ADDR0 这三个变量应该分别赋什么值
+</div>
+</div>
+
+<aside class="notes"><p>“现在，我们把所有的知识串联起来，分析一下如何点亮开发板上的第二个LED灯（LED2）。”</p>
+<p>“第一步，我们要打开‘总阀门’，也就是让三极管Q16导通。Q16是一个PNP三极管，它的基极需要低电平才能导通。而它的基极连接着74HC138的Y6输出。所以，我们的目标是让<strong>Y6输出低电平</strong>。”</p>
+<p>“第二步，如何让Y6输出低电平？查阅真值表，我们需要先<strong>使能74HC138</strong>，然后给它的地址输入端CBA一个组合‘110’。对应到我们的电路图上，就是让ADDR2=1, ADDR1=1, ADDR0=0。”</p>
+<p>“第三步，当Y6输出低电平后，三极管Q16导通，VCC电源流过Q16，到达八个LED的阳极。此时，‘总阀门’已经打开。”</p>
+<p>“第四步，我们要打开对应的‘分阀门’。LED2连接在P0.0引脚上。为了让LED2亮，我们需要让P0.0引脚输出<strong>低电平</strong>，这样电流就能从VCC流过Q16，流过LED2，最后灌入P0.0引脚，形成回路，LED2就被点亮了。”</p>
+<p>“总结一下：<strong>使能芯片 -&gt; 设置地址(110) -&gt; Y6输出低 -&gt; Q16导通 -&gt; P0.0输出低 -&gt; LED2点亮</strong>。整个控制链条就是这样。”</p>
+<p>(提问)</p>
+<p>“好的，理论我们已经走通了。现在来个现场小测验，检验一下大家的掌握情况。如果我现在想点亮的是连接在Y5输出和P0.1引脚上的那个LED，那么程序里 ADDR2, ADDR1, ADDR0 这三个变量应该分别赋什么值？P0^1这个引脚最后应该输出高电平还是低电平？”</p>
+<p>(解答与分析)</p>
+<p>“（给学生一点思考时间）……我们来一起分析。首先，要让Y5输出低电平。查真值表，5的二进制是101。对应到地址线CBA，就是C=1, B=0, A=1。所以，ADDR2应该赋值为1，ADDR1为0，ADDR0为1。然后，总阀门打开后，要点亮P0.1上的LED，作为分阀门，P0^1引脚应该输出低电平。大家都跟上了吗？非常好！”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.3 74HC138三八译码器的应用：点亮LED的完整流程
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+单片机
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813200011649.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813160707452.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+<div class="" style="position: absolute; left: 52%; top: 15%; height: 45%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+上拉电阻
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/file-20250727170100139.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 52%; top: 60%; height: 25%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+初始状态（所有引脚都停止输出低电平） ->  上拉电阻将所有引脚拉高电平 -> LED小灯熄灭 -> 程序控制引脚输出低电平 -> 成功点亮小灯
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+上拉电阻，输入高电平，输出什么电平？
+</div>
+</div>
+
+<aside class="notes"><p>好的，我们来梳理一下点亮LED的完整流程。</p>
+<p>首先，请大家注意电路连接：单片机的P0端口，需要先接一个<strong>上拉电阻</strong>到正电源（VCC），然后再连接到我们LED灯组的公共阴极。</p>
+<p><strong>为什么P0口需要上拉电阻呢？</strong> 因为P0口是一种特殊的“开漏”输出结构，它自身只能输出强低电平，但无法主动输出高电平。上拉电阻的作用，就是在P0口不输出低电平的时候，将端口电压“拉”到高电平，给它一个确定的默认状态。</p>
+<p>我们来看工作过程：</p>
+<ol>
+<li><strong>初始状态</strong>：程序让P0口所有引脚都停止输出低电平（相当于高阻态）。这时，上拉电阻就会起作用，将P0口的电压拉到高电平。因此，LED灯的阴极也是高电平。因为阳极接的也是高电平（VCC），所以阴阳两极没有电压差，LED灯处于<strong>熄灭</strong>状态。</li>
+<li><strong>点亮LED</strong>：当我们想点亮其中一盏灯，比如LED2时，程序控制对应的P0.0口输出一个<strong>低电平</strong>。这个低电平信号通过数据线DB0传到LED2的阴极。现在，LED的阳极是高电平，阴极是低电平，产生了足够的压降，于是LED2就<strong>成功点亮</strong>了。</li>
+</ol>
+<p>这里我们解释2个概念——<strong>上拉电阻</strong>。它的核心功能是：<strong>在端口悬空或处于高阻态时，提供一个默认的高电平，防止状态不确定；同时，允许外部信号或端口自身将其拉低至低电平。</strong></p>
+<p>“开漏”，英文是 <strong>Open Drain</strong>，简称OD。它是指一个集成电路（比如单片机的一个GPIO引脚）的输出结构。想象一下输出引脚内部有一个开关，这个开关的一端连接着输出引脚，另一端连接到地（GND）。</p>
+<ul>
+<li>当需要输出<strong>低电平</strong>（逻辑0）时，内部的开关<strong>闭合</strong>，把引脚直接连接到地。</li>
+<li>当需要输出<strong>高电平</strong>（逻辑1）时，内部的开关<strong>断开</strong>。此时，引脚不连接任何东西，处于一种“开路”或“悬空”的状态。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.3 74HC138三八译码器的应用：实例代码
+</div>
+
+<div class="" style="position: absolute; left: 52%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+#include <reg52.h>   //包含特殊功能寄存器定义的头文件
+
+sbit LED = P0^0;     //位地址声明，注意：sbit必须小写、P大写！
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+```
+```C
+void main()
+{
+    ENLED = 0;
+    ADDR3 = 1;
+    ADDR2 = 1;
+    ADDR1 = 1;
+    ADDR0 = 0;
+    LED = 0;        //点亮小灯
+    while (1);      //程序停止在这里
+}
+```
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813200011649.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250813160707452.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+有哪位同学可以复述一下点亮LED小灯的流程？
+</div>
+</div>
+
+<aside class="notes"><p>理解了硬件原理，把它翻译成程序代码就非常简单了。我们来看这段C代码。大家看，每一行代码都和我们分析的硬件操作一一对应。这就是单片机编程的核心思想：<strong>通过软件代码来控制硬件电路的时序和状态</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.4 LED闪烁程序：设计思路
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/file-20240903074049134.png" alt="" style="object-fit: scale-down">
+
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+ - **设计思路**：
+    - 点亮LED程序：LED = 0
+    - 熄灭LED程序：LED = 1
+    - 闪烁实现：点亮→延时→熄灭→延时→循环
+- **程序逻辑**：
+    - 在亮和灭中间加延时
+    - 反复不断地点亮和熄灭
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>“让一个灯常亮，我们已经做到了。但这还不够酷，我们想让它闪烁起来。如何实现呢？”</p>
+<p>“思路非常直接。我们已经知道，<code>LED = 0</code>是点亮，<code>LED = 1</code>是熄灭。要让它闪烁，无非就是在这两个状态之间来回切换。但是，如果只是简单地交替执行这两条语句，由于单片机执行速度太快（微秒级别），人眼根本无法分辨，看到的仍然是一个常亮的灯（或者亮度稍暗）。”</p>
+<p>“所以，关键在于，我们需要在<strong>点亮之后，维持一段时间；熄灭之后，也维持一段时间</strong>。这个‘维持一段时间’，就是<strong>延时</strong>。整个逻辑就是：<strong>点亮 -&gt; 延时 -&gt; 熄灭 -&gt; 延时</strong>，然后把这个过程放进一个无限循环里，就实现了闪烁的效果。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.4 LED闪烁程序：实例代码
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+```C
+#include<reg52.h>
+
+sbit LED = P0^0;
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+
+void main()  //void即函数类型
+{
+	//以下为声明语句部分
+	
+	unsigned int i = 0; //定义一个无符号整型变量i， 并赋初值0
+
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+```C
+	//以下为执行语句部分
+	ENLED = 0;  //U3、U4两片74HC138总使能
+	ADDR3 = 1;  //使能U3使之正常输出
+	ADDR2 = 1;  //经U3的Y6输出开启三极管Q16
+	ADDR1 = 1; 
+	ADDR0 = 0;
+	while(1)
+	{
+		LED = 0;   //点亮小灯
+		for (i=0; i<30000; i++); //延时一段时间
+		LED = 1;
+		for (i=0; i<30000; i++); //延时一段时间	
+	}
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+for循环来实现延时非常简单直观，但它有没有什么缺点？或者说，这种延时方式可能会带来什么问题？
+</div>
+</div>
+
+<aside class="notes"><p>“好，我们来看具体的代码实现。这段代码在刚才点亮LED的基础上，增加了一个<code>while(1)</code>循环和延时。”</p>
+<p>“我们看<code>while(1)</code>循环内部。先执行<code>LED = 0</code>点亮灯，然后进入一个<code>for</code>循环。这个<code>for</code>循环什么也不做，就是让变量<code>i</code>从0数到29999。这个过程会消耗一定的时间。当循环结束后，延时就结束了。接着执行<code>LED = 1</code>熄灭灯，然后再次用同样的方式延时一段时间。因为这一切都在一个<code>while(1)</code>无限循环里，所以这个过程会不断重复，我们就看到了LED在一闪一闪。”</p>
+<p>(提问)</p>
+<p>“大家看，我们用了一个for循环来实现延时。这种方法非常简单直观，但它有没有什么缺点？或者说，在更复杂的项目中，这种延时方式可能会带来什么问题？”</p>
+<p>(解答与分析)</p>
+<p>“这是一个非常好的问题，能想到这里说明大家在深入思考了。这种for循环延时最大的缺点是<strong>‘阻塞式’的。也就是说，在执行这个for循环的几十毫秒或几百毫秒内，我们的CPU被完全占用了，它就在那里埋头数数，对外界的任何其他事情都无法做出响应。比如，如果这时我们按下一个按键，程序是无法立即处理的。在未来的课程中，我们将学习使用定时器和中断来实现更高效、更精确的‘非阻塞式’延时</strong>，那将是更专业的做法。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第3章 硬件基础知识学习/file-20250818222305657.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **本次课重点内容**：
+    - 电磁兼容EMC基本概念和去耦电容应用
+    - 三极管的工作原理和在数字电路中的应用
+    - 74HC138译码器的使用方法
+    - LED闪烁程序的编写和调试
+- **关键要点**：
+    - 单片机编程要根据实际电路图编写
+    - 硬件电路设计要考虑EMC要求
+    - 三极管可实现电平转换和电流放大
+</div>
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>好的，各位同学，通过本节课的学习，我们从理论到实践，全面提升了单片机应用的硬件设计与编程能力。接下来，我们再次回顾一下本章的几个核心要点</p>
+<p>请看总结页。本节课我们围绕几个关键技术点展开，它们是确保我们单片机系统稳定、可靠运行的基础。</p>
+<p>首先在<strong>系统稳定性和可靠性</strong>方面，我们重点强调了<strong>电磁兼容性（EMC）</strong>的概念。各位一定要记住，<strong>去耦电容</strong>是抑制电源高频噪声的“定海神针”，它的应用绝不能被忽视，这是硬件设计考虑EMC要求的第一步。</p>
+<p>其次是关于<strong>功能扩展和驱动</strong>。 我们深入理解了<strong>三极管的工作原理</strong>。它不仅仅是一个放大器，在数字电路中，它更是实现<strong>电平转换</strong>和<strong>电流放大</strong>的重要“开关”，帮助我们驱动LED、继电器等需要较大电流的负载。 同时，我们学会了利用<strong>74HC138译码器</strong>。它解决了我们单片机IO口资源不足的问题，是实现<strong>多路输出扩展</strong>的实用工具。</p>
+<p>最后，所有的理论知识都回归到<strong>实践</strong>。我们通过<strong>LED闪烁程序</strong>的编写和调试，再次明确了一个<strong>关键要点</strong>：<strong>单片机编程必须以实际的硬件电路图为依据</strong>，脱离了电路图的编程是纸上谈兵。</p>
+<p>总之，本章的核心要点可归纳为以下三点：</p>
+<p>第一，务必重视EMC设计，合理使用去耦电容，以提升硬件的稳定性和可靠性；</p>
+<p>第二，掌握三极管在电平转换与电流放大方面的基本应用能力；</p>
+<p>第三，程序代码的编写应严格参照实际电路图，确保软硬件协同工作。</p>
+<p>这些内容不仅是电路设计的基本原理，也将成为各位今后开展项目设计时所应遵循的规范与标准。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>“今天的课程就到这里。希望通过今天的学习和互动，大家对单片机硬件有了更深入的理解。课后请大家务必亲手把今天讲的代码敲一遍，下载到开发板上，亲眼看看LED闪烁的效果。”</p>
+<p>“如果大家有任何问题，可以通过邮件联系我。谢谢大家！”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1200,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>

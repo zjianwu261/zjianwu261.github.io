@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 40%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/Step_by_Step_learning.webp" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 55%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第5章 定时器与数码管基础
+</div>
+
+<div class="" style="position: absolute; left: 10%; top: 70%; height: 20%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《单片机原理与应用》<br><br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本次课主要内容
+</div>
+
+<div class="" style="line-height: 2.5; font-size: 45px; position: absolute; left: 5%; top: 25%; height: 50%; width: 44%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 5.1 逻辑运算和逻辑电路
+- 5.2 定时器和计数器
+- 5.3 用定时器实现LED小灯闪烁
+- 5.4 认识数码管
+- 5.5 数码管静态显示
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 17%; height: 66%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20240921154734061.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>大家好！欢迎回到我们的单片机课堂。今天，我们将一起踏上一个精彩的旅程，深入探索单片机的另一大核心功能——定时器</p>
+<p>首先，我们将从<strong>逻辑运算</strong>和<strong>逻辑电路</strong>的基础知识开始，它们是理解所有数字电路的基石。接着，我们将揭开<strong>定时器和计数器</strong>的神秘面纱，学习它们如何在单片机中精确地进行时间管理和事件计数。</p>
+<p>然后，我们将把理论付诸实践，利用定时器来实现一个经典项目——让<strong>LED小灯按特定频率闪烁</strong>。这不仅能加深大家对定时器的理解，还能让你们看到它在实际应用中的强大威力。</p>
+<p>最后，我们将引入一种常见的显示器件——<strong>数码管</strong>。我们将学习如何识别和驱动数码管，并最终实现<strong>数码管的静态显示</strong>。</p>
+<p>通过本节课的学习，大家不仅能掌握定时器的使用，还能将所学知识扩展到其他硬件控制上，为后续更复杂的项目打下坚实的基础。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.1 逻辑电路与逻辑运算：与或非
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+| 符号 |   意义   | 举例   | 结果 |
+|:----:|:--------:|:------:|:----:|
+|  &&  |  逻辑与  | 0&&1   | 0   |
+|  \|\| | 逻辑或  |0\|\|1 |  1   |
+|  !   |  逻辑非  | !0   |  1   |
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **逻辑值：** 只有两个值——**真**（非0）和**假**（0）。
+- **三种基本运算：**
+    - **逻辑与（`&&`）：** 所有条件都满足，结果才为真。
+    - **逻辑或（`||`）：** 只要一个条件满足，结果就为真。
+    - **逻辑非（`!`）：** 对结果取反。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：在C语言中，当执行 `!5` 这样的逻辑非运算时，结果会是什么？
+</div>
+</div>
+
+<aside class="notes"><p>今天我们将探讨一个非常基础但至关重要的概念：<strong>逻辑运算</strong>。无论是在数字电路还是在C语言编程中，逻辑都无处不在，是单片机控制和程序设计的基石。</p>
+<p>首先，我们来统一一下概念。在<strong>逻辑</strong>的世界里，只有<strong>真</strong>和<strong>假</strong>两个值。当我们将它映射到数字电路或C语言中，就变得非常直观：<strong>“假”</strong>对应于<strong>0</strong>，而<strong>“真”</strong>则对应于所有<strong>非0</strong>的值。</p>
+<p>接下来，我们将重点讲解三种最基本的逻辑运算：</p>
+<ul>
+<li><strong>逻辑与（&amp;&amp;）</strong>：想象一下，你想要同时满足两个条件。只有当条件A<strong>和</strong>条件B都成立时，结果才成立。比如，<code>if (A &amp;&amp; B)</code>，只有当A和B都为真时，括号内的代码才会执行。</li>
+<li><strong>逻辑或（||）</strong>：这次，你只需要满足多个条件中的一个。只要条件A<strong>或</strong>条件B，任意一个为真，结果就为真。例如，<code>if (A || B)</code>，只要A或B中有一个是真的，代码就会执行。</li>
+<li><strong>逻辑非（!）</strong>：这是一种“反转”的运算。如果条件A是真的，那么对它进行逻辑非运算后，结果就变为假的。反之亦然。例如，<code>if (!A)</code>，当A为假时，代码才会执行。</li>
+</ul>
+<p>掌握了这三种逻辑运算，你就掌握了编写复杂条件判断和控制流程的利器。</p>
+<p><strong>小问题：</strong></p>
+<p>在C语言中，当执行 <code>!5</code> 这样的逻辑非运算时，结果会是什么？为什么？</p>
+<p><strong>回答：</strong></p>
+<p>结果是 <strong>0</strong>。这是因为在C语言中，任何非零值都代表“真”。数字<code>5</code>是一个非零值，所以它的逻辑值为“真”。根据逻辑非的定义，对“真”进行运算后，结果为“假”，而“假”在C语言中用<code>0</code>来表示。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.1 逻辑电路与逻辑运算：位逻辑符
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+| 符号 |   意义   | 举例        | 结果        |
+|:----:|:--------:|:--------------------------------------:|:-----------:|
+|  &   | 按位与   | 0b11001100 & 0b11110000 | 0b11000000  |
+|  \|  | 按位或   | 0b11001100 \| 0b11110000   | 0b11111100  |
+|  ~   | 按位取反 | ~0b11001100  | 0b00110011  |
+|  ^   | 按位异或 | 0b11001100 ^ 0b11110000   | 0b00111100  |
+</div>
+
+<div class="" style="line-height: 1.6; position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **按位与（`&`）：** 过滤器，用于**清零**或**提取**特定位。
+- **按位或（`|`）：** 置位器，用于**设置**或**打开**特定位。
+- **按位取反（`~`）：** 将每一位进行**翻转**（0变1，1变0）
+- **按位异或（`^`）：** 相异为1，相同为0
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：在C语言中，如果你想把一个数的最低位（也就是最右边的位）设为1，应该用哪种按位运算？
+</div>
+</div>
+
+<aside class="notes"><p>按位运算与我们之前学习的逻辑运算不同，它不是对整个逻辑值（真/假）进行操作，而是对<strong>二进制数的每一位</strong>单独进行运算。我们可以通过符号来快速区分：按位运算通常只用一个符号，例如 <strong><code>&amp;</code></strong> 或 **<code>|</code>**。</p>
+<p>今天，我们将学习四种核心的按位运算：</p>
+<ul>
+<li><strong>按位与 (<code>&amp;</code>)<strong>：它就像一个“过滤器”。当一个位与另一个位都为1时，结果才为1。这在</strong>清零</strong>或<strong>提取</strong>特定位时非常有用。比如，<code>0b11001100 &amp; 0b11110000</code> 的结果是 <code>0b11000000</code>。</li>
+<li><strong>按位或 (<code>|</code>)<strong>：它是一个“置位器”。只要一个位为1，结果就为1。这在</strong>设置</strong>或<strong>打开</strong>特定位时特别方便。比如，<code>0b11001100 | 0b11110000</code> 的结果是 <code>0b11111100</code>。</li>
+<li>**按位取反 (<code>~</code>)**：这是一个“翻转”操作。它将一个数的所有位都进行反转，1变0，0变1。</li>
+<li><strong>按位异或 (<code>^</code>)<strong>：这个运算的规则是“相异为真”。当两个位不同时，结果为1；相同时，结果为0。它在</strong>数据加密</strong>或<strong>状态翻转</strong>等场景下有独特应用。</li>
+</ul>
+<p>理解了这些，你就能更灵活地处理底层数据，为高效的单片机编程打下坚实的基础。</p>
+<p><strong>小问题：</strong></p>
+<p>在C语言中，如果你想把一个数的最低位（也就是最右边的位）设为1，应该用哪种按位运算？</p>
+<p><strong>回答：</strong></p>
+<p>你应该使用<strong>按位或</strong>运算。例如，如果你想把变量 <code>num</code> 的最低位设为1，你可以这样做：<code>num = num | 1;</code> 因为 <code>1</code> 的二进制表示中只有最低位是1，其他位都是0。通过按位或运算，它会保留 <code>num</code> 其他位的值，并确保最低位变为1。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.1 逻辑电路与逻辑运算：代码示例
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+#include <reg52.h>
+sbit LED = P1^0;     // LED输出
+sbit KEY1 = P2^0;    // 按键1输入
+sbit KEY2 = P2^1;    // 按键2输入
+void main()
+{
+    unsigned char a, b, result;
+    while(1)
+    {
+        a = !KEY1; // 读取输入
+        b = !KEY2;
+        
+        // 与运算 (AND) - 两个键都按下时LED亮
+        result = ~(a & b);
+        LED = result;
+```
+```C
+         // 或运算 (OR) - 任意键按下LED亮
+        // result = ~(a | b);
+        // LED = result;
+        
+        // 非运算 (NOT) - KEY1按下时LED亮
+        // result = a;
+        // LED = result;
+        
+        // 异或运算 (XOR) - 两键状态不同时LED亮
+        // result = ~(a ^ b);
+        // LED = result;
+    }
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- 按键按下为0，LED点亮需要为0
+- **与运算**：两个按键都按下（都为0）时，LED点亮（输出0）
+- **或运算**：任意按键按下时，LED点亮
+- **非运算**：KEY1按下时，LED点亮
+- **异或运算**：两按键状态不同时，LED点亮
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>以按键控制LED为例，我们可以通过四种基本逻辑运算来实现不同的功能：<strong>与运算（AND）</strong>要求所有条件都满足（比如两个按键都按下），LED才亮；<strong>或运算（OR）</strong>则只需要一个条件满足（任意一个按键按下），LED就会亮；<strong>非运算（NOT）</strong>的效果则完全相反，比如当按键未按下时，LED反而亮；而<strong>异或运算（XOR）</strong>则很有趣，它要求条件必须<strong>不同</strong>时（比如一个按键按下，另一个未按下），LED才会亮。通过灵活运用这些逻辑，我们就能让单片机实现各种复杂的控制功能。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.1 逻辑电路与逻辑运算：左移右移
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+| 符号 |   意义   | 举例       | 结果    |
+|:----:|:--------:|:----------:|:-------:|
+|  <<  | 左移     | 0b00001111 << 2   | 0b00111100  |
+|  >>  | 右移     | 0b11110000 >> 2   | 0b00111100  |
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- 左移（`<<`）
+	- **功能：** 将二进制数向左移动。
+	- **效果：** 相当于**乘以2的n次方**，速度快。
+	- **示例：** `1 << 2` 等于 `4`
+- 右移（`>>`）
+	- **功能：** 将二进制数向右移动。
+	- **效果：** 相当于**除以2的n次方**，速度快。
+	- **示例：** `8 >> 2` 等于 `2`（8÷22）
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：在单片机中，如果你想让一个数乘以4，最快的方法是什么？请用移位运算来表示。
+</div>
+</div>
+
+<aside class="notes"><p>接下来我们再学习两种非常实用且高效的按位运算——<strong>移位运算</strong>。这两种运算在单片机编程中非常常见，能帮助我们快速进行数据的位操作，实现一些特定的功能。</p>
+<p>移位运算顾名思义，就是将一个二进制数的所有位向左或向右移动。</p>
+<ul>
+<li>**左移 (<code>&lt;&lt;</code>)**：这个操作符将一个数的所有位向左移动指定的位数。当一个位向左移动时，它会从最左边“移出去”，而最右边新空出的位则会自动用 <strong>0</strong> 填充。<ul>
+<li>例如：<code>0b00001111 &lt;&lt; 2</code>。我们将这个数向左移动两位，结果是 <code>0b00111100</code>。</li>
+<li>左移操作的一个重要特性是，每左移一位，相当于将这个数乘以2，这比普通的乘法运算要快得多。</li>
+</ul>
+</li>
+<li>**右移 (<code>&gt;&gt;</code>)**：与左移相反，这个操作符将一个数的所有位向右移动指定的位数。当一个位向右移动时，它会从最右边“移出去”，而最左边新空出的位则会用 <strong>0</strong> 填充。<ul>
+<li>例如：<code>0b11110000 &gt;&gt; 2</code>。我们将这个数向右移动两位，结果是 <code>0b00111100</code>。</li>
+<li>右移操作的一个重要特性是，每右移一位，相当于将这个数除以2，这对于快速进行除法运算非常有效。
+掌握了移位运算，你将能更高效地处理数据，并为许多底层编程技巧打下坚实的基础。</li>
+</ul>
+</li>
+</ul>
+<p><strong>小问题：</strong></p>
+<p>在单片机中，如果你想让一个数乘以4，最快的方法是什么？请用移位运算来表示。</p>
+<p><strong>回答：</strong></p>
+<p>最快的方法是<strong>左移</strong>运算。将一个数左移两位（<code>&lt;&lt; 2</code>）就相当于将它乘以4。 例如，<code>num &lt;&lt; 2</code>。 这是因为在二进制中，每向左移动一位，数值就会翻倍，移动两位则会翻四倍。这种移位运算比传统的乘法运算在单片机中执行速度更快。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.1 逻辑电路与逻辑运算：左移右移示例
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 20%; height: 60%; width: 48%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+ 
+```
+#include <reg52.h>
+void delay_ms(unsigned int ms) {
+    unsigned int i, j;
+    for (i = 0; i < ms; i++) {
+        for (j = 0; j < 120; j++);
+    }
+}
+void main() {
+    while (1) {
+        P1 &= ~(1 << 3); // 输出低电平，使用按位与和取反操作来点亮LED
+        delay_ms(500);
+        P1 |= (1 << 3); // 输出高电平，使用按位或操作来熄灭LED
+        delay_ms(500);
+    }
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 48%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+ 
+- 高效位移乘除法：利用位移操作替代乘除法，大幅提升代码性能。例如，用 `x << 3` 代替 `x * 8`，用 `x >> 1` 代替 `x / 2`
+- 数据压缩与内存优化：将多个布尔状态打包进一个字节
+- 核心硬件寄存器控制：
+	- 设置位：用 `|=` 开启功能，如 `PORTB |= (1 << 3);`。
+	- 清除位：用 `&= ~`关闭功能，如 `PORTB &= ~(1 << 3);`。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：`P1 &= ~(1 << 3);`: 这行代码将P1.3位清零，如何实现？
+</div>
+</div>
+
+<aside class="notes"><p><strong>单片机中的核心应用场景</strong></p>
+<p>那么，学这两个运算符的意义何在？在单片机开发中，它们是绝对的“神器”，尤其是以下几个方面：</p>
+<ul>
+<li><strong>高效乘除法</strong>：在对性能要求极高的代码中，用 <code>x &lt;&lt; 3</code> 代替 <code>x * 8</code>，或者用 <code>x &gt;&gt; 1</code> 代替 <code>x / 2</code>，CPU执行速度会快得多。</li>
+<li><strong>数据打包与解包</strong>：我们可以用一个字节来存储8个开关的状态，用移位操作来精确地访问和修改每一个独立的状态位，极大地节省内存。</li>
+<li><strong>硬件寄存器操作</strong>：这是<strong>最重要</strong>的应用！单片机的每一个功能（如GPIO、定时器、串口）都是通过配置内部的<strong>寄存器</strong>来实现的。而寄存器的每一位通常都有特定的含义。</li>
+</ul>
+<p>举个例子：我们要点亮连接到PB3引脚的LED灯，最标准、最高效的写法是：</p>
+<p><code>PORTB |= (1 &lt;&lt; 3);</code></p>
+<p>大家可以思考一下：这行代码中的 <code>(1 &lt;&lt; 3)</code>，为什么能够精确地定位到PORTB寄存器的第3位，而不会影响到其他位呢？这个问题，正是位移运算的精髓所在。掌握好位移运算，是真正从“软件思维”迈向“硬件思维”的关键一步。</p>
+<ul>
+<li><strong><code>P1 &amp;= ~(1 &lt;&lt; 3);</code></strong>: 这行代码将P1.3位清零，也就是设置为<strong>低电平</strong>。此时，LED亮。</li>
+<li><strong><code>P1 |= (1 &lt;&lt; 3);</code></strong>: 这行代码将P1.3位设置为1，也就是设置为<strong>高电平</strong>。此时，LED灭。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.1 逻辑电路与逻辑运算：逻辑符与位逻辑符异同
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 15%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+|特性|位逻辑符 (Bitwise Operators)|逻辑符 (Logical Operators)|
+|:-:|:-:|:-:|
+|**操作对象**|变量的每一个二进制位|整个表达式的布尔值 (真/假)|
+|**返回值**|一个新的数值|一个布尔值 (1 或 0)|
+|**用途**|底层编程、硬件控制、数据压缩、加密、算法优化等|程序流程控制，如 `if`、`while`|
+|**短路特性**|无，始终对所有操作数进行完整运算|有，例如 `&&`、`\|\|` |
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>关于逻辑符号与位逻辑符的异同，我们可以通过这张表格进行总结。</p>
+<p>核心区别在于它们的<strong>操作对象</strong>：</p>
+<ul>
+<li><strong>位逻辑符（Bitwise Operators）</strong>：它们的关注点是<strong>变量的每一个二进制位</strong>。当你使用 <code>&amp;</code>、<code>|</code>、<code>~</code> 等符号时，你是在对一个字节或字中的每一位进行独立的布尔运算。例如，<code>0b1010 &amp; 0b1100</code> 的结果是 <code>0b1000</code>。这种运算在底层编程中极为常见，用于精确地设置、清除或检查硬件寄存器中的某个特定位。</li>
+<li><strong>逻辑符（Logical Operators）</strong>：它们的关注点是<strong>整个表达式的真假</strong>。<code>&amp;&amp;</code>、<code>||</code> 和 <code>!</code> 符号用于评估一个条件的布尔值。结果只有两种：真（1）或假（0）。它们不关心变量内部的位，只判断整个表达式是“真”还是“假”。这正是我们用来控制程序流程的工具，比如 <code>if</code> 语句。</li>
+</ul>
+<p>另一个重要区别是<strong>短路特性</strong>：</p>
+<ul>
+<li><strong>位逻辑符</strong>：没有短路特性。<code>a &amp; b</code> 会始终计算 <code>a</code> 和 <code>b</code> 的所有位，然后得出结果。</li>
+<li><strong>逻辑符</strong>：具有短路特性。以 <code>a &amp;&amp; b</code> 为例，如果 <code>a</code> 已经为假，<code>&amp;&amp;</code> 就会立即返回假，根本不会去评估 <code>b</code>。这不仅能提高程序效率，还能避免一些潜在的错误，比如在评估 <code>a &amp;&amp; b</code> 时，如果 <code>a</code> 是一个空指针，就可以避免对 <code>b</code> 的非法访问。</li>
+</ul>
+<h3 id="思考与总结">思考与总结</h3>
+<p>总而言之，<strong>位逻辑符</strong>就像是精密的“位”操作员，专注于微观世界，用于直接操纵硬件；而<strong>逻辑符</strong>则是宏观的“逻辑”判断者，用于构建程序的整体流程。在单片机编程中，你需要根据任务的性质来选择正确的工具：当需要控制硬件引脚时，用位逻辑符；当需要根据多个条件来做决策时，用逻辑符。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.1 逻辑电路与逻辑运算：逻辑电路符号
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 10%; top: 15%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20240921161015395.png" alt="" style="width: 1200px; object-fit: fill">
+
+</div>
+
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>所有的软件逻辑最终都会落实到硬件中去实现，而<strong>位</strong>是其中最基本的运算单元。对应地，位逻辑运算在硬件中也有专门的电路来处理。至于更高层次的逻辑运算符，则是由多个逻辑门组合而成的电路来完成。可以把这些逻辑电路看作一个个微小的“处理单元”，它们在硬件层面忠实而高效地执行着我们定义的逻辑操作。</p>
+<p>在电路示意图中，我们经常会看到这些逻辑门的图标，它们是电路图的“语言”，理解它们的含义至关重要。</p>
+<p><strong>符号的理解与运用</strong></p>
+<p>在电路符号方面，国际标准和早期的符号有所不同。但请大家不要有任何的心理负担，这些符号<strong>不需要死记硬背</strong>。当你在分析电路图，遇到不熟悉的符号时，随时都可以查阅相关资料。重要的是理解它们背后所代表的逻辑功能，而不是死记硬背它们的形状。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.2 定时器和计数器：机器周期
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250830224043191.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+
+<div class="" style="line-height: 1.8; position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **时钟周期（T）**
+	- 单片机中最小的时间单位。T=1/时钟频率
+	- 例如：晶振 11.0592MHz，则 T=1/11059200 秒。  
+- **机器周期**
+	- 完成一个操作的最短时间，汇编语言中每条指令执行时间是机器周期的整数倍。
+	- 标准 8051 架构：1 个机器周期 = 12 个时钟周期，即 12/11059200 秒。
+</div>
+
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么标准 8051 单片机的一个机器周期是 12 个时钟周期，而不是 10 个或 8 个
+</div>
+</div>
+
+<aside class="notes"><p>我们已经学会了如何利用逻辑运算来处理信息，这就像是给单片机装上了大脑。但光有大脑还不够，它还需要一个“心跳”来驱动所有操作。这个“心跳”就是我们接下来要讲的——<strong>时钟周期和机器周期</strong>。</p>
+<p><strong>时钟周期（T）：单片机的脉搏</strong>：</p>
+<p>首先，我们来看<strong>时钟周期（T）</strong>。它可以被看作是单片机世界的最小时间单位，就像我们现实生活中的秒。单片机的所有动作，无论是执行一条指令还是传输一个数据，都是以这个最小单位为基础的。</p>
+<p>它的计算方式很简单，就是<strong>时钟频率的倒数</strong>。比如，如果你的单片机晶振是 <strong>11.0592MHz</strong>，那么它的时钟周期就是 <strong>1/11059200 秒</strong>。这个数字虽然很小，却是整个单片机系统精确运行的基石。</p>
+<p><strong>机器周期：单片机的一步</strong>：</p>
+<p>接下来是<strong>机器周期</strong>。如果说时钟周期是单片机一次心跳，那么机器周期就是它完成一个基本动作所花的时间。我们可以把它理解为单片机“迈出的一步”。这个概念在<strong>汇编语言编程</strong>中尤为重要，因为每一条汇编指令的执行时间，都是机器周期的整数倍。</p>
+<p>在最经典的 <strong>8051 架构</strong>中，一个机器周期由 <strong>12 个时钟周期</strong>组成。这意味着，完成一个基本操作需要 <strong>12 拍</strong>。用我们之前的例子来说，一个机器周期就是 <strong>12/11059200 秒</strong>。</p>
+<p><strong>问题：</strong> 为什么标准 8051 单片机的一个机器周期是 12 个时钟周期，而不是 10 个或 8 个？</p>
+<p><strong>回答：</strong> 这是 8051 单片机最初设计时的内部电路架构决定的。早期的 8051 芯片为了完成一次完整的取指令、解码、执行等操作，其内部计数器和时序逻辑需要 12 个时钟脉冲来同步各个阶段。这是一种固定的设计，就像一台机器出厂时被设定好的工作节奏，虽然如今的增强型单片机已大大缩短了这个比例（例如，1 个机器周期等于 1 个或 4 个时钟周期），但在学习经典 8051 时，记住这个 <strong>12T</strong> 的特性是理解其时序基础的关键。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.2 定时器和计数器：定时器和计数器
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250830230843753.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **一体两用：** 定时器和计数器是单片机内部的同一模块。通过配置寄存器，我们可以让它实现**定时**或**计数**功能。
+- **定时器工作原理：** 它的内部有一个寄存器，每经过一个**机器周期**，数值就会自动加 1。
+- **溢出与定时：** 定时器的**位宽**（如 16 位）决定了它的最大值。当数值达到最大后，再加 1 就会发生**溢出**并归零。利用从特定初始值到溢出的这段时间，我们就能实现精确的定时。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我们想用定时器来计时，当时间到了之后，单片机怎么知道“时间到了”呢？
+</div>
+</div>
+
+<aside class="notes"><p>我们知道，机器周期是单片机执行一个基本操作所需的最短时间。</p>
+<p>今天，我们就把这个概念应用到实践中。我们要学习一个非常重要的模块：<strong>定时器与计数器</strong>。</p>
+<p><strong>一体两用：定时器和计数器</strong>：</p>
+<p>首先，要搞清楚一个概念：在单片机内部，<strong>定时器和计数器其实是同一个硬件模块</strong>。我们可以通过配置特殊的寄存器，让它实现<strong>定时</strong>（timer）或者<strong>计数</strong>（counter）这两种不同的功能。就像一把瑞士军刀，通过切换工具，可以完成不同的任务。</p>
+<p>我们主要来看它作为定时器的功能。</p>
+<p><strong>定时器的工作原理</strong>：</p>
+<p>定时器内部有一个寄存器。当它开始工作时，这个寄存器的值会像秒表一样自动往上跳。它“跳动”的频率正是由我们上一节讲的<strong>机器周期</strong>决定的。</p>
+<p>比如，在经典的 8051 单片机里，每过一个机器周期，这个寄存器的值就会自动加 1。这就像是单片机在用自己的“心跳”来丈量时间。</p>
+<p><strong>“溢出”与精准定时</strong>“：</p>
+<p>那这个寄存器会一直加下去吗？当然不会。定时器有不同的<strong>位宽</strong>（比如 16 位），这决定了它的最大计数值。一个 16 位的定时器，最大能数到 65535。当它从 65535 再加 1 时，就会发生<strong>溢出</strong>，数值自动归零。</p>
+<p>这就是我们实现定时器的核心原理：我们设置一个初始值，让它开始计数，直到它“溢出”归零。从初始值到溢出的这段时间，就是一个精准的定时周期。通过控制初始值，我们就能控制这个定时的长短。</p>
+<p><strong>问题：</strong> 如果我们想用定时器来计时，当时间到了之后，单片机怎么知道“时间到了”呢？</p>
+<p><strong>回答：</strong> 当定时器的寄存器发生<strong>溢出</strong>时，单片机会自动设置一个<strong>标志位</strong>。这个标志位就像一个信号灯，亮起来就告诉单片机：“计时已经完成！”</p>
+<p>我们的程序可以随时检查这个标志位。当发现它被点亮时，就知道定时任务已经结束了，然后就可以去执行下一步的操作，比如让 LED 灯亮起来，或者发送一个信号等等。</p>
+<p>这个标志位是单片机<strong>硬件自动生成的</strong>，不需要我们去写复杂的代码来判断，这极大地简化了编程。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.2 定时器和计数器：定时器的的寄存器
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250830231505778.png" alt="" style="object-fit: scale-down">
+
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **硬件资源：** 标准 51 单片机内置两个独立的定时器/计数器模块，分别命名为**T0**和**T1**（T 即 Timer 的缩写）。
+- **计数寄存器：**
+    - **TH0 / TL0**：用于存储**定时器 T0** 的 16 位计数值（高八位/低八位）。
+    - **TH1 / TL1**：用于存储**定时器 T1** 的 16 位计数值（高八位/低八位）。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么一个 16 位的计数值，要分成两个 8 位的寄存器（THx 和 TLx）来存储呢？
+</div>
+</div>
+
+<aside class="notes"><p>定时器的核心原理就是通过<strong>设置一个初始值</strong>，让它计数到<strong>溢出</strong>，从而实现一段精准的定时。</p>
+<p>那么，这个“初始值”到底设置在哪里？定时器又是如何进行计数的呢？这就要深入到单片机的内部，看看我们到底是用什么来控制它的。</p>
+<p><strong>定时器的硬件结构：T0 和 T1</strong>:</p>
+<p>在标准的 51 单片机里，我们有两个专门用来计时的“秒表”，它们就是独立的<strong>定时器 T0 和 T1</strong>。T 就是 Timer 的缩写。有了这两个模块，我们就可以同时执行两个不同的定时任务。</p>
+<p><strong>计数寄存器：实现定时的核心</strong>:</p>
+<p>每个定时器内部都有一个特殊的<strong>计数寄存器</strong>，我们设置的<strong>初始值</strong>和定时器正在计的<strong>当前值</strong>就都存放在这里。</p>
+<ul>
+<li>对于<strong>定时器 T0</strong>，它的计数值由两个 8 位的寄存器共同存储：<strong>TH0</strong>（高八位）和 <strong>TL0</strong>（低八位）。</li>
+<li>同理，对于<strong>定时器 T1</strong>，它的计数值由 <strong>TH1</strong>（高八位）和 <strong>TL1</strong>（低八位）组成。</li>
+</ul>
+<p>当定时器开始工作时，就是这些寄存器里的值在不断地自动加 1。当它们的组合值达到最大（例如，16 位定时器达到 65535）时，就会发生溢出。</p>
+<p><strong>所以，我们要想设置一个定时器，其实就是通过编程去向这些特殊的寄存器写入初始值。</strong></p>
+<p><strong>问题：</strong> 为什么一个 16 位的计数值，要分成两个 8 位的寄存器（THx 和 TLx）来存储呢？</p>
+<p><strong>回答：</strong> 这是因为 51 单片机是一种 <strong>8 位</strong>的单片机。它的内部总线和数据处理单元一次只能处理 8 位的数据。为了存储 16 位（2 个字节）的计数值，设计者就必须把它拆分成高 8 位和低 8 位，分别存放在两个独立的 8 位寄存器中。虽然看起来麻烦，但这正是由 51 单片机的硬件架构所决定的。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.2 定时器和计数器：定时器控制寄存器
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20240923094141883.png" alt="" style="width: 1200px; object-fit: fill">
+
+TCON（0x88）-定时器控制寄存器的位分配（高四位）
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **作用：** 用于控制和监控定时器的状态，地址为 `0x88`，可按位操作。
+- **主要位功能：**
+    - **TRx (TR0/TR1)：** **运行控制位**，置 `1` 启动定时器，清 `0` 停止。
+    - **TFx (TF0/TF1)：** **溢出标志位**，当定时器溢出时，由硬件自动置 `1`。
+- **关系：** **TRx** 是我们用来**控制**定时器的，而 **TFx** 是定时器用来**报告**完成状态的。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我把 TCON 寄存器中的 TR0 设置为 1 启动了定时器，但是忘记了清除 TF0 标志位，会发生什么？
+</div>
+</div>
+
+<aside class="notes"><p>我们已经知道，定时器的计数值存放在 <strong>THx</strong> 和 <strong>TLx</strong> 寄存器里。但仅仅有这些寄存器还不够，我们还需要一个“开关”来控制定时器何时开始、何时停止。</p>
+<p>这就需要我们的<strong>TCON 寄存器</strong>，全称<strong>定时器控制寄存器</strong>，它的地址是 <strong>0x88</strong>，而且非常方便，它是可以按位寻址的。这就像一个带有很多独立开关的控制面板，我们可以单独控制每一个开关，而不影响其他的。</p>
+<p>在这个控制台里，有两个最重要的开关和指示灯：</p>
+<ul>
+<li><strong>TRx（运行控制位）：</strong> 就像定时器的“电源开关”。当我们通过软件将 <strong>TR0</strong> 或 <strong>TR1</strong> 置 1 时，对应的定时器就会开始工作；当我们将它清零时，定时器就会停止。这是我们启动和停止定时器的核心方式。</li>
+<li><strong>TFx（溢出标志位）：</strong> 就像一个“任务完成”的指示灯。当对应的定时器发生溢出时，这个 <strong>TF0</strong> 或 <strong>TF1</strong> 位就会由硬件自动置为 1，亮起红灯，告诉我们：“计时时间到了！”。我们可以通过软件来清除这个标志，也可以在进入定时器中断时，由硬件自动清除。</li>
+</ul>
+<p>简单来说，<strong>TR</strong> 是我们用来<strong>控制</strong>定时器运行的，而 <strong>TF</strong> 是单片机用来<strong>报告</strong>定时器状态的。</p>
+<p><strong>问题：</strong> 如果我把 TCON 寄存器中的 TR0 设置为 1 启动了定时器，但是忘记了清除 TF0 标志位，会发生什么？</p>
+<p><strong>回答：</strong> 如果你没有清除 <strong>TF0</strong> 标志位，那么当定时器再次溢出时，这个标志位仍然会保持为 1。这会导致你的程序无法正确判断下一次定时任务是否完成。举个例子，如果你的程序逻辑是“当 TF0 等于 1 时，执行某个操作”，那么在 TF0 被清零之前，这个操作就不会被执行。因此，在每次处理完定时器溢出事件后，<strong>手动清除 TFx 标志位</strong>是一个非常重要的步骤，确保下一次定时溢出时，程序能够正确响应。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.2 定时器和计数器：定时器模式寄存器
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20240923114144862.png" alt="" style="width: 1200px; object-fit: fill">
+
+**TMOD**（Timer Mode Register）配置定时器的工作方式，地址为 `0x89`
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **Gate（门控位）：**
+	- `Gate = 0`：仅由软件启动和停止。
+	- `Gate = 1`：除软件控制外，还需外部引脚的高电平信号才能启动。
+- **C/T（定时/计数选择位）：**
+	- `C/T = 0`：作为**定时器**使用（基于机器周期计时）。
+	- `C/T = 1`：作为**计数器**使用（对外部脉冲计数）
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：如果我们想让单片机用定时器来数**按键被按下了多少次**，我们应该怎么设置 TMOD 寄存器
+</div>
+</div>
+
+<aside class="notes"><p><strong>TCON 寄存器</strong>就像是定时器的“控制开关”，可以启动和停止计时。但仅仅有开关还不够，我们还需要一个“模式选择器”来告诉定时器，它到底应该怎么工作。</p>
+<p>这个“模式选择器”就是我们今天要学习的 <strong>TMOD 寄存器</strong>。<strong>TMOD</strong>，全称<strong>定时器模式寄存器</strong>，它的地址是 <code>0x89</code>。和 TCON 不同的是，TMOD 是<strong>不可位寻址</strong>的，我们必须一次性对它整个字节进行读写。这就好比一个多功能的旋钮，通过旋转到不同位置，来选择不同的工作模式。</p>
+<p>TMOD 寄存器里，最重要的就是两个控制位：</p>
+<ul>
+<li><p><strong>C/T（定时/计数选择位）：</strong> 这是最关键的控制位，它决定了我们把这个模块当成什么来用。</p>
+<ul>
+<li>当 <strong>C/T 等于 0</strong> 时，它就是我们熟悉的<strong>定时器</strong>，它会根据单片机内部的<strong>机器周期</strong>来计时。</li>
+<li>当 <strong>C/T 等于 1</strong> 时，它就变成了<strong>计数器</strong>，它不再依赖内部时钟，而是对外部引脚输入的脉冲信号进行计数。这在需要统计外部事件次数时非常有用。</li>
+</ul>
+</li>
+<li><p><strong>Gate（门控位）：</strong> 这个位决定了定时器启动的条件。</p>
+<ul>
+<li>当 <strong>Gate 等于 0</strong> 时，非常简单，我们只需要通过软件将 TCON 里的 TRx 位置 1，定时器就会开始工作。</li>
+<li>当 <strong>Gate 等于 1</strong> 时，启动条件就多了一个：除了 TRx 要置 1 外，外部引脚（如 INT0 或 INT1）还必须是高电平，定时器才能启动。这让我们可以通过外部信号来精确控制定时器的启停。</li>
+</ul>
+</li>
+</ul>
+<p>在我们的课程中，我们通常会让 <strong>C/T 等于 0</strong>，把模块配置成定时器，并且让 <strong>Gate 等于 0</strong>，让启动方式更简单。</p>
+<p><strong>问题：</strong> 如果我们想让单片机用定时器来数<strong>按键被按下了多少次</strong>，我们应该怎么设置 TMOD 寄存器？</p>
+<p><strong>回答：</strong> 要数按键按下的次数，我们需要让定时器模块工作在<strong>计数器</strong>模式。因此，我们要将 <strong>TMOD</strong> 寄存器中的 <strong>C/T</strong> 位设置为 <code>1</code>。这样，每当按键按下并产生一个外部脉冲信号时，定时器的计数值就会自动加 1。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.2 定时器和计数器：定时器模式寄存器
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20240923114144862.png" alt="" style="width: 1200px; object-fit: fill">
+
+**TMOD**（Timer Mode Register）配置定时器的工作方式，地址为 `0x89`
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **M1、M0** 组合出了定时器的四种工作方式：
+	- **模式 0 (00)：** 13 位定时器，兼容旧型号，**不常用**。
+	- **模式 1 (01)：** **16 位定时器**。最常用，由 THx 和 TLx 构成，可从 0 计数到 65535。
+	- **模式 2 (10)：** **8 位自动重装模式**。TLx 溢出后，THx 的值自动回填，适合**固定周期定时**。
+	- **模式 3 (11)：** 特殊模式，禁用定时器 1，并将定时器 0 拆分。**不常用**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么在模式 2 中，当 TLx 溢出时，THx 的值会复制给 TLx，而 THx 本身的值却不会加 1 呢？
+</div>
+</div>
+
+<aside class="notes"><p><strong>TMOD 寄存器</strong>的 <strong>C/T</strong> 和 <strong>Gate</strong> 位，它们决定了定时器是<strong>计时</strong>还是<strong>计数</strong>，以及如何<strong>启动</strong>。而<strong>M1 和 M0</strong> 这两位。它们是定时器的“模式选择”旋钮，通过不同的组合，能让定时器以四种不同的方式工作。</p>
+<ul>
+<li><p><strong>模式 0（13 位定时器）：</strong></p>
+<ul>
+<li>当 <strong>M1M0 = 00</strong> 时，定时器工作在模式 0。它是一个 13 位的定时器，由 <strong>THx 的低 5 位</strong>和 <strong>TLx 的 8 位</strong>组成。这种模式主要为了兼容旧型号的单片机，现在我们很少使用。</li>
+</ul>
+</li>
+<li><p><strong>模式 1（16 位定时器）：</strong></p>
+<ul>
+<li>当 <strong>M1M0 = 01</strong> 时，进入<strong>模式 1</strong>。这是一个标准的 <strong>16 位定时器</strong>，由 <strong>THx 和 TLx</strong> 共同构成。它可以从 <code>0</code> 一直计数到 <code>65535</code>。这是我们最常用、最灵活的模式，因为它能提供最长的定时时长。</li>
+</ul>
+</li>
+<li><p><strong>模式 2（8 位自动重装）：</strong></p>
+<ul>
+<li>当 <strong>M1M0 = 10</strong> 时，进入<strong>模式 2</strong>。这是一个 <strong>8 位自动重装</strong>模式。它的核心特点是：当 <strong>TLx</strong> 寄存器溢出后，<strong>THx</strong> 寄存器里预先设定的值会自动复制回 <strong>TLx</strong>。这就像一个无限循环的沙漏，每漏完一次，就会自动填满，保证下一次定时的时间完全相同。这个模式非常适合需要周期性、精准定时（比如产生方波信号）的应用。</li>
+</ul>
+</li>
+<li><p><strong>模式 3（双 8 位定时器）：</strong></p>
+<ul>
+<li>当 <strong>M1M0 = 11</strong> 时，进入<strong>模式 3</strong>。这种模式比较特殊，<strong>它会禁用定时器 1</strong>。同时，定时器 0 会被拆分成两个独立的 8 位定时器：一个由 <strong>TL0</strong> 控制，另一个由 <strong>TH0</strong> 控制。这种模式很少被使用，了解即可。</li>
+</ul>
+</li>
+</ul>
+<p>在实际编程中，我们最常使用的就是<strong>模式 1</strong>，因为它提供了最大的灵活性。在需要固定周期定时时，<strong>模式 2</strong> 则是更好的选择。</p>
+<p><strong>问题：</strong> 为什么在模式 2 中，当 TLx 溢出时，THx 的值会复制给 TLx，而 THx 本身的值却不会加 1 呢？</p>
+<p><strong>回答：</strong> 这是模式 2 的<strong>核心设计</strong>。THx 在模式 2 中扮演的角色不是计数器，而是<strong>初始值存储器</strong>。它的作用就是<strong>存储一个固定的、不变的初值</strong>。每当 TLx 溢出归零时，就会立刻从 THx 中“拉”来这个值，重新开始计数。这种设计保证了定时器每次溢出所需的时间都是完全一致的，从而实现精确的<strong>周期性定时</strong>，例如生成固定频率的波形。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.2 定时器和计数器：定时器使用步骤
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250830235255923.png" alt="" style="object-fit: scale-down">
+
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **模式配置：** 设置 **TMOD 寄存器**，配置定时器的工作模式（如**模式 1**）。
+- **初值设置：** 向 **THx 和 TLx 寄存器**写入计算好的初值，以决定定时时长。
+- **启动定时：** 设置 **TCON 寄存器**中的 **TRx** 位为 `1`，启动定时器。
+- **溢出监测：** 循环判断 **TCON 寄存器**中的 **TFx** 标志位，监控定时器溢出情况。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：在这四步中，哪一步是真正让定时器“动”起来的？
+</div>
+</div>
+
+<aside class="notes"><p>我们已经学习了定时器的各个<strong>寄存器</strong>，包括控制开关的 TCON，以及配置模式的 TMOD。现在，让我们把这些知识串联起来，看看如何编写程序，实现一个完整的定时功能。</p>
+<p>这就像一个标准的操作流程，我们只需要按部就班地完成以下四步：</p>
+<ol>
+<li><strong>配置工作模式：</strong> 第一步，我们要告诉单片机，这个定时器要怎么工作。我们通过设置 <strong>TMOD 寄存器</strong>来完成这个任务。比如，如果我们要使用最常用的 <strong>16 位定时器模式</strong>，我们就需要将 TMOD 设置为 <code>0x01</code>。</li>
+<li><strong>设置初值：</strong> 第二步是设置计数的起点。我们使用 <strong>THx</strong> 和 <strong>TLx</strong> 这两个计数寄存器来存储初值。这个值需要我们提前计算好，以确保定时器能在我们期望的时间点溢出。这就像给一个沙漏设定好起始的沙量，从而控制它漏完的时间。</li>
+<li><strong>启动定时器：</strong> 一切准备就绪后，我们就可以“按下启动键”了。这很简单，我们只需设置 <strong>TCON 寄存器</strong>中的 <strong>TRx</strong> 位为 <code>1</code>。一旦这一步完成，定时器就会立即开始计数。</li>
+<li><strong>监测溢出：</strong> 最后，我们需要实时监控定时器的状态。我们通过判断 <strong>TCON 寄存器</strong>中的 <strong>TFx</strong> 标志位来完成。当 <strong>TFx</strong> 变成 <code>1</code> 时，就代表定时器已经溢出了，我们的定时任务也就完成了。</li>
+</ol>
+<p>这四步构成了定时器编程的基本框架。只要掌握了这个流程，你就可以在单片机上实现各种精确的定时任务。</p>
+<p><strong>问题：</strong> 在这四步中，哪一步是真正让定时器“动”起来的？
+<strong>回答：</strong> 是第三步，<strong>启动定时器</strong>。当我们执行 <code>TRx = 1</code> 这条指令时，就像给定时器通了电，它才会真正开始计数。而其他步骤，比如设置模式和初值，都是在为这一步做准备。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.3 用定时器实现LED小灯闪烁
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250901153140772.png" alt="" style="width: 700px; object-fit: fill">
+
+通过断点计算两次for循环延迟的时间
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+- for循环延时的局限性
+	- **不精确**：延时时间受编译器优化和CPU其他任务影响。
+	- **不一致**：无法保证每次亮灭的持续时间相同。
+	- **阻塞性**：延时期间CPU“空转”，无法执行其他任务。
+- 定时器的优势
+	- **精确性**：基于硬件时钟，计时不受软件影响。
+	- **稳定性**：确保亮灭时间高度一致。
+	- **非阻塞**：定时器在后台独立运行，CPU可同时处理其他任务。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：定时器实现的LED闪烁，亮灭时间为什么能保持一致？
+</div>
+</div>
+
+<aside class="notes"><p>上一节课我们学习了如何用<strong>for循环</strong>实现LED小灯的闪烁，并且通过断电调试，知道了for循环延时时间不确定。这在需要精确控制的应用中是无法接受的。</p>
+<p>而使用定时器则完美解决了这些问题。定时器可以提供<strong>精确的延时</strong>，因为它是基于固定的时钟周期进行计数的，与主程序的运行状态无关。因此，我们可以让LED亮灭的持续时间<strong>保持一致</strong>，例如亮一秒、灭一秒，从而实现稳定的0.5赫兹闪烁频率。</p>
+<p>问：定时器实现的LED闪烁，亮灭时间为什么能保持一致？</p>
+<p>答：因为定时器是基于固定的时钟频率来计时的，与程序中其他代码的执行速度无关，所以每次计时的时长都是精确且一致的。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.3 用定时器实现LED小灯闪烁：计算初值（以定时20ms为例）
+</div>
+
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250901161558454.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **计算所需机器周期数 (X)**
+    - **公式**：`X * 机器周期时长 = 定时时长`
+    - **计算**：`X = 0.02 * (11059200 / 12) = 18432`
+- **计算定时器初值 (Y)**
+    - **公式**：`Y = 65536 - X`
+    - **计算**：`Y = 65536 - 18432 = 47104` (十进制)
+- **转换为十六进制**
+    - `47104` (十进制) = `B800` (十六进制)
+    - TH0 (高八位)：`0xB8`
+	- TL0 (低八位)：`0x00`
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么定时器溢出值是65536，而不是一个更大的数？
+</div>
+</div>
+
+<aside class="notes"><p>同学们，既然我们知道了定时器比for循环更精确，那么下一步就是如何让定时器工作起来。</p>
+<p>定时器想要精准计时，我们必须先给它设定一个起点，这个起点就是<strong>定时器初值</strong>。就像我们想让一个沙漏在固定时间漏完沙子，就得先放入正确的沙子量。</p>
+<p>在我们的例子中，我们使用<strong>定时器0</strong>来实现LED闪烁。要计算它的初值<strong>TH0</strong>和<strong>TL0</strong>，需要经过几个简单的步骤：</p>
+<p>首先，我们要计算为了达到目标定时时长，需要经过多少个<strong>机器周期</strong>。大家可以看到PPT上，一个机器周期是 12/11059200 秒。如果我们的目标是定时20毫秒（也就是0.02秒），那么通过简单的公式推导，我们可以算出需要<strong>18432个</strong>机器周期。</p>
+<p>接下来，我们计算<strong>定时器初值Y</strong>。因为定时器是从初值开始向上计数，一直到65536时才会溢出并产生中断。所以，我们用<strong>65536</strong>减去刚刚计算出的机器周期数<strong>18432</strong>，得到<strong>47104</strong>。这个十进制的47104就是我们需要的初值。</p>
+<p>最后一步是把这个十进制初值转换为十六进制。大家可以用计算器辅助，将47104转换为十六进制，结果是<strong>B800</strong>。我们将这个值拆分，高八位<strong>0xB8</strong>给<strong>TH0</strong>，低八位<strong>0x00</strong>给<strong>TL0</strong>。</p>
+<p>只要把这两个值写入对应的寄存器，定时器就会从<strong>0xB800</strong>开始计数，经过精确的20毫秒后溢出。</p>
+<p><strong>问：</strong> 为什么定时器溢出值是65536，而不是一个更大的数？</p>
+<p><strong>答：</strong> 因为我们使用的是16位定时器，它的计数范围是 0 到 216−1，也就是 0 到 65535。当计数器从 65535 再加1时，就会发生溢出，回到 0，并产生溢出标志，所以我们说它的溢出值是65536。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.3 用定时器实现LED小灯闪烁：代码实现
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```C
+#include<reg52.h>
+sbit LED = P0^0;
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+void main() 
+{
+	unsigned char  cnt = 0 ;
+	ENLED = 0; 
+	ADDR3 = 1;
+	ADDR2 = 1;
+	ADDR1 = 1;
+	ADDR0 = 0;
+```
+```C
+	TMOD = 0x01; //设置T0为模式1
+	TH0 = 0xB8;  //为T0赋初值0xB800
+	TL0 = 0x00;
+	TR0 = 1; //启动T0
+
+	while (1)
+	{
+		if (TF0 == 1) 
+		{
+			TF0 = 0;
+			
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 35%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+```C
+			TH0 = 0xB8;  //并重新赋初值
+			TL0 = 0x00;
+			cnt++;
+			if (cnt >= 50) 
+			//判断T0溢出是否达到50次
+			{
+				cnt = 0; 
+				//达到50次后计数值清零
+				LED = ~LED; //LED取反
+			}
+			
+		}
+	}
+}
+```
+</div>
+
+<div class="flex-even" style="position: absolute; left: 50%; top: 50%; height: 40%; width: 50%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/file-20250821155119249.png" alt="" style="width: 80px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/file-20250821154857649.png" alt="" style="width: 80px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 程序中的 `if (TF0 == 1)` 这行代码是什么意思
+</div>
+</div>
+
+<aside class="notes"><p>接下来就让我们把这些理论知识转化为实际的代码。</p>
+<p>请看PPT上的这段程序，这就是使用定时器实现LED闪烁的完整代码。我将带着大家逐一分析每一部分。</p>
+<p>首先，在主函数 <code>main()</code> 中，我们定义了一个无符号字符型变量 <code>cnt</code> 并初始化为0。这个 <code>cnt</code> 将作为我们的计数器，用来记录定时器溢出的次数。</p>
+<p>接着，我们进行定时器的初始化设置。第一步是设置定时器0的工作模式，我们用**<code>TMOD = 0x01</code><strong>将其设置为</strong>模式1<strong>。接下来，我们将前面计算出的初值</strong>0xB8<strong>和</strong>0x00<strong>分别赋给</strong><code>TH0</code><strong>和</strong><code>TL0</code><strong>。最后，通过</strong><code>TR0 = 1</code>**启动定时器0，让它开始计时。</p>
+<p>程序进入主循环 <code>while(1)</code> 后，核心逻辑是判断定时器是否溢出。我们使用**<code>if (TF0 == 1)</code>**来判断。<code>TF0</code> 是定时器0的溢出标志位，当定时器溢出时，它会自动置1。</p>
+<p>一旦检测到溢出（即 <code>if</code> 条件成立），我们首先需要<strong>手动将 <code>TF0</code> 清零</strong>，也就是 **<code>TF0 = 0</code>**。这是非常关键的一步，因为定时器硬件不会自动清零这个标志位。</p>
+<p>然后，为了让定时器能够继续精确计时，我们<strong>重新给 <code>TH0</code> 和 <code>TL0</code> 赋上初值</strong>。</p>
+<p>接着，我们让计数器 <strong><code>cnt</code> 自加1</strong>。当 <code>cnt</code> 累加到50次时，就说明已经过去了1秒钟（因为每次定时是20毫秒，50次就是1000毫秒）。这时，我们执行 <code>cnt = 0</code> 来<strong>清零计数器</strong>，然后执行 **<code>LED = ~LED</code>**，让LED的状态取反，从而实现闪烁。</p>
+<p>通过这个程序，我们就可以实现一个稳定、精确的0.5Hz频率的LED闪烁效果。</p>
+<p><strong>问：</strong> 程序中的 <code>if (TF0 == 1)</code> 这行代码是什么意思？</p>
+<p><strong>答：</strong> 这行代码是在<strong>判断定时器是否溢出</strong>。<code>TF0</code> 是定时器0的溢出标志位，它是一个寄存器中的位。当定时器0的计数值从最大值 <code>0xFFFF</code> 变为 <code>0x0000</code> 时，硬件会自动将这个 <code>TF0</code> 位置为1，表示发生了溢出。因此，<code>if (TF0 == 1)</code>就是在询问：“定时器0溢出了吗？” 如果溢出，程序就会执行大括号里的代码</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.4 认识数码管：结构与组成
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250901163649349.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 结构与组成：
+	- **本质**：由8个独立的LED小灯组成。
+	- **命名**：分为a、b、c、d、e、f、g七段和dp（小数点）。
+-  工作原理：
+	- 通过控制不同LED的亮灭组合，显示数字和字符。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>前面我们学习了如何用定时器来控制单个LED灯的闪烁。那么，如果我们要显示更复杂的内容，比如数字，该怎么办呢？这就需要用到<strong>数码管</strong>。</p>
+<p>大家看PPT上的图，一个数码管看起来像一个“8”字，但它其实不是一个整体。它是由<strong>8个独立的LED小灯</strong>组成的。</p>
+<p>具体来说，这8个小灯分别被命名为：<strong>a、b、c、d、e、f、g</strong>，以及小数点<strong>dp</strong>。我们可以通过控制这些小灯的亮灭组合，来显示不同的数字和字符。</p>
+<p>例如，如果我们想显示数字“1”，就让b段和c段的LED亮起来；想显示“8”，就让所有的LED都亮起来。所以，从本质上讲，控制数码管就是控制8个LED小灯的亮灭状态。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.4 认识数码管：共阳极与共阴极数码管
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20240923134739421.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **共阳极数码管**
+    - **特点**: 8个LED的**阳极**连接在一起，作为公共端（COM）。
+    - **控制**: 通过低电平控制各段阴极来点亮。
+- **共阴极数码管**
+    - **特点**: 8个LED的**阴极**连接在一起，作为公共端（COM）。
+    - **控制**: 通过高电平控制各段阳极来点亮。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 在实际应用中，我们如何判断一个数码管是共阳极还是共阴极？
+</div>
+</div>
+
+<aside class="notes"><p>我们了解了数码管的内部结构，那该如何控制它呢？这就涉及到数码管的两种基本类型：<strong>共阴极</strong>和<strong>共阳极</strong>。</p>
+<p>大家看PPT上的图，这两种类型的数码管主要区别在于公共端的连接方式。</p>
+<ul>
+<li>对于<strong>共阴极数码管</strong>，8个LED小灯的<strong>阴极</strong>都连接在一起，形成一个公共端（<strong>COM</strong>）。要点亮某个段，我们需要给对应的阳极施加<strong>高电平</strong>。</li>
+<li>而<strong>共阳极数码管</strong>则正好相反，8个LED小灯的<strong>阳极</strong>连接在一起，作为公共端。要点亮某个段，我们需要给对应的阴极施加<strong>低电平</strong>。</li>
+</ul>
+<p>理解这两种类型非常重要，因为它决定了我们编程时，到底是输出高电平还是低电平来控制数码管的亮灭。</p>
+<p><strong>问：</strong> 在实际应用中，我们如何判断一个数码管是共阳极还是共阴极？
+<strong>答：</strong> 最简单的方法是用万用表的二极管档进行测试。先找到公共端引脚，然后用万用表的探针分别连接公共端和其余引脚，根据LED是否点亮来判断。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.4 认识数码管：共阳连接中的阳极部分
+</div>
+
+<div class="flex-even" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250901220437856.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250901215119614.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 65%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **连接方式**：数码管的阳极通过两个COM口连接一个三极管。
+- **控制作用**：通过控制三极管的导通或截止，来控制整个数码管的通断（使能）。
+- **双COM口作用**：
+    - **物理**：引脚布局对称，便于设计。
+    - **电气**：分担大电流，保护引脚不因过热而损坏。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 三八译码器74HC138的作用是什么？
+</div>
+</div>
+
+<aside class="notes"><p>大家看电路图。我们这块开发板上的数码管，它的<strong>阳极</strong>通过<strong>两个COM口</strong>连接到了一个<strong>三极管</strong>上。这个三极管就像一个电子开关，通过控制它的导通和截止状态，我们就能控制整个数码管的亮灭。采用双COM口设计，主要是为了物理布局更对称，同时也能<strong>分担电流</strong>。当数码管所有段都点亮时，总电流会很大。双COM口能将这个电流分摊到两根引脚上，<strong>降低单线电流压力</strong>，从而保护电路不受损。</p>
+<p>那么，是谁来控制这个三极管的开关呢？答案就是我们之前在流水灯实验中提到过的<strong>三八译码器</strong>，也就是 <strong>74HC138</strong>。它通过接收单片机的输入信号，来决定哪个输出引脚变为低电平，从而驱动对应的三极管，进而使能某个数码管。</p>
+<p><strong>问：</strong> 三八译码器74HC138的作用是什么？
+<strong>答：</strong> 74HC138的作用是<strong>扩展单片机的输出口</strong>。它可以用3个输入引脚（A0、A1、A2）来控制8个输出引脚（Y0-Y7），从而用更少的IO口来控制更多的外部设备。在数码管驱动电路中，它就是用来选择性地使能我们所需的数码管。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.4 认识数码管：阴极部分
+</div>
+
+<div class="flex-even" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250901231212921.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250901215119614.png" alt="" style="width: 400px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 电路连接：
+	- **阴极**：通过**上拉电阻**连到单片机的**P0口**。
+	- **目的**：利用上拉电阻，保证数码管熄灭，防止随机亮灭。
+- 作用原理：
+	- **P0口特性**：作为准双向口，不输出时处于高阻态（电平不确定）。
+	- **上拉电阻**：将高阻态的P0口电位拉高，保证数码管的稳定性和可靠性。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** “上拉电阻”在这里有什么作用？
+</div>
+</div>
+
+<aside class="notes"><p>接下来，让我们看看数码管的另一端——它的<strong>阴极</strong>是如何连接到单片机上的。</p>
+<p>大家请看PPT上的电路图。你会发现，数码管的阴极段（a、b、c等等）并不是直接连接到单片机的P0口，中间还有一个<strong>上拉电阻</strong>。</p>
+<p>这个上拉电阻起到了一个非常重要的作用。P0口在作为<strong>准双向口</strong>时，如果不主动输出低电平，就会处于一种<strong>高阻态</strong>，也就是“悬空”状态。在这种状态下，它的电平是不确定的，很容易受到外部信号干扰。</p>
+<p>而我们的数码管是共阳极的，要点亮它需要给阴极一个<strong>低电平</strong>。这个上拉电阻的作用，就是确保当P0口不主动输出低电平时，<strong>将电位拉高到高电平</strong>，保证数码管是熄灭的，从而避免了数码管出现随机亮灭的现象，保证了整个系统的<strong>稳定性和可靠性</strong>。</p>
+<p><strong>问：</strong> “上拉电阻”在这里有什么作用？
+<strong>答：</strong> 上拉电阻的作用是<strong>保证电路的稳定性</strong>。当单片机不主动输出信号时，它会将P0口的电位拉到高电平，确保数码管不会因电平不确定而随机亮灭。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.4 认识数码管：显示原理
+</div>
+<div class="flex-even" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250901231212921.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250901215119614.png" alt="" style="width: 400px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **数码管结构**
+    - 由8个LED小灯组成：a, b, c, d, e, f, g, dp
+    - 每个小段对应P0口的一个引脚
+- **控制原理**
+    - 通过控制8个LED的亮灭组合来显示不同数字或符号
+    - 以共阳极数码管为例
+        - **亮：** 输出低电平（0）
+        - **灭：** 输出高电平（1）
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>大家可以把数码管想象成一个由8个独立的 <strong>LED小灯</strong> 组成的。它们分别是 <strong>a、b、c、d、e、f、g</strong>，以及右下角代表小数点的 <strong>dp</strong>。就像我们在图上看到的那样，这些小段中的每一个，都对应着单片机 <strong>P0口</strong> 的一个引脚。</p>
+<p>所以，想要数码管显示出不同的数字或者符号，其背后的原理其实非常简单：我们只需要通过编程，控制这8个LED的亮灭组合就可以了。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.4 认识数码管：显示“1”的实例
+</div>
+<div class="flex-even" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250901231212921.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250901215119614.png" alt="" style="width: 400px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **目标：** 点亮b段和c段
+- **P0口状态：**
+    - a段：灭 (1)
+    - b段：亮 (0)
+    - c段：亮 (0)
+    - d, e, f, g, dp段：灭 (1)
+- **P0口值：**
+    - 二进制：`0b11111001`
+    - 十六进制：`0xF9`
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 要显示数字“0”，P0口的值应该是什么？
+</div>
+</div>
+
+<aside class="notes"><p>我们以最简单的数字 <strong>“1”</strong> 为例。要显示数字“1”，我们只需要点亮 <strong>b段</strong> 和 <strong>c段</strong>，同时让其他所有的段都熄灭。</p>
+<p>现在，让我们来思考一下，这在P0口上对应的状态是什么。</p>
+<p>在我们的电路中，如果使用的是<strong>共阳极数码管</strong>，要点亮一个LED，需要向对应的引脚发送低电平（<code>0</code>）；要熄灭一个LED，则需要发送高电平（<code>1</code>）。</p>
+<p>因此，要显示“1”，P0口上各段的状态应该是：</p>
+<ul>
+<li>b段：亮（<code>0</code>）</li>
+<li>c段：亮（<code>0</code>）</li>
+<li>其他所有段（a, d, e, f, g, dp）：灭（<code>1</code>）</li>
+</ul>
+<p>将这些状态组合起来，P0口的二进制值就是 **<code>0b11111001</code>**，转换为十六进制就是 **<code>0xF9</code>**。当我们向P0口写入 <code>0xF9</code> 这个值时，单片机就会控制数码管，让它正确显示出数字“1”。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.5 数码管静态显示
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250906195834231.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **定义：**
+    - 一次只点亮一个数码管
+    - 适用于显示少量数字
+- **工作原理：**
+    - 利用 **74HC138** 解码器
+    - **74HC138** 决定哪个数码管亮
+    - **P0** 口决定显示的数字或字符
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>同学们，我们前面学习了 <strong>74HC138</strong> 解码器和 <strong>P0</strong> 口的控制。现在，让我们把这些知识结合起来，学习一种数码管的显示方式：<strong>静态显示</strong>。</p>
+<p>大家可能会问，为什么叫“静态”显示？这是因为它适用于只显示一个或少量几个数码管的场景。当需要控制多个数码管时，静态显示就显得效率低下，甚至没有意义了。虽然如此，静态显示是学习数码管控制的基础，它会为我们下一节课的动态显示打好基础。</p>
+<p>那么，静态显示具体是怎么工作的呢？</p>
+<p>它的核心原理是利用 <strong>74HC138</strong> 解码器。大家还记得吗？在同一时刻，<strong>74HC138</strong> 只能使一个输出引脚为低电平。这意味着，我们一次只能点亮一个数码管。而这个数码管上显示什么，则完全由 <strong>P0</strong> 口的值来决定。</p>
+<p>在本节课中，我们将把这个原理应用到实践中。我们会编写一个程序，让最右侧的数码管，每隔一秒钟，自动地从数字0递增到F，然后再回到0，不断循环。这个简单的程序将帮助我们深入理解静态显示的实现过程。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.5 数码管静态显示：位和段
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250906193830020.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 58%; top: 15%; height: 65%; width: 42%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 数码管位数与位选
+	- **位数**：开发板有6个数码管，习惯上称作6位。
+	- **位选**：通过74HC138译码器控制，决定哪个数码管被使能（点亮）。
+- 数码管段与段选
+	- **段**：数码管内部的8个LED小灯。
+	- **段选**：通过单片机P0口控制，并经过上拉电阻驱动，决定各段的亮灭。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 在实际编程中，我们如何控制**位选**和**段选**来实现动态显示？
+</div>
+</div>
+
+<aside class="notes"><p>在此之前，我们再了解两个核心概念：<strong>位选</strong>和<strong>段选</strong>。</p>
+<p>首先是<strong>位选</strong>。我们的开发板上有<strong>6个数码管</strong>，习惯上我们称之为<strong>6位</strong>数码管。位选，顾名思义，就是选择我们想要点亮哪一位数码管。这个控制任务由 <strong>74HC138</strong> 译码器来完成。通过控制译码器的输入，我们可以精确地选择并使能（即打开）其中的一个数码管。</p>
+<p>接下来是<strong>段选</strong>。大家还记得，一个数码管内部有8个LED小灯，我们称它们为“段”。<strong>段选</strong>就是决定这些段的亮灭，从而显示出我们想要的数字或字符。这个控制由单片机的<strong>P0口</strong>来完成，并且需要经过<strong>上拉电阻</strong>进行驱动。上拉电阻的作用是确保电路在空载时保持高电平</p>
+<p>所以，整个工作流程就是：先用<strong>位选</strong>（74HC138）确定要点亮哪一位数码管，再用<strong>段选</strong>（P0口）给它发送数据，决定它显示什么内容。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.5 数码管静态显示：真值表
+</div>
+<div class="flex-even" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 90%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250906191342806.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 根据这张真值表，如果想在数码管上显示字母“A”，我们应该向P0口赋什么值？
+</div>
+</div>
+
+<aside class="notes"><p>同时为了方便我们进行编程，我们可以将每个数字或字符对应的P0口赋值整理成一个表格，这个表格就是我们常说的<strong>数码管真值表</strong>。</p>
+<p>大家可以看到，这张真值表针对我们Kingst51开发板的电路图进行了整理，它清楚地列出了从0到9以及A到F这16个数字和字符，它们每个都对应着一个十六进制的P0口赋值。</p>
+<p><strong>大家请注意，这张真值表里显示的数字都不带小数点。</strong> 在实际编程时，如果我们需要显示小数点，只需要再额外控制一下dp段即可。</p>
+<p><strong>问：</strong> 根据这张真值表，如果想在数码管上显示字母“A”，我们应该向P0口赋什么值？
+<strong>答：</strong> 查阅真值表，你会发现字母“A”对应的十六进制值为<code>0x88</code>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.5 数码管静态显示：变量知识
+</div>
+
+<div class="flex-even" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第5章 定时器与数码管基础/file-20250906202924874.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **RAM (随机存取存储器)**
+    - 存储可变数据（如：`unsigned char`）
+    - 空间小，但读写速度快
+    - 变量值可以被随意修改
+- **Flash (程序存储空间)**
+    - 存储不可变数据（如：`code`）
+    - 空间大，用于存放程序代码
+    - **`code`** 关键字：
+        - 将数据存入 **Flash**，节省宝贵的 **RAM** 空间
+        - 适用于只读数据，如数码管真值表
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问： 假如我们需要一个变量来计数，从0一直增加，我们应该用 code 关键字来定义它吗？
+</div>
+</div>
+
+<aside class="notes"><p>最后是C语言相关的知识。在前边的课程中，我们定义变量时，通常会使用 <code>unsigned char</code> 或 <code>unsigned int</code>。这些变量默认都是存放在单片机的 <strong>RAM</strong>（随机存取存储器）中。<strong>RAM</strong> 的特点是我们可以随时、自由地读取和修改它的值，但它的空间通常比较小。</p>
+<p>然而，在我们的程序中，还有一类特殊的数据：它们在程序运行时需要被读取，但它们的值是<strong>固定不变的</strong>，我们不需要去修改它们。对于这类数据，我们有一个更好的存储方式。</p>
+<p>我们可以使用一个特殊的关键字 <strong><code>code</code></strong> 来修饰这类数据。当我们加上 <code>code</code> 关键字后，这些数据就会被存储到单片机的<strong>程序空间（Flash）</strong>中。</p>
+<p>这样做的好处是什么呢？我们的单片机通常拥有更大的 <strong>Flash</strong> 空间。将那些固定不变的数据放到 <strong>Flash</strong> 中，可以大大节省宝贵的 <strong>RAM</strong> 空间，使我们能够更有效地使用 <strong>RAM</strong> 来处理那些需要频繁变化的变量。</p>
+<p>接下来我们即将使用的<strong>数码管真值表</strong>就是一个完美的例子。真值表中的数据（如<code>0xC0</code>、<code>0xF9</code>等）在程序运行中是固定不变的，我们只会读取它们，而不会去修改它们。因此，我们就可以用 <code>code</code> 关键字来修饰它，将其存放在 <strong>Flash</strong> 中，从而优化我们的程序。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 5.5 数码管静态显示：演示程序
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 12%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include<reg52.h>
+
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+//用数组来存储数码管的真值表
+unsigned char code LedChar [] = {
+	0xC0, 0xF9, 0xA4, 0xB0, 
+	0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83,
+	0xC6, 0xA1, 0x86, 0x8E
+};
+```
+```C
+void main ()
+{
+	unsigned char cnt = 0; //中断次数
+	unsigned char sec = 0; 
+	//记录经过的秒数
+	ENLED = 0; //使能U3，选择数码管DS1
+	ADDR3 = 1;
+	ADDR2 = 0;
+	ADDR1 = 0;
+	ADDR0 = 0;
+	TMOD = 0x01; //设置T0为模式1
+	TH0 = 0xB8; //为T0赋初值0xB800
+	TL0 = 0x00;
+	TR0 = 1;  //启动T0
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+
+```C
+	while (1)
+	{
+		if (TF0 == 1) //判断T0是否溢出
+		{
+			TF0 = 0; 
+			//T0溢出后，清零中断标志
+			TH0 = 0xB8; //并重新赋初值
+			TL0 = 0x00;
+			cnt++;  //计数值自加1
+			if (cnt >= 50) // 判断T0溢出是否达到50次
+```
+```C
+			{
+				cnt = 0; //达到50次后计数值清零
+				P0 = LedChar[sec]; //当前秒数对应的真值表中的值
+				sec++;
+				if (sec >= 16)//当秒数超过0x0F（15）后重新开始
+				{
+					sec = 0;
+				}
+			}
+		}
+	}
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>好了，同学们，理论知识我们已经掌握得差不多了，接下来，就让我们把之前学习的知识——数码管的段码、定时器的使用以及 <strong><code>code</code></strong> 关键字的应用——整合到一个完整的程序中，实现一个更酷炫的功能。</p>
+<h3 id="数码管静态显示：代码实现"><strong>数码管静态显示：代码实现</strong></h3>
+<p>我们来看这段代码，它将让数码管实现一个简单的计数功能：每隔一秒，数码管上的数字会从0递增到F，然后循环往复。</p>
+<p>首先，在代码的开头，我们用一个<strong>数组</strong>来存储数码管的真值表。注意，我们用 <code>code</code> 关键字修饰了这个数组。还记得为什么吗？因为真值表的值是固定的，这样可以将它存储在 <strong>Flash</strong> 中，节省宝贵的 <strong>RAM</strong> 资源。</p>
+<p>在 <code>main</code> 函数中，我们进行了几个关键的初始化步骤：</p>
+<ul>
+<li><strong><code>ENLED = 0;</code></strong> 和 <strong><code>ADDRx</code></strong> 系列的赋值，用来使能 <strong>74HC138</strong> 解码器，选择我们要控制的第一个数码管（DS1）。</li>
+<li>接下来，我们配置了<strong>定时器T0</strong>。我们将T0设置为模式1，并赋初值 <code>0xB800</code>，这样它就能每隔20毫秒溢出一次。然后，我们启动了定时器。</li>
+</ul>
+<p>在 <code>while(1)</code> 无限循环中，我们不断地<strong>检测</strong>定时器T0是否溢出（**<code>if (TF0 == 1)</code>**）。</p>
+<ul>
+<li>每当T0溢出时，我们都会清零标志位 <code>TF0</code> 并重新赋初值，然后将计数变量 <code>cnt</code> 自加1。</li>
+<li>当 <code>cnt</code> 达到50次（即经过了 <code>50 * 20ms = 1s</code>）时，我们执行最核心的操作：将 <code>cnt</code> 清零，并将数组 <code>LedChar</code> 中，由 <code>sec</code> 索引的真值赋给 <strong><code>P0</code> 口</strong>。这样，数码管就会显示出对应的数字或字符。</li>
+<li>最后，我们将 <code>sec</code> 自加1，当它达到16（即显示完F后），就让它回到0，实现循环计数。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 15%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+#### **一、逻辑与位运算**
+
+- **核心概念：** 逻辑运算（`&&`、`||`、`!`）和位运算（`&`、`|`、`^`、`<<`、`>>`）是单片机底层编程和硬件控制的基石。
+    
+
+#### **二、定时器与计数器**
+
+- **核心概念：** 定时器和计数器是单片机内部的同一模块。通过配置 **TMOD** 和 **TCON** 寄存器，可实现定时（精确延时）或计数（统计外部事件）。
+    
+
+#### **三、数码管与静态显示**
+
+- **核心概念：** 数码管由8个LED组成，分为共阳极和共阴极两种类型。
+- **静态显示：** 借助 **74HC138** 解码器，一次只点亮一个数码管。
+- **存储优化：** 使用 `code` 关键字将真值表等常量数据存入 Flash，以节省宝贵的 RAM 空间。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>在这一章中，我们学习了单片机编程中几个非常重要的基本概念：<strong>逻辑与位运算</strong>、<strong>定时器与计数器</strong>、以及<strong>数码管与静态显示</strong>。</p>
+<p>首先，我们了解了<strong>逻辑和位运算</strong>，它们是单片机底层编程的基石。通过**与(&amp;)<strong>、</strong>或(|)<strong>、</strong>异或(^)<strong>和</strong>移位(&lt;&lt;, &gt;&gt;)**等运算，我们能够对数据的每一个位进行精确的控制，这在硬件寄存器配置和状态检测中至关重要。</p>
+<p>然后，我们深入探讨了<strong>定时器与计数器</strong>。我们知道，它们是单片机内部同一个强大的模块。通过配置<strong>TMOD</strong>和<strong>TCON</strong>寄存器，我们可以让它们在<strong>定时器</strong>模式下精确地延时，或者在<strong>计数器</strong>模式下统计外部事件，实现多种复杂功能。</p>
+<p>最后，我们学习了如何使用<strong>数码管</strong>来显示信息。我们知道了数码管是由8个LED组成的，并且分为<strong>共阳极</strong>和<strong>共阴极</strong>两种类型。通过配合<strong>74HC138译码器</strong>，我们实现了<strong>静态显示</strong>，也就是一次只点亮一个数码管。为了节省单片机的RAM空间，我们还学会了使用<strong>code</strong>关键字将真值表等不变的数据存储在<strong>Flash</strong>中。</p>
+<p>希望通过这一章的学习，大家能对这些基础概念有一个清晰的认识</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1200,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>

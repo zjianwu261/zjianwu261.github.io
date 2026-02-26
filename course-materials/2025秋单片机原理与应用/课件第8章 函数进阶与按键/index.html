@@ -1,0 +1,2790 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 40%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第2章 点亮你的LED/Step_by_Step_learning.webp" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 55%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第8章 函数进阶与按键
+</div>
+
+<div class="" style="position: absolute; left: 10%; top: 70%; height: 20%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《单片机原理与应用》<br><br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div>
+
+<aside class="notes"><p>各位同学，欢迎回来！<br>上一章我们完成了<strong>变量进阶与LED点阵显示</strong>的学习，掌握了数据的组织方式，也让单片机“会说话”，能够输出丰富的信息。  而从这一章开始，我们要让单片机<strong>“听懂指令”</strong>，能够与外界进行交互。</p>
+<p>今天我们进入第8章——<strong>函数进阶与按键</strong>。<br>这章的核心目标，是把我们学过的<strong>输出控制</strong>和即将学习的<strong>输入响应</strong>结合起来，构建一个完整、可交互的系统。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本次课主要内容
+</div>
+
+<div class="" style="line-height: 2.0; font-size: 45px; position: absolute; left: 5%; top: 20%; height: 60%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 8.1 单片机最小系统详解
+- 8.2 函数的调用
+- 8.3 按键的基本原理
+- 8.4 按键的扫描和抖动
+- 8.5 实用按键消抖算法
+- 8.6 矩阵按键扫描
+- 8.7 简易加法计算器
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 17%; height: 66%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250920102211867.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>本章共分七个部分：</p>
+<ul>
+<li><p><strong>8.1 单片机最小系统详解</strong><br>  我们将回到硬件的起点，理解单片机赖以生存的基本系统，包括电源、晶振和复位电路。  它就像单片机的“心脏”和“安全网”，没有这一层，所有程序都无法运行。</p>
+</li>
+<li><p><strong>8.2 函数的调用</strong><br>  这是软件结构的核心，我们将学习如何把程序拆分成清晰的功能模块，理解主函数与子函数的关系，以及参数传递与返回值机制。<br>  模块化编程，会让你的代码更简洁、更专业。</p>
+</li>
+<li><p><strong>8.3 按键的基本原理</strong><br>  我们第一次正式接触输入设备，了解按键如何通过电平变化传递指令。<br>  从此，单片机不仅能“说”，还能“听”。</p>
+</li>
+<li><p><strong>8.4 按键的扫描和抖动</strong><br>  实际电路中的按键并不完美，机械触点在按下的瞬间会产生抖动。我们会分析这一现象，理解为什么简单的检测会误判。</p>
+</li>
+<li><p><strong>8.5 实用按键消抖算法</strong><br>  针对抖动问题，我们会学习几种典型的消抖方案，重点掌握<strong>定时器法</strong>这种兼顾准确与实时性的算法。</p>
+</li>
+<li><p><strong>8.6 矩阵按键扫描</strong><br>  当按键数量增多时，独立按键方式会耗尽IO口。矩阵扫描是一个聪明的解决方案，我们将学习如何用<strong>行列复用</strong>实现更多输入。</p>
+</li>
+<li><p><strong>8.7 简易加法计算器</strong><br>  最后，我们会将函数、按键、显示等知识整合起来，做一个实战项目——用矩阵键盘实现一个加法计算器。<br>  它标志着你从“控制输出”正式迈向“人机交互”阶段。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.1 单片机最小系统详解：电源系统
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250920125417447.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心：** 5V/3.3V是**标称值**，非精确值。
+- **规则：** 单片机需在指定**电压范围**内工作。
+- **举例：**
+    - **5V单片机**：范围通常为 **3.4V~5.5V**。
+        - **低于**3.4V会停止工作。
+        - **高于**5.5V会烧坏。
+    - **3.3V单片机**：范围通常为 **2.7V~3.6V**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么单片机的工作电压会有一个范围，而不是一个固定的精确值？
+</div>
+</div>
+
+<aside class="notes"><p>好的，同学们，在前面的课程中，我们已经接触到了像“5V”和“3.3V”这样的电压概念。但大家有没有想过，这个“5V”是不是就必须得是精确的5.0000V呢？今天，我们来更深入地聊聊单片机电源系统的<strong>工作电压范围</strong>。</p>
+<h3 id="电源：电压不是精确值"><strong>电源：电压不是精确值</strong></h3>
+<ul>
+<li><p><strong>核心概念：</strong> 无论是5V还是3.3V，这些都是单片机的<strong>标称电压</strong>，而非精确值。在实际电路中，只要电源电压位于一个特定的<strong>工作电压范围</strong>内，单片机就能正常工作。</p>
+</li>
+<li><p><strong>以5V单片机为例：</strong></p>
+<ul>
+<li>例如，STC89C52RC这款芯片，它的工作电压范围是 <strong>3.4V到5.5V</strong>。</li>
+<li>这意味着，只要你的供电电压在这个区间内，芯片都能稳定运行。</li>
+<li><strong>重要提醒：</strong><ul>
+<li>电压<strong>低于</strong>3.4V，单片机不会损坏，但会停止工作。</li>
+<li>电压<strong>高于</strong>5.5V，单片机将会被<strong>烧坏</strong>，这是绝对不允许的。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>以3.3V单片机为例：</strong></p>
+<ul>
+<li>这类芯片的典型工作电压范围是 <strong>2.7V到3.6V</strong>。</li>
+</ul>
+</li>
+</ul>
+<h3 id="简单问答"><strong>简单问答</strong></h3>
+<p><strong>问：</strong> 为什么单片机的工作电压会有一个范围，而不是一个固定的精确值？</p>
+<p><strong>答：</strong> 这是因为单片机内部的半导体器件，如晶体管，在设计时就允许在一定电压波动范围内正常工作。这个设计提供了灵活性和鲁棒性，让单片机能够适应真实世界中电源可能存在的微小波动，而不需要完全精确的稳压电源，从而降低了电路设计的复杂性和成本。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.1 单片机最小系统详解：晶振
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250920140439737.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **作用：**
+    - 单片机的**“心脏”**，提供**时钟信号**。
+    - 决定程序运行的“节拍”，使指令按时序执行。
+- **类型：**
+    - **无源晶振：** 仅为晶体本身。
+    - **有源晶振：** 在无源晶振基础上**增加起振芯片**，可独立工作。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 有源晶振比无源晶振多出来的起振芯片作用是？
+</div>
+</div>
+
+<aside class="notes"><p>好，我们接着看单片机的第二个重要外部器件：<strong>晶振</strong>。</p>
+<h3 id="晶振：单片机的心脏">晶振：单片机的“心脏”</h3>
+<p>大家可以把晶振想象成单片机的<strong>心脏</strong>。就像我们人的心跳有固定的节拍一样，晶振的作用就是给单片机提供一个稳定的<strong>时钟信号</strong>，也就是让程序运行的“节拍”。没有这个节拍，单片机里的所有指令都没法按时序执行。</p>
+<p>晶振主要分为两大类：<strong>无源晶振</strong>和<strong>有源晶振</strong>。它们最大的区别在于，有源晶振在无源晶振的基础上增加了一个独立的<strong>起振芯片</strong>，所以它自己就能产生稳定的时钟信号。</p>
+<p><strong>问：</strong> 多出来的起振芯片作用是？</p>
+<p><strong>答：</strong> 这里的“芯片”指的是一个集成电路（IC），它包含了振荡、放大、整形等电路。无源晶振只是一个石英晶体，需要依赖单片机内部的振荡电路才能工作。而有源晶振内部已经包含了这些电路，所以可以独立工作，直接输出稳定的时钟信号。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.1 单片机最小系统详解：无源与有源晶振对比
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250920141734370.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 57%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+| 特性           | 无源晶振<br> (Crystal)           | 有源晶振 <br>(Oscillator)      |
+| :--------------: | :---------------------------: | :-------------------------: |
+| 是否需<br>外部电路 | 是<br>（需单片机内部振荡器）     | 否<br>（自带振荡电路）         |
+| 引脚数         | 2个                          | 4个                        |
+| 成本           | 极低                         | 较高                       |
+| 精度           | 较高                         | 更高                       |
+| 单片机应用     | ✅ 普遍使用                  | ⚠️ 特殊场合                |
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 既然有源晶振精度更高，为什么单片机课程中我们主要学习和使用无源晶振呢？
+</div>
+</div>
+
+<aside class="notes"><p>我们接着来看晶振的类型对比，特别是它们在单片机应用中的选择。</p>
+<h3 id="无源晶振-vs-有源晶振">无源晶振 vs. 有源晶振</h3>
+<p>首先是<strong>无源晶振</strong>，它只有两个引脚，成本非常低。它本身无法独立工作，需要依赖单片机内部的振荡电路才能产生时钟信号。虽然它的精度受外部电容影响，但对于大多数应用来说已经足够了。因此，无源晶振在单片机项目中非常普遍。</p>
+<p>接着是<strong>有源晶振</strong>，它通常有四个引脚，内部自带振荡电路，所以不需要外部电路的帮助。它只需要供电就能直接输出稳定的时钟信号，因此精度更高。但相对的，有源晶振的成本也更高，通常只在对时钟信号精度要求特别高的特殊场合使用。</p>
+<p><strong>问：</strong> 既然有源晶振精度更高，为什么单片机课程中我们主要学习和使用无源晶振呢？</p>
+<p><strong>答：</strong> 因为在绝大多数单片机应用中，无源晶振提供的时钟精度已经完全足够了，例如控制LED、读取传感器数据等。同时，无源晶振的成本更低，更适合大规模应用和初学者学习。只有在对通信协议时序要求极高（如USB通信）、或者需要高精度定时功能的场合，才会考虑使用有源晶振。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.1 单片机最小系统详解：复位电路
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20240927165609163.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="" style="position: absolute; left: 45%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **作用：**
+    - 确保单片机上电时**正常启动**。 
+    - 在程序跑飞时，使单片机回到初始状态。
+- **工作原理：**
+    - 上电瞬间，电容充电，复位引脚保持高电平。
+    - 充电完成后，引脚恢复低电平，单片机开始工作。
+- **现代趋势：**
+    - 许多新型单片机已**内置复位功能**（如上电复位）。
+    - 外接复位电路简化，甚至可以省略。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 在手动复位时，为什么按下按键后 RST 是高电平，松开后会变为低电平？
+</div>
+</div>
+
+<aside class="notes"><p>好，讲完了单片机的“心脏”——晶振，我们来看另一个同样重要的“安全卫士”——<strong>复位电路</strong>。</p>
+<h3 id="复位电路工作原理">复位电路工作原理</h3>
+<h4 id="上电复位">上电复位</h4>
+<p>首先，我们来看<strong>上电复位</strong>。当电源（+5V）接通的瞬间，电容 <strong>C11</strong> 还没有充电，它相当于一个短路状态。这使得 RST（复位）引脚瞬间被拉到高电平（+5V）。单片机检测到这个高电平脉冲，就会执行复位操作。</p>
+<p>随着时间的推移，电容 <strong>C11</strong> 通过电阻 <strong>R31</strong> 缓慢充电，RST 引脚的电压会逐渐下降，最终被 <strong>R31</strong> 拉到地电位（低电平）。当电压降到一定阈值后，单片机就会退出复位状态，开始正常工作。这段充电过程提供了一个稳定的延时，确保单片机在电源电压稳定后才开始运行。</p>
+<h4 id="手动复位">手动复位</h4>
+<p>接着是<strong>手动复位</strong>。当程序跑飞或需要重启时，我们可以按下 <strong>K17</strong> 复位按键。</p>
+<p>当你按下按键时，它会将 RST 引脚直接连接到 +5V，强制其进入高电平状态，从而实现手动复位。松开按键后，RST 引脚上的电压会通过 <strong>C11</strong> 缓慢放电，并最终被 <strong>R31</strong> 拉回地电位，单片机再次进入正常工作状态。</p>
+<p><strong>问：</strong> 在手动复位时，为什么按下按键后 RST 是高电平，松开后会变为低电平？</p>
+<p><strong>答：</strong> 在这个电路设计中，当按下按键 <strong>K17</strong> 时，RST 引脚被直接连接到 +5V 电源，所以电平立即变为高电平，单片机开始复位。松开按键后，<strong>K17</strong> 恢复断开状态。此时，RST 引脚不再与 +5V 直接相连，而是通过电阻 <strong>R31</strong> 连接到地（GND）。根据电阻的分压原理，RST 引脚的电压会被 <strong>R31</strong> 拉低到地电位，从而使单片机退出复位状态。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.1 单片机最小系统详解：补充电容 (Capacitor)知识
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250920160022336.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **对直流电（DC）：**
+    - **稳态下**：相当于**开路**，阻断电流。
+    - **刚接通瞬间**：相当于**短路**，有瞬间冲击电流。
+    - **总结**：只在直流电压变化的瞬间导通。
+- **对交流电（AC）：**
+    - **持续导通**：因交流电压不断变化，电容持续充放电。
+    - **容抗 (XC​=2πfC1​)：**
+        - **高频：** 容抗小，易通过。 
+        - **低频：** 容抗大，难通过。
+    - **总结**：高频交流易通过，低频交流难通过。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么电源电路中常常会在电源输入端并联一个电容？
+</div>
+</div>
+
+<aside class="notes"><p>在讲完了复位电路之后，我们来补充一些基础知识，帮助大家更好地理解电路中的一些元件，比如<strong>电容</strong>。电容在单片机电路中非常常见，但它对直流电和交流电的表现是截然不同</p>
+<h3 id="电容：直流与交流中的不同表现">电容：直流与交流中的不同表现</h3>
+<h4 id="1-对直流电（dc）">1. 对直流电（DC）</h4>
+<p>我们可以把电容想象成一个小水库。当连接到直流电源时：</p>
+<ul>
+<li><strong>稳态下</strong>：一旦水库（电容）充满水（电荷），水位（电压）就不再变化了。此时，水流（电流）停止流动。所以，在直流电路的<strong>稳态</strong>下，电容相当于一个<strong>断路</strong>，阻断电流。</li>
+<li><strong>刚接通瞬间</strong>：在水库开始蓄水（电容充电）的瞬间，水流非常大，这就是瞬间的<strong>冲击电流</strong>。但很快，水库蓄满，水流就停止了。</li>
+</ul>
+<p><strong>总结</strong>：电容对“稳态直流”是阻断的，只在直流变化的瞬间导通。</p>
+<h4 id="2-对交流电（ac）">2. 对交流电（AC）</h4>
+<p>交流电的电压是不断变化的，就像水流在来回摆动。</p>
+<ul>
+<li>由于电压不断变化，电容也随之不断地充电和放电，所以电流可以<strong>持续流动</strong>。</li>
+<li>电容对交流电的阻碍作用称为<strong>容抗</strong> <code>$X_C$</code>​ 。它的计算公式是 <code>$X_C​=1/{2πfC}$</code> ​。从公式可以看出：<ul>
+<li><strong>频率</strong> (<code>$f$</code>) <strong>越高</strong>，容抗越小，高频电流越容易通过</li>
+<li><strong>频率</strong> (<code>$f$</code>) <strong>越低</strong>，容抗越大，低频电流越难通过；</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong>：电容对<strong>高频交流</strong>呈现低阻抗（容易通过），对<strong>低频交流</strong>呈现高阻抗（难以通过）。</p>
+<p><strong>问：</strong> 为什么电源电路中常常会在电源输入端并联一个电容？</p>
+<p><strong>答：</strong> 在电源电路中并联电容，主要是利用它<strong>“通交流，隔直流”</strong>的特性。电源输出的直流电中，可能混杂着高频的干扰信号或纹波。并联的电容可以为这些高频干扰提供一个低阻抗的通路，将它们旁路到地，从而起到<strong>滤波和去耦</strong>的作用，使电源输出的直流电压更加纯净、稳定。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.1 单片机最小系统详解：上电复位过程与时间
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250920162253996.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 35%; top: 15%; height: 65%; width: 62%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **复位时间要求：**
+    - 因单片机型号而异。
+    - **51单片机：** 不少于**2个机器周期**（约2微秒）。
+- **复位时间计算：**
+    - 简化公式：t≈1.2×R×C
+    - **示例：**
+        - R=4.7KΩ  
+        - C=0.1μF
+		- t=1.2×4700×0.1×`$10^{−6}$`≈564μs
+    - **结论：** 设计留有足够余量，确保单片机可靠复位。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 如果复位时间太短，会发生什么？
+</div>
+</div>
+
+<aside class="notes"><h3 id="上电复位过程与时间">上电复位过程与时间</h3>
+<p>结合我们之前讲的电路图，单片机系统上电后，RST 引脚会先保持一小段时间的高电平，然后变为低电平。这个从高到低的变化过程，就是我们所说的<strong>上电复位</strong>。</p>
+<p>那么，这个“一小段时间”具体是多久呢？这取决于你使用的单片机型号。对于经典的51单片机，手册要求复位信号的持续时间不能少于<strong>2个机器周期</strong>。我们前面计算过，通常的晶振频率下，一个机器周期是1微秒，所以复位时间至少需要2微秒。</p>
+<p>至于复位时间的具体计算，虽然过程比较复杂，但我们可以直接记住一个结论：复位时间 t 约等于 1.2×R×C。</p>
+<p>以我们常用的元件为例：</p>
+<ul>
+<li>电阻 R=4700 欧姆</li>
+<li>电容 C=0.0000001 法拉</li>
+<li>计算得出 t=1.2×4700×0.0000001=0.000564 秒，也就是 <strong>564微秒</strong>。</li>
+</ul>
+<p>这个时间远远大于2个机器周期的要求，所以我们的电路设计留有足够的余量，能够确保单片机可靠地完成复位。</p>
+<p><strong>问：</strong> 如果复位时间太短，会发生什么？
+<strong>答：</strong> 如果复位时间太短，单片机可能会在电源电压尚未完全稳定时就开始工作，导致程序“跑飞”或进入不确定的状态，无法正常启动。因此，在设计复位电路时，确保复位时间有足够余量是非常重要的。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.2 函数的调用
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250920163045898.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **函数作用：**
+    - 将程序划分为独立的功能模块。
+    - 提高代码**可读性**和**复用性**。
+    - 避免大段代码重复。
+- **结构与调用：**
+    - 一个程序由**一个主函数 (`main`)** 和**多个其他函数**构成。
+    - **主函数**：程序的唯一入口，可调用其他函数。
+    - **其他函数**：可相互调用，但**不能调用主函数**。
+    - **中断服务函数**：一种特殊函数，由单片机在中断发生时**自动调用**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 主函数可以被其他函数调用吗？为什么？
+</div>
+</div>
+
+<aside class="notes"><p>好，在了解了单片机的硬件基础之后，我们来进入软件编程的部分。一个好的单片机程序，离不开清晰的结构和模块化的设计，而这就要用到我们接下来要讲的——<strong>函数</strong>。</p>
+<h3 id="函数：程序的箭囊">函数：程序的“箭囊”</h3>
+<p>我们先来看一个有趣的汉字——“函”。在甲骨文里，“函”就像一个装箭的套子。它的本意就是装东西的容器，就像一个箭囊，里面装了各种各样的箭。</p>
+<p>我们的程序也是一样。如果把所有代码都写在 <code>main</code> 函数里，程序会变得非常混乱，就像把所有的箭都堆在地上，用起来既不方便，也容易出错。</p>
+<p>因此，在编写程序时，我们通常会把一些零散的功能单独写成一个个的<strong>函数</strong>。一个函数就是一个独立的功能模块，就像箭囊里的一支箭。当需要实现某个功能时，我们只需要简单地<strong>调用</strong>这个函数，这不仅能让程序结构清晰、条理分明，还能避免大量重复的代码。</p>
+<h3 id="函数的结构与调用">函数的结构与调用</h3>
+<p>在一个实际的C语言项目中，一个程序通常由一个<strong>主函数 (<code>main</code>)</strong> 和许多<strong>其他函数</strong>构成。</p>
+<ul>
+<li><strong>主函数</strong>是程序的唯一入口，它可以调用其他函数。</li>
+<li><strong>其他函数</strong>之间也可以相互调用，但<strong>不能调用主函数</strong>。</li>
+</ul>
+<p>此外，在我们的51单片机程序中，还有一种特殊的函数：<strong>中断服务函数</strong>。这种函数不需要我们手动调用，而是在相应的中断事件发生后，由单片机自动调用的。</p>
+<p><strong>问：</strong> 主函数可以被其他函数调用吗？为什么？</p>
+<p><strong>答：</strong> 不可以。主函数 (<code>main</code>) 是程序的唯一入口，它的作用是启动整个程序。如果其他函数可以调用主函数，那么程序的执行逻辑就会变得混乱，无法确定程序的起点和终点，这不符合程序设计的规范和逻辑。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.2 函数的调用
+</div>
+
+<div class="" style="position: absolute; left: 5%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```C
+函数名 (实参列表)
+```
+函数调用的一般形式
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 35%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **概念：**
+    - **函数调用**即“启动”一个独立的功能模块。
+    - 通过**函数名**和**参数**来完成。
+- **调用要素：**
+    - **函数名：** 待调用函数的名称。
+    - **实参列表：** 传递给函数的具体参数。
+        - 无参数时，保留空括号 `()`。
+        - 多个参数用逗号 `,` 分隔。
+- **应用：**
+    - 将复杂功能（如秒计数、动态扫描）封装成独立函数。
+    - 在 `main` 函数中**调用**，简化主程序结构，提高代码清晰度。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 函数调用时，为什么要传递参数？
+</div>
+</div>
+
+<aside class="notes"><p>好，在理解了函数的基本概念之后，我们来看如何在程序中<strong>调用和使用函数</strong>。</p>
+<h3 id="函数的调用与使用">函数的调用与使用</h3>
+<p>一个函数就像是一个独立的小程序，我们需要通过特定的方式来“启动”它。这个过程就叫做<strong>函数调用</strong>。</p>
+<p><strong>调用一个函数主要有两部分：</strong></p>
+<ol>
+<li><strong>函数名</strong>：这是你想要调用的那个函数的名称，比如我们 <code>DelayMs()</code> 或 <code>Display()</code>。</li>
+<li><strong>实参列表</strong>：这是在调用函数时，需要传递给它的具体参数。这些参数是函数执行特定任务所需要的数据。如果一个函数不需要任何参数，我们只需要保留空括号就可以了。如果需要传递多个参数，要用逗号将它们隔开。</li>
+</ol>
+<p>例如，在一个复杂的项目中，<code>main</code> 函数可能会变得很乱，因为它需要处理很多不同的任务，比如秒计数和数码管动态扫描。这时，我们可以把这些具体的功能从 <code>main</code> 函数中<strong>单独拎出来</strong>，各自写成一个函数，然后在 <code>main</code> 函数中需要的时候调用它们，这样可以极大地简化主函数的代码，让程序结构更清晰。</p>
+<h3 id="简单问题与解答">简单问题与解答</h3>
+<p><strong>问：</strong> 函数调用时，为什么要传递参数？
+<strong>答：</strong> 传递参数是为了让函数更灵活、更通用。例如，如果我们有一个函数用于延时，通过传递一个参数（比如延时时长），我们就可以用同一个函数实现100毫秒的延时，也能实现1000毫秒的延时，而不需要为每种延时都编写一个新函数。参数使得函数可以根据不同的输入数据执行不同的操作。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.2 函数的调用：演示程序
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include <reg52.h>
+
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3;
+sbit ENLED = P1^4;
+```
+```C
+unsigned char code LedChar[ ] = {
+	0xC0, 0xF9, 0xA4, 0xB0,
+	0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83,
+	0xC6, 0xA1, 0x86, 0x8E
+};
+unsigned char LedBuff[6] = {
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+};
+void SecondCount( );
+void LedRefresh( );
+```
+</div>
+
+<div class="" style="position: absolute; left: 46%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+void main() {
+	ENLED = 0;  //使能U3，选择控制数码管
+	ADDR3 = 1;  //ADDR0-2的值需要动态变化
+	TMOD = 0x01; //设置T0为模式1
+	TH0 = 0xFC; //为T0赋初值0xFC67，定时1ms
+	TL0 = 0x67;
+	TR0 = 1;  //启动T0
+```
+```C
+//循环函数
+	while (1) {
+		if (TF0 == 1) {  //判断 T0 是否溢出
+			TF0 = 0; //T0 溢出后,清零中断标志
+			TH0 = 0xFC; //并重新赋初值
+			TL0 = 0x67;
+			SecondCount(); //调用秒计数函数
+			LedRefresh(); //调用显示刷新函数	
+		}
+	}
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么要把 `SecondCount()` 和 `LedRefresh()` 这两个功能单独写成函数，而不是放在 `while(1)` 循环里？
+</div>
+</div>
+
+<aside class="notes"><p>在学习了函数的基本概念和调用方法后，我们来看一个完整的单片机程序实例，看看这些知识点是如何在实际代码中应用的。</p>
+<h3 id="程序实例：秒表与数码管显示">程序实例：秒表与数码管显示</h3>
+<p>这个程序实现了一个简单的秒表功能，并把时间显示在数码管上。我们可以将代码分为几个部分：</p>
+<ol>
+<li>变量和函数声明</li>
+</ol>
+<p>左侧这部分定义了程序中要使用的变量，包括<strong>位定义</strong>（<code>sbit</code>），用来控制数码管的引脚；<strong>数组</strong>，用来存放数码管的字形码和显示缓冲区；以及<strong>函数声明</strong>，告诉编译器我们后面会用到 <code>SecondCount</code> 和 <code>LedRefresh</code> 这两个函数。</p>
+<ol start="2">
+<li>主函数 <code>main()</code></li>
+</ol>
+<p><code>main</code> 函数是整个程序的<strong>核心</strong>。它首先进行各种初始化设置，包括使能数码管和配置定时器。然后进入一个无限循环 <code>while(1)</code>，在这个循环中，程序会不断地检查定时器是否溢出。一旦检测到溢出（<code>if (TF0 == 1)</code>），就会清零溢出标志、重新加载定时器初值，并<strong>调用</strong>我们之前声明的 <code>SecondCount()</code> 和 <code>LedRefresh()</code> 这两个函数，分别用于秒计数和刷新数码管显示。</p>
+<p><strong>问：</strong> 这个程序为什么要把 <code>SecondCount()</code> 和 <code>LedRefresh()</code> 这两个功能单独写成函数，而不是直接放在 <code>while(1)</code> 循环里？</p>
+<p><strong>答：</strong> 这是为了实现<strong>模块化编程</strong>。将不同的功能封装成独立的函数，可以让主函数 <code>main()</code> 的代码变得非常简洁和清晰。当我们需要调试或修改某个功能时，比如秒计数或数码管显示，我们只需要找到对应的函数进行修改，而不需要在整个庞大的 <code>while</code> 循环中寻找代码，这极大地提高了程序的<strong>可读性、可维护性和复用性</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.2 函数的调用：演示程序
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 43%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* 秒计数函数,每秒进行一次秒数+1,并转换为数码管显示字符 */
+void SecondCount() {
+	static unsigned int cnt = 0; //记录 T0 中断次数
+	static unsigned long sec = 0; //记录经过的秒数
+	cnt++; //计数值自加 1
+```
+```C
+	if (cnt >= 1000) {  //判断 T0 溢出是否达到 1000 次
+		cnt = 0; //达到 1000 次后计数值清零
+		sec++; //秒计数自加 1
+		LedBuff[0] = LedChar[sec%10];
+		LedBuff[1] = LedChar[sec/10%10];
+		LedBuff[2] = LedChar[sec/100%10];
+		LedBuff[3] = LedChar[sec/1000%10];
+		LedBuff[4] = LedChar[sec/10000%10];
+		LedBuff[5] = LedChar[sec/100000%10];
+	}
+}
+```
+</div>
+
+<div class="" style="position: absolute; left: 45%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* 数码管动态扫描刷新函数 */
+
+void LedRefresh() {
+	//动态扫描的索引
+	static unsigned char i = 0; 
+```
+```C
+//
+	switch (i)  {
+		case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=LedBuff[0]; break;
+		case 1: ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=LedBuff[1]; break;
+		case 2: ADDR2=0; ADDR1=1; ADDR0=0; i++; P0=LedBuff[2]; break;
+		case 3: ADDR2=0; ADDR1=1; ADDR0=1; i++; P0=LedBuff[3]; break;
+		case 4: ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=LedBuff[4]; break;
+		case 5: ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=LedBuff[5]; break;
+		default: break;
+	}
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么 `cnt` 和 `i` 这两个变量前面都加了 `static` 关键字？
+</div>
+</div>
+
+<aside class="notes"><p>我们接着来分析秒表程序的两个核心函数：<code>SecondCount()</code> 和 <code>LedRefresh()</code>。</p>
+<h3 id="程序核心函数详解">程序核心函数详解</h3>
+<h4 id="1-秒计数函数-secondcount">1. 秒计数函数 <code>SecondCount()</code></h4>
+<p>这个函数的作用是每隔一秒钟，将秒计数器 <code>sec</code> 加1。</p>
+<ul>
+<li>我们使用了一个<strong>定时器</strong>，每1毫秒产生一次中断。</li>
+<li>在 <code>SecondCount()</code> 函数中，我们用一个变量 <code>cnt</code> 来<strong>计数</strong>，每被调用一次，<code>cnt</code> 就加1。</li>
+<li>当 <code>cnt</code> 的值达到 <code>1000</code> 时，说明已经过去了1000毫秒，也就是<strong>1秒</strong>。</li>
+<li>此时，我们将 <code>cnt</code> 清零，并将秒数 <code>sec</code> 加1。</li>
+<li>之后，通过一系列取模和除法操作，将秒数 <code>sec</code> 转换成对应的数码管显示字符，并存入 <code>LedBuff</code> 缓冲区中。</li>
+</ul>
+<h4 id="2-数码管动态扫描函数-ledrefresh">2. 数码管动态扫描函数 <code>LedRefresh()</code></h4>
+<p>这个函数的作用是<strong>动态刷新</strong>数码管显示。由于人眼视觉暂留效应，我们需要以很快的速度轮流点亮不同的数码管。</p>
+<ul>
+<li>我们使用一个静态变量 <code>i</code> 作为<strong>扫描索引</strong>，每次调用函数时，<code>i</code> 的值都会递增。</li>
+<li><code>switch</code> 语句根据 <code>i</code> 的值来决定点亮哪一位数码管。</li>
+<li>通过设置 <code>ADDR0</code>、<code>ADDR1</code>、<code>ADDR2</code> 的高低电平组合，来选择需要点亮的数码管。</li>
+<li>最后，将 <code>LedBuff</code> 中对应位置的显示数据输出到 <code>P0</code> 口，点亮该位数码管。</li>
+</ul>
+<p><strong>问：</strong> 为什么 <code>cnt</code> 和 <code>i</code> 这两个变量前面都加了 <code>static</code> 关键字？</p>
+<p><strong>答：</strong> 这是因为 <code>static</code> 关键字的作用是让变量在函数被多次调用时，仍然<strong>保留其值</strong>。如果 <code>cnt</code> 和 <code>i</code> 没有加 <code>static</code>，它们每次被调用时都会被重新初始化为0，这样就无法实现累加计数和动态扫描的功能了。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.2 函数的调用：代码结构与函数调用规范
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **主函数 (`main`) 作用：**
+    - 作为程序主干，提纲挈领。
+    - 仅负责调用各功能函数，保持简洁。
+- **静态变量 (`static`)：**
+    - **目的：** 在函数多次调用时，保留变量值。
+    - **应用：** 保证计数、扫描等功能的连续性。
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **函数的声明与定义：**
+	- **规则：** 函数必须先声明或定义，才能被调用。
+	- **声明：** 告知编译器函数存在。
+	    - 格式：`[类型] [函数名]([参数列表]);`
+	    - **注意：** 结尾必须有分号。
+	- **定义：** 实现函数具体功能。
+	    - **注意：** 与声明行唯一区别是**没有分号**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 49%; top: 10%; height: 80%; width: 1%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 函数声明的作用是什么？如果我不声明，直接把所有函数定义都写在 `main` 函数前面可以吗？
+</div>
+</div>
+
+<aside class="notes"><h4 id="1-主函数：提纲挈领">1. 主函数：提纲挈领</h4>
+<p>现在再来看主函数，是不是感觉清晰多了？主函数不再处理具体的逻辑，它只负责一件事：每隔1毫秒就调用 <code>SecondCount()</code> 和 <code>LedRefresh()</code> 这两个函数。至于这两个函数具体做了什么，我们不必关心，因为它们已经被封装好了。这种模块化的设计，让我们的程序主干变得非常简洁明了。</p>
+<h4 id="2-静态变量的重要性">2. 静态变量的重要性</h4>
+<p>大家还记得之前代码中的 <code>i</code>、<code>cnt</code> 和 <code>sec</code> 这几个变量吗？当我们将它们从 <code>main</code> 函数移到各自的子函数里后，都给它们加上了 <strong><code>static</code></strong> 关键字。这是为什么呢？在 <code>main</code> 函数里，这些变量的值一直被保持着，但如果放到子函数里，每次调用函数时，局部变量都会被重新初始化。加了 <code>static</code> 之后，这些变量就变成了<strong>静态变量</strong>，它们的值在函数调用结束后依然被保留，从而保证了计数的连续性和动态扫描的正常进行。</p>
+<h4 id="3-函数的声明与定义">3. 函数的声明与定义</h4>
+<p>在C语言中，有一个重要的规定：<strong>函数在被调用之前，必须先被定义或声明</strong>。为了让代码更具可读性，我们通常将 <code>main</code> 函数放在最前面，然后在文件开头专门开辟一块区域进行<strong>函数声明</strong>，就像我们示例程序中做的那样。</p>
+<p><strong>函数声明</strong>时，你需要：</p>
+<ul>
+<li>加上函数类型（例如 <code>void</code>）。</li>
+<li>加上函数名。</li>
+<li>加上形式参数。</li>
+<li><strong>最后必须加上一个分号</strong>。</li>
+</ul>
+<p><strong>函数定义</strong>与声明非常相似，唯一的区别就是<strong>没有末尾的分号</strong>。初学者很容易因为粗心而弄错，导致编译失败。</p>
+<p><strong>问：</strong> 函数声明的作用是什么？如果我不声明，直接把所有函数定义都写在 <code>main</code> 函数前面可以吗？</p>
+<p><strong>答：</strong> 函数声明的作用是告诉编译器，这个函数存在，并且它的类型、名称和参数是什么。它的主要目的是解决<strong>函数调用位置</strong>的问题。如果你把所有函数都定义在 <code>main</code> 函数前面，理论上是可行的。但是，这会使 <code>main</code> 函数的位置后移，让程序的整体结构变得不清晰。因此，将 <code>main</code> 放在前面并使用函数声明是一种更符合编程规范，也更易于阅读和维护的做法。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.2 函数的调用：形式参数和实际参数
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+unsigned char add(unsigned char x, unsigned char y);  //函数声明
+void main()
+{
+	unsigned char a = 1;
+	unsigned char b = 2;
+	unsigned char c = 0;
+	c = add(a, b);   //调用时a 和 b 就是实参，把函数的返回值赋给 c
+				//执行完后c 的值就是 3
+	while(1);
+}
+```
+```C
+unsigned char add(unsigned char x, unsigned char y)  //函数定义
+{           //这里括号中的 x 和 y 就是形参
+	unsigned char z = 0;
+	z = x + y;
+	return z;    //返回值 z 的类型就是函数 add 的类型
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **参数传递：**
+    - **实参：** 调用函数时传入的**具体数据**。 
+    - **形参：** 定义函数时用来**接收数据的变量**。
+    - **作用：** 实现函数之间的数据传递。
+- **返回值：**
+    - **概念：** 函数执行后的结果。
+    - **规则：**
+        - `void` 类型无返回值。
+        - 其他类型函数**必须有返回值**。
+        - 返回值类型与函数类型一致。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 在调用函数时，形参和实参的个数、顺序和类型需要保持一致吗？
+</div>
+</div>
+
+<aside class="notes"><p>上一个例程中在进行函数调用的时候，不需要任何参数传递，所以函数定义和调用时括号内都是空的，但是更多的时候我们需要在主调函数和被调用函数之间传递参数。在调用一 个有参数的函数时，函数名后边括号中的参数叫做实际参数，简称实参。而被调用的函数在进行定义时，括号里的参数叫做形式参数，简称形参</p>
+<p>这个简单的加法程序，虽然很小，但涵盖了函数调用的全部内容：数据通过实参和形参在<strong>主调函数</strong> (<code>main</code>) 和<strong>被调用函数</strong> (<code>add</code>) 之间完成了传递。同时，<code>add</code> 函数运算完后，通过 <code>return</code> 语句返回一个值，并将其赋值给 <code>c</code> 变量。</p>
+<p>只要一个函数的类型不是 <code>void</code>，它就一定会有返回值，返回值的类型必须和函数本身的类型一致。</p>
+<p><strong>问：</strong> 在调用函数时，形参和实参的个数、顺序和类型需要保持一致吗？</p>
+<p><strong>答：</strong> 是的，必须保持一致。因为在函数调用时，系统会根据形参的个数、顺序和类型来分配内存并接收实参传递过来的数据。如果两者不匹配，编译器就会报错，导致程序无法正常编译和运行。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.2 函数的调用：注意事项
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **形参 (形式参数):**
+    - 形参是函数内部的**临时变量**。
+    - 只在函数被调用时才分配内存，函数结束后立即释放。
+- **实参 (实际参数):**
+    - 实参是调用函数时传递的**具体数据**。    
+    - 可以是常量或表达式，但必须有确定的值。
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **传递规则：**
+	- **单向传递**：数据只能从实参流向形参。
+	- 形参的改变**不影响**实参的值。
+	- 形参和实参的数据类型应**相同或兼容**。
+	- 函数调用前，必须进行**原型声明**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 51%; top: 10%; height: 80%; width: 1%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 如果一个函数有多个形参，实参传递的顺序重要吗？
+</div>
+</div>
+
+<aside class="notes"><h3 id="形参与实参的运行机制">形参与实参的运行机制</h3>
+<h4 id="1-形参的生命周期与内存">1. 形参的生命周期与内存</h4>
+<ul>
+<li><strong>形参</strong>本质上是<strong>局部变量</strong>。在函数被调用之前，形参并不占用内存。</li>
+<li>只有当函数被调用时，系统才会为形参<strong>分配内存</strong>，用来接收实参传递过来的值。</li>
+<li>函数执行结束后，这些内存会被立即<strong>释放</strong>。</li>
+</ul>
+<h4 id="2-实参的传递方式">2. 实参的传递方式</h4>
+<ul>
+<li><strong>实参</strong>可以是常量（比如 <code>1</code>），也可以是简单或复杂的表达式（比如 <code>a+b</code>），但它们必须在函数调用时有一个<strong>确定的值</strong>。</li>
+<li>这个值会<strong>单向传递</strong>给对应的形参。这意味着，数据只能从实参流向形参。</li>
+<li>即使你在函数内部修改了形参的值，这个改变也<strong>不会影响到外部的实参</strong>。当函数调用结束，形参被释放，实参的值依然保持不变。</li>
+</ul>
+<h4 id="3-数据类型与原型声明">3. 数据类型与原型声明</h4>
+<ul>
+<li><strong>数据类型</strong>：形参和实参的数据类型应该<strong>相同</strong>或<strong>赋值兼容</strong>。如果类型不同，编译器会进行自动转换。</li>
+<li><strong>原型声明</strong>：在调用函数之前，必须先对其进行<strong>原型声明</strong>，这是 C 语言的强制规定，可以避免很多潜在的错误。</li>
+</ul>
+<p><strong>问：</strong> 如果一个函数有多个形参，实参传递的顺序重要吗？</p>
+<p><strong>答：</strong> 非常重要。在 C 语言中，函数调用时实参是按<strong>顺序</strong>依次传递给形参的。例如，如果函数定义为 <code>void func(int a, char b)</code>，那么你调用时 <code>func(10, &#39;c&#39;)</code>，实参 <code>10</code> 会传递给形参 <code>a</code>，实参 <code>&#39;c&#39;</code> 会传递给形参 <code>b</code>。如果顺序颠倒，编译器可能会报错或导致程序逻辑错误。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.3 按键的基本原理
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20240929200827430.png" alt="" style="width: 650px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **按键作用：**
+    - 单片机的重要**输入设备**。
+    - 通过按键输入指令，控制程序运行。  
+- **常见类型：**
+    - **独立式按键**
+    - **矩阵式按键**
+- **独立式按键：**
+    - **电路：** 简单，每个按键**单独连接**一个输入引脚。
+    - **原理：** 按键按下时对应引脚电平变化，单片机检测执行
+    - **优点：** 电路简单，编程容易。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 独立式按键的优点是什么？
+</div>
+</div>
+
+<aside class="notes"><p>好，讲完了基础的电路元件和编程知识，我们再回到单片机的硬件部分，来看一个非常常见的人机交互器件——<strong>按键</strong>。</p>
+<h3 id="按键：人机交互的起点">按键：人机交互的起点</h3>
+<p>按键是单片机系统中最重要的输入设备之一。通过按键，我们可以向单片机输入指令，控制程序的运行。</p>
+<p>常用的按键电路主要有两种形式：<strong>独立式按键</strong>和<strong>矩阵式按键</strong>。</p>
+<p>首先我们来看<strong>独立式按键</strong>。顾名思义，独立式按键的电路非常简单。每一个按键都单独连接到单片机的一个输入引脚上。当按键被按下时，对应的引脚电平就会发生变化，单片机检测到这个变化后，就可以执行相应的操作。</p>
+<p><strong>问：</strong> 独立式按键的优点是什么？</p>
+<p><strong>答：</strong> 独立式按键最大的优点就是<strong>电路简单</strong>，<strong>编程容易</strong>。由于每个按键都对应一个单独的引脚，我们只需要检测该引脚的电平变化就可以判断是哪个按键被按下，非常直观。这在按键数量不多的应用中非常方便。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.3 按键的基本原理：独立式按键工作原理
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20240929200827430.png" alt="" style="width: 650px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **按键按下：**
+    - **通路：** +5V → 电阻 → 按键 → GND
+    - **结果：** 单片机引脚电压接近0V，检测到**低电平**。
+- **按键松开：**
+    - **通路：** 电路断开，无电流。
+    - **结果：** 电阻**上拉**引脚至+5V，检测到**高电平**。
+- **总结：**
+    - 通过检测IO口电平，即可判断按键状态。
+    - **低电平** = 按键**按下**
+    - **高电平** = 按键**松开**
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 这个电路中的电阻 R1 有什么作用？它为什么被称为“上拉”电阻？
+</div>
+</div>
+
+<aside class="notes"><p>左侧是一个典型的独立式按键电路，它有四条输入线连接到单片机的IO口上。我们以其中一个按键为例来分析：</p>
+<ul>
+<li><strong>按键按下时</strong>：当按键 K1 被按下时，电路导通。电流会从 +5V 电源出发，流经上拉电阻 R1，然后通过按键 K1 到达地（GND），形成一条完整的通路。根据欧姆定律，所有电压都加在了电阻 R1 上，所以连接到单片机的 <code>KeyIn1</code> 引脚的电压就会接近于 0V，即<strong>低电平</strong>。</li>
+<li><strong>按键松开时</strong>：当按键被松开，电路断开，没有电流流动。此时，<code>KeyIn1</code> 引脚和 +5V 电源之间是直接相连的，没有压降，所以 <code>KeyIn1</code> 引脚的电压会和电源电压一样，即<strong>高电平</strong>。</li>
+</ul>
+<p>通过这种高低电平的变化，我们就可以用单片机来<strong>检测按键的状态</strong>：当引脚为低电平时，表示按键被按下；当引脚为高电平时，表示按键被松开。</p>
+<p><strong>问：</strong> 这个电路中的电阻 R1 有什么作用？它为什么被称为“上拉”电阻？</p>
+<p><strong>答：</strong> 这个电阻的作用是<strong>防止IO口悬空</strong>。当按键松开时，如果没有这个电阻，<code>KeyIn1</code> 引脚就处于悬空状态，其电平是不确定的，可能受到周围电磁干扰而发生随机变化，导致误判。R1 确保了在按键松开时，<code>KeyIn1</code> 引脚能稳定地保持高电平。因为它将引脚的电平<strong>拉高</strong>，所以我们称之为<strong>上拉电阻</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.3 按键的基本原理：单片机IO口内部
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20240929201922236.png" alt="" style="width: 650px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **IO口特性：**
+    - 单片机IO口默认是**准双向**的，内部有上拉电阻。 
+- **工作原理：**
+    - **要读取外部信号，IO口必须先输出高电平（1）。**
+    - **输出高电平**时，IO口进入**高阻态**，电平由外部按键决定，可以正常读取。
+    - **输出低电平**时，IO口被内部电路拉低，无论外部按键状态如何，读取到的**永远是低电平**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 在单片机编程中，我们如何实现“内部输出高电平”这一操作？
+</div>
+</div>
+
+<aside class="notes"><p>好，我们接着深入探讨，了解单片机内部的 IO 口是如何工作的，以及为什么在读取按键状态前需要先进行一些设置。</p>
+<h3 id="io口：内部上拉与工作原理">IO口：内部上拉与工作原理</h3>
+<p>我们的按键电路通常连接到单片机的 IO 口，例如 P2 口，它默认是一种<strong>准双向 IO 口</strong>。为了方便理解，我们可以把它内部的复杂电路简化成一个包含<strong>上拉电阻</strong>和<strong>三极管</strong>的等效模型。</p>
+<h3 id="读取外部按键信号的条件">读取外部按键信号的条件</h3>
+<p>大家请注意一个关键点：当我们需要<strong>读取外部按键信号</strong>时，必须先将该 IO 口内部设置为<strong>输出高电平（1）</strong>。</p>
+<p>这是为什么呢？我们来分析两种情况：</p>
+<ul>
+<li><p><strong>情况一：内部输出高电平（1）</strong></p>
+<ul>
+<li>当我们给 IO 口内部发送一个高电平时，经过内部电路的反相，三极管不会导通。</li>
+<li>此时，IO 口对内是<strong>高阻态</strong>，它的电平由外部决定。由于内部上拉电阻的存在，IO 口保持高电平。</li>
+<li>如果外部按键没有按下，IO 口会一直保持高电平。此时，单片机可以<strong>正常读取</strong>到外部的高电平状态。</li>
+</ul>
+</li>
+<li><p><strong>情况二：内部输出低电平（0）</strong></p>
+<ul>
+<li>当我们给 IO 口内部发送一个低电平时，经过反相，三极管会导通。</li>
+<li>此时，IO 口直接被三极管拉到低电平。</li>
+<li>无论外部按键是否按下，都无法改变这个状态。换句话说，单片机从 IO 口读取到的信号<strong>永远是低电平</strong>，我们<strong>无法判断</strong>外部按键的真实状态。</li>
+</ul>
+</li>
+</ul>
+<h3 id="结论：读取前的设置">结论：读取前的设置</h3>
+<p>从上述分析我们可以得出一个重要结论：对于这种带有上拉电阻的准双向 IO 口，如果要正常读取外部按键的状态，<strong>必须首先确保内部输出为高电平</strong>。如果内部输出为低电平，那么无论外部是什么信号，IO 口读到的都将是低电平。</p>
+<p><strong>问：</strong> 在单片机编程中，我们如何实现“内部输出高电平”这一操作？
+<strong>答：</strong> 在 C 语言编程中，向一个 IO 口写入高电平非常简单。我们只需要通过赋值语句实现，例如：<code>P2 = 0xFF;</code>。这会将 P2 口的所有引脚都设置为高电平，从而满足读取外部按键信号的前提条件。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.3 按键的基本原理：矩阵键盘的工作原理
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20240929204347621.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+
+<div class="" style="line-height: 1.8; position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心思想：**
+    - **行**（`Kout`）与**列**（`Kin`）交叉，实现I/O口复用。
+    - 用8个I/O口检测16个按键（4x4矩阵）。
+- **检测步骤：**
+	- **行扫描：** 依次给某一**行**（如Kout1）输出**低电平**，其他行保持高电平。 
+	- **列读取：** 读取所有**列**（Kin1~Kin4）的电平状态。
+	- **判断按键：** 如果某列引脚变为**低电平**，则该列与当前低电平行的交叉按键被按下。
+	- **循环：** 重复以上步骤，依次扫描所有行，直到检测到所有按键。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 矩阵按键和独立按键相比，主要优点是什么？
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们讲了独立式按键，它简单直观，但占用较多 IO 口。现在，如果一块开发板上有许多按键，比如16个，如果还用独立按键的方式，那会占用16个IO口，非常浪费。因此，我们需要一种更高效的解决方案——<strong>矩阵式按键</strong>。</p>
+<h3 id="矩阵按键：更高效的按键方案">矩阵按键：更高效的按键方案</h3>
+<p>矩阵按键可以极大地节省单片机的IO口资源。以16个按键为例，我们可以把它们组织成一个4x4的矩阵，只需要8个IO口就能实现检测，效率大大提升。</p>
+<h3 id="工作原理">工作原理</h3>
+<p>我们可以将矩阵按键分为<strong>行</strong>和<strong>列</strong>。例如，用Kout1到Kout4作为<strong>行</strong>，Kin1到Kin4作为<strong>列</strong>。</p>
+<p><strong>1. 扫描行</strong></p>
+<ul>
+<li>为了检测按键，我们需要用单片机依次<strong>扫描</strong>每一行。</li>
+<li>我们给其中一行，比如Kout1，输出<strong>低电平</strong>。而其他行，比如Kout2、Kout3、Kout4，都输出高电平。</li>
+<li>在这种情况下，只有与Kout1连接的按键在按下时，才能被检测到。</li>
+</ul>
+<p><strong>2. 读取列</strong></p>
+<ul>
+<li>当Kout1为低电平，且按键被按下时，这个低电平会导通到对应的Kin引脚，使得该引脚也变为<strong>低电平</strong>。</li>
+<li>如果没有按键按下，Kin引脚会保持高电平。</li>
+<li>通过读取Kin1到Kin4的电平，我们就能判断是Kout1这一行的哪个按键被按下了。</li>
+</ul>
+<p><strong>3. 循环扫描</strong></p>
+<ul>
+<li>我们可以依次给每一行（Kout1、Kout2、Kout3、Kout4）输出低电平，然后读取每一列（Kin1、Kin2、Kin3、Kin4）的电平，从而检测所有按键。</li>
+<li><strong>注意：</strong>在任何一个瞬间，只能有一个Kout引脚输出低电平，否则会发生串扰，导致无法正确判断。</li>
+</ul>
+<p>通过这种“行扫描、列读取”的矩阵方式，用8个IO口就能够检测16个按键。</p>
+<p><strong>问：</strong> 矩阵按键和独立按键相比，主要优点是什么？</p>
+<p><strong>答：</strong> 矩阵按键最大的优点是<strong>节省IO口</strong>。如果按键数量很多，独立按键会占用大量IO口资源，而矩阵按键能用较少的IO口实现更多的按键功能，这对于资源有限的单片机来说非常重要。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.3 按键的基本原理：矩阵键盘的工作原理
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250923231743694.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250924100215439.png" alt="" style="width: 650px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250924100231316.png" alt="" style="width: 650px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么键盘的“输出”线和“输入”线都连接在P2口上？
+</div>
+</div>
+
+<aside class="notes"><p>好，在理解了独立按键的原理之后，我们来通过一个具体的编程任务，看看如何将这些知识应用到实践中。</p>
+<h3 id="编程实例：独立按键控制led">编程实例：独立按键控制LED</h3>
+<p>编程的第一步是<strong>理清硬件连接</strong>，也就是我们常说的“看图说话”。我们需要明确程序中的每一个功能对应到单片机的哪个引脚。</p>
+<p>在这个实例中，我们关注键盘和LED灯两部分：</p>
+<h4 id="1-键盘引脚定义">1. 键盘引脚定义</h4>
+<ul>
+<li><strong>键盘输出线</strong>：<code>KeyOut1</code> 到 <code>KeyOut4</code> 分别连接到单片机的 <strong>P2.3 到 P2.0</strong> 引脚。这些引脚用于输出，扫描键盘。</li>
+<li><strong>键盘输入线</strong>：<code>KeyIn1</code> 到 <code>KeyIn4</code> 分别连接到 <strong>P2.4 到 P2.7</strong> 引脚。这些引脚用于输入，读取按键状态。</li>
+</ul>
+<h4 id="2-led灯引脚定义">2. LED灯引脚定义</h4>
+<ul>
+<li><strong>LED灯</strong>：<code>LED2</code> 到 <code>LED9</code> 的阴极，也就是控制信号线，连接到单片机的 <strong>P0.0 到 P0.7</strong> 引脚。这些引脚用于输出，控制LED的亮灭。</li>
+</ul>
+<p>理清了这些引脚关系后，我们就可以开始编写代码了。我们的任务是实现按键和LED的一一对应控制。</p>
+<p><strong>问：</strong> 为什么键盘的“输出”线和“输入”线都连接在P2口上？
+<strong>答：</strong> 这是因为P2口是<strong>准双向I/O口</strong>。它既可以作为输入口，读取外部信号，也可以作为输出口，向外部发送信号。将键盘的输入和输出线都连接在P2口上，可以更高效地利用单片机的I/O资源，这在引脚资源有限的单片机系统中是很常见的做法。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.3 按键的基本原理：按键亮灯
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include <reg52.h>
+
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;  
+sbit ADDR2 = P1^2;  
+sbit ADDR3 = P1^3;  
+sbit ENLED = P1^4;
+```
+```C
+sbit LED9 = P0^7;  
+sbit LED8 = P0^6;  
+sbit LED7 = P0^5;  
+sbit LED6 = P0^4;
+// 定义键盘输入
+sbit KEY1 = P2^4;  
+sbit KEY2 = P2^5; 
+sbit KEY3 = P2^6;  
+sbit KEY4 = P2^7;
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+void main() {
+	ENLED = 0; //选择独立 LED 进行显示
+	ADDR3 = 1;
+	ADDR2 = 1;  
+	ADDR1 = 1;  
+	ADDR0 = 0;
+	P2 = 0b1111 0111;    //P2.3 置 0,即 KeyOut1 输出低电平
+```
+
+```C
+//将按键扫描引脚的值传递到 LED 上
+	while (1) 
+	{ 
+		LED9 = KEY1; //按下时为 0,对应的 LED 点亮
+		LED8 = KEY2;
+		LED7 = KEY3;
+		LED6 = KEY4;
+	}
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么在独立按键控制LED的程序中，需要设置P2.0到P2.3这几个引脚默认输出高电平？
+</div>
+</div>
+
+<aside class="notes"><p>在明确了硬件连接之后，我们来看一下如何用代码来实现<strong>独立按键控制LED</strong>的功能。</p>
+<ol>
+<li>变量和IO口定义</li>
+</ol>
+<p>首先，我们通过 <code>sbit</code> 关键字为要使用的引脚起了别名，比如 <code>LED9</code> 对应 <strong>P0.7</strong>，<code>KEY1</code> 对应 <strong>P2.4</strong>。这可以让我们的代码更易读，直接使用 <code>LED9</code> 就能操作 <code>P0.7</code> 引脚，而不需要记住具体的引脚号。</p>
+<ol start="2">
+<li>主函数 <code>main()</code></li>
+</ol>
+<ul>
+<li>在 <code>main</code> 函数的<strong>初始化部分</strong>，我们首先设置了数码管控制引脚，确保只有独立LED被选中。</li>
+<li><strong>关键的一步</strong>是 <code>P2 = 0b1111 0111;</code>。这会将 <code>P2.3</code>（<code>KeyOut1</code>）引脚设置为低电平，而其他引脚设置为高电平。这其实是一个<strong>按键扫描</strong>的过程，为我们读取按键输入做准备。</li>
+<li>随后，程序进入一个无限循环 <code>while(1)</code>。在循环内部，我们通过简单的赋值语句 <code>LED9 = KEY1;</code> 将按键引脚的状态<strong>直接赋给LED引脚</strong>。由于按键按下时是低电平，LED灯也是低电平点亮，所以这个简单的赋值就实现了“按键按下，LED亮”的功能。</li>
+</ul>
+<p><strong>问：</strong> 为什么在独立按键控制LED的程序中，需要设置P2.0到P2.3这几个引脚默认输出高电平？</p>
+<p><strong>答：</strong> 这个问题的关键在于<strong>IO口的工作方式</strong>。</p>
+<p>在单片机中，IO口既可以作为输入，也可以作为输出。当我们将IO口用作输入时，需要确保它能正确读取到外部的电平状态。对于<strong>准双向IO口</strong>（如51单片机的P0-P3口），如果我们要读取外部的按键信号，必须先让该引脚输出高电平。</p>
+<p>这是因为，准双向IO口在输出低电平时，内部的<strong>三极管会导通</strong>，将引脚直接拉到低电平。此时，无论外部按键是断开还是闭合，都无法改变引脚的低电平状态。这就导致我们无法通过读取电平来判断按键是否按下。</p>
+<p>而当IO口输出高电平时，内部三极管会关闭，引脚处于<strong>高阻态</strong>，此时引脚的电平完全由外部电路决定。</p>
+<p>因此，为了让单片机能正确读取按键状态，我们需要先将与按键相连的IO口（P2.0-P2.3）设置为高电平。这样，当按键按下时，外部的低电平信号才能成功地被单片机检测到。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.3 按键的基本原理：按键计数
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include <reg52.h>
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;  
+sbit ADDR2 = P1^2;  
+sbit ADDR3 = P1^3;  
+sbit ENLED = P1^4;
+
+sbit KEY1 = P2^4;  
+sbit KEY2 = P2^5; 
+sbit KEY3 = P2^6;  
+sbit KEY4 = P2^7;
+unsigned char code LedChar[ ] = { //数码管显示字符转换表
+	0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83, 0xC6, 0xA1, 0x86, 0x8E
+};
+```
+```C
+void main() {
+	bit backup = 1; //定义一个位变量,保存前一次扫描的按键值
+	unsigned char cnt = 0; //定义一个计数变量,记录按键按下的次数
+	ENLED = 0;   //选择数码管 DS1 进行显示
+	ADDR3 = 1;
+	ADDR2 = 0;  
+	ADDR1 = 0;  
+	ADDR0 = 0;
+	P2 = 0xF7;   //P2.3 置 0,即 KeyOut1 输出低电平
+	P0 = LedChar[cnt];   //显示按键次数初值
+```
+</div>
+
+<div class="" style="position: absolute; left: 43%; top: 14%; height: 40%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+	while (1) {
+		if (KEY4 != backup) {  //当前值与前次值不相等说明此时按键有动作
+			if (backup == 0)  { 
+				//如果前次值为 0,则说明当前是由 0 变 1,即按键弹起
+				cnt++; //按键次数+1
+				if (cnt >= 10) {
+				    //只用 1 个数码管显示,所以加到 10 就清零重新开始
+					cnt = 0;
+				}
+				P0 = LedChar[cnt]; //计数值显示到数码管上
+			}
+			backup = KEY4; //更新备份为当前值,以备进行下次比较
+		}
+	}
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 43%; top: 50%; height: 35%; width: 58%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- 使用一个变量**记录按键上一次的状态**。
+- 在循环中，不断比较当前状态和上一次状态。
+- 当检测到状态从“按下”变为“弹起”时，计数器加1。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>在理解了独立按键的基本检测方法后，我们来看一个更高级的应用：<strong>按键计数</strong>。这个程序不仅要检测按键是否按下，还要对按下的次数进行计数，并把结果显示在数码管上。</p>
+<p>这个程序的目标是：每按下一次按键，数码管上的数字就加一。</p>
+<ol>
+<li>变量与初始化</li>
+</ol>
+<ul>
+<li>程序开始时，我们定义了两个关键变量：**<code>backup</code>** 和 **<code>cnt</code>**。</li>
+<li><code>backup</code> 变量用来存储按键的<strong>上一次状态</strong></li>
+<li><code>cnt</code> 变量则用来记录按键按下的<strong>总次数</strong>。</li>
+</ul>
+<ol start="2">
+<li>主循环：检测与计数</li>
+</ol>
+<ul>
+<li>循环的核心在于 <code>if (KEY4 != backup)</code> 这个判断。它检查<strong>当前按键状态</strong>是否与<strong>上一次状态</strong>不同。</li>
+<li><strong>当按键状态改变时</strong>，程序进入内部的 <code>if</code> 语句。</li>
+<li>内部的 <code>if (backup == 0)</code> 进一步判断，如果上一次的状态是<strong>低电平</strong>（即按键被按下），而现在是高电平，说明按键刚刚<strong>弹起</strong>。</li>
+<li>只有在按键<strong>弹起</strong>的那一瞬间，我们才将计数器 <code>cnt</code> 加1，并将结果显示在数码管上。</li>
+<li>最后，<code>backup = KEY4;</code> 这行代码会<strong>更新备份状态</strong>，为下一次比较做准备。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.3 按键的基本原理：位 bit
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250924174754534.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **`bit` 类型：**
+    - 51单片机特有的**特殊变量类型**。
+    - **内存：** 只占用**1位（bit）**空间。
+    - **值：** 只能存储 `0` 或 `1`。
+    - **优点：** 节省内存，适合表示开关量状态（如按键、LED）。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问： 为什么标准C语言中没有 bit 这种变量类型？
+</div>
+</div>
+
+<aside class="notes"><p>我们再来学习一个专属于51单片机的新知识点——**<code>bit</code> 类型变量**。</p>
+<h3 id="bit-类型变量：专为单片机而生"><code>bit</code> 类型变量：专为单片机而生</h3>
+<p>在标准C语言中，我们通常使用 <code>char</code>、<code>int</code> 等变量类型。但对于51单片机，还有一个特殊的变量类型，就是**<code>bit</code>**。</p>
+<ul>
+<li><code>bit</code> 类型的变量只占用<strong>1位（bit）</strong>的内存空间，而我们常用的 <code>char</code> 类型则占用8位，也就是1个字节。</li>
+<li>尽管 <code>bit</code> 变量只能存储<strong>0</strong>或<strong>1</strong>这两个值，但它却非常有用。在单片机编程中，很多状态都可以用<code>0</code>和<code>1</code>来表示，比如按键的按下与弹起、LED灯的亮与灭、三极管的导通与关断等等。</li>
+</ul>
+<p><code>bit</code> 类型最大的优点是<strong>节省内存</strong>。在内存资源宝贵的单片机上，8个 <code>bit</code> 变量所占用的空间才相当于1个 <code>char</code> 变量，这对于优化程序非常有帮助。</p>
+<p><strong>问：</strong> 为什么标准C语言中没有 <code>bit</code> 这种变量类型？
+<strong>答：</strong> 因为标准C语言是为通用计算机设计的，通用计算机的内存单位通常是字节（8位），不方便直接操作单个位。而 <code>bit</code> 类型是51单片机厂商为了方便开发者直接操作硬件引脚和内部寄存器中的单一位而特意扩展的，属于单片机C语言的特有功能。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.4 按键的扫描和抖动：按键抖动
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20241003083144993.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 47%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **问题：**
+    - **按键抖动**是按键的**物理特性**。
+    - 按下/弹起时，机械触点会产生**短暂的、不稳定的抖动**。
+- **后果：**
+    - 单片机引脚电平**反复跳变**。
+    - 导致程序**误判**，一次按键被识别为多次。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：为什么单片机程序能正确识别按键按下，但却无法忽视按键抖动带来的误判？
+</div>
+</div>
+
+<aside class="notes"><p>在了解了 <code>bit</code> 变量的基本概念之后，我们来面对一个实际编程中一定会遇到的问题——<strong>按键抖动</strong>。</p>
+<h3 id="按键抖动：一个无法避免的物理现象">按键抖动：一个无法避免的物理现象</h3>
+<p>理论上，我们设计的程序是只在按键弹起时才进行计数，这听起来非常完美。但如果你在实际开发板上试一下，可能会发现一个奇怪的现象：有时候明明只按了一下按键，数码管上的数字却加了不止1，而是2或者更多。</p>
+<p>这是怎么回事呢？这并不是我们的程序逻辑有问题，而是由按键的<strong>物理特性</strong>造成的。</p>
+<ul>
+<li><strong>机械弹性</strong>：按键内部的开关都是机械弹性触点。</li>
+<li><strong>不稳定状态</strong>：当按下或松开按键时，触点并不会立即稳定地闭合或断开。由于弹性的作用，它们会在闭合和断开的瞬间，产生一连串的短暂抖动。</li>
+<li><strong>电平跳变</strong>：这种抖动会使得单片机引脚的电平在短时间内反复跳变。</li>
+</ul>
+<p>这就好比你在按开关时，它在瞬间开了又关、关了又开好几次，而单片机却把每一次的电平变化都当作了一次按键动作，从而导致误判和重复计数。</p>
+<p>问：为什么单片机程序能正确识别按键按下，但却无法忽视按键抖动带来的误判？
+答：这是因为单片机的工作速度<strong>远快于</strong>按键的抖动速度。</p>
+<ul>
+<li><strong>识别按键按下</strong>：当按键被按下时，单片机引脚的电平确实会从高电平变为低电平。由于单片机的执行速度非常快，它能够轻松捕捉到这个电平变化，并判断“有按键被按下了”。</li>
+<li><strong>无法忽视抖动</strong>：问题在于，按键的物理抖动过程通常会持续几毫秒。在这几毫秒内，单片机的主循环可能已经执行了成百上千次。每一次的电平跳变（从高到低，再从低到高），对于高速运行的单片机来说，都像是一次新的按键动作。因此，它会把一次按键动作所产生的多次电平跳变，都当作有效的按键信号，从而导致误判和重复计数。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.4 按键的扫描和抖动：消抖方法
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20241003083144993.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **问题：**
+    - 按键按下/弹起时有**短暂抖动**，易导致误判。
+- **核心思想：**
+    - **等待**抖动结束，再读取按键状态。
+- **消抖方法：**
+    - **硬件消抖：** 通过**电容**等元件过滤。
+    - **软件消抖：** 编写**程序延时**或判断。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么软件消抖通常比硬件消抖更常用？
+</div>
+</div>
+
+<aside class="notes"><p>好，既然我们知道了按键抖动是物理现象，那么如何解决它呢？接下来，我们来讨论<strong>按键消抖</strong>的方法。</p>
+<h3 id="按键消抖：理论与方法">按键消抖：理论与方法</h3>
+<p>首先，我们需要区分两个重要的时间概念：</p>
+<ul>
+<li><strong>按键稳定时间</strong>：这是指我们手动按下或松开按键并保持稳定的时间，通常在<strong>40毫秒</strong>以上，取决于操作者的速度。</li>
+<li><strong>按键抖动时间</strong>：这是由按键的机械特性决定的，一般都在<strong>10毫秒以内</strong>。</li>
+</ul>
+<p>我们的目标就是利用这两个时间的差异。当检测到按键状态变化时，我们不应该立即响应，而是应该等待一段比抖动时间更长的时间，确保按键已经稳定下来，再进行处理。这样，即使发生了抖动，我们也能过滤掉不稳定的信号，确保一次按键动作只被识别为一次。</p>
+<p>按键消抖主要有两种方法：</p>
+<ul>
+<li><strong>硬件消抖</strong>：通过在按键电路中增加电容等元器件，从物理层面上滤除抖动信号。</li>
+<li><strong>软件消抖</strong>：通过编写程序，利用延时或状态判断等逻辑，来过滤掉抖动信号。</li>
+</ul>
+<p><strong>问：</strong> 为什么软件消抖通常比硬件消抖更常用？</p>
+<p><strong>答：</strong> 软件消抖在单片机应用中更常用，主要是因为它<strong>成本低，灵活性高</strong>。硬件消抖需要增加额外的元器件，会增加电路的复杂性和成本。而软件消抖只需要几行代码，就可以在不增加任何硬件成本的情况下解决问题。同时，通过修改代码，我们可以轻松调整消抖时间，以适应不同按键或不同场景的需求。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.4 按键的扫描和抖动：软件消抖程序
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 12%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include <reg52.h>
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;  
+sbit ADDR2 = P1^2;  
+sbit ADDR3 = P1^3;  
+sbit ENLED = P1^4;
+
+sbit KEY1 = P2^4;  
+sbit KEY2 = P2^5; 
+sbit KEY3 = P2^6;  
+sbit KEY4 = P2^7;
+unsigned char code LedChar[ ] = { //数码管显示字符转换表
+	0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83, 0xC6, 0xA1, 0x86, 0x8E
+};
+```
+```C
+void delay();
+void main() {
+	bit keybuf = 1; //按键值暂存,临时保存按键的扫描值
+	bit backup = 1; //按键值备份,保存前一次的扫描值
+	unsigned char cnt = 0; //按键计数,记录按键按下的次数
+	
+	ENLED = 0;   //选择数码管 DS1 进行显示
+	ADDR3 = 1;
+	ADDR2 = 0;  
+	ADDR1 = 0;  
+	ADDR0 = 0;
+	P2 = 0xF7;   //P2.3 置 0,即 KeyOut1 输出低电平
+	P0 = LedChar[cnt];   //显示按键次数初值
+```
+</div>
+
+<div class="" style="position: absolute; left: 43%; top: 12%; height: 40%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+	while (1) {
+		keybuf = KEY4;    //把当前扫描值暂存
+		if (keybuf != backup) {    //当前值与前次值不相等说明此时按键有动作
+			delay();
+			if (keybuf == KEY4) {  //判断扫描值有没有发生改变,即按键抖动
+				if (backup == 0)  {
+					cnt++; //按键次数+1
+					if (cnt >= 10) {
+						cnt = 0;
+					}
+					P0 = LedChar[cnt]; //计数值显示到数码管上
+				}
+				backup = keybuf;  //更新备份为当前值,以备进行下次比较
+			}
+		}
+	}
+}
+```
+```C
+/* 软件延时函数,延时约 10ms */
+
+void delay(){
+	unsigned int i = 1000;
+	while (i--);
+}
+
+
+
+
+
+
+
+
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 这个程序为什么需要两次判断 `KEY4` 的值？
+</div>
+</div>
+
+<aside class="notes"><p>在了解了按键抖动的原理之后，我们来通过一个更完善的程序，看看如何用<strong>软件延时</strong>的方法来解决这个问题。</p>
+<p>这个程序与我们之前看到的类似，但它在按键检测部分增加了一个关键的<strong>消抖逻辑</strong>。程序中新增了 <code>keybuf</code> 变量，用来暂存当前的按键扫描值。<code>backup</code> 变量仍然用于保存上一次的按键状态。</p>
+<p><strong>主循环：延时消抖</strong></p>
+<ul>
+<li><strong>第一步</strong>：<code>keybuf = KEY4;</code>，程序先读取当前的按键状态，并将其暂存到 <code>keybuf</code> 中。</li>
+<li><strong>第二步</strong>：<code>if (keybuf != backup)</code>，判断当前状态是否与上次状态不同。如果不同，说明按键<strong>可能</strong>被按下了。</li>
+<li><strong>第三步</strong>：<code>delay();</code>，程序进入一个短暂的<strong>延时</strong>，比如10毫秒。这是消抖的关键。</li>
+<li><strong>第四步</strong>：<code>if (keybuf == KEY4)</code>，延时结束后，再次读取按键状态。如果<strong>延时前后的状态依然相同</strong>，就说明这确实是一次稳定的按键动作，而不是抖动。</li>
+<li><strong>第五步</strong>：在确认按键稳定后，程序会继续判断是否为“弹起”动作，然后进行计数并更新 <code>backup</code> 变量。</li>
+</ul>
+<p><strong>问：</strong> 这个程序为什么需要两次判断 <code>KEY4</code> 的值？</p>
+<p><strong>答：</strong> 两次判断 <code>KEY4</code> 的值是为了实现<strong>按键消抖</strong>。第一次判断 <code>keybuf = KEY4; if (keybuf != backup)</code> 是为了<strong>发现</strong>按键状态发生了变化。第二次判断 <code>if (keybuf == KEY4)</code> 是在<strong>延时之后</strong>，用来<strong>确认</strong>这个变化是稳定的、持续的，而不是短暂的抖动。通过这种“先发现，再确认”的逻辑，我们才能可靠地识别按键动作。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.4 按键的扫描和抖动：延迟函数不足
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 10%; top: 15%; height: 65%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **问题：** **阻塞式延时**
+    - **`delay()` 函数**会暂停所有程序执行。
+    - 导致在延时期间**错过其他事件**（如按键、传感器信号）。
+- **解决方案：**
+    - **避免在主循环中长时间延时。**
+    - 使用**非阻塞**方法处理长时间任务。
+- **非阻塞方法示例：**
+    - **状态机：** 分步处理按键状态，无需等待。
+    - **定时器：** 在后台独立计时，通过**中断**处理任务，不影响主循环。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么说定时器可以实现非阻塞的延时？
+</div>
+</div>
+
+<aside class="notes"><p>我们接着来讨论一个在实际项目中非常重要的问题：<strong>软件延时消抖的局限性</strong>。</p>
+<h3 id="软件消抖：简单延时的局限性">软件消抖：简单延时的局限性</h3>
+<p>我们之前用<strong>延时函数</strong>实现了按键消抖，这对于简单的演示程序非常有效。但如果是在复杂的项目开发中，这种方法会带来一个严重的问题：</p>
+<ul>
+<li><strong>阻塞式延时</strong>：我们的 <code>delay()</code> 函数是一个<strong>阻塞式延时</strong>，也就是说，当程序在执行这个函数时，它会暂停所有其他操作，等待延时结束。</li>
+<li><strong>错过事件</strong>：在 <code>while(1)</code> 循环中，程序需要不断地扫描各种状态，并及时处理任务。如果我们在主循环中加入了延时，那么在延时期间，任何突发事件，比如另一个按键被按下，或者某个传感器数据发生变化，都可能被<strong>完全错过</strong>。当延时结束后，这个事件已经发生了，程序再去检查，就已经“晚了”。</li>
+</ul>
+<h3 id="解决方案：避免阻塞">解决方案：避免阻塞</h3>
+<p>为了解决这个问题，在实际项目中，我们必须<strong>尽量缩短 <code>while(1)</code> 循环一次所用的时间</strong>，避免在主循环中进行长时间的阻塞式延时。</p>
+<p>对于需要长时间等待的操作，比如按键消抖，我们可以采用其他非阻塞的方法来处理，例如：</p>
+<ul>
+<li><strong>状态机</strong>：通过记录按键的状态（如按下、弹起、稳定等），分步进行处理，而不是使用延时。</li>
+<li><strong>定时器</strong>：利用单片机内部的定时器功能，在后台进行定时，当达到指定时间后，再进行按键状态的确认。</li>
+</ul>
+<p><strong>问：</strong> 为什么说定时器可以实现非阻塞的延时？
+<strong>答：</strong> 定时器可以在<strong>后台</strong>独立运行。当程序配置好定时器并启动后，主循环可以继续执行其他任务，不会被阻塞。定时器会在设定的时间到达后产生一个<strong>中断信号</strong>，这时程序会跳转到中断服务函数中处理相关逻辑（比如确认按键状态），处理完后立刻返回主循环。这样既实现了延时，又没有影响主程序的正常运行。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.5 实用按键消抖算法：定时器中断消抖
+</div>
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250924212532116.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 48%; top: 15%; height: 65%; width: 53%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **核心思想：** 利用**定时器**实现**非阻塞**消抖。
+- **工作流程：**
+    - 启用定时器，每 **2ms** 触发一次中断。
+    - 在中断中**扫描并存储**按键状态。
+    - **连续扫描8次**（共16ms），覆盖按键抖动时间。
+- **判断逻辑：**
+    - **稳定**：连续8次状态**一致**（全0或全1）。
+    - **抖动**：8次状态**不一致**（0和1交错）。
+- **优点：**
+    - 不会阻塞主循环，提高系统**实时性**。
+    - 判断结果更**稳定可靠**。
+</div>
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么我们选择扫描8次，而不是其他次数？
+</div>
+</div>
+
+<aside class="notes"><p>好，我们继续深入。除了之前讲到的简单软件延时方法，我们还有一种更高级、更可靠的按键消抖方案。</p>
+<h3 id="高级消抖：定时器与状态机结合">高级消抖：定时器与状态机结合</h3>
+<p>简单的延时会阻塞程序，导致我们错过其他事件。为了解决这个问题，我们可以利用单片机的<strong>定时器</strong>来实现<strong>非阻塞</strong>的按键消抖。</p>
+<p>这里有一个例子：我们可以启用一个定时器，让它每隔 <strong>2毫秒</strong>就触发一次中断。在每次中断服务程序里，我们只做两件事：</p>
+<ol>
+<li><strong>扫描按键状态</strong>：读取当前按键的电平。</li>
+<li><strong>存储状态</strong>：将这次扫描的结果存储在一个缓冲区里。</li>
+</ol>
+<p>然后，我们连续扫描 <strong>8次</strong>，总共用时大约 <strong>16毫秒</strong>。这16毫秒的时间，已经足够长到覆盖按键的抖动时间。</p>
+<h3 id="抖动判断逻辑">抖动判断逻辑</h3>
+<p>在每次中断中，我们都会检查这<strong>连续8次的按键状态</strong>是否一致：</p>
+<ul>
+<li><strong>如果8次扫描结果全部是1</strong>，我们就可以确定按键已经稳定弹起，并可以执行相应的操作。</li>
+<li><strong>如果8次扫描结果全部是0</strong>，我们就可以确定按键已经稳定按下。</li>
+<li><strong>如果0和1交错出现</strong>，我们就判定这是抖动，不作任何处理。</li>
+</ul>
+<p>这种方法将按键状态的判断与主循环分离，即使在判断期间，主程序也能继续执行其他任务，从而避免了阻塞，提高了系统的实时性。</p>
+<p><strong>问：</strong> 为什么我们选择扫描8次，而不是其他次数？</p>
+<p><strong>答：</strong> 选择8次是一个经验值，因为我们通常知道按键的抖动时间在10毫秒以内。每次扫描间隔2毫秒，连续扫描8次，总时间是16毫秒。这个时间足够长，可以确保按键的抖动已经完全结束，从而得到一个稳定、可靠的状态。同时，8这个数字也方便在计算机中用一个字节来存储和处理，提高了效率。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.5 实用按键消抖算法：中断消抖程序
+</div>
+<div class="" style="position: absolute; left: 0%; top: 12%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include <reg52.h>
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;
+sbit ADDR2 = P1^2;
+sbit ADDR3 = P1^3; 
+sbit ENLED = P1^4;
+sbit KEY1 = P2^4;
+sbit KEY2 = P2^5; 
+sbit KEY3 = P2^6;  
+sbit KEY4 = P2^7;
+unsigned char code LedChar[ ] = { //数码管显示字符转换表
+	0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83, 0xC6, 0xA1, 0x86, 0x8E
+};
+bit KeySta = 1; //当前按键状态
+```
+```C
+void main() {
+	bit backup = 1; //按键值备份,保存前一次的扫描值
+	unsigned char cnt = 0;  //按键计数,记录按键按下的次数
+	EA = 1;  //使能总中断
+	ENLED = 0;   //选择数码管 DS1 进行显示
+	ADDR3 = 1;
+	ADDR2 = 0;  
+	ADDR1 = 0;  
+	ADDR0 = 0;
+	TMOD = 0x01; //设置 T0 为模式 1
+	TH0 = 0xF8; //为 T0 赋初值 0xF8CD，定时 2ms
+	TL0 = 0xCD;
+	ET0 = 1;  //使能 T0 中断
+```
+</div>
+
+<div class="" style="position: absolute; left: 43%; top: 11%; height: 41%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+	TR0 = 1;      //启动 T0
+	P2 = 0xF7;  //P2.3 置 0,即 KeyOut1 输出低电平
+	P0 = LedChar[cnt];  //显示按键次数初值
+	while (1) {
+		if (KeySta != backup) {  //当前值与前次值不相等说明此时按键有动作
+			if (backup == 0) {  //如果前次值为 0,则说明当前是弹起动作
+				cnt++; //按键次数+1
+				if (cnt >= 10) { 
+					cnt = 0;
+				}
+				P0 = LedChar[cnt]; //计数值显示到数码管上
+			}
+			backup = KeySta; //更新备份为当前值,以备进行下次比较
+		}
+	}
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 43%; top: 50%; height: 35%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **判断：** 比较当前按键状态 (`KeySta`) 与上次 (`backup`)。
+- **动作：** 如果状态改变，且上次是**按下**，则确认一次**有效弹起**。
+- **执行：** 按键次数加1，并更新显示。
+- **备份：** 将当前状态保存为下一次比较的依据。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们讲了按键消抖的原理，现在我们来看一个具体的、基于定时器中断的按键消抖程序代码，来加深理解。</p>
+<h3 id="中断消抖程序代码解析"><strong>中断消抖程序代码解析</strong></h3>
+<p>首先我们看代码的头部，这里定义了一些变量和管脚。 
+<code>sbit</code> 关键字我们很熟悉了，它用于定义按键和数码管的控制引脚。 <code>unsigned char code LedChar[]</code> 是数码管显示字符的转换表，把数字0到F转换成数码管能显示的编码。 
+这里要注意一个新定义的变量： <code>bit KeySta = 1;</code> 这个变量用于保存我们按键的当前状态，它的初始值设为1，表示按键默认是弹起状态。</p>
+<p>接下来进入主函数 <code>void main()</code>。 我们看到程序首先初始化了定时器。 <code>TMOD = 0x01;</code> 设置了定时器T0为模式1，也就是16位定时器。 
+<code>TH0 = 0xF8;</code> 和 <code>TL0 = 0xCD;</code> 给定时器赋初值，这个值是经过计算的，它能让定时器每隔2毫秒就产生一次中断。 
+<code>ET0 = 1;</code> 开启了定时器T0的中断。 
+<code>EA = 1;</code> 开启了总中断。 
+然后 <code>TR0 = 1;</code> 启动定时器，这样每2毫秒就会自动触发中断。</p>
+<p>接下来我们看主循环 <code>while (1)</code>。这里面的逻辑非常简洁： <code>if (KeySta != backup)</code> 这行代码是整个程序的关键。它判断当前的按键状态 <code>KeySta</code> 是否和上一次的备份值 <code>backup</code> 不一样。 如果不一样，就说明按键有动作了。 <code>if (backup == 0)</code> 这行代码进一步判断，如果上一次的值是0，也就是按键从按下状态变成了弹起状态，我们就可以确定这是一次完整的按键动作，然后执行相应的操作，比如让计数器 <code>cnt++</code>，并把新的值显示到数码管上。 最后，<code>backup = KeySta;</code> 这行代码会更新 <code>backup</code> 的值，为下一次的比较做准备。</p>
+<p><strong>问：</strong> 为什么在主循环 <code>while(1)</code> 里没有直接读取按键状态？
+<strong>答：</strong> 因为按键状态的读取和抖动判断都放在了定时器中断服务程序里。这样做的好处是主程序不会被阻塞，可以一直执行其他任务，只在按键状态稳定改变时才进行处理，大大提高了系统的实时性和效率。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.5 实用按键消抖算法：中断消抖程序
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* T0 中断服务函数,用于按键状态的扫描并消抖 */
+void InterruptTimer0() interrupt 1 {
+	//扫描缓冲区,保存一段时间内的扫描值
+	static unsigned char keybuf = 0xFF; 
+	TH0 = 0xF8; //重新加载初值
+	TL0 = 0xCD;
+	//缓冲区左移一位,并将当前扫描值移入最低位
+	keybuf = (keybuf<<1) | KEY4; 
+	if (keybuf == 0x00) { 
+	//连续 8 次扫描值都为 0
+	// 即 16ms 内都只检测到按下状态时,可认为按键已按下
+		KeySta = 0;
+	}
+```
+```C
+	else if (keybuf == 0xFF) { 
+	//连续 8 次扫描值都为 1
+	//即 16ms 内都只检测到弹起状态时,可认为按键已弹起
+		KeySta = 1;
+	}
+	else
+	{ } //其它情况则说明按键状态尚未稳定,则不对 KeySta 变量值进行更新
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 48%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **函数定义：** `void InterruptTimer0() interrupt 1`
+    - T0定时器中断服务函数。
+    - 核心变量：`static unsigned char keybuf`，用于存储最近8次按键扫描结果的**静态缓冲区**。
+- **主要逻辑：**
+    - 重载定时器，确保每2ms中断一次。
+    - 通过 `keybuf = (keybuf<<1) | KEY4;` 实时更新缓冲区，保存最新的8次按键状态。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>好的，我们继续看代码。上一个PPT我们看到了主函数是如何利用一个 <code>KeySta</code> 变量来判断按键动作的，那么这个关键的 <code>KeySta</code> 变量是在哪里更新的呢？答案就在定时器中断服务函数里。</p>
+<h3 id="中断服务函数：按键消抖的核心逻辑"><strong>中断服务函数：按键消抖的核心逻辑</strong></h3>
+<p>这段代码就是定时器T0的中断服务函数 <code>InterruptTimer0()</code>。它才是我们实现非阻塞式按键消抖的<strong>核心</strong>。</p>
+<p>首先，函数开头定义了一个静态变量 <code>static unsigned char keybuf = 0xFF;</code>。这个 <code>keybuf</code> 就是我们用来存储连续8次按键扫描结果的<strong>缓冲区</strong>，或者说，是一个简单的<strong>状态机</strong>。</p>
+<p>进入中断后，我们做的第一件事是<strong>重新加载定时器的初值</strong>，也就是 <code>TH0 = 0xF8;</code> 和 <code>TL0 = 0xCD;</code>，确保下一次中断依然是2毫秒后触发。</p>
+<p>接下来，就是最重要的按键扫描和状态判断： <code>keybuf = (keybuf&lt;&lt;1) | KEY4;</code> 这行代码的作用是，把 <code>keybuf</code> 这个8位缓冲区左移一位，然后将当前按键 <code>KEY4</code> 的状态读进来，放到最低位。这样，<code>keybuf</code> 里面就始终保存着最近<strong>8次</strong>的按键扫描结果。</p>
+<p>然后，我们通过判断 <code>keybuf</code> 的值，来确定按键的状态是否稳定：</p>
+<ul>
+<li><strong><code>if (keybuf == 0x00)</code><strong>：这表示 <code>keybuf</code> 的8位全部都是0。这说明在连续16毫秒（8次 x 2毫秒）里，我们每次扫描到的按键状态都是0，也就是</strong>按下</strong>。这时，我们就可以确定按键已经稳定按下，并将全局变量 <code>KeySta</code> 更新为0。</li>
+<li><strong><code>else if (keybuf == 0xFF)</code><strong>：这表示 <code>keybuf</code> 的8位全部都是1。这说明在连续16毫秒里，按键状态都是1，也就是</strong>弹起</strong>。这时，我们将 <code>KeySta</code> 更新为1。</li>
+<li><strong><code>else { }</code><strong>：其他所有情况，<code>keybuf</code> 既不是 <code>0x00</code> 也不是 <code>0xFF</code>，就说明0和1是交替出现的，这正是按键</strong>抖动</strong>的特征。在这种情况下，我们不做任何处理，直接退出中断函数，等待下一次扫描。</li>
+</ul>
+<p><strong>问：</strong> 在中断服务函数中，为什么 <code>keybuf</code> 要定义为 <code>static</code> 类型？ <strong>答：</strong> 因为 <code>static</code> 变量在函数调用结束后，它的值不会被销毁，而是会保留下来。这样，在每次中断被触发时，<code>keybuf</code> 都能保留上一次的扫描结果，从而实现连续多次的按键状态记录，来判断按键是否稳定。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.6 矩阵按键扫描
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 42%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250924100231316.png" alt="" style="width: 750px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 42%; top: 15%; height: 65%; width: 59%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **结构：**
+    - 通过**行线**和**列线**组成，实现多达16个按键的识别。
+- **扫描：**
+    - 利用**定时器中断**，每次只激活**一行**，然后读取所有**列**
+    - 这种**动态扫描**类似数码管的动态显示。
+- **时间：**
+    - 为保证消抖效果，将**1ms**中断与**4次**采样结合，确保总消抖时间为**16ms**。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 矩阵按键扫描和数码管动态显示有什么相似之处？ 
+</div>
+</div>
+
+<aside class="notes"><p>好的，各位，前面我们讲了独立按键的消抖，接下来我们把目光转向更复杂的按键类型——矩阵按键。</p>
+<h3 id="矩阵按键的扫描原理"><strong>矩阵按键的扫描原理</strong></h3>
+<p>我们讲独立按键扫描的时候，大家已经简单认识了矩阵按键是什么样子了。</p>
+<p>矩阵按键相当于4组、每组各4个独立按键，一共是<strong>16个按键</strong>。那么，如何区分这16个按键呢？</p>
+<p>我们可以想象一下我们所在的地球，要想确定我们所在的位置，就需要借助经纬线。矩阵按键的原理与此类似，它就是通过<strong>行线</strong>和<strong>列线</strong>来确定哪个按键被按下的。</p>
+<p>那么在程序中，我们又如何进行这项操作呢？</p>
+<p>在按键扫描中断中，我们的做法是<strong>动态扫描</strong>：</p>
+<ul>
+<li>每次中断，我们只让矩阵按键的一个<strong>KeyOut</strong>（行线）输出低电平，而其他三个KeyOut都输出高电平。</li>
+<li>接着，我们判断当前所有<strong>KeyIn</strong>（列线）的状态，看看是否有低电平出现。</li>
+<li>下次中断时，我们再让<strong>下一个KeyOut</strong>输出低电平，以此类推，通过快速的中断循环来扫描所有行和列的交叉点，最终确定哪个按键被按下。</li>
+</ul>
+<p>这个原理是不是跟数码管的<strong>动态扫描</strong>有点类似？没错，它们都是利用了人眼的视觉暂留和程序的高速执行。数码管我们在动态地赋值，而按键这里，我们则是在<strong>动态地读取状态</strong>。</p>
+<h3 id="扫描时间与消抖时间的调整"><strong>扫描时间与消抖时间的调整</strong></h3>
+<p>至于扫描间隔时间和消抖时间，这里需要重新计算一下：</p>
+<ul>
+<li>独立按键我们用的是2毫秒中断，判断8次扫描值，总消抖时间是16毫秒。</li>
+<li>但矩阵按键有<strong>4个KeyOut输出</strong>，需要中断4次才能完成一次全部按键的扫描。如果我们还是用2ms中断、判断8次，那么总消抖时间就会变得非常长：2ms×4×8=64ms，这会严重影响系统的响应速度。</li>
+</ul>
+<p>所以，我们就需要调整参数，让消抖时间保持在合适的范围内。我们改用<strong>1毫秒中断</strong>，并判断<strong>4次采样值</strong>。这样，一个按键的消抖时间仍然是：1ms×4×4=16ms。既保证了消抖效果，又兼顾了系统的实时性。</p>
+<p><strong>问：</strong> 矩阵按键扫描和数码管动态显示有什么相似之处？ 
+<strong>答：</strong> 它们都利用了“<strong>动态</strong>”的原理。数码管动态显示是通过快速切换位选和段码，让不同的数码管轮流显示，利用人眼视觉暂留形成稳定的显示效果；而矩阵按键扫描也是通过快速切换行线电平，分时读取列线状态，利用程序的高速执行来确定哪一个按键被按下。本质上都是<strong>分时复用</strong>。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.6 矩阵按键扫描：代码示例
+</div>
+
+<div class="" style="position: absolute; left: 2%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include <reg52.h>
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;  
+sbit ADDR2 = P1^2;  
+sbit ADDR3 = P1^3;  
+sbit ENLED = P1^4;
+sbit KEY_IN_1 = P2^4;  
+sbit KEY_IN_2 = P2^5;  
+sbit KEY_IN_3 = P2^6;  
+sbit KEY_IN_4 = P2^7;  
+sbit KEY_OUT_1 = P2^3;  
+sbit KEY_OUT_2 = P2^2;  
+sbit KEY_OUT_3 = P2^1;  
+sbit KEY_OUT_4 = P2^0;
+```
+
+```C
+unsigned char code LedChar[ ] = {   //数码管显示字符转换表
+	0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83, 0xC6, 0xA1, 0x86, 0x8E
+};
+unsigned char KeySta[4][4] = {   //全部矩阵按键的当前状态
+	{1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}
+};
+void main() {
+	unsigned char i, j;
+	unsigned char backup[4][4] = { //按键值备份,保存前一次的值
+		{1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}
+	}
+```
+</div>
+
+<div class="" style="position: absolute; left: 48%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+	EA = 1;  //使能总中断
+	ENLED = 0;   //选择数码管 DS1 进行显示
+	ADDR3 = 1;
+	ADDR2 = 0;  
+	ADDR1 = 0;  
+	ADDR0 = 0;
+	
+	TMOD = 0x01; //设置 T0 为模式 1
+	TH0 = 0xFC; //为 T0 赋初值 0xFC67,定时 1ms
+	TL0 = 0x67;
+	ET0 = 1;  //使能 T0 中断
+	TR0 = 1;  //启动 T0
+	
+	P0 = LedChar[cnt];  //显示按键次数初值
+```
+```C
+	while (1){
+		for (i=0; i<4; i++) {  //循环检测 4*4 的矩阵按键
+			for (j=0; j<4; j++){
+				if (backup[i][j] != KeySta[i][j]) { //检测按键动作
+					if (backup[i][j] != 0) {  //按键按下时执行动作
+						P0 = LedChar[i*4+j]; //将编号显示到数码管
+					}
+					backup[i][j] = KeySta[i][j]; //更新前一次的备份值
+				}
+			}
+		}
+	}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么在定义按键状态变量时，要使用 `unsigned char KeySta[4][4]` 这样的二维数组？
+</div>
+</div>
+
+<aside class="notes"><p>好的，上一页我们分析了矩阵按键的扫描原理，现在我们来看一下矩阵按键程序的具体代码。我们先从代码的头部和 <code>main</code> 函数开始。</p>
+<h3 id="矩阵按键程序代码解析"><strong>矩阵按键程序代码解析</strong></h3>
+<p>首先，我们看代码的头部。</p>
+<ul>
+<li><p><strong>引脚定义：</strong> 这里我们看到，除了数码管的引脚，我们还定义了矩阵按键的引脚。</p>
+<ul>
+<li><strong>KeyIn：</strong> <code>P2^4</code> 到 <code>P2^7</code>，对应4个列线。</li>
+<li><strong>KeyOut：</strong> <code>P2^0</code> 到 <code>P2^3</code>，对应4个行线。</li>
+</ul>
+</li>
+<li><p><strong>变量定义：</strong></p>
+<ul>
+<li><code>unsigned char code LedChar[]</code>：这是我们熟悉的数码管显示字符转换表。</li>
+<li><code>unsigned char KeySta[4][4]</code>：这是一个非常重要的二维数组，用来存储<strong>全部16个按键的当前状态</strong>。它的初始值都设为1，表示所有按键默认都是弹起状态。</li>
+<li><code>unsigned char backup[4][4]</code>：这是另一个二维数组，用于<strong>备份上一次的按键状态</strong>，方便在主循环中进行比较。</li>
+</ul>
+</li>
+</ul>
+<p>接下来是 <code>main</code> 函数。</p>
+<ul>
+<li><p><strong>中断和定时器初始化：</strong> 这里的初始化与独立按键有些不同。</p>
+<ul>
+<li><code>EA = 1;</code> 开启总中断。</li>
+<li><code>TMOD = 0x01;</code> 设置T0为模式1。</li>
+<li><code>TH0 = 0xFC;</code> 和 <code>TL0 = 0x67;</code>：这里给定时器赋的初值是 <code>0xFC67</code>，这个值经过计算，能让定时器每隔<strong>1毫秒</strong>产生一次中断。还记得我们前面讲的吗？为了保证矩阵按键的消抖时间，我们将中断间隔从2毫秒调整到了1毫秒。</li>
+<li><code>ET0 = 1;</code> 使能T0中断。</li>
+<li><code>TR0 = 1;</code> 启动定时器。</li>
+</ul>
+</li>
+<li><p><strong>其他初始化：</strong></p>
+<ul>
+<li><code>P0 = LedChar[cnt];</code>：用于将初始的按键计数显示在数码管上。</li>
+</ul>
+</li>
+</ul>
+<p><strong>问：</strong> 为什么在定义按键状态变量时，要使用 <code>unsigned char KeySta[4][4]</code> 这样的二维数组？ 
+<strong>答：</strong> 因为矩阵按键有16个按键，将它们的状态存储在一个 <code>4x4</code> 的二维数组里，能够非常直观地对应矩阵按键的行和列。例如，<code>KeySta[0][0]</code> 就代表矩阵按键第一行第一列的那个按键，这使得程序逻辑更加清晰，方便管理和访问每一个按键的状态。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.6 矩阵按键扫描：中断消抖
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* T0 中断服务函数,扫描矩阵按键状态并消抖 */
+void InterruptTimer0() interrupt 1 {
+	unsigned char i;
+	static unsigned char keyout = 0; //矩阵按键扫描输出索引
+	static unsigned char keybuf[4][4] = { //矩阵按键扫描缓冲区
+		{0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF},
+		{0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}
+	};
+	
+	TH0 = 0xFC; //重新加载初值
+	TL0 = 0x67;
+```
+```C
+	keybuf[keyout][0] = (keybuf[keyout][0] << 1) | KEY_IN_1;  
+	keybuf[keyout][1] = (keybuf[keyout][1] << 1) | KEY_IN_2;  
+	keybuf[keyout][2] = (keybuf[keyout][2] << 1) | KEY_IN_3;  
+	keybuf[keyout][3] = (keybuf[keyout][3] << 1) | KEY_IN_4;
+	//消抖后更新按键状态
+	for (i=0; i<4; i++) {  //每行 4 个按键,所以循环 4 次
+		if ((keybuf[keyout][i] & 0x0F) == 0x00) {
+		//连续 4 次扫描值为 0，即 4*4ms 内都是按下状态时
+		//可认为按键已稳定的按下
+			KeySta[keyout][i] = 0;
+		}
+		else if ((keybuf[keyout][i] & 0x0F) == 0x0F) {
+			KeySta[keyout][i] = 1;
+		}
+	}
+```
+</div>
+
+<div class="" style="position: absolute; left: 45%; top: 13%; height: 32%; width: 52%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+	//执行下一次的扫描输出
+	keyout++; //输出索引递增
+	keyout = keyout & 0x03; //索引值加到 4 即归零
+	switch (keyout) {   //根据索引,释放当前输出引脚,拉低下次的输出引脚
+		case 0: KEY_OUT_4 = 1; KEY_OUT_1 = 0; break;  
+		case 1: KEY_OUT_1 = 1; KEY_OUT_2 = 0; break;  
+		case 2: KEY_OUT_2 = 1; KEY_OUT_3 = 0; break;  
+		case 3: KEY_OUT_3 = 1; KEY_OUT_4 = 0; break;  
+		default: break;  
+	}
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 45%; top: 46%; height: 32%; width: 52%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 重载定时器，确保**1ms**中断。
+- 将当前行**所有列**的状态存入 `keybuf`。
+- 通过**掩码**判断最近**4次**扫描结果，完成消抖。
+- 更新 `KeySta` 状态。
+- 切换到**下一行**继续扫描。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：**为什么判断消抖的条件从 `keybuf == 0x00` 变成了 `(keybuf & 0x0F) == 0x00`？ 
+</div>
+</div>
+
+<aside class="notes"><h3 id="矩阵按键中断服务函数：扫描与消抖"><strong>矩阵按键中断服务函数：扫描与消抖</strong></h3>
+<p>这段代码就是我们的定时器T0中断服务函数，它包含了矩阵按键<strong>动态扫描</strong>和<strong>消抖</strong>的全部逻辑。</p>
+<p>首先，函数内部定义了两个静态变量：</p>
+<ul>
+<li><code>static unsigned char keyout = 0;</code>：这是一个索引，用来记录当前是哪一行的<strong>KeyOut</strong>在输出低电平。</li>
+<li><code>static unsigned char keybuf[4][4]</code>：这是一个<strong>4x4的二维缓冲区</strong>。每一个单元格都对应一个按键，用来保存这个按键最近<strong>8次</strong>的扫描结果。</li>
+</ul>
+<p>进入中断后，我们首先会<strong>重载定时器初值</strong>，确保下一次中断仍然是1毫秒后触发。</p>
+<p>接下来，我们看核心的扫描和消抖逻辑： <code>keybuf[keyout][0] = (keybuf[keyout][0] &lt;&lt; 1) | KEY_IN_1;</code> 这几行代码是<strong>同时</strong>对当前扫描行的所有按键进行状态更新。它将缓冲区对应位置的数据左移一位，然后把当前读到的列线状态<strong>（KEY_IN）</strong>存入最低位。这样，<code>keybuf</code> 的每个单元格都保存了对应按键最近8次的扫描结果。</p>
+<p>然后我们用一个 <code>for</code> 循环来判断按键状态： <code>if ((keybuf[keyout][i] &amp; 0x0F) == 0x00)</code> 这里我们不再是判断 <code>keybuf</code> 是否为 <code>0x00</code> 或 <code>0xFF</code>，而是用<strong>按位与</strong>操作符 <code>&amp;</code> 加上掩码 <code>0x0F</code>，来判断<strong>最后4次</strong>的扫描结果是否全为0。这4次扫描正好对应<strong>4毫秒</strong>的时间。如果连续4毫秒都是按下状态，我们就认为按键已经稳定，将 <code>KeySta</code> 设为0。</p>
+<p>最后，我们执行下一次的扫描输出：</p>
+<ul>
+<li><code>keyout++;</code> 递增索引。</li>
+<li><code>keyout = keyout &amp; 0x03;</code> 确保索引值在0到3之间循环。</li>
+<li><code>switch (keyout)</code> 语句则根据索引，将对应的<strong>KeyOut</strong>引脚拉低，<strong>切换到下一行</strong>进行扫描。</li>
+</ul>
+<p><strong>问：</strong> 在中断服务函数中，为什么判断消抖的条件从 <code>keybuf == 0x00</code> 变成了 <code>(keybuf &amp; 0x0F) == 0x00</code>？ 
+<strong>答：</strong> 这是因为矩阵按键的扫描时间变长了。我们采用的是<strong>1ms中断</strong>，但每次中断只扫描<strong>一行</strong>。一个按键的完整扫描周期需要4次中断（1ms x 4行 = 4ms）。因此，我们只需要检查最近4次、也就是<strong>4毫秒</strong>内的扫描结果是否一致，就能实现有效的消抖。<code>&amp; 0x0F</code> 操作正是为了提取 <code>keybuf</code> 的<strong>最低4位</strong>进行判断。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.6 矩阵按键扫描：
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 42%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### **中断服务函数中的I/O顺序** 
+- **常规：** 先切换输出，再读取输入。
+- **程序实现：** **先读取输入** (`KeyIn`)，**后切换输出** (`KeyOut`)。
+- **原因：** 保证输出信号有足够的时间（一个中断周期）来稳定，提高程序**健壮性**。
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 42%; top: 15%; height: 65%; width: 58%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+### **按键扫描索引的编程技巧** 
+- **目的：** 实现 `keyout` 变量在 0-3 之间循环，加到 4 自动归零。
+- **常规方法：** `if (keyout >= 4) { keyout = 0; }`
+- **技巧：** 使用**按位与运算**
+	- `keyout = keyout & 0x03;`
+	- **原理：** `0x03` 的二进制为 `0000 0011`，该运算只保留 `keyout` 的**最低两位**，实现 0-3 的循环效果，代码更简洁高效。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 42%; top: 10%; height: 80%; width: 1%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 在中断服务函数中，先扫描输入再切换输出的顺序，除了让信号稳定，还有什么好处？ 
+</div>
+</div>
+
+<aside class="notes"><p>好的，各位同学，到这里我们已经把矩阵按键的程序代码全部过了一遍。这个程序实现了矩阵按键的<strong>扫描、消抖、动作分离</strong>的全部内容。希望大家能认真研究，彻底掌握矩阵按键的原理和应用方法。</p>
+<p>在程序的最后，还有两点需要特别说明一下，它们体现了编程的严谨性和技巧性。</p>
+<h3 id="一、中断函数中输入输出的顺序"><strong>一、中断函数中输入输出的顺序</strong></h3>
+<p>我们来观察一下中断服务函数中，扫描 <code>KeyIn</code> 输入和切换 <code>KeyOut</code> 输出的顺序。你会发现，程序是先对所有的 <code>KeyIn</code> 做了扫描和消抖，然后才切换到下一次的 <code>KeyOut</code> 输出。</p>
+<p>这与我们直观想象的“先输出再读取”正好相反。为什么呢？</p>
+<ul>
+<li><strong>原因：</strong> 任何信号从输出到稳定都需要一个时间。虽然这个时间通常很短，但有时可能不够快。</li>
+<li><strong>目的：</strong> 这种颠倒的输入输出顺序，就是为了让输出信号有<strong>足够的时间（一次中断间隔）</strong>来稳定，并有足够的时间来完成它对输入的影响。当你的按键电路中还有硬件电容消抖时，这样处理是绝对必要的。</li>
+<li><strong>优点：</strong> 这种编程方式虽然理解起来有点绕，但它的适应性是最好的。换句话说，这段程序足够<strong>“健壮”</strong>，足以应对各种复杂的硬件电路和恶劣情况。</li>
+</ul>
+<h3 id="二、按键扫描索引的编程技巧"><strong>二、按键扫描索引的编程技巧</strong></h3>
+<p>接下来，我们看一个编程上的小技巧。请注意看这行代码： <code>keyout = keyout &amp; 0x03;</code></p>
+<p>这行的目的是让 <code>keyout</code> 变量在0到3之间循环变化，加到4就自动归零。按照常规，你可以用 <code>if (keyout &gt;= 4) { keyout = 0; }</code> 这样的语句轻松实现。</p>
+<p>但是，使用<strong>按位与</strong>操作符 (<code>&amp;</code>) 也能实现同样的效果，而且更简洁。</p>
+<ul>
+<li><strong>原理：</strong> 因为0、1、2、3这四个数值，正好只占用二进制数的<strong>最低两位</strong>（00, 01, 10, 11）。<code>0x03</code> 的二进制就是 <code>0000 0011</code>。</li>
+<li><strong>效果：</strong> 当 <code>keyout</code> 与 <code>0x03</code> 做按位与运算时，它会<strong>清除</strong><code>keyout</code> 的高6位，只保留最低两位，从而实现0到3的循环。</li>
+</ul>
+<p><strong>问：</strong> 在中断服务函数中，先扫描输入再切换输出的顺序，除了让信号稳定，还有什么好处？ 
+<strong>答：</strong> 这种设计提高了程序的<strong>鲁棒性</strong>。它能兼容一些信号建立时间较长的硬件电路，避免因为信号不稳定而导致的误判。这种对硬件特性的考量，是编写高质量、可靠的嵌入式程序时非常重要的一环。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.7 简易加法计算器
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第8章 函数进阶与按键/file-20250925101533408.png" alt="" style="width: 500px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 36%; top: 15%; height: 65%; width: 64%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **项目核心：**
+    - **复杂功能**需要**模块化编程**。
+    - 将每个功能写成独立函数，提高代码清晰度和维护性。
+- **关键概念：** **键码标准化**
+    - **为什么？** 不直接用按键行列号，而是转换为标准键码。
+    - **好处：**
+        1. **遵循标准：** 方便交流和对接。
+        2. **分层设计：** 硬件改变时，只需修改底层代码，不影响上层功能，程序更易于移植。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 什么是程序的“底层驱动”和“应用层”？
+</div>
+</div>
+
+<aside class="notes"><p>好，在掌握了按键、数码管和函数的基本知识后，我们来挑战一个更复杂的项目：<strong>简易加法计算器</strong>。</p>
+<h3 id="编程实战：简易加法计算器">编程实战：简易加法计算器</h3>
+<p>这个项目的功能相对复杂，需要整合多个技术点：</p>
+<ol>
+<li><strong>数字输入</strong>：从0~9的按键输入数字，并实时显示在数码管上。</li>
+<li><strong>运算</strong>：用“上箭头”键代表加号，并允许输入第二个数字。</li>
+<li><strong>计算</strong>：按下回车键，计算结果并显示在数码管上。</li>
+</ol>
+<p>这是一个复杂的任务，所以我们必须采用<strong>模块化编程</strong>。我们将把每个子功能都写成独立的函数，让程序结构更清晰，也更便于编写和维护。大家在分析程序时，可以从主函数和中断函数入手，然后顺着程序的调用流程去理解每个函数的作用。想象一下，如果把所有代码都塞进一个主函数里，程序会变得多么混乱。</p>
+<h3 id="键码标准化：为什么要做多此一举的事？">键码标准化：为什么要做“多此一举”的事？</h3>
+<p>在这个计算器程序中，我们没有直接使用按键的行列号来判断按键，而是先将它们转换成一种<strong>“标准键盘键码”</strong>。这听起来有点多此一举，但背后有两层重要的意义：</p>
+<ol>
+<li><strong>遵循行业标准</strong>：将自定义的硬件信号（如行列号）转换为标准化的键码，有助于我们的设计与行业规范接轨。这不仅方便别人理解，也更容易与其他系统对接，因为标准就是为此而生的。</li>
+<li><strong>分层与可移植性</strong>：这种做法有助于程序的<strong>层次化</strong>。我们把按键扫描（底层驱动）与功能实现（应用层）分离开来。如果将来硬件布局改变，比如从4x4按键变为4x5，我们只需要修改键码转换的底层代码（<code>KeyCodeMap</code> 数组），而无需改动上层的功能实现代码。这大大提高了程序的可维护性和可移植性。</li>
+</ol>
+<p><strong>问：</strong> 什么是程序的“底层驱动”和“应用层”？</p>
+<p><strong>答：</strong> 程序的“底层驱动”是指直接与硬件（如按键、LED）打交道的代码，它负责处理硬件的输入输出细节。而“应用层”则是在底层驱动之上，实现具体功能的代码。例如，读取按键行列号属于底层，而根据键码实现加法运算则属于应用层。这种分层设计让开发者可以专注于各自的任务，互不干扰，提高了开发效率和代码质量。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.7 简易加法计算器
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 60%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+#include <reg52.h>
+sbit ADDR0 = P1^0;
+sbit ADDR1 = P1^1;  
+sbit ADDR2 = P1^2;  
+sbit ADDR3 = P1^3;  
+sbit ENLED = P1^4;
+sbit KEY_IN_1 = P2^4;  
+sbit KEY_IN_2 = P2^5;  
+sbit KEY_IN_3 = P2^6;  
+sbit KEY_IN_4 = P2^7;  
+sbit KEY_OUT_1 = P2^3;  
+sbit KEY_OUT_2 = P2^2;  
+sbit KEY_OUT_3 = P2^1;  
+sbit KEY_OUT_4 = P2^0;
+```
+
+```C
+unsigned char code LedChar[ ] = {   //数码管显示字符转换表
+	0xC0, 0xF9, 0xA4, 0xB0, 0x99, 0x92, 0x82, 0xF8,
+	0x80, 0x90, 0x88, 0x83, 0xC6, 0xA1, 0x86, 0x8E
+};
+unsigned char LedBuff[6] = {   //数码管显示缓冲区
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+};
+unsigned char code KeyCodeMap[4][4] = {  //矩阵按键编号到标准键盘键码的映射表
+	{ 0x31, 0x32, 0x33, 0x26 }, //数字键 1、数字键 2、数字键 3、向上键
+	{ 0x34, 0x35, 0x36, 0x25 }, //数字键 4、数字键 5、数字键 6、向左键
+	{ 0x37, 0x38, 0x39, 0x28 }, //数字键 7、数字键 8、数字键 9、向下键
+	{ 0x30, 0x1B, 0x0D, 0x27 } //数字键 0、ESC 键、 回车键、 向右键
+};	
+unsigned char KeySta[4][4] = { //全部矩阵按键的当前状态
+	{1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}
+};
+```
+</div>
+
+<div class="" style="position: absolute; left: 53%; top: 10%; height: 38%; width: 47%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+void KeyDriver();
+void main() {
+	EA = 1; //使能总中断
+	ENLED = 0; //选择数码管进行显示
+	ADDR3 = 1;  
+	TMOD = 0x01; //设置 T0 为模式 1  
+	TH0 = 0xFC; //为 T0 赋初值 0xFC67,定时 1ms  
+	TL0 = 0x67;  
+	ET0 = 1; //使能 T0 中断  
+	TR0 = 1; //启动 T0  
+	LedBuff[0] = LedChar[0];  //上电显示 0
+	while (1){
+		KeyDriver(); //调用按键驱动函数
+	}
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 53%; top: 45%; height: 42%; width: 47%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- `KeyCodeMap`：将按键行列号映射为标准键码。
+- **主循环**：只负责调用 `KeyDriver()` 函数。
+- **模块化编程**，主程序只做调度。
+- 使用**定时器中断**，实现非阻塞按键扫描。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：`KeyDriver()` 为什么在主函数中？而不是中断函数中
+</div>
+</div>
+
+<aside class="notes"><p>好，在理解了计算器项目的整体思路之后，我们来分析它的<strong>代码框架</strong>，看看如何用C语言将这些思想落地。</p>
+<ol>
+<li>变量与引脚定义</li>
+</ol>
+<p>这部分是程序的“基石”。我们使用 <code>sbit</code> 定义了所有按键和数码管引脚，让代码更易读。接着定义了几个重要的<strong>数组</strong>：</p>
+<ul>
+<li><code>LedChar</code>：用于数码管显示字符的<strong>字模表</strong>。</li>
+<li><code>KeyCodeMap</code>：将<strong>矩阵按键的行列号</strong>映射到<strong>标准键码</strong>，这是我们之前提到的分层设计的关键。</li>
+<li><code>KeySta</code>：用于存储所有按键的<strong>当前状态</strong>，是实现按键去抖动的核心</li>
+</ul>
+<ol start="2">
+<li>主函数 <code>main()</code></li>
+</ol>
+<ul>
+<li><strong>初始化</strong>：<code>main</code> 函数首先进行各种初始化工作，包括使能总中断 <code>EA = 1</code>，配置定时器0（<code>TMOD</code>、<code>TH0</code>、<code>TL0</code>）并使其能产生中断（<code>ET0 = 1</code>）和启动（<code>TR0 = 1</code>）。定时器是这个程序的核心，它将在后台以固定频率产生中断，用于按键扫描和数码管动态刷新。</li>
+<li><strong>主循环</strong>：<code>main</code> 函数的主循环非常简洁，它只做一件事：不断调用 <code>KeyDriver()</code> 函数。这体现了我们<strong>模块化编程</strong>的理念，主函数只负责任务的调度，具体细节由其他函数来完成。</li>
+</ul>
+<p><strong>问：</strong> <code>KeyDriver()</code> 为什么在主函数中？而不是中断函数中
+<strong>答：</strong> </p>
+<h3 id="keydriver-为什么在主函数中？"><code>KeyDriver()</code> 为什么在主函数中？</h3>
+<p>将 <code>KeyDriver()</code> 放在主函数 <code>while(1)</code> 循环中，而不是定时器中断中，主要是基于以下几点考虑：</p>
+<ol>
+<li><p><strong>分层与解耦</strong>：</p>
+<ul>
+<li><p><strong>中断服务函数</strong>（ISR）应该尽可能地<strong>简短</strong>、<strong>高效</strong>。它的主要任务是处理紧急的、时效性强的事件，比如按键扫描、数码管刷新等底层I/O操作。</p>
+</li>
+<li><p>而 <code>KeyDriver()</code> 函数中包含了对按键状态变化的<strong>逻辑判断</strong>和对 <code>KeyAction()</code> 函数的<strong>调用</strong>。这个过程涉及到更高级的程序逻辑，例如判断按键是否“弹起”以及调用 <code>KeyAction()</code> 来执行复杂的计算任务。</p>
+</li>
+<li><p>将 <code>KeyDriver()</code> 放在主循环中，可以将底层按键扫描（在中断中完成）和上层按键逻辑（在主循环中完成）<strong>分离开来</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>避免在中断中执行复杂任务</strong>：</p>
+<ul>
+<li><p><code>KeyAction()</code> 函数中包含了数字运算、变量赋值和函数调用等相对耗时的操作。</p>
+</li>
+<li><p>如果在中断中执行这些任务，可能会导致中断服务函数执行时间过长，从而<strong>阻塞</strong>其他更重要的中断或任务。</p>
+</li>
+<li><p>将 <code>KeyDriver()</code> 放在主循环中，即使它执行的时间稍长，也不会影响到定时器中断的正常运行，保证了程序的<strong>实时性</strong>和<strong>稳定性</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>非阻塞的设计思想</strong>：</p>
+<ul>
+<li><p>程序利用定时器中断（每1ms）在后台高频地调用 <code>KeyScan()</code>，负责<strong>非阻塞</strong>地、持续地更新按键状态。</p>
+</li>
+<li><p>而主循环中的 <code>KeyDriver()</code> 则不断地读取最新的按键状态，一旦发现变化，就去处理它。这个过程是<strong>“被动”</strong>的，它依赖于中断去更新状态。</p>
+</li>
+<li><p>这种设计实现了<strong>任务分离</strong>：中断负责<strong>数据采集</strong>（KeyScan），主循环负责<strong>数据处理</strong>（KeyDriver），两者高效协作，避免了任何一方的阻塞。</p>
+</li>
+</ul>
+</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.7 简易加法计算器
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 12%; height: 50%; width: 46%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+// 将一个无符号长整型的数字显示到数码管上，num-待显示数字
+void ShowNumber(unsigned long num)  {  
+	signed char i;  
+	unsigned char buf[6];  
+	for (i=0; i<6; i++)  { 
+		buf[i] = num % 10;  
+		num = num / 10;  
+	}  
+	for (i=5; i>=1; i--) { 
+	    if (buf[i] == 0)  
+		    LedBuff[i] = 0xFF;  
+		else  
+			break;  
+	}  
+```
+```C
+	//剩余低位都如实转换为数码管显示字符  
+	for ( ; i>=0; i--) {
+		LedBuff[i] = LedChar[buf[i]];  
+	}  
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 45%; height: 55%; width: 48%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **高位消隐**：隐藏数字前面多余的 `0`，使显示美观
+- **转换**：将拆解后的数字转换为**字模**，存入显示缓冲区。
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 12%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* 按键动作函数,根据键码执行相应的操作,keycode-按键键码 */
+void KeyAction(unsigned char keycode)  {  
+	static unsigned long result = 0; //用于保存运算结果  
+	static unsigned long addend = 0; //用于保存输入的加数  
+	if ((keycode>=0x30) && (keycode<=0x39))  {  //输入 0-9 的数字  
+		addend = (addend*10)+(keycode-0x30);  
+		//整体十进制左移，新数字进入个位  
+		ShowNumber(addend);  //运算结果显示到数码管  
+	}  
+	else if (keycode == 0x26) { //向上键用作加号,执行加法或连加运算
+		result += addend;  //进行加法运算  
+		addend = 0;  
+		ShowNumber(result);  //运算结果显示到数码管  
+	}  
+```
+```C
+	else if (keycode == 0x0D)  { 
+	//回车键,执行加法运算(实际效果与加号相同) 
+		result += addend;   //进行加法运算  
+		addend = 0;  
+		ShowNumber(result);  //运算结果显示到数码管
+	}
+	
+	else if (keycode == 0x1B)  { //Esc 键,清零结果
+		addend = 0;
+		result = 0;
+		ShowNumber(addend); //清零后的加数显示到数码管
+	}
+}
+```
+</div>
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 在 `ShowNumber()` 函数中，为什么需要一个循环来处理高位消隐？
+</div>
+</div>
+
+<aside class="notes"><p>我们继续分析计算器项目的核心代码。这两个函数是实现计算器功能的关键。</p>
+<p>1. <code>ShowNumber()</code>：数码管数字显示</p>
+<p>这个函数的作用是将一个长整型数字（<code>num</code>）转换为数码管可以显示的格式。</p>
+<ul>
+<li><strong>数字拆解</strong>：函数通过<strong>“取模 (<code>%</code>) 和除法 (<code>/</code>)”</strong>操作，将一个多位数字从低位到高位依次拆解，存入一个名为 <code>buf</code> 的数组中。</li>
+<li><strong>高位消隐</strong>：在显示时，它会从最高位开始，检查是否有<strong>多余的0</strong>。比如数字<code>12</code>，在六位数码管上显示时，前面的四个0会被隐藏。这个过程就叫做<strong>高位消隐</strong>。</li>
+<li><strong>转换显示</strong>：最后，它将拆解后的数字逐一转换为数码管的字模，存入显示缓冲区 <code>LedBuff</code> 中，等待动态刷新函数去显示。</li>
+</ul>
+<p>2. <code>KeyAction()</code>：按键功能执行</p>
+<p>这个函数是计算器的<strong>大脑</strong>，它根据按键的<strong>标准键码</strong>来执行不同的动作。</p>
+<ul>
+<li><strong><code>static</code> 变量</strong>：<code>result</code> 和 <code>addend</code> 都被声明为静态变量，它们的数值在函数被多次调用时会被保留，从而实现<strong>连续运算</strong>的功能。</li>
+<li><strong>数字输入</strong>：当按下0-9的数字键时，程序会将新输入的数字加入到 <code>addend</code> 中，并显示在数码管上。</li>
+<li><strong>加法运算</strong>：当按下“向上箭头”键（0x26）或“回车键”（0x0D）时，程序会将 <code>addend</code> 的值加到 <code>result</code> 上，并清零 <code>addend</code>，为下一次输入做准备。</li>
+<li><strong>清零操作</strong>：按下“ESC”键（0x1B）会清空 <code>addend</code> 和 <code>result</code>，实现计算器的清零功能。</li>
+</ul>
+<p><strong>问：</strong> 在 <code>ShowNumber()</code> 函数中，为什么需要一个循环来处理高位消隐？
+<strong>答：</strong> 高位消隐是为了让数字显示更美观。如果不进行高位消隐，当我们要显示数字 <code>12</code> 时，六位数码管会显示 <code>000012</code>。通过高位消隐循环，程序会找到第一个不为0的数字，并从这里开始显示，把前面多余的0都关闭，从而让数码管只显示 <code>12</code>，提高了用户的阅读体验。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.7 简易加法计算器：`KeyScan()` 按键扫描函数
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 53%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* 按键扫描函数,需在定时中断中调用,推荐调用间隔 1ms */
+void KeyScan()  {  
+	unsigned char i;  
+	static unsigned char keyout = 0; //矩阵按键扫描输出索引  
+	static unsigned char keybuf[4][4] = { //矩阵按键扫描缓冲区  
+		{0xFF, 0xFF, 0xFF, 0xFF}, 
+		{0xFF, 0xFF, 0xFF, 0xFF},  
+		{0xFF, 0xFF, 0xFF, 0xFF}, 
+		{0xFF, 0xFF, 0xFF, 0xFF}  
+	};  
+	
+```
+```C
+	//将一行的 4 个按键值移入缓冲区  
+	keybuf[keyout][0] = (keybuf[keyout][0] << 1) | KEY_IN_1;  
+	keybuf[keyout][1] = (keybuf[keyout][1] << 1) | KEY_IN_2;
+	keybuf[keyout][2] = (keybuf[keyout][2] << 1) | KEY_IN_3;  
+	keybuf[keyout][3] = (keybuf[keyout][3] << 1) | KEY_IN_4; 
+	//消抖后更新按键状态  
+	for (i=0; i<4; i++) { //每行 4 个按键,所以循环 4 次  
+		if ((keybuf[keyout][i] & 0x0F) == 0x00)  { 
+			 KeySta[keyout][i] = 0;  
+		 }  
+		 else if ((keybuf[keyout][i] & 0x0F) == 0x0F)  { 
+			 KeySta[keyout][i] = 1;  
+		 }  
+	 }
+```
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 30%; width: 48%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+	keyout++; //输出索引递增 
+	keyout = keyout & 0x03; //索引值加到 4 即归零  
+	switch (keyout)  {  
+	// 根据索引，释放当前输出引脚，拉低下次的输出引脚 
+		case 0: KEY_OUT_4 = 1; KEY_OUT_1 = 0; break;  
+		case 1: KEY_OUT_1 = 1; KEY_OUT_2 = 0; break;  
+		case 2: KEY_OUT_2 = 1; KEY_OUT_3 = 0; break;  
+		case 3: KEY_OUT_3 = 1; KEY_OUT_4 = 0; break;  
+		default: break;  
+	}
+}
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 50%; top: 48%; height: 30%; width: 48%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **定时器中断**，每隔1ms调用一次。
+- **轮流扫描**：依次检测矩阵按键的每一行。
+- **非阻塞消抖**：使用缓冲区记录按键状态，通过**移位操作**检查状态是否稳定。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么这个消抖方法比简单的 `delay()` 更好？
+</div>
+</div>
+
+<aside class="notes"><p>我们接着分析计算器项目的另一个核心部分：**<code>KeyScan()</code> 按键扫描函数<strong>。这个函数是实现</strong>矩阵按键<strong>输入、</strong>消抖<strong>和</strong>非阻塞扫描**的关键。</p>
+<h3 id="按键扫描与软件消抖">按键扫描与软件消抖</h3>
+<p><code>KeyScan()</code> 函数通常在定时器中断中被调用，推荐的调用间隔是1毫秒。它的核心思想是<strong>轮流扫描</strong>矩阵按键的每一行，并对按键状态进行<strong>软件消抖</strong>。</p>
+<h4 id="1-扫描与数据暂存">1. 扫描与数据暂存</h4>
+<ul>
+<li><code>KeyScan()</code> 使用一个名为 <code>keyout</code> 的索引来依次<strong>拉低</strong>矩阵按键的每一行。例如，当 <code>keyout</code> 为0时，<code>KEY_OUT_1</code>被拉低，此时程序就可以读取第一行按键的状态。</li>
+<li>程序使用一个二维数组 <code>keybuf[4][4]</code> 作为<strong>缓冲区</strong>。它采用一种<strong>“移位”</strong>的方式来记录按键状态。每一毫秒，它将按键当前的值移入缓冲区，形成一个8位的历史记录。</li>
+</ul>
+<h4 id="2-软件消抖">2. 软件消抖</h4>
+<ul>
+<li><code>keybuf[keyout][i]</code> 的每个字节都存储了某个按键在<strong>过去8毫秒</strong>的状态历史。</li>
+<li>消抖的核心逻辑是 <code>(keybuf[keyout][i] &amp; 0x0F) == 0x00</code> 和 <code>(keybuf[keyout][i] &amp; 0x0F) == 0x0F</code>。</li>
+<li><code>0x00</code> 表示该按键在最近4毫秒内<strong>都为低电平</strong>，证明按键已经<strong>稳定按下</strong>。</li>
+<li><code>0x0F</code> 表示该按键在最近4毫秒内<strong>都为高电平</strong>，证明按键已经<strong>稳定松开</strong>。</li>
+<li>通过这种方法，程序只在按键状态稳定后才更新 <code>KeySta</code> 数组，从而实现了<strong>非阻塞的软件消抖</strong>。</li>
+</ul>
+<h4 id="3-循环扫描">3. 循环扫描</h4>
+<ul>
+<li>函数的最后，<code>keyout</code> 索引递增，并根据 <code>switch</code> 语句来拉低下一行的按键。这样，程序就能以很快的速度<strong>轮流扫描</strong>整个矩阵按键，确保每一个按键都能被及时检测到。</li>
+</ul>
+<p><strong>问：</strong> 为什么这个消抖方法比简单的 <code>delay()</code> 更好？</p>
+<p><strong>答：</strong> 这种消抖方法是<strong>非阻塞</strong>的。<code>KeyScan()</code> 在定时器中断中运行，每次只执行一小段代码，不影响主程序的正常运行。而 <code>delay()</code> 函数会暂停主程序的所有任务。使用定时器扫描，即使在按键消抖期间，主程序也可以同时处理数码管显示、传感器数据等其他任务，提高了程序的实时性和效率。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 8.7 简易加法计算器
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 12%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+void KeyDriver()  {  
+	unsigned char i, j;  
+	static unsigned char backup[4][4] = { 
+		{1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}  
+	};  
+	for (i=0; i<4; i++) //循环检测 4*4 的矩阵按键  {  
+		for (j=0; j<4; j++)  {  
+			if (backup[i][j] != KeySta[i][j]) { //检测按键动作    
+				if (backup[i][j] != 0)  {  //按键按下时执行动作 
+					KeyAction(KeyCodeMap[i][j]); 
+				}  
+				backup[i][j] = KeySta[i][j]; 
+			}  
+		}  
+	}  
+}
+```
+```C
+/* 数码管动态扫描刷新函数,需在定时中断中调用 */ 
+void LedScan()  {  
+	static unsigned char i = 0; //动态扫描的索引  
+	P0 = 0xFF; //显示消隐  
+	switch (i)  {  
+		case 0: ADDR2=0; ADDR1=0; ADDR0=0; i++; P0=LedBuff[0]; break; 
+		case 1: ADDR2=0; ADDR1=0; ADDR0=1; i++; P0=LedBuff[1]; break; 
+		case 2: ADDR2=0; ADDR1=1; ADDR0=0; i++; P0=LedBuff[2]; break; 
+		case 3: ADDR2=0; ADDR1=1; ADDR0=1; i++; P0=LedBuff[3]; break; 
+		case 4: ADDR2=1; ADDR1=0; ADDR0=0; i++; P0=LedBuff[4]; break; 
+		case 5: ADDR2=1; ADDR1=0; ADDR0=1; i=0; P0=LedBuff[5]; break; 
+		default: break;  
+	}  
+}
+```
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 12%; height: 35%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+```C
+/* T0 中断服务函数,用于数码管显示扫描与按键扫描 */
+void InterruptTimer0() interrupt 1  
+{  
+	TH0 = 0xFC; //重新加载初值  
+	TL0 = 0x67;  
+	LedScan(); //调用数码管显示扫描函数  
+	KeyScan(); //调用按键扫描函数  
+}
+
+
+
+
+
+
+
+
+```
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 55%; top: 48%; height: 40%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- `KeyDriver()` (主循环调用)：检测按键弹起，并触发计算。
+- `LedScan()` (中断中调用)：数码管动态刷新
+- `InterruptTimer0()` (中断)：在后台驱动按键扫描和显示。
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 12%; height: 25%; width: 45%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+</div>
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问：** 为什么 `KeyDriver()` 和 `LedScan()` 一个在主循环里调用，一个在中断里调用？
+</div>
+</div>
+
+<aside class="notes"><p>我们接着来看计算器项目的最后几个核心函数，它们是整个程序的“幕后英雄”，负责<strong>按键驱动</strong>和<strong>数码管刷新</strong>的底层工作。</p>
+<p>1. <code>KeyDriver()</code>：按键驱动</p>
+<p>这个函数在 <code>main</code> 主循环中被<strong>持续调用</strong>，它的作用是<strong>检测按键动作并触发相应的功能</strong>。</p>
+<ul>
+<li><strong>状态检测</strong>：它使用一个 <code>backup</code> 数组来保存<strong>上一次</strong>的按键状态，并与 <code>KeySta</code> 数组（经过消抖后的<strong>当前</strong>按键状态）进行比较。</li>
+<li><strong>触发条件</strong>：<code>if (backup[i][j] != KeySta[i][j])</code> 这行代码是关键。只有当按键状态发生变化时，程序才会进入内部的 <code>if</code> 语句。</li>
+<li><strong>执行动作</strong>：<code>if (backup[i][j] != 0)</code> 这行代码进一步判断，如果上一次是按键是“按下”（即<code>backup</code>为0），而现在是“弹起”，就调用 <code>KeyAction()</code> 函数，传入对应的键码，从而执行计算逻辑。</li>
+</ul>
+<p>2. <code>LedScan()</code>：数码管扫描</p>
+<p>这个函数我们之前见过，它是实现数码管<strong>动态刷新</strong>的核心。它使用一个静态变量 <code>i</code> 作为索引，通过 <code>switch</code> 语句轮流点亮六位数码管，并将 <code>LedBuff</code> 缓冲区中的数据输出到对应的数码管上。在每次刷新之前，<code>P0 = 0xFF;</code> 这一步是<strong>显示消隐</strong>，避免了显示重影。</p>
+<p>3. <code>InterruptTimer0()</code>：中断服务函数</p>
+<p>这个函数是<strong>定时器中断</strong>的入口。每1毫秒，程序都会自动进入这里。它负责重新加载定时器初值，并调用**<code>LedScan()</code><strong>和</strong><code>KeyScan()</code>**这两个函数。正是这个中断机制，让按键扫描和数码管刷新能够在后台稳定、高效地运行，而不会阻塞主循环。</p>
+<p><strong>问：</strong> 为什么 <code>KeyDriver()</code> 和 <code>LedScan()</code> 一个在主循环里调用，一个在中断里调用？</p>
+<p><strong>答：</strong> 这是一个很好的设计。<code>LedScan()</code> 和 <code>KeyScan()</code> 都需要<strong>高频、固定</strong>地运行，以实现动态刷新和按键扫描。将它们放在定时器中断中，可以确保它们每1毫秒都会被准确调用一次，互不影响，并且不占用主循环的时间。而 <code>KeyDriver()</code> 只需要在主循环中不断检查按键状态是否改变，并在改变时触发计算，不需要固定频率，所以放在主循环中更合适，也避免了在中断中进行复杂的计算。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 5%; top: 15%; height: 65%; width: 90%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+- **最小系统**：理解单片机在指定**电压范围**内工作，而不是精确值。掌握**晶振**和**复位电路**的作用。
+- **函数进阶**：学会使用**实参**和**形参**传递数据，以及**函数声明**和**定义**的规范。
+- **按键**：了解**独立按键**和**矩阵按键**的原理，并通过**定时器中断**实现非阻塞的**按键消抖**。
+- **实战**：通过简易计算器项目，实践**模块化编程**和**键码标准化**，并理解**中断与主循环**的分工协作。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div>
+
+<aside class="notes"><p>好的，同学们，在结束本章的学习之前，我们来做一个全面的回顾和总结。</p>
+<h3 id="本章小结">本章小结</h3>
+<p>本章我们深入学习了单片机编程的进阶知识和按键应用。主要内容可以概括为以下几个方面：</p>
+<ul>
+<li><strong>最小系统</strong>：我们理解了单片机的工作电压并非精确值，而是在一个指定的<strong>电压范围</strong>内，这使得单片机能适应实际电源的波动。同时，我们掌握了作为“心脏”提供时钟信号的<strong>晶振</strong> 和确保单片机正常启动的<strong>复位电路</strong>的作用。</li>
+<li><strong>函数进阶</strong>：我们学会了如何使用<strong>实参</strong>和<strong>形参</strong>在函数间传递数据，并掌握了函数<strong>声明</strong>和<strong>定义</strong>的规范。</li>
+<li><strong>按键</strong>：我们了解了<strong>独立按键</strong>和<strong>矩阵按键</strong>两种按键的工作原理。其中，矩阵按键通过行列扫描的方式，能更有效地<strong>节省IO口资源</strong>。为了解决按键的物理抖动问题，我们学习了通过<strong>定时器中断</strong>实现非阻塞的<strong>按键消抖</strong>方法。</li>
+<li><strong>实战</strong>：通过一个简易计算器项目，我们实践了<strong>模块化编程</strong>和<strong>键码标准化</strong>。这让我们更深入地理解了<strong>中断与主循环</strong>的分工协作模式，即中断负责底层高频任务，主循环负责上层逻辑处理。</li>
+</ul>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第1学期/2025秋单片机原理与应用/理论课/assets/课件第1章 如何学习单片机/背景图片.png" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1200px; width: 1920px; min-height: 1200px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2025年秋《单片机原理与应用》
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1200,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>
