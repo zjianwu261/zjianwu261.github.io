@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 50%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第1章 Android Studio环境搭建/file-20241114161819034.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 65%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第 1 章 Android Studio环境搭建
+</div>
+
+<div class="" style="line-height: 3.5; position: absolute; left: 0%; top: 70%; height: 30%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《Android 嵌入式软件开发》<br><br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div>
+
+<aside class="notes"><p>各位同学大家好，欢迎来到《Android嵌入式软件开发》课堂，我是来自合肥大学人工智能与大数据学院的张建武老师。</p>
+<p>从今天起，我将与大家共同踏上Android探索之旅。期待通过这门课程，帮助你夯实Android核心概念，并亲手完成从原理到工程的代码落地</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本次课主要内容
+</div>
+
+<div class="" style="line-height: 2; font-size: 45px; position: absolute; left: 0%; top: 20%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 1.1 Android开发简介
+- 1.2 搭建Android Studio开发环境
+- 1.3 创建并编译App工程
+- 1.4 运行
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 20%; height: 60%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260113120012540.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《Android嵌入式软件开发》
+</div>
+</div>
+
+<aside class="notes"><p>本次课程的内容非常充实，主要分为四个核心板块：</p>
+<ul>
+<li><p><strong>首先是 1.1 节，我们要了解 Android 的‘前世今生’。</strong> 我们会回顾 Android 从一个初创项目成长为全球最大移动操作系统的历程，同时也会看看我们的核心生产力工具——Android Studio 是如何一步步进化，成为今天这样强大的 IDE 的。</p>
+</li>
+<li><p><strong>紧接着是 1.2 节，这是动手的开始。</strong> 我们会检查计算机的硬件配置是否达标，然后一步步安装 Android Studio。请大家特别注意 SDK（软件开发工具包）的下载，这是开发工作的基石。</p>
+</li>
+<li><p><strong>在 1.3 节，我们将进入实操阶段。</strong> 学习如何从零创建一个新项目，或者如何正确地导入已有的工程代码。我们会重点讲解编译过程，让大家理解代码是如何转化为可执行文件的。</p>
+</li>
+<li><p><strong>最后是 1.4 节，我们要看到成果。</strong> 我们会学习如何配置内置模拟器，并让你的第一个 App 在虚拟环境中跑起来。同时，学会通过 Logcat 观察运行日志，这是以后排查问题的关键技能。</p>
+</li>
+</ul>
+<p><strong>【过渡/互动】</strong> “掌握了这些，你就已经迈过了 Android 开发的第一道门槛。在开始演示具体安装步骤前，我想先考考大家对工具的理解。”</p>
+<h3 id="互动问答-qa"><strong>互动问答 (Q&amp;A)</strong></h3>
+<p><strong>问题：</strong> 在搭建开发环境时，Android Studio 和 Android SDK 分别扮演什么角色？如果只安装 Android Studio 而不下载 SDK，能进行开发吗？</p>
+<p><strong>解答：</strong></p>
+<ul>
+<li><p><strong>角色定位：</strong> <strong>Android Studio</strong> 是“编辑器”或“集成开发环境（IDE）”，相当于我们写文章用的 Word；而 <strong>Android SDK</strong> 是“工具包和库文件”，包含了编译、调试和运行 Android 程序所需的各种 API 和工具，相当于写文章时参考的字典和语法手册。</p>
+</li>
+<li><p><strong>能否开发：</strong> <strong>不能。</strong> 没有 SDK，Android Studio 就无法识别 Android 特有的代码语法，也无法将代码编译成能在手机上运行的安装包（APK）。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.1 Android开发简介：Android 发展历程概览
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260112163212181.png" alt="" style="width: 400px; object-fit: fill">
+
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **系统本质与血统**
+    - 基于 **Linux 内核**的开源操作系统（不含 GNU 组件）
+- **关键历史节点**
+    - **2005-2007：** Google 收购 Android，组建**开放手机联盟**
+    - **2008年10月：** 发布首款商用手机 **HTC Dream (G1)**
+- **市场地位演进**
+    - **2011年：** 市场份额超越塞班，跃居**全球第一**
+    - **2019年：** 全球活跃设备突破 **25 亿部**
+- **应用领域扩张**
+    - 从手机/平板延伸至**智能车载、穿戴设备、智能家居**等嵌入式领域
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：Android 操作系统的底层基础是什么？
+</div>
+</div>
+
+<aside class="notes"><p>在正式动手搭建环境之前，我们首先需要从宏观角度去认识我们的主角——Android。它究竟是如何从一个名不见经传的小项目，成长为如今统治全球的操作系统霸主的呢？</p>
+<ul>
+<li><p><strong>技术血统：</strong> Android 是基于 <strong>Linux 内核</strong>开发的自由及开放源代码操作系统。这里要特别注意，它并不包含传统的 GNU 组件，这使得它在移动和嵌入式设备上更加轻量和高效。</p>
+</li>
+<li><p><strong>诞生与收编：</strong> Android 最初由“安卓之父”安迪·鲁宾（Andy Rubin）创立。<strong>2005年</strong>是一个转折点，Google 慧眼识珠将其收购。到了 <strong>2007年</strong>，Google 联合 84 家企业组成了“开放手机联盟”，并正式向全球发布了源代码。</p>
+</li>
+<li><p><strong>商业首秀：</strong> 历史性的时刻发生在 <strong>2008年10月</strong>，全球第一部 Android 智能手机由 <strong>HTC</strong> 制造并发布。从此，移动互联的新时代开启了。  </p>
+</li>
+<li><p><strong>登顶与扩张：</strong> * <strong>2011年</strong>，Android 击败了当年的霸主塞班系统（Symbian），夺得全球市场份额第一。</p>
+<ul>
+<li>到了 <strong>2019年</strong>，全球活跃的 Android 设备已超过 <strong>25亿部</strong>，这还不包括中国庞大的非原生 Google 服务设备。</li>
+</ul>
+</li>
+<li><p><strong>跨界融合：</strong> 如今，Android 早已不再局限于手机。在我们的嵌入式开发领域，它广泛应用于智能电视、车载大屏（Android Auto）、智能家居、智能手表乃至工业控制终端。可以说，学习 Android 开发，就是掌握了通往万物互联的一把钥匙。</p>
+</li>
+</ul>
+<p><strong>问题：</strong> 根据刚才的内容，Android 操作系统的底层基础是什么？它最初是由哪家公司独立研发的？</p>
+<ul>
+<li><strong>底层基础：</strong> Android 是基于 <strong>Linux 内核</strong>（Kernel）开发的。</li>
+<li><strong>最初研发者：</strong> 它最初由 **Android Inc.**（安迪·鲁宾创办的公司）研发，并非 Google 原创，Google 是在 2005 年通过收购将其纳为己有的。</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.1 Android开发简介： Android 版本演进
+</div>
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260112145438825.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="position: absolute; left: 68%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260112150013781.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+为什么 Android 官方在 Android 11 之后取消了公开的甜品命名，转而采用纯数字命名？
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们回顾了 Android 从诞生到登顶全球的过程。作为一个开发者，除了关注它的市场地位，我们更需要关注它的版本更迭。因为每一个版本的升级，都意味着底层 API 的变动和新功能的加入。下面我们来看看 Android 在命名和版本节奏上发生的有趣变化。</p>
+<p>在 Android 的发展史上，版本命名是一个非常有辨识度的文化符号：</p>
+<ul>
+<li><strong>甜品时代（Android 1.0 - 10）：</strong> 大家可能听说过，早期的 Android 版本都是按照字母顺序，以各种“甜品”命名的。从 Android 1.5 的 Cupcake（纸杯蛋糕）开始，经历了 Gingerbread（姜饼）、Ice Cream Sandwich（冰淇淋三明治），一直到 Android 9 Pie（派）。这种命名方式既亲民又充满了极客浪漫。</li>
+<li><strong>数字时代（Android 11 至今）：</strong> 从 Android 10 开始（虽然内部仍有甜品代号），Google 决定回归简约，正式采用数字命名。这样做的目的是为了让全球用户和开发者更直观地判断版本的新旧顺序，减少沟通成本。</li>
+<li><strong>最新动态：</strong> 目前 Android 的迭代速度非常稳定。最新的 <strong>Android 16</strong> 已经于 <strong>2025 年 6 月份</strong>正式发布。作为嵌入式开发者，我们需要密切关注新版本在权限管理、能效优化以及对新型硬件支持方面的改动，以便让我们的软件能够完美适配最新的系统环境。</li>
+</ul>
+<p>为什么 Android 官方在 Android 11 之后取消了公开的甜品命名，转而采用纯数字命名？</p>
+<p><strong>解答：</strong> 主要有两个原因：</p>
+<ol>
+<li><strong>易用性与清晰度：</strong> 数字能让全球用户（尤其是非英语母语者）一眼看出哪个版本更高、更新，避免了因为不熟悉西方甜品名称而产生的混淆。</li>
+<li><strong>品牌统一性：</strong> 随着 Android 应用于更多工业和商业嵌入式领域，纯数字命名显得更加正式、统一，符合其作为全球化基础设施操作系统的形象。</li>
+</ol>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.1 Android开发简介：Android Studio的发展历程
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **开发语言基础**：主要采用 **Java** 与 **Kotlin** 语言
+- **早期：Eclipse + ADT 时代**
+    - 采用插件化方式（ADT）兼容 Java 开发者
+    - 缺点：非专属定制、运行偏慢、配置复杂
+- **转折：Android Studio 诞生 (2013)**
+    - 基于 **IntelliJ IDEA** 深度定制
+    - 优势：代码补全智能、布局预览直观、性能高效
+- **确立：官方唯一指定工具**
+    - **2015年：** 停止更新 ADT，全面转向 Android Studio
+    - **现状：** 全球主流、功能完备的 Android 开发集成环境
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260112163604035.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>了解了 Android 系统的版本更迭后，大家可能会问：我们要用什么工具来编写运行在这些系统上的 App 呢？虽然 Android 的底层是 Linux，但其应用层开发主要使用的是 Java 和 Kotlin 语言。为了让开发者更高效地工作，开发工具也经历了一场从‘借用’到‘专属’的重大演变。</p>
+<ul>
+<li><p><strong>早期阶段：Eclipse + ADT 时代</strong> 在 Android 诞生初期，为了快速吸引庞大的 Java 开发者群体，Google 并没有急于自研 IDE，而是选择了当时最流行的 <strong>Eclipse</strong>。通过安装 <strong>ADT（Android Development Tools）</strong> 插件，开发者可以在 Eclipse 上进行 App 的开发和调试。</p>
+</li>
+<li><p><strong>转折点：Android Studio 的诞生</strong> Eclipse 虽强，但它并非为 Android 量身定制，插件化的架构导致它运行缓慢、配置复杂。于是，在 <strong>2013 年 5 月</strong>，Google 推出了基于 <strong>IntelliJ IDEA</strong> 深度定制的官方开发环境——<strong>Android Studio</strong>。</p>
+</li>
+<li><p><strong>主流地位的确立</strong></p>
+<ul>
+<li><p><strong>青出于蓝：</strong> Android Studio 继承了 IntelliJ IDEA 智能代码补全、高效重构的优点，并加入了专属的布局编辑器和性能分析工具。</p>
+</li>
+<li><p><strong>官方唯一指定：</strong> <strong>2015 年</strong>，Google 停止了 ADT 的更新，标志着 Eclipse 时代的终结。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>现状：</strong> 经过十余年的迭代，现在的 Android Studio 功能极其丰富，无论是代码编写、多设备模拟调试，还是复杂的内存泄漏分析，它都能游刃有余，是目前全球 Android 开发者<strong>唯一的主流选择</strong>。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.1 Android开发简介：Android Studio的发展历程
+</div>
+<div class="" style="position: absolute; left: 0%; top: 10%; height: 75%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+| 版本号 (代号)     | 发布日期      | 主要更新内容                                     |
+| :--------------- | :------------ | :---------------------------------------------- |
+| Arctic Fox       | 2021年7月     | 支持 Jetpack Compose，改进 Gradle 构建速度        |
+| Bumblebee        | 2021年10月    | 强化 Compose 支持，新增 UI 设计工具               |
+| Giraffe          | 2023年7月     | 全新 UI 界面设计，集成设备流式传输功能             |
+| Hedgehog         | 2023年11月    | 增强性能分析工具，支持 Android 14 预览            |
+| Iguana           | 2024年2月     | 引入 App Quality Insights，增强版本控制集成       |
+| Koala            | 2024年6月     | 集成 Gemini 1.0 AI 助手，提升代码编写效率         |
+| Ladybug          | 2024年10月    | 深度整合 Gemini 1.5 Pro，支持多模态输入调试       |
+| Meerkat          | 2025年2月     | 推出 Gemini 代码转换器，支持 Android 15 正式版    |
+| Nightowl / Otter | 2025年6月至今  | 全面适配 Android 16，AI 自动化测试与全流程调试     |
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们聊到了 Android Studio 是如何取代 Eclipse 成为官方唯一指定的开发工具。为了让这个工具不断进化，Google 建立了一套非常有意思的命名机制。就像 Android 系统以前用甜品命名一样，Android Studio 近几年的版本则是以‘动物’来命名的。让我们来看看最近这几年的重要更新。</p>
+<p>请大家看这组版本更新表，这里记录了 Android Studio 近几年迈出的重要步伐：</p>
+<ul>
+<li><strong>动物命名法：</strong> 从 2021 年开始，Android Studio 采用了以字母顺序排列的动物名称作为版本号（A 到 F）。</li>
+<li><strong>Arctic Fox（北极狐）：</strong> 这是一个里程碑版本，它正式支持了 <strong>Jetpack Compose</strong>——这是 Android 全新的声明式 UI 框架，彻底改变了我们写界面的方式。</li>
+<li><strong>Bumblebee 与 Chipmunk：</strong> 这两个版本（大黄蜂与花栗鼠）重点强化了设计工具和<strong>内存分析</strong>。在嵌入式开发中，内存是非常宝贵的资源，强大的分析工具能帮我们精准定位资源消耗。</li>
+<li><strong>Dolphin 与 Electric Eel：</strong> 海豚和电鳗版本持续优化了编译系统 <strong>Gradle</strong> 的配置速度，并加强了对 Android 13 等新系统的特性支持。</li>
+<li><strong>Flamingo（火烈鸟）：</strong> 也就是我们近期经常使用的稳定版本之一，它极大地提升了 IDE 的运行稳定性，并完美适配了最新的 SDK。</li>
+</ul>
+<p>从这个演进表可以看出，Google 更新的核心逻辑始终围绕着三点：<strong>新的 UI 框架支持、更快的编译速度、以及更强大的调试分析能力。</strong></p>
+<p><strong>问题：</strong> 从表格中看，哪个版本开始正式支持 Jetpack Compose？这个更新对开发者有什么意义？</p>
+<ul>
+<li><strong>版本：</strong> <strong>Arctic Fox (2021.3.1)</strong> 版本开始正式支持。</li>
+<li><strong>意义：</strong> Jetpack Compose 是 Android 的现代 UI 工具包，它简化并加速了 UI 开发。开发者不再需要编写繁琐的 XML 布局文件，而是直接使用 Kotlin 代码来描述界面，大大提升了开发效率和代码的可维护性。</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.2　搭建Android Studio开发环境
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **硬件核心配置**
+    - **内存：** 至少 **8GB**（推荐 16GB+，以流畅运行模拟器）
+    - **CPU：** 主频 **1.5GHz** 以上（推荐多核处理器提升编译速度）
+    - **硬盘：** 系统盘剩余 10GB+（建议预留 50GB 以存储 SDK/缓存）
+- **软件与系统环境**
+    - **操作系统：** 必须为 **64 位** Windows 7/10/11（不支持 XP/32 位）
+    - **扩展接口：** 须具备 **USB 插槽**（真机调试）与无线网卡
+- **网络访问要求**
+    - **带宽：** 下载速度 **>1MB/s**（安装包及 SDK 资源较大）
+    - **环境：** 推荐**公众网**（避免校园网防火墙拦截国外 SDK 服务器）
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260112163341637.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们一起‘云游’了 Android Studio 从诞生到 Otter、Panda 等最新版本的进化历程。大家一定很想立刻把这个‘神兵利器’装进自己的电脑。但俗话说‘工欲善其事，必先利其器’，Android Studio 作为一个功能极度强大的集成开发环境，对硬件是有一定‘脾气’的。在安装之前，我们必须先检查一下自己的装备是否达标。</p>
+<p>要顺畅运行 Android 开发环境，我们需要从三个维度来评估电脑配置：</p>
+<ul>
+<li><p><strong>硬件三大件：</strong></p>
+<ul>
+<li><strong>内存（核心）：</strong> 至少 <strong>8GB</strong> 起步。由于我们要同时运行 IDE、编译器甚至是模拟器，内存是越大越好，16GB 或更高会让你告别卡顿。</li>
+<li><strong>CPU：</strong> 主频要求在 <strong>1.5GHz</strong> 以上，建议使用多核心处理器以加快代码编译速度。</li>
+<li><strong>硬盘：</strong> 系统盘剩余空间至少 <strong>10GB</strong>，但在实际开发中，SDK 和各种缓存会占用大量空间，建议预留 50GB 以上。</li>
+</ul>
+</li>
+<li><p><strong>外部扩展：</strong> 必须具备 <strong>无线网卡</strong> 和 <strong>USB 插槽</strong>。这不仅是为了上网，更重要的是为了后续连接真机进行调试。</p>
+</li>
+<li><p><strong>软件环境（以 Windows 为例）：</strong></p>
+<ul>
+<li><strong>架构：</strong> 必须是 <strong>64 位系统</strong>，现在的 Android Studio 已经不再支持过时的 32 位系统了。</li>
+<li><strong>版本：</strong> 至少 Windows 7，但强烈推荐 <strong>Windows 10 或 Windows 11</strong>。请记住，Windows XP 已经是历史，无法支持现代开发工具。</li>
+</ul>
+</li>
+<li><p><strong>网络带宽：</strong> 这也是很多同学容易忽视的。安装包本身约 1GB，后续还需下载几百 MB 甚至数 GB 的 SDK 和依赖库。建议下载速度在 <strong>1MB/s</strong> 以上，且最好连接<strong>公众网</strong>，避免校园网防火墙拦截国外服务器的下载请求。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.2　搭建Android Studio开发环境：下载Android studio
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 62%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **官方唯一渠道**
+    - **下载地址**：[developer.android.com](https://developer.android.com/?hl=zh-cn)
+- **核心优势**
+    - **安全性与纯净性**：无广告插件，保障开发环境纯净安全
+    - **权威性**：提供最新稳定版及第一手中文技术文档
+- **下载与适配**
+    - 网页自动识别操作系统（Win/Mac/Linux）推荐对应版本
+    - 点击 **"Download Android Studio"** 即可开始获取
+</div>
+
+<div class="" style="position: absolute; left: 62%; top: 15%; height: 65%; width: 38%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260112164358455.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>我们已经确认了电脑的‘体力’（硬件配置）能够胜任开发任务，那么现在就该去获取我们的‘生产工具’了。很多同学会去各种第三方软件园下载，但我强烈建议大家只认准一个地方，那就是 Google 官方的开发者门户。这不仅是为了安全，更是为了确保你拿到的工具是最新的。</p>
+<ul>
+<li><p><strong>官方唯一指定下载地址：</strong> <a href="https://developer.android.com/?hl=zh-cn">developer.android.com</a></p>
+</li>
+<li><p><strong>为什么要选官方站？</strong></p>
+<ul>
+<li><strong>安全性：</strong> 避免了第三方安装包可能携带的木马或广告插件。</li>
+<li><strong>纯净性：</strong> 官方包不包含冗余的推广软件。</li>
+<li><strong>实时性：</strong> 这里永远提供当前最稳定的 Release 版本，并附带最权威的官方中文文档。</li>
+</ul>
+</li>
+<li><p><strong>下载说明：</strong> 进入页面后，你会看到一个非常醒目的“Download Android Studio”按钮。点击后，网站会自动识别你的操作系统（Windows, macOS 或 Linux），并推荐最合适的版本。</p>
+</li>
+<li><p><strong>小贴士：</strong> 由于该服务器位于海外，如果大家在校园网环境下下载缓慢，可以尝试切换到手机热点或者使用镜像源。但第一步，一定要先熟悉这个官方网站，因为未来你遇到的 90% 的技术难题，在这里都能找到答案。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.2　搭建Android Studio开发环境：Android SDK 下载与管理
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **配置流程**
+    - **访问**：`More Actions` → `SDK Manager` 进入管理界面
+    - **路径**：修改 `SDK Location` 至非系统盘（预留 50GB+ 空间）
+    - **勾选**：在 `SDK Platforms` 选版本，`SDK Tools` 选必备组件
+- **SDK 关键目录职能**
+    - `/build-tools`：存放各版本的编译与打包工具
+    - `/platforms`：包含各版本内核核心库 `android.jar`
+    - `/platform-tools`：核心调试工具包，含 **ADB** 指令
+    - `/sources`：存放 Android 系统源代码，方便底层学习
+</div>
+
+<div class="" style="position: absolute; left: 65%; top: 10%; height: 80%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260126143649429.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260126144120884.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+为什么在 SDK 管理中，`platform-tools` 被认为是嵌入式开发中最常用的目录？
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们成功安装了 Android Studio 的‘外壳’，但这只是一个毛坯房。要让它真正具备开发和编译能力，我们还需要请进它的核心灵魂——<strong>Android SDK</strong>。这就好比你装好了 Word 软件，但还需要安装对应的字库和语言包才能写文章一样。接下来，我们就来实操如何正确地下载和配置这个软件开发工具包。</p>
+<p>请大家看投影，配置 SDK 主要分为三个关键步骤：</p>
+<ol>
+<li><p><strong>进入管理界面：</strong> 在 Android Studio 的欢迎界面，点击 <strong>More Actions</strong>，选择 <strong>SDK Manager</strong>。这里就是我们管理所有开发资源的大本营。</p>
+</li>
+<li><p><strong>设置存放路径：</strong> 首先要注意 <strong>Android SDK Location</strong>。我不建议大家使用默认的 C 盘路径，点击 <strong>Edit</strong> 链接，将其改到剩余空间较大的磁盘（如 D 盘）。记住，随着你开发的深入，这个目录会占用几十个 GB。</p>
+</li>
+<li><p><strong>选择版本与组件：</strong></p>
+<ul>
+<li>在 <strong>SDK Platforms</strong> 选项卡中，勾选你需要的 Android 版本（如最新的 Android 16）。</li>
+<li>切换到 <strong>SDK Tools</strong> 选项卡，这里有几个“刚需”组件：<strong>Build-Tools</strong>（用于编译包）、<strong>Platform-Tools</strong>（包含著名的 ADB 调试工具）。</li>
+</ul>
+</li>
+<li><p><strong>认识核心目录：</strong> 下载完成后，你的 SDK 文件夹内会出现几个重要成员：</p>
+<ul>
+<li><code>build-tools</code>：App 变身为 APK 文件的流水线工具。</li>
+<li><code>platforms</code>：存放每个版本的内核核心 <code>android.jar</code>。</li>
+<li><code>platform-tools</code>：包含了我们以后真机调试最常用的 <strong>adb.exe</strong>。</li>
+</ul>
+</li>
+</ol>
+<h3 id="互动问答-qa"><strong>互动问答 (Q&amp;A)</strong></h3>
+<p><strong>问题：</strong> 在 SDK 的目录结构中，<code>platform-tools</code> 目录下的 <code>adb.exe</code> 文件主要有什么作用？</p>
+<p><strong>解答：</strong> **ADB (Android Debug Bridge)**，即安卓调试桥。它是连接电脑开发环境和 Android 设备（真机或模拟器）的桥梁。通过它，我们可以从电脑端向手机发送指令、安装 App、查看运行日志以及进行各种底层调试操作。它是嵌入式软件开发中利用率最高的辅助工具。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.3　创建并编译App工程：创建新项目
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **项目创建流程**
+    - **模板选择**：`File` → `New Project`，选择 **Empty Views Activity**
+- **关键参数配置**
+    - **命名与包名**：设置应用名称及唯一标识符（Package Name）
+    - **开发语言**：选择 **Java**（基础教学与嵌入式开发常用）
+    - **兼容性**：设置 **Minimum SDK** 为 API 19（覆盖约 98% 设备）
+- **项目构建与同步 (Gradle)**
+    - **核心职能**：作为构建工具，负责自动下载依赖库并构建项目
+    - **同步过程**：初次运行会从云端同步插件，需确保网络畅通并耐心等待
+</div>
+
+<div class="" style="position: absolute; left: 65%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第1章 Android Studio环境搭建/file-20250217205218821.png" alt="" style="width: 900px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>前面我们已经完成了 Android Studio 的安装和 SDK 的零件储备。现在，‘工厂’已经建好，‘零件’也已到位，是时候启动我们的生产线了。接下来，我将带大家手把手创建人生中第一个 Android 项目，并带大家看看 Android 开发中那个非常重要、却又让很多初学者感到头疼的‘大管家’——Gradle。</p>
+<p>创建一个标准的 Android 工程通常分为三个步骤：</p>
+<ol>
+<li><p><strong>启动项目向导：</strong> 如果你已经在编辑器里，可以通过 <code>File -&gt; New -&gt; New Project</code> 开启。在这里，我们选择 <strong>Empty Views Activity</strong>。请注意，不要选错成 Compose，因为对于基础教学和理解 Android 底层机制来说，传统的 XML 布局方式（Views）是我们的首选。</p>
+</li>
+<li><p><strong>关键参数配置：</strong></p>
+<ul>
+<li><p><strong>Name &amp; Package Name：</strong> 项目名和包名。包名通常是公司域名的倒序（如 <code>com.example.myapp</code>），它是 App 在全球范围内的唯一身份证。</p>
+</li>
+<li><p><strong>Language：</strong> 在本次课程中，我们统一选择 <strong>Java</strong>。</p>
+</li>
+<li><p><strong>Minimum SDK：</strong> 我们设置为 **API 19 (Android 4.4)**。这能确保我们的 App 可以覆盖全球约 <strong>98%</strong> 的设备，这在嵌入式碎片化严重的场景下非常重要。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Gradle 同步：</strong> 点击 Finish 后，你会发现屏幕下方有一个进度条正在疯狂闪烁，那是 <strong>Gradle</strong> 在工作。它是 Android 的构建工具。第一次创建项目时，它会从云端下载大量的插件和依赖库。这个过程可能很慢，取决于你的网速，请大家保持耐心，千万不要在中途强行关闭软件。</p>
+</li>
+</ol>
+<h3 id="互动问答-qa"><strong>互动问答 (Q&amp;A)</strong></h3>
+<p><strong>问题：</strong> 在项目创建完成后，为什么需要等待 Gradle 同步（Sync）结束才能开始编写代码？</p>
+<p><strong>解答：</strong> 因为 <strong>Gradle</strong> 是项目的“大管家”，它负责管理代码的所有依赖关系（比如各种功能库）。在同步过程中，它正在根据配置文件下载必要的编译工具、库文件，并构建项目的索引。如果同步未完成，Android Studio 就无法识别你写的代码（会满屏报错），也无法进行编译和运行。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.3　创建并编译App工程：三种视图模式
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **Code（代码模式）**
+    - **特性**：纯 XML 文本环境，支持精准控制控件属性
+    - **适用**：复杂布局精调及嵌入式性能优化场景
+- **Design（设计模式）**
+    - **特性**：全可视化画布，支持组件“拖拽式”布局
+    - **适用**：快速搭建 UI 原型，无需编写代码
+- **Split（拆分模式）**
+    - **特性**：左侧代码 + 右侧预览，实时渲染修改效果
+    - **推荐**：最强开发模式，利于建立代码与视觉的逻辑关联
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第1章 Android Studio环境搭建/file-20250217211019594.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>在实际开发中，很多初学者面对枯燥的 XML 代码会感到头疼。其实，Android Studio 为我们提供了一个非常人性化的‘所见即所得’编辑器，让我们可以在代码和视觉效果之间自由穿梭。</p>
+<p>在打开 XML 布局文件时，请大家注意编辑器窗口右上角的三个切换按钮，它们代表了 <strong>Views Activity</strong> 的三种核心工作模式：</p>
+<ol>
+<li><p><strong>Code（代码模式）：</strong> 这是‘极客’最爱的纯文本环境。在这里，你通过编写 XML 标签来精准定义每一个控件的属性。对于嵌入式开发中需要精细控制性能和布局嵌套的场景，这是最专业的方式。</p>
+</li>
+<li><p><strong>Design（设计模式）：</strong> 这是一个纯粹的视觉画布。你可以从左侧的组件栏里，直接把按钮（Button）或文本框（TextView）‘拖拽’到手机屏幕上。它不需要你写一行代码，非常适合快速勾勒 App 的原型。</p>
+</li>
+<li><p><strong>Split（拆分/代码+视图模式）：</strong> 这是我最推荐、也是开发效率最高的一种模式。窗口左侧是 XML 代码，右侧是实时渲染的预览效果。当你修改左边的属性值（比如把背景改成红色），右边的画面会即刻同步更新。</p>
+</li>
+</ol>
+<p><strong>操作建议：</strong> 在学习阶段，请大家多在 <strong>Split 模式</strong>下工作，这样你能直观地建立起‘代码指令’与‘视觉效果’之间的逻辑关联。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.3　创建并编译App工程：工程“三剑客”结构
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **AndroidManifest.xml (清单文件)**
+    - **位置**：`manifests` 目录
+    - **职能**：App 的“户口本”，配置权限、图标及四大组件注册
+- **MainActivity.java (业务逻辑)**
+    - **位置**：`java` 文件夹
+    - **职能**：App 的“大脑”，使用 Java 处理交互逻辑与数据运算
+- **activity_main.xml (界面布局)**
+    - **位置**：`res/layout` 目录
+    - **职能**：App 的“皮囊”，通过 XML 定义 UI 控件与视觉样式
+- **核心逻辑总结**：清单管全局，Java 管逻辑，XML 管外观
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第1章 Android Studio环境搭建/file-20250217211516685.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们经历了稍显漫长的 Gradle 同步过程。当进度条走完，项目结构清晰地展现在左侧时，恭喜大家，你们已经正式跨入了 Android 开发的大门。但面对这成百上千个文件，新手往往会感到迷茫。别担心，我们只需要掌握‘三剑客’，就能玩转绝大多数项目。</p>
+<p>请大家看屏幕，项目构建完成后，我们可以通过点击左侧的 <strong>Project</strong> 标签来观察工程的目录树。在这里，我要求大家重点掌握三个核心文件：</p>
+<ol>
+<li><p><strong>AndroidManifest.xml（清单文件）：</strong> 它位于 <code>manifests</code> 目录下。这是整个 App 的‘户口本’。无论是应用的名字、图标，还是它需要用到的权限（如摄像头、网络），甚至是有多少个界面（Activity），都必须在这里白纸黑字地登记备案。</p>
+</li>
+<li><p><strong>MainActivity.java（业务逻辑）：</strong> 位于 <code>java</code> 文件夹下。这是 App 的‘大脑’。我们所有的业务代码、按钮点击后的逻辑处理、数据运算，主要都在这里用 Java 语言编写。</p>
+</li>
+<li><p><strong>activity_main.xml（界面布局）：</strong> 位于 <code>res/layout</code> 目录下。它是 App 的‘皮囊’。通过 Android Studio 的<strong>代码+视图模式</strong>（窗口右上角切换），我们可以像搭积木一样布置按钮、文本框和图片。</p>
+</li>
+</ol>
+<p><strong>总结一下：</strong> 清单文件管全局，Java 文件管逻辑，XML 文件管长相。理解了这三者的关系，你就掌握了 Android 开发的底层逻辑。</p>
+<h3 id="互动问答-qa"><strong>互动问答 (Q&amp;A)</strong></h3>
+<p><strong>问题：</strong> 如果在 <code>activity_main.xml</code> 中增加了一个按钮，但没有在 <code>MainActivity.java</code> 中编写相关代码，App 运行后会发生什么？</p>
+<p><strong>解答：</strong> App 会正常运行并显示这个按钮，但当你点击它时，不会有任何反应。这就好比你给机器人安装了一只手（UI 布局），但没有连接神经信号（逻辑代码）。在 Android 开发中，<strong>界面</strong>与<strong>逻辑</strong>是分离的，必须通过代码将两者绑定。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.3　创建并编译App工程：导入已有的工程
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **导入完整项目 (Project)**
+    - **路径**：`File` → `Open` 或 `Import Project` 
+    - **窗口选择**：
+        - **This Window**：替换当前项目
+        - **New Window**：新窗口打开（**推荐**，便于多工程对照）
+- **导入特定模块 (Module)**
+- **适用场景**：在现有工程中引入外部功能组件（如示例源码、驱动模块）
+    - **路径**：`File` → `New` → `Import Module`
+    - **识别标志**：导入后项目结构图中会出现独立的模块文件夹
+- **注意事项**：导入后需等待 **Gradle** 自动同步以识别依赖关系
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第1章 Android Studio环境搭建/file-20241115100449567.png" alt="" style="width: 1000px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+为什么建议使用 `Import Module` 而不是直接把源码文件复制粘贴到文件夹里？
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们学习了如何从零开始创建一个新工程，但在实际的嵌入式开发或团队协作中，我们更多时候是需要‘站在巨人的肩膀上’——去参考现有的源码或导入已经写好的功能模块。接下来，我就教大家如何正确地将外部项目或特定模块‘搬’进你的 Android Studio。</p>
+<p>在导入代码时，我们需要根据“规模”选择不同的方式：</p>
+<ol>
+<li><p><strong>导入完整项目（Project）：</strong></p>
+<ul>
+<li><p><strong>操作：</strong> 通过 <code>File -&gt; Open</code> 或 <code>File -&gt; New -&gt; Import Project</code>。</p>
+</li>
+<li><p><strong>关键选择：</strong> 选中路径点击 OK 后，系统会问你在哪里打开。</p>
+<ul>
+<li><p><strong>This Window：</strong> 关掉当前项目，直接替换。</p>
+</li>
+<li><p><strong>New Window：</strong> 维持现状，另外开一个窗口。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>建议：</strong> 推荐选 <strong>New Window</strong>，方便你对照自己的代码和参考代码。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>导入特定模块（Module）：</strong></p>
+<ul>
+<li><p><strong>场景：</strong> 如果你已经开了一个工程，只想把某一章（如 <code>chapter02</code>）的示例代码加进来，就不能导入整个项目，而要选 <strong>Import Module</strong>。</p>
+</li>
+<li><p><strong>操作：</strong> <code>File -&gt; New -&gt; Import Module</code>。</p>
+</li>
+<li><p><strong>识别：</strong> 导入成功后，你会发现左侧的项目结构图中多了一个文件夹（模块）。这在嵌入式开发中非常常见，比如把别人写好的“传感器驱动模块”直接导入到你的主程序中。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="互动问答-qa"><strong>互动问答 (Q&amp;A)</strong></h3>
+<p><strong>问题：</strong> 在已有工程的情况下，为什么建议使用 <code>Import Module</code> 而不是直接把源码文件复制粘贴到文件夹里？</p>
+<p><strong>解答：</strong> 因为 Android 项目是靠 <strong>Gradle</strong> 管理的。通过 <code>Import Module</code> 导入，Android Studio 会自动识别该模块的配置文件（<code>build.gradle</code>），并自动建立与主项目的依赖关系和路径引用。如果只是简单的复制粘贴，系统无法识别这些代码的结构和所需的库文件，会导致大量的编译错误。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.3　创建并编译App工程：项目保存与编译逻辑
+</div>
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **自动化保存与预检**
+    - **自动保存**：即时写入硬盘，无惧断电丢失。
+    - **实时预编译**：语法错误即时“标红”预警。
+- **科学存储规范**
+    - **路径要求**：Project Location 严禁使用**中文路径**。
+    - **规避风险**：防止底层工具链出现编码报错。
+- **Gradle 核心编译流程**
+    - **资源处理**：图片压缩与 XML 资源编号。
+    - **代码编译**：源码转为字节码，并进行打包签名。
+    - **首次编译**：下载依赖较慢，需观察进度条耐心等待。
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260205162229353.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下）</strong> 刚才我们学习了如何创建和导入项目，大家在操作时可能发现了一个有趣的现象：Android Studio 的工具栏里似乎找不到那个熟悉的“保存”磁盘图标。这是因为它继承了 IntelliJ IDEA 强大的自动化基因。</p>
+<p>但在实际的嵌入式开发过程中，代码写得对不对、能不能跑通，全看“编译”这一步。今天我们就来深入了解一下它的保存与编译逻辑。</p>
+<p><strong>（正文逻辑）</strong> 在 Android Studio 中，关于代码的保存与编译，有三个核心特性需要大家掌握：</p>
+<p><strong>第一，自动化的力量。</strong> Android Studio 拥有<strong>自动保存</strong>机制。你改动的每一行代码都会即时存入硬盘，无须担心断电丢失。同时，它还会进行<strong>实时预编译</strong>，一旦你的语法有误，编辑器会立即“标红”预警，这能帮我们把低级错误扼杀在摇篮里。</p>
+<p><strong>第二，科学的存储路径。</strong> 与传统的单文件程序不同，一个 Android 工程实际上是一个复杂的目录结构。大家在设置 <strong>Project Location</strong> 时，<strong>务必选择一个非中文路径</strong>。在嵌入式环境下，很多底层工具对路径编码非常敏感，非中文路径能帮你避开 90% 莫名其妙的构建错误。</p>
+<p><strong>第三，核心编译逻辑——Gradle。</strong> 在 Android 开发中，我们不再直接调用底层的编译器，而是通过 <strong>Gradle</strong> 这个强大的管家来指挥。当你点击“运行”时，后台会按顺序完成三件事：</p>
+<ol>
+<li><p><strong>资源处理</strong>：压缩图片，并将布局 XML 转换成系统能识别的编号。</p>
+</li>
+<li><p><strong>代码编译</strong>：将 Java 或 Kotlin 源码编译成字节码。</p>
+</li>
+<li><p><strong>打包签名</strong>：最后将所有碎片封装成一个 <code>.apk</code> 文件。</p>
+</li>
+</ol>
+<p><strong>（特别提醒）</strong> 对于嵌入式开发而言，由于部分开发板或低配 PC 的性能限制，第一次编译（Cold Build）可能会比较慢，这通常是因为 Gradle 在下载必要的依赖库。请大家保持耐心，观察状态栏的进度条，不要重复点击。</p>
+<h3 id="互动环节">互动环节</h3>
+<p><strong>问题：</strong> 既然 Android Studio 会自动保存代码，为什么我们在修改完 <code>build.gradle</code>（项目配置文件）后，上方会弹出一个 “Sync Now”（立即同步）的黄色提示条？直接运行不就行了吗？</p>
+<p><strong>解答：</strong> 这是因为<strong>代码逻辑</strong>和<strong>项目配置</strong>是两个层面的东西。</p>
+<ul>
+<li><p><strong>自动保存</strong>针对的是 <code>.java</code> 或 <code>.kt</code> 等源码文件。</p>
+</li>
+<li><p><strong>Sync Now</strong> 是针对 <strong>Gradle 配置</strong>的生效过程。当你修改了库依赖或版本号，Gradle 需要重新计算整个项目的构建图谱，并从仓库下载资源。如果不点击同步，Android Studio 的编辑器就无法识别新引入的库，即便代码保存了，编译也会因为找不到引用而失败。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.4 运行和调试App：App运行环境与模拟器配置
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 72%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **运行环境概述**
+    - **编译 vs. 运行：** 语法正确不代表逻辑正确，需真机或模拟器验证。
+    - **模拟器定义：** 在电脑上构造的虚拟手机窗口，用于快速演示 App。
+- **App 运行流程**
+    - **启动方式：** 菜单 `Run` -> `Run app` 或快捷键 `Shift+F10`。
+    - **设备检测：** Android Studio 自动寻找已连接的硬件或虚拟设备。
+- **常见问题与解决**
+    - **错误处理：** 提示 `No target device found` 表示未找到目标设备
+    - **创建方案：** 通过 `Tools` -> `AVD Manager` 进入虚拟设备管理器
+</div>
+
+<div class="" style="position: absolute; left: 71%; top: 15%; height: 65%; width: 29%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260205170100500.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+如果在点击运行（Run）时，电脑上既连接了真实的 Android 手机，又开启了多个模拟器会发生什么？
+</div>
+</div>
+
+<aside class="notes"><p>在上一节课中，我们已经成功编写了第一个‘Hello World’程序并完成了代码编译。但是，代码编译通过仅仅代表没有语法错误，并不意味着逻辑一定正确。那么，我们该如何直观地看到 App 在手机上的运行效果呢？这就涉及到了我们今天要讲的关键环节：<strong>模拟器与运行调试</strong>。</p>
+<p>“首先，我们来了解一下什么是<strong>模拟器</strong>。简单来说，它就是在电脑上虚拟出来的一个手机环境。虽然我们最终的目标是将程序跑在真实手机上，但在开发阶段，利用电脑模拟器进行快速验证是非常高效的选择。</p>
+<p>当我们准备好运行 App 时，通常会点击菜单栏的 <code>Run</code> -&gt; <code>Run</code>，或者直接按下快捷键 <code>Shift+F10</code>。</p>
+<p>此时，Android Studio 会自动寻找已经连接的设备。但是，对于初学者来说，最常遇到的一个报错就是：<strong>‘Error running：No target device found.’</strong>。看到这个提示不要慌，这只是因为你既没有插上真机，也没有开启模拟器，系统‘迷路’了，找不到目标设备。</p>
+<p>解决办法很简单：我们需要手动创建一个‘虚拟手机’。请大家注意看 Android Studio 的工具栏，我们可以通过 <code>Tools</code> -&gt; <code>AVD Manager</code>（Android 虚拟设备管理器）来进入配置界面。接下来，我将演示如何在这个管理器中一步步‘组装’出我们的第一台虚拟手机。”</p>
+<h4 id="互动问答"><strong>互动问答</strong></h4>
+<p><strong>问题：</strong> 如果在点击运行（Run）时，电脑上既连接了真实的 Android 手机，又开启了多个模拟器，Android Studio 会发生什么？</p>
+<p><strong>解答：</strong> 在这种情况下，Android Studio 通常会弹出一个<strong>“Select Deployment Target”（选择部署目标）</strong>的对话框，列出当前所有可用的真机和模拟器。开发者需要手动从中选择一个目标设备来安装并运行 App。如果勾选了底部的“Use same selection for future launches”，下次运行则会默认启动在该设备上。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.4 运行和调试App：创建内置模拟器
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **创建虚拟设备**： 点击 `Create Virtual Device`，选择分类 `Phone` 及具体型号（如 Pixel 2）。
+- **配置系统镜像**
+    - **版本匹配：** 选择 API 35（Android 15 / VanillaIceCream）镜像。
+    - **下载授权：** 点击 `Accept` 接受条款，等待下载完成后确认。
+- **确认并完成创建**
+    - **设备命名：** 在 `AVD Name` 处填写名称（建议保持默认）。
+    - **结果验证：** 在管理器列表确认新设备已出现，准备启动运行。
+</div>
+
+<div class="" style="position: absolute; left: 65%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260205170016791.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+问：在创建模拟器时，为什么要特别关注“API Level”（API 级别）这个参数？
+</div>
+</div>
+
+<aside class="notes"><p>在了解了模拟器的重要性之后，大家肯定想知道：这台‘虚拟手机’到底是怎么从无到有建立起来的呢？现在，我们就进入实操环节，一起通过 AVD Manager 来‘组装’我们的第一台安卓模拟器。</p>
+<p>“首先，在管理器窗口中点击 <strong>Create Virtual Device</strong> 按钮。这时会弹出一个硬件选择对话框，我们在左侧类别中选择 <strong>Phone</strong>，然后在中间的型号列表中挑选一个经典款，比如 <strong>Pixel 2</strong>，点击 <strong>Next</strong> 进入下一步。</p>
+<p>接下来是关键的系统版本选择。大家可以看到镜像列表中出现了一个熟悉的名称——<strong>VanillaIceCream</strong>，它对应的 API 级别是 <strong>35</strong>，这正是目前最新的 <strong>Android 15</strong> 系统。因为我们的电脑里还没有这个系统文件，所以需要点击 <strong>Download</strong> 进行下载。</p>
+<p>在下载前，请务必勾选 <strong>Accept</strong> 以接受许可条款。下载完成后，原本的 Download 链接就会消失，此时选中该行镜像并点击 <strong>Next</strong>。</p>
+<p>最后一步是确认配置。在 <strong>AVD Name</strong> 处可以给你的模拟器起个好听的名字，当然，初学者建议保持默认。点击 <strong>Finish</strong> 后，回到模拟器列表，你会发现多了一个名为 <strong>Pixel 2 API 35</strong> 的设备。至此，你的‘虚拟测试手机’就正式装配完成了！”</p>
+<p><strong>问题：</strong> 在创建模拟器时，为什么要特别关注“API Level”（API 级别）这个参数？</p>
+<p><strong>解答：</strong> API Level 代表了 Android 系统的版本。开发者需要确保模拟器的 API 级别<strong>大于或等于</strong>项目中定义的 <code>minSdkVersion</code>（最低支持版本），否则 App 将无法在该模拟器上安装。同时，使用较高版本的 API（如 API 35）可以测试 App 在最新系统特性下的兼容性。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.4 运行和调试App：在模拟器上运行App
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 67%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **运行前的三步配置**
+    - **选设备**：下拉框指定运行目标（如 Medium Phone API 36）。
+    - **选模块**：确认待编译的 Module（通常为默认的 `app`）。
+    - **点运行**：点击绿色三角形 **Run** 按钮。
+- **自动化执行流程**
+    - **构建与安装**：Gradle 执行编译并自动推送 APK 至设备。
+    - **效果观察**：模拟器自动唤起 App 并展示交互界面。
+- **注意事项**
+    - **多模块管理**：工程内多个 App 模块需注意切换。
+    - **状态监控**：通过 Bottom Bar 观察安装与启动日志。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260205172324971.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+**问题：** 为什么第一次启动模拟器和运行 App 的速度通常比较慢？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下）</strong> 好了，现在我们的“虚拟手机”已经组装完毕，并静静地躺在设备库里了。万事俱备，只欠东风。接下来，就是见证奇迹的时刻——我们将把刚才编写的代码真正地跑起来，看看它在手机屏幕上到底长什么样。</p>
+<p><strong>（正文逻辑）</strong> 要让程序跑起来，我们需要完成“三步走”的操作：</p>
+<ol>
+<li><strong>选择运行设备（Running Device）</strong>： 在工具栏的设备下拉框中，选择我们刚才创建的虚拟设备，例如 <strong>Medium Phone API 36</strong>。这步操作就像是告诉系统，我们要把程序安装到哪台手机上。</li>
+<li><strong>选择运行模块</strong>： 在设备旁边，我们需要确认选中的是想要运行的 <strong>Module</strong>。在 Android 项目中，一个工程可以包含多个模块，每个模块都可以被编译成一个独立的 App。通常我们选择默认的 <code>app</code> 模块即可。</li>
+<li><strong>执行运行命令</strong>： 最后，点击那个标志性的<strong>绿色三角形按钮（Run &#39;app&#39;）</strong>。</li>
+</ol>
+<p><strong>（效果观察）</strong> 点击之后，Gradle 会开始最后的冲刺。稍等片刻，在跳出的 Android 模拟器界面中，你会看到系统正在自动安装编译出来的 APK。当安装完成，屏幕上就会自动弹出你的 App 界面。</p>
+<h3 id="互动环节">互动环节</h3>
+<p><strong>问题：</strong> 在点击“Run”按钮后，如果模拟器屏幕一直黑屏或者显示“Waiting for Target Device to Come Online”，通常是什么原因？</p>
+<p><strong>解答：</strong> 这种情况通常有两类原因：</p>
+<ol>
+<li><p><strong>硬件加速未开启</strong>：由于模拟器是高度消耗 CPU 和内存的，如果电脑 BIOS 中的“虚拟化技术（VT-x/AMD-V）”没有开启，模拟器启动会极其缓慢甚至卡死。</p>
+</li>
+<li><p><strong>ADB 连接超时</strong>：Android Studio 通过 ADB（Android Debug Bridge）与模拟器通信。如果模拟器启动过程太长，通信可能会断开。此时可以尝试通过 <strong>Device Manager</strong> 手动重启模拟器，或者点击 <strong>Wipe Data</strong> 清除缓存后再启动。</p>
+</li>
+</ol>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1.4 运行和调试App：观察App的运行日志
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **日志工具对比**： 弃用 `System.out`，改用 Android 专用的 `Log` 工具类。    
+- **日志等级划分（由高到低）**： Error (e) > Warn (w) > Info (i) > Debug (d) > Verbose (v)。
+- **代码实操**
+    - **调用：** `Log.d("Tag", "Message")`，常用 Debug 级别追踪变量
+- **Logcat 窗口调试**
+    - **查看：** 点击底部 `Logcat` 标签，观察程序后台输出。
+    - **筛选：** 通过设备名、包名、日志级别、关键字进行精准过滤。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260205175751738.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+为什么在生产环境（正式发布给用户）的 App 中，通常建议关闭或删除 Log.d 和 Log.v 的日志代码？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “刚才我们成功在模拟器上看到了 App 的界面，但这只是‘看热闹’。作为开发者，我们更需要‘看门道’——也就是程序背后的运行数据。在 Java 开发中，我们习惯用 <code>System.out.println</code>，但在 Android 嵌入式开发中，这种方式效率极低。今天我们要学习 Android 专属的‘听诊器’：<strong>Logcat 日志工具</strong>。”</p>
+<p><strong>（核心内容讲解）</strong> “Android 使用 <code>Log</code> 类来打印日志，并科学地将信息划分为 5 个等级。大家可以看这张表：从最高级的 <strong>Log.e</strong>（程序崩溃异常）到最基础的 <strong>Log.v</strong>（冗余信息）。在日常开发调试中，我们最常用的是 <strong>Log.d</strong>(Debug)，它可以帮我们追踪变量值的变化。</p>
+<p>让我们来看一段实操代码。在 <code>MainActivity</code> 的 <code>onCreate</code> 方法中，我们插入一行代码：<code>Log.d(&quot;MainActivity&quot;, &quot;我看到你了&quot;);</code>。这里第一个参数是‘标签（Tag）’，用于定位是谁发的信号；第二个参数就是具体的‘消息内容’。</p>
+<p>代码写好并重新运行后，请点击 Android Studio 底部的 <strong>Logcat</strong> 标签。你会发现日志像瀑布一样刷屏，别担心，利用顶部的<strong>筛选框</strong>就能精准定位：选择你的设备、选择 App 包名、将级别设为 <strong>Debug</strong>，甚至直接搜索‘MainActivity’。看！窗口中清爽地显示出了‘我看到你了’。这就是我们与程序进行‘暗号对接’的过程。”</p>
+<p><strong>问题：</strong> 为什么在生产环境（正式发布给用户）的 App 中，通常建议关闭或删除 Log.d 和 Log.v 的日志代码？</p>
+<p><strong>解答：</strong> 主要有两点原因：</p>
+<ol>
+<li><p><strong>性能消耗：</strong> 频繁的日志打印会占用 CPU 资源和系统内存，影响 App 运行的流畅度。</p>
+</li>
+<li><p><strong>安全风险：</strong> 调试日志可能包含敏感数据（如用户 ID、后台接口地址、内部逻辑变量等）。如果日志被他人捕获，可能会导致程序逻辑泄露或安全性下降。</p>
+</li>
+</ol>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **本章知识点梳理**
+    - **基础背景：** Android 发展史及 Android Studio 历程。
+    - **环境构建：** IDE 安装、SDK 配置及开发机环境检查。
+    - **工程管理：** 创建新项目、导入已有工程及代码编译。
+    - **调试技术：** 模拟器创建、App 部署运行及 Logcat 日志分析。
+- **学习目标达成确认**
+    - **核心技能：** 熟练使用 Android Studio 基础操作。
+    - **实践成果：** 能够独立创建、编译并在模拟器上成功运行 App。
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260113114548275.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《 Android 嵌入式软件开发》
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “通过刚才对 Logcat 日志系统的学习，我们已经掌握了 Android 开发中最基本的‘望闻问切’。到这里，本章节的核心内容就全部讲解完成了。现在，请大家跟随我一起梳理一下，这一章我们都攻克了哪些‘堡垒’。”</p>
+<p><strong>（核心内容讲解）</strong> “在本章《Android 开发环境搭建》中，我们首先溯源了 Android 及其开发工具 Android Studio 的演进历程，了解了我们所处的技术坐标。</p>
+<p>随后，我们完成了最硬核的任务：<strong>环境搭建</strong>。从硬件配置检查到 Android Studio 的安装，再到关键的 SDK 下载，大家已经亲手构建起了一个完整的开发平台。紧接着，我们学习了如何<strong>创建与编译工程</strong>，理解了如何将一个创意转化为代码文件。</p>
+<p>最后，也是最有成就感的环节：<strong>运行与调试</strong>。我们不仅学会了如何‘徒手’创建一台虚拟手机（模拟器），还实现了 App 的成功部署，并学会了利用 Logcat 观察程序的‘内心世界’。</p>
+<p>通过本章的学习，大家已经完成了从‘旁观者’到‘开发者’的转变。现在的你，已经具备了在 Android 领域施展拳脚的基础技能。下一章，我们将正式开始学习 Android 的 UI 布局，去亲手设计精美的应用界面！”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《 Android 嵌入式软件开发》
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1080,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>

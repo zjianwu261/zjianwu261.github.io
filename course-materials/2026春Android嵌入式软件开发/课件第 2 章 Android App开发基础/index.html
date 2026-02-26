@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 50%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第1章 Android Studio环境搭建/file-20241114161819034.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 65%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第 2 章 Android App开发基础
+</div>
+
+<div class="" style="line-height: 3.5; position: absolute; left: 0%; top: 70%; height: 30%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《Android 嵌入式软件开发》<br><br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div>
+
+<aside class="notes"><p>各位同学大家好，欢迎再次来到《Android嵌入式软件开发》课堂，我是来自合肥大学人工智能与大数据学院的张建武老师。本章是 Android App 开发基础。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本次课主要内容
+</div>
+
+<div class="" style="line-height: 2; font-size: 45px; position: absolute; left: 0%; top: 20%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 2.1 App的开发特点
+- 2.2 App 的工程结构
+- 2.3 App 的设计规范
+- 2.4 App 的活动页面
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 20%; height: 60%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260113120012540.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《Android嵌入式软件开发》
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “在第一章中，我们已经成功‘安家落户’，搭建好了开发环境并跑通了第一个程序。但这仅仅是迈出了第一步。如果把开发 App 比作盖房子，我们现在只是准备好了工具，还没搞清楚房子的结构和设计图纸。所以，从今天开始，我们要进入<strong>第 2 章：Android App 开发基础</strong>的学习，正式探索 Android 开发的核心奥秘。</p>
+<p><strong>（核心内容讲解）</strong> “本次课程的内容非常充实，主要分为四个核心板块：</p>
+<p>首先是 <strong>2.1 App 的开发特点</strong>。我们会探讨移动端开发与传统 PC 端开发的本质区别，比如屏幕尺寸的适配、触摸交互以及有限的硬件资源如何高效利用。</p>
+<p>接着是 <strong>2.2 App 的工程结构</strong>。我们将‘解剖’一个 Android 项目，看看那几十个文件夹里哪些是放代码的，哪些是放图片的，又是谁在负责整个工程的配置。</p>
+<p>随后进入 <strong>2.3 App 的设计规范</strong>。一个好的 App 不仅要功能强大，还要好看、好用。我们会学习 Android 官方推荐的界面设计准则，让大家写出的程序更具‘高级感’。</p>
+<p>最后是重头戏 <strong>2.4 App 的活动页面（Activity）</strong>。Activity 是 Android 开发中最基础也最重要的组件，它承载了用户看到的每一个界面。理解了 Activity，你才算真正踏入了 Android 开发的大门。</p>
+<p>接下来的时间，我们将逐一拆解这些知识点，帮助大家打牢地基。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.1 App的开发特点：运行环境
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **操作系统依附性**
+    - **主流系统：** 移动端分为 Android（基于 Linux 内核）与 iOS。
+    - **兼容性误区：** Android `$\neq$` Linux，App 无法在 Linux 桌面直接运行。
+- **开发与运行的分离**
+    - **IDE 环境：** Android Studio 支持 Windows/Mac/Linux。
+    - **运行困境：** 电脑环境无法直接执行编译后的 Android 应用。
+- **解决方案**
+    - **模拟器：** 利用电脑资源虚拟手机，适合初步功能验证。
+    - **真机调试（推荐）：** 性能占用低，硬件兼容性验证最真实。
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 2 章 Android App开发基础/file-20260113121502023.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+既然真机测试更好，那为什么 Android Studio 还要费力提供模拟器功能？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “了解了全章大纲后，我们先来看第一节：运行环境。很多同学在学习 Android 开发初期会觉得‘别扭’，因为它的开发模式与我们之前接触的 C 语言或纯 Java 开发有着显著的不同。这种‘别扭感’究竟源自哪里呢？”</p>
+<p><strong>（核心内容讲解）</strong> “首先，我们要明确 App 的归属。App 必须依附于操作系统运行。正如电脑端有 Windows 和 macOS，移动端则是 Android 与 iOS 的天下。需要注意的是，虽然 Android 系统是基于 Linux 内核开发的，但它并不等同于 Linux。因此，Android App 是无法直接在普通的 Linux 电脑上运行的。</p>
+<p>这就引出了一个很有趣的‘矛盾’：Google 为我们提供了支持 Windows、Mac 和 Linux 三大平台的开发工具——Android Studio。我们可以在电脑上写代码、编译代码，但编译出来的程序却不能像 C 语言或网页那样直接在电脑桌面上双击打开。</p>
+<p>为什么会这样？因为指令集和系统环境完全不同。那么，我们该如何验证代码逻辑呢？</p>
+<p>这就回到了我们上一章提到的两个方案：</p>
+<ol>
+<li><p><strong>内置模拟器：</strong> 在电脑里虚拟出一个手机环境。它的优点是方便，但缺点是极度消耗电脑资源（CPU/内存），容易造成开发机卡顿。</p>
+</li>
+<li><p><strong>真机测试：</strong> 这是企业开发中最常用的方式。只有在真实的硬件、真实的系统权限和真实的传感器环境下，才能完全验证 App 的功能稳定性。毕竟，用户是用手机玩你的 App，而不是用电脑模拟器。”</p>
+</li>
+</ol>
+<p><strong>问题：</strong> 既然真机测试更好，那为什么 Android Studio 还要费力提供模拟器功能？</p>
+<p><strong>解答：</strong> 模拟器具有不可替代的两个优势：</p>
+<ol>
+<li><p><strong>机型覆盖：</strong> 开发者不可能购买市面上所有的手机。模拟器可以快速模拟不同尺寸、不同分辨率和不同 API 版本的设备，方便进行适配测试。</p>
+</li>
+<li><p><strong>极端环境模拟：</strong> 模拟器可以模拟一些真机难以触发的条件，例如虚拟的 GPS 定位坐标、特定的电池电量状态或不同强度的网络延迟，这对于特定功能的调试非常有效。</p>
+</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.1 App的开发特点：开启真机调试
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **物理连接与驱动**：使用数据线连接，必要时安装驱动    
+- **解锁开发者模式**
+    - **隐藏入口：** “关于手机”连续点击“版本号” 7 次。
+    - **核心开关：** 进入“开发者选项”，开启 `USB 调试`。
+- **权限配置与交互**
+    - **USB 模式：** 必须选择 `传输文件`（MTP）而非仅充电。
+    - **信任授权：** 勾选 `始终允许` 该计算机进行调试。
+- **注意事项**
+    - **状态要求：** 手机需保持解锁，部分机型需登录账号或插 SIM 卡。
+    - **验证：** Android Studio 顶部工具栏显示真机型号即可运行。
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 2 章 Android App开发基础/file-20260129155413173.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>（承上启下 - 转场语） “刚才我们聊到，模拟器虽然方便，但真机测试才是‘实战’的最终标准。不过，很多同学发现，直接用数据线把手机插到电脑上，Android Studio 却没反应。这是因为 Android 手机出于安全考虑，默认是关闭调试权限的。现在我们就来学习如何一步步‘解锁’你的手机，让它进入开发模式。”</p>
+<p>（核心内容讲解） “第一步，是建立物理连接并安装驱动。大多数手机插上后，电脑会自动识别为 USB 存储设备。如果识别失败，可以借助手机助手软件补充驱动。</p>
+<p>第二步是重头戏：开启开发者选项。这是一个‘隐藏彩蛋’。你需要进入手机的‘设置’-&gt;‘关于手机’，找到‘版本号’（Build Number），然后开启‘疯狂点击’模式——连续点击 7 次以上。直到屏幕弹出‘您已处于开发者模式’。这时返回系统设置，你就能看到新出现的‘开发者选项’，请务必勾选<strong>‘USB 调试’</strong>。</p>
+<p>第三步，是权限授予。手机屏幕会弹出两个关键窗口：</p>
+<p>连接模式： 一定要选择‘传输文件’，纯充电模式是无法进行数据调试的。</p>
+<p>调试授权： 当弹出‘允许 USB 调试吗？’的询问时，建议勾选‘始终允许使用这台计算机’，否则每次运行你都要点一次手机确认。</p>
+<p>最后，有几点‘避坑指南’：安装时请保持手机处于解锁状态，否则系统可能会拦截安装请求。部分品牌（如小米、vivo）可能还要求插入 SIM 卡或登录品牌账号才能开启 USB 安装权限。</p>
+<p>当一切就绪，你在 Android Studio 顶部工具栏就能看到你的真实手机型号（比如华为、小米等）。点击绿色小三角，你的代码就会通过数据线，飞速安装到你手中的真机上！”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.1 App的开发特点：开发语言与技术栈
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 72%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **两大技术路线**
+    - **原生开发：** 官方语言（Java/Kotlin）+ SDK，性能最优。
+    - **混合开发：** 原生框架内嵌 H5 网页，实现动态更新。
+- **原生开发语言阵列**
+    - **核心语言：** Java（主流）、Kotlin（现代）、XML（界面定义）。
+    - **底层语言：** C/C++（通过 NDK 处理高性能计算）。
+- **Java 开发环境支持**
+    - **内置 JRE：** Android Studio 自带由 JetBrains 提供的 Java 运行环境。
+    - **构建兼容：** Gradle 默认使用内置 JDK，有效避免版本冲突。
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 2 章 Android App开发基础/file-20260113122313713.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “刚才我们解决了‘在哪里跑’的问题，即模拟器与真机的配置。接下来我们要探讨‘怎么写’的问题。Android 开发经过十几年的演进，已经形成了一套成熟的语言体系和技术路线。有些同学可能会问，现在流行网页开发，那我们学的 Android 开发属于哪一类呢？”</p>
+<p><strong>（核心内容讲解）</strong> “目前 Android App 开发主要分为<strong>原生开发</strong>和<strong>混合开发</strong>两大路线。原生开发就像是‘原厂定制’，直接使用官方提供的 Java 或 Kotlin 语言，配合 SDK 进行深度开发，性能和用户体验是最好的。而混合开发则是‘原生外壳 + H5 网页’，优点是更新灵活，改个网页服务器 App 就变了。但大家要记住：<strong>原生开发是根基</strong>。如果没有原生开发搭建的‘皮’，混合开发的‘毛’就无处依附。</p>
+<p>在原生开发领域，虽然 Kotlin 近年来备受推崇，但 <strong>Java</strong> 依然是基石。大家在创建新项目时，会发现 Language 选项默认通常就是 Java，它是目前嵌入式软件开发中生态最稳固的选择。</p>
+<p>提到 Java，就离不开开发环境的支持。很多同学担心安装 JDK 麻烦，其实 Android Studio 非常贴心，它已经<strong>自带了 JRE 环境</strong>。大家可以去 Settings 里的 Gradle 设置中查看，Android Studio 默认使用 JetBrains 提供的 JRE 来驱动 Gradle 构建工具。这种‘捆绑式’设计确保了你的代码编译环境与 IDE 高度兼容，极大减少了以前常见的‘Java 版本冲突’报错。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.1 App的开发特点：Kotlin 与 C/C++ 的角色
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **现代官方语言：Kotlin**
+    - **地位：** 谷歌官方推荐，与 Java 100% 兼容。
+    - **运行环境：** 同样基于 JVM，可与 Java 代码混编。
+- **底层性能引擎：C/C++**
+    - **性能优势：** 编译型语言，适合图像、音视频等复杂运算。
+    - **协作机制：** 通过 **JNI**（Java 原生接口）供上层 Java 调用。
+- **开发建议**
+    - **初学者：** 重点掌握 Java 基础，暂无须关注 JNI 高级开发。
+    - **系统架构：** 理解“Java 负责业务，C/C++ 负责底层”的分工
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第2章 Android App开发基础/file-20250219223911155.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+为什么说 Java/Kotlin 属于“解释型”语言执行效率相对低，但现在的手机 App 运行起来依然很流畅？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “刚才我们提到了 Java 是 Android 开发的基石，但在现代 Android 开发的版图中，还有两位重量级选手：一位是‘后起之秀’Kotlin，另一位则是‘幕后功臣’C/C++。了解它们，能帮助我们更全面地理解 Android 系统的运行机制。”</p>
+<p><strong>（核心内容讲解）</strong> “首先来看 <strong>Kotlin</strong>。它是谷歌官方近年来极力推崇的‘一等公民’。它和 Java 一样，最终都会编译成字节码在 <strong>JVM</strong>（Java 虚拟机）上运行。所以它们俩就像是同一台机器上的两种操作界面，完全兼容。在创建项目时，你可以自由切换。虽然本课程为了夯实基础采用了 Java 教学，但大家要知道，掌握了 Java 之后，迁移到 Kotlin 会非常迅速。</p>
+<p>那么，既然有了 Java 和 Kotlin，为什么还需要 <strong>C/C++</strong> 呢？这里涉及到一个核心概念：<strong>解释型语言 vs 编译型语言</strong>。 Java 属于解释型语言，在运行时才翻译成机器码，这在处理图像、音视频或复杂算法时，性能会略显吃力。而 C/C++ 是编译型语言，直接与硬件‘对话’，执行效率极高。</p>
+<p>为了平衡‘开发效率’与‘运行性能’，Android 引入了 <strong>JNI</strong>（Java 原生接口）技术。简单来说，就是让 Java 做‘外壳’负责界面逻辑，让 C/C++ 做‘引擎’负责底层运算。比如大家常用的图片滤镜、视频解码，底层其实都是 C/C++ 在跑。虽然作为初学者，我们暂时不需要写 C 代码，但我们要对这种‘内外协作’的架构心中有数。”</p>
+<p><strong>问题：</strong> 为什么说 Java/Kotlin 属于“解释型”语言执行效率相对低，但现在的手机 App 运行起来依然很流畅？</p>
+<p><strong>解答：</strong> 主要有两方面原因：</p>
+<ol>
+<li><strong>硬件性能过剩：</strong> 现代手机的 CPU 和内存性能大幅提升，足以弥补语言运行时的损耗。</li>
+<li><strong>ART/JIT 优化技术：</strong> Android 系统（从 5.0 的 ART 模式开始）引入了 <strong>AOT</strong>（预编译）和 <strong>JIT</strong>（即时编译）技术，会在 App 安装或运行时提前将部分代码编译成机器码，大大缩小了与编译型语言的差距。</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.1 App的开发特点：界面语言 XML
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 85%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **XML：界面描述语言**
+    - **性质：** 可扩展标记语言，负责定义页面元素及其层级关系。
+    - **角色：** 独立于逻辑代码，类似 HTML，用于静态布局描述。
+- **标签与属性解析**
+    - **控件对象：** 每个标签（如 `TextView`）代表一个 UI 控件。
+    - **命名空间：** `android:` 前缀表示安卓标准属性。
+- **核心属性说明（以 TextView 为例）**
+    - `id`：控件唯一标识符。
+    - `layout_width / height`：宽度与高度（`wrap_content` 为自适应内容）。
+    - `text`：显示的文本内容。
+</div>
+
+<div class="" style="position: absolute; left: 65%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```XML
+<TextView
+	android:id="@+id/tv_hello"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" 
+	android:text="Hello World!" / >
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下 - 转场语）</strong> “刚才我们聊到了负责逻辑控制的 Java 和 Kotlin，也提到了负责底层性能的 C/C++。那么，用户一眼看到的精美界面又是靠什么来定义的呢？这就是我们接下来要介绍的 <strong>XML</strong>。如果说 Java 是 App 的‘大脑’，那么 XML 就是 App 的‘面孔’。”</p>
+<p><strong>（核心内容讲解）</strong> “XML 的全称是可扩展标记语言。严格来说，它不算编程语言，而是一种<strong>标记语言</strong>，这和大家熟悉的网页 HTML 非常相似。在 Android 中，我们利用 XML 的层级结构来描述页面元素。</p>
+<p>大家请看屏幕上的这段示例代码。这是一个典型的 <code>TextView</code> 标签，它代表了一个文本显示控件。</p>
+<p>代码中的每个属性都决定了控件的‘长相’。请注意，这些属性通常以 <code>android:</code> 开头，这代表它们是安卓系统的标准规格属性。我们来拆解一下这四个关键点：</p>
+<ol>
+<li><strong>id</strong>：这是控件的‘身份证号’，方便我们在 Java 代码里找到它。</li>
+<li><strong>layout_width</strong> 与 <strong>layout_height</strong>：定义了控件的大小。这里用到了一个高频词汇 <code>wrap_content</code>，意思是‘包裹内容’——文字有多大，控件就占多大地方，绝不浪费。</li>
+<li><strong>text</strong>：这是最直观的，决定了屏幕上显示的具体字符。</li>
+</ol>
+<p>通过这种方式，我们可以像搭积木一样，在 XML 文件里把按钮、图片、输入框一个个‘垒’起来，最终形成一个完整的 App 界面。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.1 App的开发特点：前后端架构与数据库
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 68%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **数据库访问限制**
+    - **无法直连**：Android 系统不支持安装 MySQL/Oracle 等企业数据库
+- **本地存储解决方案：SQLite**
+    - **特点**：轻量级、嵌入式、无须安装，随 App 进程运行。
+    - **用途**：保存手机本地的临时或单机业务数据。
+- **前后端协作架构（C/S 架构）**
+    - 客户端 (Client)：手机 App 负责交互与本地数据处理。
+    - 服务端 (Server)：Java Web 服务负责业务逻辑与 MySQL 读写。
+    - 通信协议：双方通过 **HTTP 接口** 进行信息交互。
+</div>
+
+<div class="" style="position: absolute; left: 65%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 2 章 Android App开发基础/file-20260113153651127.png" alt="" style="object-fit: scale-down">
+
+客户端与服务端分别操作的数据库
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+既然手机已经有了内置的 SQLite 数据库，为什么还需要费力搭建后端服务和 MySQL 数据库？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “刚才我们学习了如何用 XML 画出漂亮的界面，以及用 Java 编写逻辑代码。但一个真正的商业级 App，仅仅靠手机本地的代码是不够的。比如你的淘宝购物车、微信聊天记录，即便换了手机登录依然存在。这背后涉及到了 App 的前后端协作与数据存储机制，也是我们今天要讨论的重点。”</p>
+<p><strong>（核心内容讲解）</strong> “在 Java 编程中，我们习惯用 JDBC 连接 MySQL 或 Oracle。但在 Android 开发中，情况有所不同。MySQL 等企业级数据库没有提供 Android 系统的安装包，无法直接安装在手机上。因此，手机 App 无法直接连接远程的 MySQL。</p>
+<p>那么数据存哪儿呢？Android 选择了<strong>‘内外兼修’</strong>的策略：</p>
+<ol>
+<li><p><strong>内置数据库 SQLite</strong>：Android 系统内置了轻量级的 SQLite。它是一种‘嵌入式数据库’，无须单独安装和配置连接信息，直接集成在 App 进程中，专门负责存储本地的简单业务数据。</p>
+</li>
+<li><p><strong>后端 Java Web 服务</strong>：对于需要统一管理的用户注册信息、购物记录等，我们必须搭建一个独立的‘服务端’（如 Java Web 服务）。</p>
+</li>
+</ol>
+<p>App 作为<strong>客户端</strong>，通过 <strong>HTTP 接口</strong> 向服务端发起请求。服务端接收请求后处理业务逻辑，再去读写后端的 <strong>MySQL</strong> 数据库，最后将结果返回给手机。</p>
+<p>总结来说，手机 App 能直接操作内置的 <strong>SQLite</strong>，但不能直接碰 <strong>MySQL</strong>。这种‘多对一’的架构（多个客户端对应一个服务端），才是现代 App 系统的全貌。”</p>
+<p><strong>问题：</strong> 既然手机已经有了内置的 SQLite 数据库，为什么还需要费力搭建后端服务和 MySQL 数据库？</p>
+<p><strong>解答：</strong> 主要是为了<strong>数据共享与安全</strong>。</p>
+<ol>
+<li><strong>数据获取</strong>：SQLite 文件存储在用户的手机本地，开发者无法直接获取。如果要汇总所有用户的注册信息或订单，必须存放在后端服务器上。</li>
+<li><strong>数据同步</strong>：通过后端 MySQL 存储，用户在更换手机或使用平板登录时，可以通过 HTTP 接口重新获取数据，实现多端同步。</li>
+<li><strong>安全性</strong>：核心业务逻辑和敏感数据放在服务端处理，可以有效防止客户端被反编译而导致的数据泄露。</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.2 App的工程结构
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **工程层级结构**：项目（Project）包含多个模块（Module），模块对应实际 App
+- **App 模块核心组成**
+    - **manifests**：存放 `AndroidManifest.xml`，即 App 运行配置文件
+    - **java**：存放 Java 源代码及测试代码。
+    - **res**：资源目录，包含布局（layout）、图片（drawable）等。
+- **自动化构建工具：Gradle**
+    - **build.gradle**：配置编译规则与第三方库依赖。
+    - **settings.gradle**：指定需要编译的模块。
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 2 章 Android App开发基础/file-20260129155547637.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “在讨论完 App 的开发特点与前后端协作模式后，大家可能会问：一个标准的 Android 项目在开发环境下到底长什么样？那些代码和资源又是如何各司其职的呢？接下来，我们就深入 Android Studio，揭开 <strong>2.2 App 工程结构</strong> 的神秘面纱。”</p>
+<p><strong>（核心内容讲解）</strong> “Android 工程采用了层级化的管理方式，主要分为<strong>项目（Project）</strong>和<strong>模块（Module）</strong>两个层次。通常我们编译运行的是具体的模块，因为它才对应实际的 App 实体。</p>
+<p>请大家看这张典型的项目结构图。在 <code>app</code> 模块下，有三个最重要的核心目录：</p>
+<ol>
+<li><strong>manifests 子目录</strong>：这里只存放一个 <code>AndroidManifest.xml</code> 文件。它是整个 App 的‘户口本’或‘运行配置文件’，规定了应用的名称、图标以及拥有哪些权限。</li>
+<li><strong>java 子目录</strong>：这是我们的‘代码工厂’，存放所有的 Java 源码文件。</li>
+<li><strong>res 子目录</strong>：这是‘资源仓库’。它下面又细分为存放图片的 <code>drawable</code>、存放页面布局的 <code>layout</code>、存放启动图标的 <code>mipmap</code> 以及存放字符串和颜色的 <code>values</code>。</li>
+</ol>
+<p>除了这些看得见的资源，背后还有一套强大的自动化‘管家’——<strong>Gradle Scripts</strong>。其中最核心的是 <code>build.gradle</code>，它定义了项目的编译规则和依赖库。简单来说，Java 负责逻辑，XML 负责长相，而 Gradle 负责把它们打包成最终的安装包。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.2 App的工程结构：编译配置文件 build.gradle
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **Gradle 配置文件体系**
+    - **Project 级**：全局编译配置，管理插件版本及下载仓库。
+    - **Module 级**：具体模块的编译细节，包括 SDK 版本及包名。
+- **Module 级核心参数详解**
+    - **compileSdk**：指定编译时使用的 SDK 版本。
+    - **applicationId**：App 的唯一包名标识。
+    - **minSdk**：App 支持运行的最低 Android 系统版本。
+- **依赖管理 (Dependencies)**
+    - 使用 `implementation` 引用第三方库或支持库。
+- **注意事项**：Gradle 版本需与 IDE 版本对应，否则无法成功编译
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 2 章 Android App开发基础/file-20260129155930117.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “在熟悉了 App 的目录结构后，我们发现项目里有很多以 <code>.gradle</code> 结尾的文件。如果说 <code>AndroidManifest.xml</code> 是 App 的户口本，那么 <code>build.gradle</code> 就是 App 的‘施工图纸’和‘物料清单’。它决定了项目如何编译、引用哪些外部工具，是 Android Studio 能够成功打包 APK 的核心依据。”</p>
+<p><strong>（核心内容讲解）</strong> “在一个标准的 Android 项目中，默认存在两个级别的 <code>build.gradle</code> 文件：一个是<strong>项目级（Project）</strong>，另一个是<strong>模块级（Module）</strong>。</p>
+<p>首先看项目级的 <code>build.gradle</code>。它主要负责全局配置，比如设置各种插件的下载地址（Repositories）。由于官方库在国外下载较慢，我们通常会在这里添加<strong>阿里云镜像地址</strong>，以提升国内开发者的下载速度。不过要注意，从 Android Studio Bumblebee 版本开始，这些仓库配置被移动到了 <code>settings.gradle</code> 中。</p>
+<p>重点来看<strong>模块级（Module）</strong>的 <code>build.gradle</code>。它详细规定了当前 App 的编译细节：</p>
+<ol>
+<li><strong>compileSdk</strong>：指定用哪个版本的 SDK 进行编译（例如 31 代表 Android 12）。</li>
+<li><strong>applicationId</strong>：这是 App 的唯一身份证号（包名），决定了它在应用商店的身份。</li>
+<li><strong>minSdk</strong>：这是‘兼容底线’，决定了 App 能安装在多旧的手机上。</li>
+<li><strong>dependencies</strong>：这是我们的‘外援名单’。如果你想用第三方库（如 AppCompat 支持库），必须在这里通过 <code>implementation</code> 关键字声明，Gradle 才会自动帮你下载并导入。</li>
+</ol>
+<p>最后提醒大家，Gradle 的版本必须与 Android Studio 版本匹配，否则工程会编译失败。如果遇到版本不匹配，可以在菜单 <code>File</code> -&gt; <code>Project Structure</code> 中进行调整。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.2 App的工程结构：运行配置文件 AndroidManifest.xml
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 68%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **AndroidManifest.xml 核心地位**：App 的运行配置文件，根节点 `manifest` 指定唯一包名。
+- **Application 节点全局配置**
+    - **基础属性**：配置图标（icon）、名称（label）、主题（theme）及备份开关。
+- **Activity 组件注册**
+    - **必要性**：所有活动页面必须在此注册方可访问。
+    - **首页设置**：通过 `MAIN` 动作和 `LAUNCHER` 类别指定启动首屏。
+- **Exported 属性**：包含过滤器的组件必须声明 `android:exported` 以支持跨应用调用
+</div>
+
+<div class="" style="position: absolute; left: 67%; top: 15%; height: 65%; width: 33%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 2 章 Android App开发基础/file-20260129160006259.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “如果说 <code>build.gradle</code> 决定了 App 如何被‘生产’出来，那么接下来我们要讲的 <code>AndroidManifest.xml</code> 则决定了 App 如何在手机系统中‘生存’。它是每个 Android 工程必不可少的运行配置文件，就像是应用的‘身份证’和‘说明书’，系统通过它来了解你的 App 包含哪些功能以及如何启动它。”</p>
+<p><strong>（核心内容讲解）</strong> “首先，<code>AndroidManifest.xml</code> 的根节点是 <code>manifest</code>，它的 <code>package</code> 属性定义了 App 的包名，这是应用在整个安卓系统中的唯一标识。</p>
+<p>紧接着是 <code>application</code> 节点，它配置了 App 的全局外观和行为：</p>
+<ul>
+<li><strong>android:icon</strong> 和 <strong>android:roundIcon</strong>：分别指定了手机桌面上显示的常规图标和圆角图标。</li>
+<li><strong>android:label</strong>：定义了 App 的显示名称。</li>
+<li><strong>android:theme</strong>：设定了 App 的整体视觉风格。</li>
+</ul>
+<p>在 <code>application</code> 内部，最关键的是 <code>activity</code> 节点的注册。在 Android 中，每一个页面都必须在这里备案，否则系统无法启动它。大家请注意代码中的 <code>intent-filter</code> 部分，这是决定哪个页面是‘首页’的关键。</p>
+<ul>
+<li><strong>android.intent.action.MAIN</strong>：标明这是 App 的入口页面。</li>
+<li><strong>android.intent.category.LAUNCHER</strong>：决定了是否在手机桌面生成快捷图标。</li>
+</ul>
+<p>最后提醒一点：从 Android 12 开始，如果你的 Activity 包含了 <code>intent-filter</code>，就必须显式设置 <code>android:exported=&quot;true&quot;</code>，否则应用将无法在现代安卓设备上正常运行。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.3 App 的设计规范：界面设计与代码逻辑分离
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **设计原则：界面与逻辑分离**
+    - XML (前端)：描述看得见的页面元素与布局排列。
+    - Java (后端)：书写看不见的程序业务逻辑。
+- **三大核心优势**
+    - **实时预览**：利用 `Design` 视图即时查看效果，无须频繁运行。
+    - **多处复用**：一个界面布局可被多段逻辑代码调用。
+    - **灵活适配**：一套逻辑适配多种屏幕（如横竖屏差异化布局）。
+- **实践指南**
+    - **资源存放**：默认竖屏布局放 `res/layout`，横屏布局放 `res/layout-land`
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 2 章 Android App开发基础/file-20260113160810311.png" alt="" style="object-fit: scale-down">
+
+App 的前后端分离设计
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “刚才我们深入拆解了 App 的工程目录，看到了 <code>res</code> 资源目录与 <code>java</code> 代码目录并存。这种布局并非随意而为，而是体现了 Android 开发中一个至关重要的核心原则——<strong>界面设计与代码逻辑的分离</strong>。这就像是盖房子，XML 负责‘硬装’，Java 负责‘家电控制逻辑’，两者各司其职，互不干扰。”</p>
+<p><strong>（核心内容讲解）</strong> “为什么我们要费力把界面和逻辑分开呢？这种‘前后端分离’的设计主要有三大优势：</p>
+<p>首先是<strong>所见即所得的预览功能</strong>。在 Android Studio 中，当我们编写 XML 布局文件时，只需点击右侧的 <strong>Design</strong> 按钮，就能立刻看到界面效果。如果这时你把界面写在 Java 代码里，就必须经过漫长的编译安装过程，才能在手机上看到效果，开发效率高下立判。</p>
+<p>其次是<strong>极高的代码复用性</strong>。一个设计好的 XML 布局可以被多个 Java 类引用。比如‘商品详情’的界面模板，既可以用来展示购物车的商品，也可以用来展示收藏夹的商品，大大减少了重复工作。</p>
+<p>最后，也是最强大的一点，是<strong>灵活的屏幕适配能力</strong>。一套业务逻辑可以对应多套界面布局。最典型的例子就是横竖屏切换：当手机竖着拿时，我们使用默认布局；当手机横过来时，系统会自动去 <code>layout-land</code> 目录下寻找同名的 XML 文件，展示更适合宽屏的排版，而背后的 Java 代码逻辑完全不需要修改。</p>
+<p>综上所述，后续我们的所有例程都会遵循这种‘XML 负责界面、Java 负责逻辑’的黄金法则。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.3 App 的设计规范：XML 描绘应用界面
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **XML 标签规范**
+    - **构造**：由标签头（承载属性）与标签尾组成
+    - **简写**：末梢节点可用 `/>` 合并头尾
+- **层级结构（树状模型）**
+    - **根节点**：全表唯一，需配置命名空间
+    - **布局节点**：承上启下，包裹下级节点
+    - **控件节点**：界面最小单元，多为末梢节点
+- **辅助工具**：使用 `` 编写代码注释
+</div>
+
+<div class="" style="position: absolute; left: 46%; top: 15%; height: 65%; width: 56%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```XML
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout width="match parent"
+    android:layout height="match parent">
+    <!-- 这是个线性布局，match_parent意思是与上级视图保持一致 -->
+    <LinearLayout
+        android:layout width="match_parent"
+        android:layout height="match_parent">
+        <!-- 这是个文本视图，名称为tv hello，显示的文字内容为“Hello World!” -->
+        <TextView
+            android:id="@+id/tv_hello"
+            android:layout_width="wrap_content"
+            android:layout height="wrap_content"
+            android:text="Hello World!" ></TextView>
+    </LinearLayout>
+</LinearLayout>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+在 Android 的 XML 布局文件中，根节点与普通的中间布局节点在定义上有哪两个主要区别？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “在了解了 Android 开发‘界面与逻辑分离’的核心原则后，大家一定很好奇，这张‘界面设计图’到底是怎么用 XML 画出来的？ 刚才我们提到了 <code>TextView</code> 的例子，现在我们就深入剖析一下 XML 标签的构造规范，看看它是如何像搭积木一样构建出复杂页面的。”</p>
+<p><strong>（核心内容讲解）</strong> “首先，我们要理解 XML 的<strong>标签规范</strong>。 每一个 XML 标签在本质上都由<strong>标签头</strong>（如 <code>&lt;TextView&gt;</code>）和<strong>标签尾</strong>（如 <code>&lt;/TextView&gt;</code>）组成。 标签头负责承载控件的属性，比如编号（id）、宽高等，而标签尾则标志着该节点的结束。 对于像 <code>TextView</code> 这样内部不需要再嵌套其他标签的<strong>末梢节点</strong>，我们可以使用 <code>/&gt;</code> 这种简写方式将头尾合并，让代码更简洁。</p>
+<p>如果把一个界面比作一棵大树，XML 的结构就是极其严谨的层级关系：</p>
+<ol>
+<li><p><strong>根节点（Root Node）</strong>：相当于‘树干’。 每个 XML 文件有且仅有一个根节点，它最明显的标志是必须配备 <code>xmlns:android</code> 命名空间，以便 Android Studio 校验属性的合法性。</p>
+</li>
+<li><p><strong>布局节点（Layout Node）</strong>：相当于‘树枝’。 它们负责包裹和组织下方的控件，必须成对出现标签头尾。</p>
+</li>
+<li><p><strong>控件节点（View Node）</strong>：相当于‘树叶’。 它们是界面的最小单元，通常作为末梢节点存在。</p>
+</li>
+</ol>
+<p>此外，为了让代码更具可读性，我们可以使用 `` 来添加说明。 掌握了这三种节点的关系，我们就能通过层层嵌套，组合出任何我们想要的复杂 App 界面了。”</p>
+<p><strong>问题：</strong> 在 Android 的 XML 布局文件中，根节点与普通的中间布局节点在定义上有哪两个主要区别？</p>
+<p><strong>解答：</strong> 根据 XML 规范，主要区别如下：</p>
+<ol>
+<li><p><strong>唯一性</strong>：每个界面 XML 文件只能有一个根节点，而中间的布局节点可以有多个、一层或完全没有（控件直接挂在根节点下）。</p>
+</li>
+<li><p><strong>命名空间</strong>：根节点必须指定命名空间属性 <code>xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</code>，用于属性合法性检查；而中间的布局节点则不能再次指定该命名空间。</p>
+</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.3 App 的设计规范：Java 代码书写程序逻辑
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 57%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **静态布局的局限性**：XML 仅为布局标记，无法嵌入代码实现动态刷新。
+- **Java 与 XML 的协同**：`setContentView` 方法将 Java 逻辑与 XML 布局绑定。
+- **动态修改界面的步骤**
+    1. **XML 标识**：为控件添加 `android:id` 属性分配唯一编号。
+    2. **代码关联**：调用 `findViewById` 方法获取控件实例
+    3. **逻辑操作**：通过 `setText` 等方法动态更新控件内容
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+import android.widget.TextView;
+
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // 当前的页面布局采用的是 res/layout/activity_main.xml
+        setContentView(R.layout.activity_main);
+        
+        // 获取名为 tv_hello 的 TextView 控件，注意添加导包语句 import android.widget.TextView;
+        TextView tv_hello = findViewById(R.id.tv_hello);
+        // 设置 TextView 控件的文字内容
+        tv_hello.setText("你好，世界");
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “在上一个小节中，我们学习了如何利用 XML 像‘搭积木’一样勾勒出 App 的静态外观。但大家思考一个问题：如果我们需要在 App 运行过程中，根据用户的操作动态改变文字内容，该怎么办呢？ 传统的网页开发可以在 HTML 中嵌入 JavaScript，但 Android 的 XML 仅仅是布局标记，无法嵌入逻辑代码。这就轮到我们 App 的‘大脑’——Java 代码登场了。”</p>
+<p><strong>（核心内容讲解）</strong> “每当我们创建一个新项目，Android Studio 都会默认为我们配好‘一对搭档’：布局文件 <code>activity_main.xml</code> 和代码文件 <code>MainActivity.java</code>。</p>
+<p>在 <code>MainActivity</code> 类中，最核心的是 <code>onCreate</code> 方法。其中的 <code>setContentView(R.layout.activity_main)</code> 就像是一条连接纽带，它告诉系统：‘这个 Java 页面要加载那个 XML 布局’。</p>
+<p>如果我们要动态修改界面上的文字，只需两个标准步骤：</p>
+<ol>
+<li><p><strong>给控件‘起名字’</strong>：在 XML 中为 <code>TextView</code> 添加 <code>android:id=&quot;@+id/tv_hello&quot;</code> 属性，给它一个唯一的编号。</p>
+</li>
+<li><p><strong>在代码中‘找到并控制它’</strong>：</p>
+<ul>
+<li><p>首先，使用 <code>findViewById(R.id.tv_hello)</code> 方法，通过刚才起的编号把控件对象‘取’出来。</p>
+</li>
+<li><p>然后，调用控件的 <code>setText(&quot;你好，世界&quot;)</code> 方法，赋予它新的内容。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>通过这种方式，原本死板的静态界面就具有了动态交互的能力。大家看大屏幕上的图 2-20，界面已经成功从英文变成了中文，这正是 Java 逻辑驱动界面刷新的结果。”</p>
+<p><strong>问题：</strong> 在 Java 代码中调用 <code>findViewById</code> 方法之前，为什么必须先执行 <code>setContentView</code> 方法？</p>
+<p><strong>解答：</strong> 因为 <code>setContentView</code> 方法的作用是根据 XML 布局文件生成真实的界面视图对象。如果尚未调用该方法，当前的活动界面（Activity）就是‘空’的，没有任何控件存在。此时若直接调用 <code>findViewById</code> 去查找某个 ID 的控件，会因为找不到目标而返回 <code>null</code>，进而导致程序运行崩溃（报空指针异常）。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.4 App 的活动页面：创建新的 App 页面
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **1. 创建 XML 布局**：`res/layout` 右键新建，定义页面静态外观。
+- **2. 创建 Java 类**
+    - **继承**：必须继承 `AppCompatActivity`。
+    - **关联**：`onCreate` 中调用 `setContentView` 加载布局
+- **3. 配置文件注册**
+    - **位置**：在 `AndroidManifest.xml` 的 `application` 节点内
+    - **作用**：登记页面“身份”，缺失会导致 `ActivityNotFound` 崩溃。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 47%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 2 章 Android App开发基础/file-20260129170607727.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 90%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 90%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “刚才我们学习了如何通过 Java 代码控制首页的显示逻辑。但大家知道，一个稍微复杂点的 App 都不可能只有一个界面。比如微信有‘聊天’页也有‘朋友圈’页。那么，当我们需要在项目中增加第二个、第三个页面时，应该怎么做呢？这可不是简单的文件复制，而是需要‘三步走’的标准化流程。”</p>
+<p><strong>（核心内容讲解）</strong> “第一步，我们要为新页面准备‘皮肤’，即<strong>创建 XML 文件</strong>。在 <code>layout</code> 目录上点击右键，通过 <code>New → XML → Layout XML File</code> 来新建。起名时要规范，比如 <code>activity_main2</code>。</p>
+<p>第二步，我们要为新页面注入‘灵魂’，即<strong>创建 Java 代码</strong>。在 <code>java</code> 包名目录下新建一个 Java Class（如 <code>Main2Activity</code>）。最关键的一点是：这个类必须继承 <code>AppCompatActivity</code>，并且要在 <code>onCreate</code> 方法里通过 <code>setContentView</code> 关联刚才创建的那个 XML 布局。</p>
+<p>第三步，也是初学者最容易遗漏的一步：<strong>注册页面配置</strong>。Android 系统非常严格，任何一个页面（Activity）如果没有在 <code>AndroidManifest.xml</code> 这个‘户口本’里登记，系统是绝对不会允许它运行的。我们需要在 <code>application</code> 节点下添加一行 <code>&lt;activity android:name=&quot;.Main2Activity&quot; &gt;&lt;/activity&gt;</code>。</p>
+<p>只有完成了这‘三位一体’的操作：有了 XML 布局、有了 Java 逻辑、并在清单文件中注册了身份，一个新的页面才算正式诞生。”</p>
+<h3 id="互动问答">互动问答</h3>
+<p><strong>问题：</strong> 如果我在 Java 代码中已经写好了新 Activity 的类，但在 <code>AndroidManifest.xml</code> 中忘记注册它，当程序尝试跳转到这个新页面时会发生什么？</p>
+<p><strong>解答：</strong> App 会直接<strong>崩溃退出（闪退）</strong>。 系统会抛出一个名为 <code>ActivityNotFoundException</code>（未找到活动页面异常）的错误。因为 Android 系统的安全机制要求所有四大组件（Activity 为其一）必须在清单文件中显式声明，否则系统会认为该组件是不合法的，从而拒绝启动。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.4 App 的活动页面：快速生成页面源码
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 69%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **操作流程**
+    - **入口**：右击包名 → `New` → `Activity` → `Empty Activity`
+    - **配置**：仅需填写 `Activity Name`，系统自动补全布局名
+- **自动化成果**
+    - **资源生成**：同步产生 XML 布局与 Java 源码
+    - **代码注入**：Java 类自动继承并关联对应布局
+    - **自动注册**：清单文件（Manifest）内自动补全 `<activity>` 节点
+- **核心优势**：提升效率，减少手动配置引起的 `ActivityNotFound` 错误
+</div>
+
+<div class="" style="position: absolute; left: 68%; top: 15%; height: 65%; width: 32%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 2 章 Android App开发基础/file-20260129170804138.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+在使用 Android Studio 的快速创建功能（Empty Activity 模板）时，为什么修改 Activity Name 后，Layout Name 会跟着自动改变？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “在上一小节中，我们手动完成了创建 XML、编写 Java 代码以及在清单文件中注册这‘三步走’流程。虽然这种方式有助于理解底层逻辑，但在实际开发中，如果每个页面都这样操作，效率确实太低了。那么，有没有更快捷的方法呢？其实 Android Studio 为我们提供了一个‘一键式’的解决方案，只需一个对话框就能自动完成所有繁琐步骤。”</p>
+<p><strong>（核心内容讲解）</strong> “这个高效的方法就是利用 <strong>New Activity 模板</strong>。</p>
+<p>首先，在项目结构图中右击你的代码包名，依次选择 <strong>New → Activity → Empty Activity</strong>。</p>
+<p>随后会弹出一个页面创建对话框。这里非常智能：当你输入 <strong>Activity Name</strong>（如 <code>Main2Activity</code>）时，系统会自动为你同步生成对应的 <strong>Layout Name</strong>（如 <code>activity_main2</code>）。</p>
+<p>点击 <strong>Finish</strong> 后，Android Studio 会在后台帮你完成三件大事：</p>
+<ol>
+<li>在 <code>layout</code> 目录下自动生成 XML 布局文件。</li>
+<li>在 <code>java</code> 目录下生成 Java 类，并自动写好 <code>setContentView</code> 关联代码。</li>
+<li>最关键的是，它会自动在 <code>AndroidManifest.xml</code> 中完成页面注册。</li>
+</ol>
+<p>这种方式不仅提高了开发效率，更重要的是避免了手动注册时可能出现的遗漏或笔误。”</p>
+<p><strong>问题：</strong> 在使用 Android Studio 的快速创建功能（Empty Activity 模板）时，为什么修改 Activity Name 后，Layout Name 会跟着自动改变？这种自动命名的规则通常是什么？</p>
+<p><strong>解答：</strong> 这是为了遵循 Android 的<strong>命名规范</strong>。通常情况下，Activity 使用<strong>大驼峰命名法</strong>（如 <code>LoginActivity</code>），而对应的布局文件则采用<strong>小写加下划线</strong>的逆向命名法（如 <code>activity_login</code>）。Android Studio 自动同步这一命名，是为了让代码逻辑类与界面资源文件在视觉上保持一一对应，极大地方便了后期的维护与查找。</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2.4 App 的活动页面：快速生成页面源码
+</div>
+
+<div class="" style="line-height: 1.6; position: absolute; left: 0%; top: 15%; height: 65%; width: 57%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **页面跳转核心：Intent (意图)**
+    - **功能**：连接源页面与目标页面的桥梁。
+    - **语法**：`startActivity(new Intent(源页面.this, 目标页面.class))`。
+- **延迟任务工具：Handler**
+    - **核心方法**：`postDelayed(Runnable, delayMillis)`。
+    - **时间单位**：毫秒（例如 3000 毫秒 = 3 秒）。
+- **实验方案：自动跳转流**
+    - **触发位置**：在 `onResume` 生命周期中调用跳转逻辑。
+    - **视觉反馈**：首页文本提示 → 3 秒倒计时 → 目标页展示。
+</div>
+
+<div class="" style="position: absolute; left: 52%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+@Override  
+protected void onResume(){  
+    super.onResume();  
+    goNextPage();  
+}  
+protected void goNextPage(){  
+    TextView tv_helloworld = findViewById(R.id.tv_helloworld);  
+    tv_helloworld.setText("等三秒钟");  
+    new Handler(Looper.myLooper()).postDelayed(mGoNext,3000);  
+}  
+```
+```java
+private Runnable mGoNext = new Runnable() {  
+    @Override  
+    public void run() {  
+        startActivity(new Intent(MainActivity.this,
+            MainActivity2.class));  
+    }  
+};
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+在进行页面跳转的代码 `new Intent(MainActivity.this, Main2Activity.class)` 中，为什么第一个参数有时写 `this`，有时又必须写 `MainActivity.this`？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “在上一个小节，我们掌握了‘一键式’创建新页面的黑科技。现在，我们的 App 里已经有两个房间（页面）了。但如果这两个房间是孤立的，用户就无法在它们之间走动。那么，如何实现从 A 页面到 B 页面的‘穿梭’呢？今天我们要学习 Android 开发中极其重要的一个动作：<strong>页面跳转</strong>。”</p>
+<p><strong>（核心内容讲解）</strong> “在 Android 中，页面跳转的核心指令是 <code>startActivity</code>，而实现跳转的媒介叫做 <strong>Intent（意图）</strong>。你可以把它想象成一张‘传送门票’，上面写着出发地（源页面.this）和目的地（目标页面.class）。最常用的跳转格式如下：</p>
+<p>Java</p>
+<pre><code>// 从当前页面跳转到名为 Main2Activity 的目标页面
+startActivity(new Intent(this, Main2Activity.class));
+</code></pre>
+<p>为了让大家直观感受到跳转效果，我们设计了一个有趣的实验：让 App 启动后在首页停留 3 秒，然后自动‘闪现’到新页面。</p>
+<p>这里我们引入了一个新工具——<strong>Handler</strong>。通过它的 <code>postDelayed</code> 方法，我们可以设定一个延迟任务。第一个参数是我们要执行的‘跳转任务’，第二个参数是延迟时间，注意单位是毫秒，所以 3 秒要写成 <strong>3000</strong>。</p>
+<p>我们在 <code>onResume</code> 方法中触发这个逻辑。当 App 运行后，首页会先显示‘3秒后进入下个页面’，随后 Handler 开始倒计时。时间一到，<code>mGoNext</code> 任务就会被执行，通过 Intent 启动 <code>Main2Activity</code>。大家看图 2-27 和 2-28，这就是从首页成功跳转到第二个页面的完整过程。”</p>
+<h3 id="互动问答">互动问答</h3>
+<p><strong>问题：</strong> 在进行页面跳转的代码 <code>new Intent(MainActivity.this, Main2Activity.class)</code> 中，为什么第一个参数有时写 <code>this</code>，有时又必须写 <code>MainActivity.this</code>？</p>
+<p><strong>解答：</strong> 这涉及到 Java 内部类的作用域问题：</p>
+<ol>
+<li><p>**直接使用 <code>this</code>**：当跳转代码直接写在 Activity 的普通方法（如 <code>goNextPage</code>）中时，<code>this</code> 就代表当前的 Activity 实例。</p>
+</li>
+<li><p>**使用 <code>MainActivity.this</code>**：在本次实验中，跳转逻辑写在了 <code>Runnable</code> 匿名内部类的 <code>run</code> 方法里。此时如果只写 <code>this</code>，它指向的是这个 <code>Runnable</code> 任务对象，而不是页面。为了明确告诉编译器我们要从“那个 Activity 页面”出发，必须使用 <code>类名.this</code> 进行限定。</p>
+</li>
+</ol>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **本章知识要点回顾**
+    - **App 开发特点**：运行环境、多种开发语言协作及数据库访问架构。
+    - **App 工程结构**：目录体系、`build.gradle` 编译配置及清单文件。
+    - **App 设计规范**：XML 界面设计与 Java 逻辑解耦，实现动态刷新。
+    - **App 活动页面**：页面的手动/自动创建流程、Activity 注册与 Intent 跳转。
+- **学习成果要求**
+    - 了解 App 开发核心概念，熟悉工程组织形式。
+    - **核心技能**：熟练使用 Android Studio 完成页面创建与基本逻辑编写。
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260113114548275.png" alt="" style="width: 400px; object-fit: fill">
+
+</div>
+
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《 Android 嵌入式软件开发》
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “同学们，到这里我们已经完成了第二章《Android App 开发基础》的全部内容学习。从最初的开发环境运行机制，到亲手实现页面之间的跳转，我们已经跨越了 Android 开发最基础也是最关键的门槛。现在，让我们站位全局，快速复盘一下本章的核心知识体系。”</p>
+<p><strong>（核心内容讲解）</strong> “在本章中，我们首先探讨了 <strong>App 的开发特点</strong>。大家理解了 App 必须依附于操作系统，掌握了 Java/XML/C++ 等多种语言的协作关系，并理清了手机本地 SQLite 与后端 MySQL 数据库的访问逻辑。</p>
+<p>随后，我们‘解剖’了 <strong>App 的工程结构</strong>。大家现在应该对 <code>build.gradle</code> 如何配置编译规则、<code>AndroidManifest.xml</code> 如何注册组件名、以及 <code>res</code> 目录如何分类存放资源烂熟于心了。</p>
+<p>在 <strong>设计规范</strong> 方面，我们重点强调了‘界面设计与代码逻辑分离’。通过 XML 描绘静态界面，利用 Java 处理动态业务逻辑，这种前后端分离的思维是后续所有高级开发的基础。</p>
+<p>最后，我们实操了 <strong>活动页面（Activity）</strong> 的创建与跳转。无论是手动的‘三步走’，还是 Android Studio 的一键快速生成，大家已经能够通过 Intent 实现页面间的灵活穿梭，并利用 Handler 处理延迟任务。</p>
+<p>通过本章学习，大家已经从一个‘围观者’正式转变为‘入门开发者’。希望大家在课后能够独立复现项目的组织形式，并熟练操作 Android Studio 完成简单功能的开发。”</p>
+<!-- .slide: data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《 Android 嵌入式软件开发》
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1080,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>
