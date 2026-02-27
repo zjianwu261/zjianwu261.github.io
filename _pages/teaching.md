@@ -16,13 +16,9 @@ author_profile: true
 
 ## 📖 2、章节资源（Slides / Video）
 
-### 第1章 Android Studio 环境搭建
-[📘 课件](/course-materials/2026春Android嵌入式软件开发/课件第%201%20章%20Android%20Studio环境搭建/index.html)  
-[🎬 视频]()
+- 第1章 Android Studio 环境搭建：[📘 课件](/course-materials/2026春Android嵌入式软件开发/课件第%201%20章%20Android%20Studio环境搭建/index.html)  、[🎬 视频]()
 
-### 第2章 Android App 开发基础
-[📘 课件](/course-materials/2026春Android嵌入式软件开发/课件第%202%20章%20Android%20App开发基础/index.html)  
-[🎬 视频]()
+- 第2章 Android App 开发基础：[📘 课件](/course-materials/2026春Android嵌入式软件开发/课件第%202%20章%20Android%20App开发基础/index.html)  、[🎬 视频]()
 
 ## 📝 3、作业与实验（Homework / Lab）
 
@@ -41,45 +37,26 @@ author_profile: true
 
 - [📖 手把手教你学51单片机（第2版）](/files/mcu-2025/2020朱雪松+手把手教你学51单片机——C语言版（第2版）（计算机科学与技术丛书）.pdf)
 
-
 ## 📖 2、章节资源（Slides / Video）
 
-### 第1章 如何学习单片机  
+- 第1章 如何学习单片机  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第1章%20如何学习单片机/index.html)  、[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115405821577931)
 
-[📘 课件](/course-materials/2025秋单片机原理与应用/课件第1章%20如何学习单片机/index.html)  
-[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115405821577931)
+- 第2章 点亮你的LED  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第2章%20点亮你的LED/index.html)  、[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115405855262767)
 
-### 第2章 点亮你的LED  
-[📘 课件](/course-materials/2025秋单片机原理与应用/课件第2章%20点亮你的LED/index.html)  
-[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115405855262767)
-
-### 第3章 硬件基础知识学习  
-[📘 课件](/course-materials/2025秋单片机原理与应用/课件第3章%20硬件基础知识学习/index.html)  
+- 第3章 硬件基础知识学习  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第3章%20硬件基础知识学习/index.html)  
 [🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115405838354588)
 
-### 第4章 C语言基础以及流水灯的实现  
-[📘 课件](/course-materials/2025秋单片机原理与应用/课件第4章%20C语言基础以及流水灯的实现/index.html)  
-[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115405838355597)
+- 第4章 C语言基础以及流水灯的实现  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第4章%20C语言基础以及流水灯的实现/index.html)  、[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115405838355597)
 
-### 第5章 定时器与数码管基础  
-[📘 课件](/course-materials/2025秋单片机原理与应用/课件第5章%20定时器与数码管基础/index.html)  
-[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115484221508744)
+- 第5章 定时器与数码管基础  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第5章%20定时器与数码管基础/index.html)  、[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115484221508744)
 
-### 第6章 中断与数码管动态显示  
-[📘 课件](/course-materials/2025秋单片机原理与应用/课件第6章%20中断与数码管动态显示/index.html)  
-[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115507743359042)
+- 第6章 中断与数码管动态显示  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第6章%20中断与数码管动态显示/index.html)  、[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115507743359042)
 
-### 第7章 变量进阶与点阵LED  
-[📘 课件](/course-materials/2025秋单片机原理与应用/课件第7章%20变量进阶与点阵LED/index.html)  
-[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115528932787869)
+- 第7章 变量进阶与点阵LED  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第7章%20变量进阶与点阵LED/index.html)  、[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115528932787869)
 
-### 第8章 函数进阶与按键  
-[📘 课件](/course-materials/2025秋单片机原理与应用/课件第8章%20函数进阶与按键/index.html)  
-[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115586260664359)
+- 第8章 函数进阶与按键  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第8章%20函数进阶与按键/index.html)  、[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115586260664359)
 
-### 第9章 综合练习  
-[📘 课件](/course-materials/2025秋单片机原理与应用/课件第9章%20综合练习/index.html)  
-[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115875667642300)
+- 第9章 综合练习  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第9章%20综合练习/index.html)  、[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115875667642300)
 
 ## 📝 3、作业与实验（Homework / Lab）
 
