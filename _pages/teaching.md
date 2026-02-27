@@ -12,7 +12,7 @@ author_profile: true
 
 ## 📚 1、教材
 
-- [📖 Android Studio开发实战（第3版）](/files/Android-2026/2022欧阳燊%20+%20Android%20studio开发实战：从零基础到App上线（第3版）上.pdf)
+- [Android Studio开发实战（第3版）](/files/Android-2026/2022欧阳燊%20+%20Android%20studio开发实战：从零基础到App上线（第3版）上.pdf)
 
 ## 📖 2、章节资源（Slides / Video）
 
@@ -35,7 +35,7 @@ author_profile: true
 
 ## 📚 1、教材
 
-- [📖 手把手教你学51单片机（第2版）](/files/mcu-2025/2020朱雪松+手把手教你学51单片机——C语言版（第2版）（计算机科学与技术丛书）.pdf)
+- [手把手教你学51单片机（第2版）](/files/mcu-2025/2020朱雪松+手把手教你学51单片机——C语言版（第2版）（计算机科学与技术丛书）.pdf)
 
 ## 📖 2、章节资源（Slides / Video）
 
