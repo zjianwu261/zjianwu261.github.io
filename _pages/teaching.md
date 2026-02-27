@@ -43,8 +43,7 @@ author_profile: true
 
 - 第2章 点亮你的LED  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第2章%20点亮你的LED/index.html)  、[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115405855262767)
 
-- 第3章 硬件基础知识学习  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第3章%20硬件基础知识学习/index.html)  
-[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115405838354588)
+- 第3章 硬件基础知识学习  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第3章%20硬件基础知识学习/index.html)  、[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115405838354588)
 
 - 第4章 C语言基础以及流水灯的实现  ：[📘 课件](/course-materials/2025秋单片机原理与应用/课件第4章%20C语言基础以及流水灯的实现/index.html)  、[🎬 视频](https://www.bilibili.com/list/300919826/?sid=4995290&oid=115405838355597)
 
