@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 50%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第1章 Android Studio环境搭建/file-20241114161819034.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 60%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第 4 章 常用组件
+</div>
+
+<div class="" style="line-height: 3.5; position: absolute; left: 0%; top: 70%; height: 30%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《Android 嵌入式软件开发》<br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div>
+
+<aside class="notes"><p>各位同学大家好，欢迎再次来到《Android嵌入式软件开发》课堂，我是来自合肥大学人工智能与大数据学院的张建武老师。本章是 常用组件</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本次课主要内容
+</div>
+
+<div class="" style="line-height: 2; font-size: 45px; position: absolute; left: 0%; top: 20%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 4.1 启停活动页面
+- 4.2 在活动之间传递消息
+- 4.3 为活动补充附加信息
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 20%; height: 60%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260113120012540.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《Android嵌入式软件开发》
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：按钮触发页面跳转
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **从自动到主动：交互升级**
+    - 告别第2章的3秒定时跳转，改由用户点击触发
+- **核心实现步骤**
+    - **注册监听：** Activity实现`View.OnClickListener`接口
+    - **绑定控件：** `findViewById`获取按钮并设置`setOnClickListener(this)`
+    - **逻辑编写：** 在`onClick`回调中编写跳转代码
+</div>
+
+<div class="" style="position: absolute; left: 42%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+// ActStartActivity.java
+// 活动类直接实现点击监听器的接口View.OnClickListener
+public class ActStartActivity extends AppCompatActivity implements View.OnClickListener {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_act_start);
+        findViewById(R.id.btn_act_next).setOnClickListener(this);
+    }
+```
+```java
+    @Override
+    public void onClick(View v) { // 点击事件的处理方法
+        if (v.getId() == R.id.btn_act_next) {
+            // 从当前页面跳到指定的新页面
+            // startActivity(new Intent(ActStartActivity.this, ActFinishActivity.class));
+            startActivity(new Intent(this, ActFinishActivity.class));
+        }
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><h3 id="承上启下：转场词">承上启下：转场词</h3>
+<p>同学们，在第二章的时候，我们已经初步接触了 startActivity 方法。但大家一定还记得，那时候我们还没学按钮，为了演示跳转，只能无奈地让页面倒计时 3 秒后自动起飞。这种体验显然不符合用户习惯。今天，既然我们已经掌握了按钮控件，是时候把跳转的主动权交还给用户了！</p>
+<h3 id="正文讲解">正文讲解</h3>
+<p>请看大屏上的这段代码。我们现在不再使用定时器，而是通过实现 View.OnClickListener 接口来监听按钮的点击动作。</p>
+<ul>
+<li><p><strong>注册监听：</strong> 在 onCreate 中，我们通过 findViewById 找到那个 ID 为 btn_act_next 的按钮，并调用 setOnClickListener(this)。这里的 this 就代表当前的 Activity，因为它已经实现了监听接口。</p>
+</li>
+<li><p><strong>触发跳转：</strong> 当用户手指点下去时，系统会自动回调 onClick 方法。</p>
+</li>
+<li><p><strong>核心逻辑：</strong> 在 onClick 内部，我们通过 startActivity 启动一个新的 Intent。大家注意看这段代码：</p>
+<p>  <code>$startActivity(new Intent(this, ActFinishActivity.class));$</code></p>
+<p>  这里我们指向了一个名为 ActFinishActivity 的新页面。</p>
+</li>
+</ul>
+<h3 id="视觉引导">视觉引导</h3>
+<p>大家观察图 4-1，这个新页面长得很有代表性：左上角有一个返回箭头，中间有一个绿色的完成按钮。在移动开发中，除了手机底部的物理返回键，用户更习惯点击这两个位置来结束当前任务。那么，如何让这些按钮点一下就能关掉当前页面回到上一步呢？这将是我们接下来的重点。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：主动关闭页面——finish方法
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **页面返回逻辑**
+    - 场景：点击左上角箭头或“完成”按钮主动返回  
+    - 原理：关闭当前页面（B），自动展示上一个页面（A）
+- **核心方法：finish()**
+    - 语义：Android中页面即“活动”（Activity）
+    - 区别：使用 `finish` 结束活动，而非 `close` 关闭文件
+- **实现步骤**
+    - **注册监听：** 为返回图标和完成按钮设置点击监听器
+    - **逻辑执行：** 在 `onClick` 方法中调用 `finish()`
+</div>
+
+<div class="" style="position: absolute; left: 54%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+// ActFinishActivity.java
+// 活动类直接实现点击监听器的接口View.OnClickListener
+public class ActFinishActivity extends AppCompatActivity 
+		implements View.OnClickListener {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_act_finish);
+        // 给箭头图标注册点击监听器，ImageView由View类派生而来
+        findViewById(R.id.iv_back).setOnClickListener(this);
+        // 给完成按钮注册点击监听器，Button也由View类派生而来
+        findViewById(R.id.btn_finish).setOnClickListener(this);
+    }
+```
+```java
+    @Override
+    public void onClick(View v) { // 点击事件的处理方法
+        if (v.getId() == R.id.iv_back || v.getId() == R.id.btn_finish) {
+            finish(); // 结束当前的活动页面
+        }
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><h3 id="承上启下：转场词">承上启下：转场词</h3>
+<p>刚才我们学习了如何从 A 页面跳到 B 页面，开启了新的活动。但在实际应用中，用户完成操作后总要回来。大家在手机上经常会看到左上角的返回箭头，或者底部的完成按钮，这些控件都要求 App 能够主动结束当前任务并撤回。那么，在代码层面，我们要如何实现这种撤回动作呢？</p>
+<h3 id="正文讲解">正文讲解</h3>
+<p>请大家看这段来自 ActFinishActivity 的逻辑。要实现点击返回，核心就在于一个方法：<code>finish()</code>。</p>
+<ul>
+<li><p><strong>原理解析：</strong> 移动开发中，打开页面本质是启动一个 Activity，而关闭页面则是结束这个 Activity。所以 Android 提供的函数名非常讲究，叫 <code>startActivity</code> 而不是 <code>open</code>，叫 <code>finish</code> 而不是 <code>close</code>。</p>
+</li>
+<li><p><strong>实现步骤：</strong> 1. 首先，我们要给页面上的返回箭头图标和完成按钮分别注册点击监听器。 2. 接着，在统一的 <code>onClick</code> 回调方法中，识别出是哪个控件被点击了。 3. 最后，只要执行 <code>finish()</code> 语句，系统就会自动销毁当前的 B 页面，把底层的 A 页面重新推到用户面前。</p>
+</li>
+</ul>
+<p>这就好比看书，你翻开了新的一页（start），看完后把这一页揭过去（finish），自然就看到了之前的那一页。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：Activity的生命周期
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 68%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **活动（Activity）的本质**
+    - 动态性：具备从创建到销毁的完整生命过程
+- **生命周期核心阶段**
+    - **创建与开启：** `onCreate`（加载布局）、`onStart`（页面可见）
+    - **交互高光：** `onResume`（进入活跃状态，支持用户操作） 
+    - **暂停与停止：** `onPause`（停止交互）、`onStop`（页面不可见）
+    - **回收与销毁：** `onDestroy`（释放资源，从内存清除）
+- **特殊运行路径**
+    - **重启机制：** `onRestart`（后台切换回前台，跳过重复创建）
+    - **实例重用：** 配合启动模式，触发 `onNewIntent` 避免重复实例化
+</div>
+
+<div class="" style="position: absolute; left: 63%; top: 15%; height: 65%; width: 38%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 4 章 常用组件/deepseek_mermaid_20260306_ae5bb2.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><h3 id="承上启下：转场词">承上启下：转场词</h3>
+<p>刚才我们学会了如何跳转和关闭页面，大家可能会觉得，Activity 就像一张纸，翻开就有，合上就没了。但实际上，Android 引入活动（Activity）这个概念，就是为了强调它的动态性。它不像静态的网页，而更像一个有生命周期的生物，经历着从含苞待放到凋零枯萎的过程。</p>
+<h3 id="正文讲解">正文讲解</h3>
+<p>请看大屏，这就是 Activity 完整的生命周期。我们平时在 Java 代码里最常看到的 <code>onCreate</code>，仅仅是它生命的起点。</p>
+<ul>
+<li><p><strong>出生与亮相（创建与开启）：</strong> * <code>onCreate</code> 负责把布局加载进内存，就像准备好舞台。</p>
+<ul>
+<li><code>onStart</code> 让页面出现在屏幕上，此时观众能看到舞台，但表演还没正式开始。</li>
+</ul>
+</li>
+<li><p><strong>高光时刻（恢复与交互）：</strong> * <code>onResume</code> 是最重要的状态，此时活动进入活跃期，用户可以点击按钮、输入文字，交互正式开启。</p>
+</li>
+<li><p><strong>谢幕与离场（暂停、停止与销毁）：</strong> * 当页面被遮挡或切换时，会经历 <code>onPause</code>（暂停交互）和 <code>onStop</code>（隐入后台）。</p>
+<ul>
+<li>如果调用了我们之前讲的 <code>finish</code> 方法，活动就会走到 <code>onDestroy</code>，彻底从内存中抹除，回收资源。</li>
+</ul>
+</li>
+<li><p><strong>特殊路径：</strong> * 如果活动只是由于切换回到了后台，再次回来时会走 <code>onRestart</code>，跳过重复创建的过程。</p>
+<ul>
+<li>此外，如果使用了特殊的启动模式（如 singleTask），系统可能会重用已有的实例，这时就会触发 <code>onNewIntent</code> 而不是重新 <code>onCreate</code>。</li>
+</ul>
+</li>
+</ul>
+<p>大家可以参考图的状态切换图，理解这些方法是如何串联起一个 App 的运行状态的</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：Activity的启动模式
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **任务栈（Task Stack）核心机制**
+    - 遵循先进后出（FILO）逻辑，管理活动页面开关。
+    - **入栈（Push）：** 活动按顺序叠加，栈顶活动为当前可见界面。
+    - **出栈（Pop）：** 结束栈顶活动后，下方活动自动显露。
+- **返回逻辑验证**
+    - 示例：A → B → C 入栈，点击返回键则按 C → B → A 销毁。
+    - 只有当栈内所有活动均出栈，App 才会退回桌面。
+- **启动模式（LaunchMode）设置**
+    - **静态设置：** 在 AndroidManifest.xml 的 activity 节点配置属性。
+    - **动态设置：** 在代码中调用 Intent 对象的 setFlags 方法。
+</div>
+
+<div class="" style="position: absolute; left: 64%; top: 15%; height: 65%; width: 36%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 4 章 常用组件/file-20260307101509995.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 4 章 常用组件/file-20260307101645303.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><h3 id="1-承上启下（转场白）">1. 承上启下（转场白）</h3>
+<p>大家好！在上一小节中，我们观察到一个很有趣的现象：当我们从活动 A 跳到 B，结束 B 之后，手机会自动回到 A。大家有没有想过，系统是怎么记住来时的路的？为什么它不直接退回桌面，或者跳到其他 App 呢？</p>
+<p>这背后的核心机制，就是 Android 的<strong>任务栈（Task Stack）</strong>。下面我们来拆解一下它的内部逻辑。</p>
+<h3 id="2-核心内容讲解">2. 核心内容讲解</h3>
+<p>Android 为每个运行的 App 都分配了一个活动栈。请大家看幻灯片上的<strong>图 4-7</strong>。</p>
+<ul>
+<li><p><strong>入栈（Push）：</strong> 栈遵循先进后出、后进先出的原则。当我们依次打开活动 A、B、C 时，它们就像叠盘子一样被压入栈中。此时，位于最顶端的活动 C 就是用户当前看到的界面。</p>
+</li>
+<li><p><strong>出栈（Pop）：</strong> 请看<strong>图 4-8</strong>。当用户点击返回键或调用 finish() 方法时，栈顶的活动会被弹出并销毁。如果 C 出栈了，原本压在下面的 B 就自然而然地显露出来，成为了新的栈顶。</p>
+</li>
+</ul>
+<p>这就是为什么活动 C 结束会回到 B，而不是直接回到桌面——因为 B 还在栈里等着呢。只有当栈内所有活动都出栈后，App 才会彻底退出。</p>
+<h3 id="3-进阶引出">3. 进阶引出</h3>
+<p>不过，这种老老实实的排队方式只是系统的<strong>默认标准模式</strong>。在实际开发中，我们有时需要改变这种行为。比如，点击回到首页时，我们希望把中间所有的活动全部清空。</p>
+<p>要实现这种控制，我们可以通过两种方式设置<strong>启动模式（LaunchMode）</strong>：</p>
+<ol>
+<li><p>在 AndroidManifest.xml 中静态配置属性 android:launchMode。</p>
+</li>
+<li><p>在代码中通过 Intent 对象的 setFlags 方法动态设置。</p>
+</li>
+</ol>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：Activity 启动模式配置与应用
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 64%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **配置方式：静态声明与动态设置**
+    - **静态配置**：在 `AndroidManifest.xml` 中使用 `android:launchMode`。
+    - **动态设置**：在代码中通过 `Intent.setFlags()` 传入标志位。
+- **核心 Intent 标志位解析**
+    - **SINGLE_TOP**：若目标已在栈顶则重用，防止重复创建。
+    - **CLEAR_TOP**：清除目标活动上方所有实例，实现栈内清理。
+    - **CLEAR_TASK**：清空整个任务栈，常配合 `NEW_TASK` 用于登录跳转。
+- **实战场景预览**：交替跳转逻辑优化、登录成功后的页面栈清理。
+</div>
+
+<div class="" style="font-size: 20px; position: absolute; left: 62%; top: 15%; height: 65%; width: 38%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 4 章 常用组件/file-20260307165041248.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><h3 id="承上启下：开场白">承上启下：开场白</h3>
+<p>大家好。在上一节中，我们共同探讨了 Android 任务栈的基本概念，了解了系统默认是如何管理 Activity 的。但在实际的嵌入式软件开发中，为了优化内存和提升用户体验，我们往往需要手动干预 Activity 的入栈行为。</p>
+<p>今天这节课，我们就来重点学习如何通过配置文件和代码标志位，灵活地控制活动的启动模式。</p>
+<h3 id="核心内容讲解">核心内容讲解</h3>
+<p>首先，最常见的方法是在 AndroidManifest.xml 配置文件中进行静态指定。 大家看屏幕上的代码示例。在 activity 节点中，我们通过添加 android:launchMode 属性来定义。比如这里赋值为 standard，这就是系统默认的标准模式。即便你不写这个属性，系统也会默认采用这种一板一眼的入栈方式。</p>
+<p>然而，在复杂的业务逻辑中，静态配置往往不够灵活。这时候，我们就需要用到 Intent 类的启动标志，也就是代码中的 Flag。</p>
+<p>请大家查阅表 4-2 的详细说明。这里有几个关键点需要大家通过对比来记忆：</p>
+<ul>
+<li><strong>FLAG_ACTIVITY_SINGLE_TOP</strong>：它完美对应了配置里的 singleTop。如果目标活动已经在栈顶，它会选择重用而不是新建，避免了页面的重复堆叠。</li>
+<li><strong>FLAG_ACTIVITY_CLEAR_TOP</strong>：这像是一个清理工。当目标活动已在栈中时，它会把该活动之上的所有实例全部清除。</li>
+<li><strong>FLAG_ACTIVITY_CLEAR_TASK</strong>：这是一个非常强力的标志。它会配合 NEW_TASK 使用，直接清空原有的活动栈，常用于登录成功或退出登录的场景。</li>
+</ul>
+<h4 id="过渡引向后续">过渡引向后续</h4>
+<p>掌握了这些配置和标志位的理论基础后，接下来我们将通过两个实战案例，即两个活动间的交替跳转，以及登录成功后不再返回登录页面的逻辑，来具体看看这些属性是如何在代码中生根发芽的。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：在两个活动之间交替跳转
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 63%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **典型场景与痛点分析**
+    - 场景：活动 A 与 B 之间通过按钮轮流跳转。
+    - 痛点：默认模式导致实例重复堆叠，需多次按返回键才能回首页
+- **设计目标：单次返回原则**
+    - 逻辑：无论跳转多少次，每个活动仅保留一个实例，简化回退路径。
+- **技术方案：FLAG_ACTIVITY_CLEAR_TOP**
+    - 运行机制：若目标活动已在栈中，则清除其上方所有实例。
+    - 代码实现：在 Intent 跳转时调用 `setFlags` 方法设置该标志位
+</div>
+
+<div class="" style="position: absolute; left: 62%; top: 15%; height: 65%; width: 38%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+// JumpFirstActivity.java
+Intent intent = new Intent(this, 
+		JumpSecondActivity.class);
+intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+startActivity(intent); // 跳转到意图对象指定的活动页面
+```
+```java
+// JumpSecondActivity.java
+Intent intent = new Intent(this, 
+		JumpFirstActivity.class);
+intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+startActivity(intent); // 跳转到意图指定的活动页面
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们详细了解了启动标志位的理论定义。那么在实际开发中，这些标志位到底能解决什么具体问题呢？下面请大家看一个非常经典的场景：两个页面之间的交替跳转。</p>
+<p><strong>核心逻辑讲解</strong> 请大家看这张流程图。假设我们有活动 A 和活动 B，它们之间可以互相跳转。如果不加干预，用户在 A 和 B 之间点了十次跳转，系统就会在栈里压入十个实例。</p>
+<ul>
+<li><p><strong>痛点展示</strong>：当用户想回到首页时，他得连续按十次返回键，看着页面像复读机一样在 A 和 B 之间反复横跳。这种体验对于嵌入式设备或手机应用来说，简直是灾难。</p>
+</li>
+<li><p><strong>设计原则</strong>：从逻辑上讲，既然是同一个页面，返回一次就足够了。我们要的效果是：不管过去跳了多少次，回的时候只需两步——从 B 回到 A，再从 A 回到首页。</p>
+</li>
+</ul>
+<p><strong>技术实现方案</strong> 为了打破这个无限循环，我们引入了 <strong>FLAG_ACTIVITY_CLEAR_TOP</strong>。 大家请看屏幕上的关键代码。在 A 跳 B 以及 B 跳 A 的时候，我们都在 Intent 中设置了这个标志位。</p>
+<ul>
+<li><p><strong>运行机制</strong>：它的神奇之处在于，当系统发现目标活动已经在栈里时，它不会盲目地再盖一层，而是像清理工一样，把目标活动上方的所有实例全部清空。</p>
+</li>
+<li><p><strong>最终效果</strong>：通过这行代码，我们确保了任务栈中最多只会有该活动的唯一实例。现在，无论用户在 A 和 B 之间切换了多久，返回路径都被精简到了极致，这就是内存优化与用户体验的双赢。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：登录成功后不再返回登录页面
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **场景引入：焕然一新原则**
+    - 痛点：登录成功后，按返回键不应回到登录或找回密码页。
+    - 目标：彻底清空历史页面，确保返回键直接退出 App。
+- **技术困境与方案选择**
+    - 困境：普通跳转无法销毁栈内所有先前实例。
+    - 核心方案：组合使用双重强力 Intent 标志位。
+- **双剑合璧的 Flag 解析**
+    - **CLEAR_TASK**：清空当前任务栈中的所有活动实例。
+    - **NEW_TASK**：配合前者使用，为目标活动开辟全新任务栈。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+// LoginInputActivity.java
+Intent intent = new Intent(this, 
+		LoginSuccessActivity.class);
+intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | 
+		Intent.FLAG_ACTIVITY_NEW_TASK);
+// 设置启动标志：跳转到新页面时，栈中的原有实例都被清空
+// 同时开辟新任务的活动栈
+startActivity(intent); // 跳转到意图指定的活动页面
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 在处理完了两个页面间的交替跳转后，我们再来看一个更彻底的场景。大家平时用 App 一定发现过：登录成功进入首页后，按返回键会直接退出 App，而不会回到刚才的登录或注册界面。这背后的逻辑是怎么实现的呢？</p>
+<p><strong>核心内容讲解</strong> 这就是我们要聊的焕然一新原则。</p>
+<ul>
+<li><p><strong>业务逻辑</strong>：一旦用户登录成功，之前的登录、找回密码、验证码等页面就完成了使命，不再具有存在的意义。为了安全和体验，我们必须让 App 忘记这些页面的存在。</p>
+</li>
+<li><p><strong>技术困境</strong>：仅靠普通的跳转是不够的，我们需要一次性清空整个活动栈。</p>
+</li>
+</ul>
+<p><strong>解决方案：双剑合璧的 Flag</strong> 请大家看屏幕上的这行关键代码，我们同时使用了两个强力标志位：</p>
+<ol>
+<li><p><strong>FLAG_ACTIVITY_CLEAR_TASK</strong>：它像是一枚清空炸弹，会把当前任务栈里的所有活动实例全部清除。</p>
+</li>
+<li><p><strong>FLAG_ACTIVITY_NEW_TASK</strong>：因为栈被清空了，App 需要一个新的容身之所。这个标志位会为我们将要跳转的首页开辟一个新的任务栈。</p>
+</li>
+</ol>
+<p><strong>最终效果</strong> 通过这两个标志位的配合，我们实现了任务栈的重置。跳转后，原本堆积了登录、注册页面的老栈被废弃，新栈中只剩下一个干净的首页。用户此时点击返回，系统发现栈内已无活动，便会直接退出 App，这正是最符合逻辑的操作流程。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：默认启动模式 standard
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 4 章 常用组件/file-20260307174551899.png" alt="" style="object-fit: scale-down">
+
+</div>
+<div class="" style="line-height: 1.6; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **模式地位**
+    - 系统默认：若未在 `manifest` 显式设置，即为此模式。
+- **运行机制**
+    - 顺序压栈：Activity 实例依启动顺序依次入栈
+    - 盲目创建：每次启动均创建新实例，不检查栈内状态。
+- **栈内表现**
+    - 允许重复：同一个 Task 栈内可存在多个相同 Activity 实例。
+    - 先进后出：符合标准栈结构的线性管理逻辑。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 在学习了如何利用 Intent 标志位去手动清理任务栈之后，我们有必要回归本源，看看如果不做任何特殊处理，Android 系统默认是怎么管理页面的。这就是我们今天要聊的：<strong>standard 标准模式</strong>。</p>
+<p><strong>核心内容讲解</strong> 大家请看屏幕。这是 Activity 最基础的启动模式。</p>
+<ul>
+<li><p><strong>默认属性</strong>：在 <code>AndroidManifest.xml</code> 中，如果你没有专门为 <code>&lt;activity&gt;</code> 标签设置 <code>android:launchMode</code> 属性，系统就会默认指定它为 standard。</p>
+</li>
+<li><p><strong>运行逻辑</strong>：它的逻辑可以用四个字来概括——<strong>一板一眼</strong>。每当你调用一次 <code>startActivity</code>，系统都会像在餐盘堆里放盘子一样，不加思考地创建一个全新的 Activity 实例，并把它压入当前的 Task 任务栈顶。</p>
+</li>
+<li><p><strong>关键特征</strong>：standard 模式从不检查栈内是否已经存在相同的页面。哪怕你连续启动十次同一个 Activity，栈里就会实打实地堆叠十个完全相同的实例。</p>
+</li>
+</ul>
+<p><strong>教学小贴士</strong> 理解 standard 模式是掌握其他复杂模式的基础。它就像一个最简单的线性容器，遵循先进后出的原则。在接下来的实战中，我们会发现，正是因为 standard 这种不分青红皂白的入栈方式，才催生了我们之前讲过的那些优化标志位的需求。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：栈顶复用模式 singleTop
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 4 章 常用组件/file-20260307174720921.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.6; position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心逻辑**
+    - **栈顶匹配则复用**：若目标活动已在栈顶，不创建新实例。
+    - **非栈顶则新建**：若不在栈顶，行为与 standard 模式一致
+- **应用场景**
+    - **多渠道调用**：适合从通知栏、外部链接频繁唤起的页面。
+    - **常用手段**：通常配合 Intent 标志位动态设置。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们聊完了标准模式，大家发现它有个明显的缺点：即使是重复的页面也会不停地创建。为了解决这种不必要的内存开销，Android 提供了第二种模式，也就是大家在大屏幕上看到的：<strong>singleTop 栈顶复用模式</strong>。</p>
+<p><strong>核心内容讲解</strong> singleTop 就像是一个聪明的门卫，在创建一个新的 Activity 之前，它会先探头看看栈顶。</p>
+<ul>
+<li><p><strong>判定逻辑</strong>：如果我们要启动的 Activity 恰好已经处于任务栈的<strong>最顶端</strong>，那么系统就会收回新建实例的指令。</p>
+</li>
+<li><p><strong>处理方式</strong>：它不会去走 <code>onCreate</code> 的流程，而是直接复用当前的栈顶实例，并调用该 Activity 的 <code>onNewIntent</code> 方法。</p>
+</li>
+<li><p><strong>应用价值</strong>：这种模式最常用于那些容易被重复点开的页面。比如一个新闻应用的详情页，或者是搜索结果页。当用户已经在看这条新闻时，即使再次触发点击，我们也不希望系统再盖一层一模一样的页面。</p>
+</li>
+</ul>
+<p><strong>教学建议</strong> 请大家记住，singleTop 仅对栈顶有效。如果目标 Activity 在栈里但不在栈顶，它依然会像 standard 模式一样去创建一个新实例。这种有条件的复用，正是它名字中 top 的含义所在。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：栈内复用模式 singleTask
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 4 章 常用组件/file-20260307174948810.png" alt="" style="object-fit: scale-down">
+
+</div>
+<div class="" style="line-height: 1.6; position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心逻辑**
+    - **栈内存在即复用**：扫描全栈，若有实例则不再创建。
+    - **强力清空上方**：弹出并销毁目标活动之上的所有页面。
+- **应用场景**
+    - **App 主界面**：作为程序入口，防止多次创建。
+    - **高能耗页面**：严格控制复杂页面的实例数量，节省资源
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们学习了 singleTop，它只能搞定栈顶的复用。但如果目标页面在栈的中间，甚至最底下呢？这时候 singleTop 就无能为力了。别担心，Android 为我们准备了更强力的方案：<strong>singleTask 栈内复用模式</strong>。</p>
+<p><strong>核心内容讲解</strong> 大家可以把 singleTask 想象成一个带有“强迫症”的清理员。</p>
+<ul>
+<li><p><strong>运行逻辑</strong>：当我们要启动一个 Activity 时，系统会扫描整个任务栈。只要栈里存在这个实例，不管它埋得有多深，系统都会把它揪出来，并把它上方的所有 Activity 全部“踢”出栈，让它重新回到栈顶。</p>
+</li>
+<li><p><strong>关键特征</strong>：它不仅实现了复用，还顺带完成了一次彻底的栈内清理。</p>
+</li>
+</ul>
+<p><strong>典型应用场景</strong> 在嵌入式开发中，这种模式有两个不可替代的用途：</p>
+<ol>
+<li><p><strong>App 主界面</strong>：主页通常是应用的根。我们绝对不希望用户在操作半天后，栈里堆了好几个主页实例。设置为 singleTask 后，无论从哪个深层页面回跳主页，都能保证主页唯一，且一键返回即可退出 App。</p>
+</li>
+<li><p><strong>高能耗 Activity</strong>：对于那些极其消耗 CPU 或内存的页面（比如复杂的绘图或视频渲染页），通过 singleTask 强制全局唯一，是节省系统资源的有效手段。</p>
+</li>
+</ol>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：singleInstance (全局单例)
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 4 章 常用组件/file-20260307180440881.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="line-height: 1.6; position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+- **核心机制：独占任务栈**
+    - **独立建栈**：系统为该 Activity 开辟专用任务栈。
+    - **孤岛模式**：该栈内有且仅能存在这一个 Activity 实例。
+- **全局唯一性**
+    - **系统级单例**：全系统仅存在一个实例，重复调用即唤醒旧栈。
+- **应用价值**
+    - **完全独立页面**：常用于闹钟提醒、来电显示等独立功能。
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 前面我们聊的模式，无论怎么复用，大家基本还都在同一个“锅”里吃饭。但今天我们要请出一位独行侠：<strong>singleInstance 全局单例模式</strong>。它是 Android 启动模式中最特殊的一个，因为它要求“独占一栈”。</p>
+<p><strong>核心内容讲解</strong> 请大家看屏幕，这个模式的逻辑非常简单霸道：</p>
+<ul>
+<li><p><strong>独占新栈</strong>：当你启动一个 singleInstance 的 Activity 时，系统会专门为它开辟一个新的 Task 任务栈。而且这个新栈非常有原则——有且仅能存放这一个 Activity 实例。</p>
+</li>
+<li><p><strong>全局唯一</strong>：一旦这个实例被创建，全系统就这一份。后续无论从哪个 App 再次唤起它，系统都不会再建新栈，而是直接把那个老栈唤醒到前台。</p>
+</li>
+</ul>
+<p><strong>案例拆解（重点）</strong> 大家看这个流程示例。Activity 1 和 2 是标准模式，它们在 A 栈；Activity 3 是 singleInstance，它在 B 栈。</p>
+<ul>
+<li><p><strong>跳转路径</strong>：1 → 2 → 3。此时 3 在前台，1 和 2 所在的 A 栈被挤到了后台。</p>
+</li>
+<li><p><strong>回退路径</strong>：这里是同学们最容易晕的地方。当你从 3 按返回键时，3 所在的 B 栈直接销毁了。由于 A 栈刚才在后台，此时它会被重新唤回前台。</p>
+</li>
+<li><p><strong>最终结果</strong>：你会发现返回顺序不是 3→2→1，而是由栈的交替决定的。如果最后销毁的是唯一的 singleInstance 栈，应用可能直接就退出了。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：动态设置启动模式
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 62%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **设置方式与优先级**
+    - **动态设置**：通过 `intent.setFlags()` 在代码中指定。
+    - **优先级**：动态设置高于 Manifest 中的 `launchMode` 静态配置。        
+- **与 singleInstance 的关键区别**
+    - **栈容量**：`NEW_TASK` 允许后续活动入栈；后者只能独占。
+    - **生效条件**：前者受亲和性限制；后者强制创建新栈。
+- **实战场景**
+    - **非 Activity 环境启动**：从 Service 或广播启动页面时必须添加。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 42%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```
+public class MyReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, 
+		    Intent intent) {
+        Intent newIntent = new Intent(context, 
+		        AlertActivity.class);
+        // 因为广播接收器的 context 并不是 Activity 类型，
+        // 没有任务栈上下文
+        newIntent.setFlags(Intent.
+		        FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(newIntent);
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 前面我们学习的四种启动模式，都是在 <code>AndroidManifest.xml</code> 里“一通百通”的静态配置。但在实际开发中，有时候我们需要根据逻辑判断来决定跳转行为。这就涉及到了动态设置，也就是在 Java 代码中通过 <code>Intent</code> 的标志位来干预任务栈。</p>
+<p><strong>核心内容讲解</strong> 请大家看屏幕。动态设置的核心方法是 <code>intent.setFlags()</code>。这里有一个至关重要的优先级规则：<strong>如果动态代码和静态配置冲突了，系统会以动态代码为准。</strong></p>
+<p>今天我们重点拆解一个非常强力的标志位：<strong>FLAG_ACTIVITY_NEW_TASK</strong>。</p>
+<ul>
+<li><p><strong>基本逻辑</strong>：它听起来和 <code>singleInstance</code> 很像，都会涉及新任务栈。系统会根据 Activity 的 <code>affinity</code>（亲和性）去匹配。如果找不到匹配的任务栈，它就会新建一个，并把 Activity 塞进去。</p>
+</li>
+<li><p><strong>关键区别</strong>：很多同学容易把它和 <code>singleInstance</code> 搞混，请大家注意这两点核心差异：</p>
+<ol>
+<li><p><strong>容量不同</strong>：<code>singleInstance</code> 所在的栈是“独木桥”，只能存它一个；而 <code>NEW_TASK</code> 创建的栈是“大马路”，后面启动的 Activity 依然可以压在这个栈里。</p>
+</li>
+<li><p><strong>生效条件不同</strong>：在同一个 App 内，如果所有 Activity 的亲和性都一样，单独设置 <code>NEW_TASK</code> 往往是无效的（不会产生新栈）；但 <code>singleInstance</code> 无论何时都会强行开辟新栈。</p>
+</li>
+</ol>
+</li>
+</ul>
+<p><strong>实战提醒</strong> 在嵌入式开发中，当我们从 Service（后台服务）或 BroadcastReceiver（广播接收者）中启动页面时，系统通常会强制要求我们添加这个 <code>NEW_TASK</code> 标志位，因为这些组件本身没有任务栈上下文。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.1  启停活动页面：动态设置启动模式
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心 Flag 功能解析**
+    - **SINGLE_TOP**：效用等同静态设置，仅针对栈顶复用。
+    - **CLEAR_TOP**：栈内清理，弹出并销毁目标活动之上的所有实例。
+- **CLEAR_TOP 的两种行为分歧**
+    - **组合使用**：配合 `SINGLE_TOP` 可直接复用栈内实例。
+    - **单独使用**：销毁目标活动及其上方所有实例，再重新创建。
+</div>
+
+<div class="" style="position: absolute; left: 52%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+// SINGLE_TOP
+Intent intent = new Intent(this, C.class);
+intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+startActivity(intent);
+
+// CLEAR_TOP
+Intent intent = new Intent(this, B.class);
+intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+startActivity(intent);
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们学习了如何通过 <code>NEW_TASK</code> 开辟新战场，但在同一个任务栈内部，我们有时也需要精细化的“大扫除”。接下来，我们看看另外两个非常实用的动态标志位：<code>SINGLE_TOP</code> 和 <code>CLEAR_TOP</code>。</p>
+<p><strong>核心内容讲解</strong> 大家请看屏幕。<code>FLAG_ACTIVITY_SINGLE_TOP</code> 的逻辑很简单，它与静态的 <code>singleTop</code> 模式完全一致。重点在于 **<code>FLAG_ACTIVITY_CLEAR_TOP</code>**，它是任务栈的“强力清道夫”。</p>
+<ul>
+<li><p><strong>清理机制</strong>：启动 Activity 时，它会检查栈内是否已有该实例。如果有，它会将该实例之上的所有 Activity 全部弹出销毁。</p>
+</li>
+<li><p><strong>分歧处理</strong>：这里有一个关键细节：</p>
+<ol>
+<li><p><strong>配合 SINGLE_TOP 使用</strong>：如果这两个 Flag 用“按位或”连在一起，那么目标 Activity 会被直接复用，并触发 <code>onNewIntent</code>。</p>
+</li>
+<li><p><strong>单独使用</strong>：如果你只用了 <code>CLEAR_TOP</code>，系统会非常有意思——它会把目标 Activity 及其上方的页面<strong>全部销毁</strong>，然后重新创建一个全新的目标 Activity 实例。</p>
+</li>
+</ol>
+</li>
+</ul>
+<p><strong>技术原理：位运算</strong> 大家在代码中看到的那个“竖杠”符号 <code>|</code>，其实是 Java 中的<strong>按位或运算符</strong>。</p>
+<ul>
+<li><strong>为什么要用它？</strong> 在 Android 底层，每一个 Flag 都是一个 32 位的整数，且只有其中一位是 1。通过按位或运算，我们可以把多个 Flag 的特性“叠加”在一起，生成一个新的标志值。就像屏幕上的例子：3（011）与 5（101）进行或运算得到 7（111）。这种方式既节省空间，计算速度又极快，是嵌入式软件开发中非常高效的一种配置表达方式。</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 在活动之间传递消息：Intent (意图)
+</div>
+
+<div class="" style="line-height: 1.6; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **定义与角色**
+    - **组件桥梁**：连接 Activity、Service、Broadcast 的核心通信机制。
+    - **意图表达**：向系统描述“想执行什么操作”的逻辑载体。
+- **三大核心职能**
+    - **导航定位**：明确通信的来源、去向及路径（如启动模式）。
+    - **载荷传输**：发起方携带数据，接收方解析并处理内容。
+    - **结果反馈**：支持将处理结果异步传回发起方。
+- **目标指定方式**
+    - **显式 Intent**：明确指定目标组件的类名，精准调用。
+    - **隐式 Intent**：通过 Action/Category 描述，由系统筛选匹配。
+</div>
+
+<div class="" style="position: absolute; left: 58%; top: 15%; height: 65%; width: 43%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 4 章 常用组件/file-20260307183807496.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们一直在讨论如何通过 Flag 去操纵任务栈，大家有没有想过，那个承载 Flag、告诉系统“我们要去哪儿”的载体——也就是代码里的 <code>Intent</code> 对象，它到底扮演着什么样的角色？现在，就让我们正式拆解这个 Android 开发中的“超级快递员”。</p>
+<p><strong>核心内容讲解</strong> Intent，中文翻译为“意图”。简单来说，它就是一份<strong>通信协议</strong>，代表了“我想让系统干什么”。它是 Activity、Service 和 BroadcastReceiver 这三大组件之间沟通的唯一桥梁。</p>
+<p>具体来说，一个合格的 Intent 主要负责三项工作：</p>
+<ol>
+<li><p><strong>导航定位</strong>：它要说清楚这次请求从哪发起的（Context）、要去往哪个组件、以及通过什么路径（启动模式）去走。</p>
+</li>
+<li><p><strong>数据传输</strong>：它就像一个包裹，发起方把数据（如用户 ID、订单号）塞进去，接收方再把它拆开解析。</p>
+</li>
+<li><p><strong>结果回传</strong>：意图不仅能送货，还能带话。如果发起方想知道“任务办得怎么样”，Intent 还要负责把处理结果反馈回来。</p>
+</li>
+</ol>
+<p><strong>进阶分类</strong> 在接下来的实践中，我们会接触到两种指定目标的方式：</p>
+<ul>
+<li><p><strong>显式 Intent</strong>：指名道姓，直接说我要启动哪个 Class。</p>
+</li>
+<li><p><strong>隐式 Intent</strong>：只提要求（Action），不提姓名，让系统去匹配谁能干这件事。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 在活动之间传递消息：精准组件跳转——显式 Intent
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心定义：精确匹配**
+    - 指名道姓：直接指定来源 `Context` 与目标 `Class`。
+- **三种构建方式**
+    - **构造函数法（首选）**：`new Intent(this, Target.class)`，最常用且简洁。
+    - **setClass 方法**：先创建对象再设置目标，增加逻辑灵活性。
+    - **setComponent 方法**：通过 `ComponentName` 封装，支持跨应用精确调用。
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```
+// 方式一：通过构造函数直接指定目标活动
+Intent intent = new Intent(this, ActNextActivity.class);
+
+// 方式二：先创建空意图，再通过setClass方法设置目标活动
+Intent intent = new Intent(); // 创建一个新意图
+intent.setClass(this, ActNextActivity.class); 
+
+// 方式三：通过ComponentName组件名称对象来设置目标活动
+Intent intent = new Intent(); // 创建一个新意图
+// 创建包含目标活动在内的组件名称对象
+ComponentName component = new ComponentName(this, 
+		ActNextActivity.class);
+intent.setComponent(component); // 设置意图携带的组件信息
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们宏观地了解了 Intent 是组件通信的“桥梁”，那么在实际开发中，最常见、最稳妥的过桥方式就是“显式 Intent”。所谓显式，就是“指名道姓”，清清楚楚地告诉系统：我从哪里来，要到哪个具体的页面去。</p>
+<p><strong>核心内容讲解</strong> 大家请看屏幕。显式 Intent 属于<strong>精确匹配</strong>，它的核心逻辑就是指定“来源 <code>Context</code>”和“目标 <code>Class</code>”。在 Android 开发中，我们通常有三种方式来构建这种意图：</p>
+<ol>
+<li><p><strong>构造函数法（最常用）</strong>： 这是大家见得最多的方式。直接在 <code>new Intent()</code> 的时候，把当前 Activity 的实例和目标 Activity 的类名传进去。这种写法简洁明了，一行代码搞定，是平时的首选。</p>
+</li>
+<li><p><strong>setClass 灵活指定</strong>： 如果你先创建了一个空的 Intent 对象，后续才决定要去哪个页面，就可以调用 <code>setClass</code>方法。它的效果和构造函数是一模一样的，只是把设置目标的过程拆分了出来，增加了代码的灵活性。</p>
+</li>
+<li><p><strong>setComponent 深度定制</strong>： 这种方式稍微复杂一点，需要用到 <code>ComponentName</code> 对象。它实际上是把来源和目标封装成了一个“组件名称”。在一些复杂的嵌入式应用中，比如你需要跨应用启动另一个 App 的某个 Activity，这种方式就非常有用，因为它能更精确地定位到组件的每一个细节。</p>
+</li>
+</ol>
+<p><strong>技术小贴士</strong> 虽然有三种写法，但它们的本质都是为了完成那项“精确匹配”的工作。在大多数单应用开发中，大家熟练掌握第一种即可。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 在活动之间传递消息：灵活的组件调度——隐式 Intent
+</div>
+
+<div class="" style="line-height: 1.6; position: absolute; left: 0%; top: 15%; height: 65%; width: 67%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心理念：解耦与协作**
+    - **模糊匹配**：不指定具体类名，通过“招贤榜”模式寻找匹配组件
+    - **安全解耦**：隐藏内部类名，支持跨应用调用系统或第三方功能
+- **三大匹配要素**
+    - Action (动作)：意图的灵魂，定义“要做什么”（如查看、拨号）。
+    - Uri (数据路径)：通过 `setData` 指定具体操作对象（如网址、号码）。
+    - Category (类别)：通过 `addCategory` 增加限制标签，支持多重过滤。
+- **运行机制**
+    - **过滤器匹配**：系统根据 `intent-filter` 自动筛选符合条件的组件
+    - **多目标处理**：若有多个匹配项，系统将弹出选择器供用户确认。
+</div>
+
+<div class="" style="position: absolute; left: 65%; top: 15%; height: 65%; width: 36%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+// ActionUriActivity.java
+String phoneNo = "12345";
+Intent intent = new Intent(); 
+intent.setAction(Intent.ACTION_DIAL); 
+
+Uri uri = Uri.parse("tel:" + phoneNo); 
+intent.setData(uri); // 设置意图前往的路径
+
+startActivity(intent); 
+```
+```xml
+<activity android:name=".MyDialActivity">
+    <intent-filter>
+        <!-- 指定动作：拨号 -->
+        <action android:name="android.intent.
+		        action.DIAL" ></action>
+        <category android:name="android.intent.
+		        category.DEFAULT" ></category>
+        <!-- 指定数据格式：tel 协议 -->
+        <data android:scheme="tel" ></data>
+    </intent-filter>
+</activity>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们学习了“指名道姓”的显式 Intent，但在很多场景下，我们并不想把自己的内部类名暴露给别人，或者我们根本不知道谁能处理这个请求（比如你想打开一个网页，但不知道用户装的是哪个浏览器）。这时，我们就需要用到<strong>隐式 Intent</strong>。</p>
+<p><strong>核心内容讲解</strong> 隐式 Intent 不指定具体的 Class，而是发起一种“模糊匹配”。它就像是在系统里发布了一个“招贤榜”，只要谁的条件符合，谁就出来揭榜。</p>
+<ol>
+<li><p><strong>核心要素：动作（Action）</strong> 这是隐式 Intent 的灵魂。它是一个标记字符串，比如“查看图片”或“打电话”。你可以用系统预定义的动作，也可以自定义。设置方式很简单，直接写在构造函数里，或者调用 <code>setAction</code>。</p>
+</li>
+<li><p><strong>精细过滤：Uri 与 Category</strong> 只靠 Action 有时还不够精准。就像我们要找人，只知道他在“天通苑小区”是不够的。</p>
+<ul>
+<li><p><strong>Uri（数据）</strong>：它提供了具体的路径信息（如电话号码 <code>tel:10086</code> 或网址）。通过 <code>setData</code> 设置，可以进一步缩小范围。</p>
+</li>
+<li><p><strong>Category（类别）</strong>：它为 Action 增加了额外的限制。之所以用 <code>addCategory</code> 而不是 <code>set</code>，是因为一个意图可以贴上多个标签（比如：它既是一个“桌面快捷方式”，又是一个“可修改”的页面），通过多重过滤确保匹配的准确性。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>开发思维</strong> 隐式 Intent 极大地提高了系统的解耦性。它是 App 之间互相协作的基础，也是保护内部代码逻辑不被外部窥探的一种安全手段。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 在活动之间传递消息：Intent 数据传输——putExtra 与 Bundle
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **数据装载方式**
+    - 零散装载 (putExtra)：直接调用 Intent 方法，支持基本类型及序列化对象。
+    - 系统化装载 (Bundle)：如同“快递柜”，将多组数据打包后统一存取。
+- **Bundle 核心机制**
+    - **内部结构**：基于 **Map (映射)** 实现，支持按 Key 增删改查。
+    - **操作流程**：通过 `putExtras` 整体打包，目标页 `getExtras` 完整取出。
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+// ActSendActivity.java
+Intent intent = new Intent(this, ActReceiveActivity.class);
+Bundle bundle = new Bundle(); // 创建一个新包裹
+bundle.putString("request_time", DateUtil.getNowTime());
+bundle.putString("request_content", tv_send.getText().toString());
+intent.putExtras(bundle); // 把快递包裹塞给意图
+startActivity(intent); // 跳转到意图指定的活动页面
+```
+```
+// ActReceiveActivity.java
+TextView tv_receive = findViewById(R.id.tv_receive);
+Bundle bundle = getIntent().getExtras();
+String request_time = bundle.getString("request_time");
+String request_content = bundle.getString("request_content");
+String desc = String.format("收到请求消息：\n请求时间为%s\n请求内容为%s", 
+        request_time, request_content); 
+tv_receive.setText(desc); // 把请求消息的详情显示在文本视图上
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们聊了 Intent 是如何“导航”定位到目标的。但导航只是解决了“去哪儿”的问题，作为通信桥梁，它还有一个更核心的任务——“运货”。在 Android 中，我们如何把复杂的参数从一个页面安全地送到另一个页面呢？</p>
+<p><strong>核心内容讲解</strong> 大家请看屏幕。Intent 携带数据主要有两种方式：</p>
+<ol>
+<li><p><strong>零散装载：putExtra</strong> 最简单的方法是直接调用 <code>putExtra</code>。Intent 重载了非常多的 <code>putExtra</code> 方法，支持从基础的整型、字符串到复杂的序列化对象（Serializable）。这就像发快递时，大件小件随手扔在车上。虽然方便，但当数据量变多、类型变杂时，管理起来就会非常混乱。</p>
+</li>
+<li><p><strong>系统化装载：Bundle（快递柜）</strong> 为了更优雅地管理数据，Android 引入了 <strong>Bundle</strong> 概念。大家可以把 Bundle 想象成超市的寄包柜或快递收件柜。</p>
+<ul>
+<li><p><strong>内部结构</strong>：Bundle 内部其实是一个 <strong>Map（映射）</strong> 数据结构。你可以往里添加、删除元素，或者查询某个 Key 是否存在。</p>
+</li>
+<li><p><strong>统一存取</strong>：开发者可以先把所有数据在 Bundle 里打包好，然后调用一次 <code>putExtras(bundle)</code> 整体塞给 Intent。到了目标页面，再调用一次 <code>getExtras()</code> 就能拎走整个“寄包柜”。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>开发实战建议</strong> 在嵌入式开发中，保持代码的可读性和安全性至关重要。使用 Bundle 统一管理数据，不仅让逻辑更清晰，也方便我们在复杂的 Activity 跳转中，一次性校验所有参数的完整性。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 在活动之间传递消息：来而不往非礼也——Activity 的数据回传
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 85%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心流程：四步接力赛**
+    - **发起请求**：使用 `startActivityForResult` 并携带唯一 `requestCode`。
+    - **接收解析**：目标页面通过 `getExtras()` 获取请求数据并执行逻辑。
+    - **打包返回**：调用 `setResult` 设置结果码与意图，随后 `finish()`。
+    - **结果处理**：重写 `onActivityResult`，校验请求码与结果码后解包。
+- **关键参数解析**
+    - RequestCode (请求码)：标识来源，区分多个不同的跳转请求。
+    - ResultCode (结果码)：反馈状态，标识处理成功 (OK) 或取消 (CANCELED)。
+- **开发思维：逻辑闭环**
+	- 确保页面间通信的“请求-处理-响应-销毁”完整生命周期。
+	- 提升嵌入式应用交互的严谨性，避免非法数据导致空指针异常。
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们学习了如何把数据打包塞进“快递柜”Bundle 发送出去。但在实际开发中，通信往往是双向的。比如你打开相册选了一张照片，相册页面关闭后，必须把选中的照片信息传回给上一个页面。这种“有去有回”的机制，就是我们要讲的 <strong>Activity 数据回传</strong>。</p>
+<p><strong>核心内容讲解</strong> 实现这个功能就像一场严谨的接力赛，分为四个标准步骤：</p>
+<ol>
+<li><p>**发出申请 (startActivityForResult)**： 上一个页面不再使用普通的 <code>startActivity</code>，而是改用 <code>startActivityForResult</code>。除了 Intent，我们还要传一个 <code>requestCode</code>（请求码）。这就像给这次任务发了一个“工单号”，方便一会儿对账。</p>
+</li>
+<li><p><strong>接收处理</strong>： 下一个页面通过 <code>getExtras()</code> 正常签收包裹，处理业务逻辑。</p>
+</li>
+<li><p>**打包回传 (setResult)**： 这是关键点。在页面关闭前，我们需要准备一个新的 Intent（应答包），调用 <code>setResult</code> 方法。这里有两个参数：一个是结果码（告诉上一个页面处理是成功还是失败），另一个是携带应答数据的 Intent。最后，调用 <code>finish()</code> 销毁自己。</p>
+</li>
+<li><p>**对账解包 (onActivityResult)**： 当下一个页面消失，上一个页面会重新来到前台，并自动触发 <code>onActivityResult</code>回调。我们要在这里通过“请求码”确认是哪个任务回来了，通过“结果码”确认对方办妥没，最后再拆开包裹读取应答数据。</p>
+</li>
+</ol>
+<p><strong>开发思维</strong> 这种模式在嵌入式 UI 设计中非常经典。它保证了页面间的逻辑闭环：请求、处理、响应、销毁。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.2 在活动之间传递消息：来而不往非礼也——Activity 的数据回传
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```java
+// ActRequestActivity.java
+// 步骤一，上一个页面打包好请求数据，并发送
+String request = "你吃饭了吗？来我家吃吧";
+Intent intent = new Intent(this, ActResponseActivity.class);
+Bundle bundle = new Bundle();
+bundle.putString("request_time", DateUtil.getNowTime());
+bundle.putString("request_content", request);
+intent.putExtras(bundle);
+startActivityForResult(intent, 0);
+```
+```java
+// ActResponseActivity.java
+// 步骤二，下一个页面接收并解析请求数据
+Bundle bundle = getIntent().getExtras();
+String request_time = bundle.getString("request_time");
+String request_content = bundle.getString("request_content");
+String desc = String.format("收到请求消息：\n请求时间为%s\n请求内容为%s", 
+		request_time, request_content);
+tv_request.setText(desc);
+```
+</div>
+
+<div class="" style="position: absolute; left: 48%; top: 15%; height: 65%; width: 54%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+// ActResponseActivity.java
+// 步骤三，下一个页面在返回上一个页面时
+String response = "我吃过了，还是你来我家吃";
+Intent intent = new Intent();
+Bundle bundle = new Bundle();
+bundle.putString("response_time", DateUtil.getNowTime());
+bundle.putString("response_content", response);
+intent.putExtras(bundle);
+setResult(Activity.RESULT_OK, intent);
+finish();
+```
+```java
+// ActRequestActivity.java
+// 步骤四，上一个页面重写方法onActivityResult
+protected void onActivityResult(int requestCode, int resultCode, 
+		Intent intent) {
+    super.onActivityResult(requestCode, resultCode, intent);
+    if (intent != null && requestCode == 0 && resultCode == 
+		    Activity.RESULT_OK) {
+        Bundle bundle = intent.getExtras();
+        String response_time = bundle.getString("response_time");
+        String response_content = bundle.getString("response_content");
+        String desc = String.format("收到返回消息：\n应答时间为：
+		        %s\n应答内容为：%s", 
+                response_time, response_content);
+        tv_response.setText(desc);
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们演示了如何把数据单向快递给下一个 Activity。但在嵌入式软件开发中，我们经常需要有去有回的交互。比如，主界面请求打开一个串口配置页面，配置完成后，我们需要把用户选定的参数传回给主界面。这就是我们要讨论的：Activity 的数据回传。</p>
+<p><strong>核心内容讲解</strong> 请大家看 PPT 上的四段核心代码，我们将这套流程拆解为四个标准步骤：</p>
+<ol>
+<li><p><strong>步骤一：发起带有回执单的跳转。</strong> 在左上角代码中，我们不再使用普通的 startActivity，而是改用 startActivityForResult。注意那个参数 0，它是我们的请求码 RequestCode，就像是给这次请求打了一个唯一的标签，方便回来时对账。</p>
+</li>
+<li><p><strong>步骤二：目标页面签收。</strong> 左下角显示了目标页面如何通过 getIntent().getExtras() 拿到包裹。这和普通的数据传递并无区别，解析出内容并显示即可。</p>
+</li>
+<li><p><strong>步骤三：应答并收工。</strong> 右上角代码是关键。在返回之前，我们需要重新打包一个 Intent，并调用 setResult。第一个参数 RESULT_OK 告诉系统：任务顺利完成了！随后调用 finish() 关掉当前页面，系统会自动带着包裹回到上一个页面。</p>
+</li>
+<li><p><strong>步骤四：在原页面验货。</strong> 右下角代码展示了 onActivityResult 回调方法。当目标页面关闭时，这个方法会被自动触发。我们会根据 requestCode 确定是哪个请求回来了，根据 resultCode 确定处理是否成功，最后精准地解包并更新 UI。</p>
+</li>
+</ol>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 为活动补充附加信息：strings.xml 的应用
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 66%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **解耦思想：代码与数据分离**
+    - **避免硬编码**：减少修改参数时的代码搜索与重新编译时间。
+    - **提升效率**：通过外部配置文件灵活管理易变动的参数。
+- **资源定义：res/values/strings.xml**
+    - **XML 配置**：使用 `<string name="名称">值</string>` 格式定义。
+    - **应用场景**：应用名称、天气信息、传感器单位等固定文本。
+- **数据读取：getString() 方法**
+    - **调用接口**：通过 `getString(R.string.name)` 实现资源检索。
+    - **继承体系**：方法源自 `Context` 类，Activity 可直接调用。
+</div>
+
+<div class="" style="position: absolute; left: 63%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```
+// ReadStringActivity.java
+// 显示字符串资源
+private void showStringResource() {
+    // 从strings.xml获取名叫weather_str的字符串值
+    String value = getString(R.string.weather_str);
+    
+    // 在文本视图上显示文字
+    tv_resource.setText("来自字符串资源：今天的天气是" 
+		    + value);
+}
+```
+```xml
+<!-- res/values目录下面的strings.xml -->
+<string name="weather_str">晴天</string>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们演示了如何通过 Bundle 在页面间“动态”传值。但在嵌入式软件开发中，还有很多参数是相对固定的，比如天气预报的城市、传感器显示的单位或是应用的标题。如果这些都写死在 Java 代码里，每次微调都要翻代码、重编译，效率实在太低。为了解决这个问题，Android 引入了资源配置化的思想。</p>
+<p><strong>核心内容讲解</strong> 请大家看屏幕。我们通常把可能需要手工变动的参数，以键值对的形式写入配置文件。在 Android 中，最经典的做法就是利用 <code>res\values\strings.xml</code>。</p>
+<ol>
+<li><p><strong>配置文件定义</strong>： 在 <code>strings.xml</code> 中，我们像定义 <code>app_name</code> 一样，添加一行 <code>&lt;string&gt;</code> 标签。例如，我们定义一个名为 <code>weather_str</code> 的参数，值为“晴天”。这样，即使将来要改成“阴天”，我们也只需修改这个 XML 文件，而不需要动任何逻辑代码。</p>
+</li>
+<li><p><strong>Java 代码调用</strong>： 在 Java 代码中，我们不需要手动解析 XML。系统为我们提供了一个非常方便的方法：<code>getString()</code>。</p>
+<ul>
+<li><strong>调用方式</strong>：通过 <code>getString(R.string.weather_str)</code> 即可直接获取配置的文字。</li>
+<li><strong>原理背景</strong>：这个 <code>getString</code> 方法其实定义在 <code>Context</code> 类中。因为我们的 Activity 类追根溯源都是 <code>Context</code> 的子类，所以我们可以直接在这个页面里信手拈来，直接调用。</li>
+</ul>
+</li>
+</ol>
+<p><strong>开发思维</strong> 这种“代码与数据分离”的做法，是嵌入式系统国际化（多语言适配）和快速迭代的核心。它让我们的程序更灵活，也让维护工作变得异常轻松。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 为活动补充附加信息：特定组件的私有配置
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 75%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心概念：Metadata**
+    - **定义**：描述数据的数据，用于在清单文件中向组件附加参数。
+    - **优势**：实现组件级参数隔离，提升配置的安全性和内聚性。
+- **清单配置 (AndroidManifest.xml)**
+    - **标签结构**：在 `<activity>` 内部嵌套 `<meta-data>` 标签。
+    - **赋值方式**：支持直接赋值 `android:value="值"` 或引用资源 `@string/...`。
+- **Java 读取“三部曲”**
+    - **获取管家**：调用 `getPackageManager()` 获取包管理器。
+    - **检索信息**：通过 `getActivityInfo` 并指定 `GET_META_DATA` 标志。
+    - **提取数据**：从 `act.metaData` 这个 Bundle 对象中按 Key 取值。
+</div>
+
+<div class="" style="position: absolute; left: 62%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+// MetaDataActivity.java
+private void showMetaData() {
+    try {
+        PackageManager pm = getPackageManager();
+        ActivityInfo act = pm.getActivityInfo(
+		        getComponentName(), 
+                PackageManager.GET_META_DATA);
+        Bundle bundle = act.metaData;
+        String value = bundle.getString("weather");
+        tv_meta.setText("来自元数据信息：今天的天气是" 
+		        + value);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+```
+```
+<!-- AndroidManifest.xml -->
+<activity android:name=".MetaDataActivity">
+    <meta-data 
+        android:name="weather" 
+        android:value="晴天" ></meta>
+</activity>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们学习了如何通过 <code>strings.xml</code> 进行全局资源配置。但在实际开发中，有些配置我们希望是“私有”的，即某个参数只给特定的 Activity 使用，而不希望它变成全局可见的资源。这时候，Android 提供的“元数据（Metadata）”就派上用场了。</p>
+<p><strong>核心内容讲解</strong> 所谓元数据，简单说就是“描述数据的数据”。它允许我们在 <code>AndroidManifest.xml</code> 中，直接为某个特定的 Activity 节点挂载个性化的参数信息。</p>
+<ol>
+<li><p><strong>清单文件配置</strong>： 大家请看这个 XML 片段。我们在 <code>&lt;activity&gt;</code> 标签内部添加 <code>&lt;meta-data&gt;</code> 标签。通过 <code>android:name</code>定义键，<code>android:value</code> 定义值。这里的 <code>value</code> 非常灵活，你既可以直接写死字符串“晴天”，也可以使用 <code>@string/weather_str</code> 引用我们之前学过的字符串资源。</p>
+</li>
+<li><p><strong>Java 代码读取（三部曲）</strong>： 由于元数据是保存在系统清单里的，读取它比读取普通资源要稍微绕一点，需要经过三步：</p>
+<ul>
+<li><p><strong>找管家</strong>：调用 <code>getPackageManager()</code> 获取包管理器，它是掌控应用全局信息的“管家”。</p>
+</li>
+<li><p><strong>查信息</strong>：通过 <code>getActivityInfo()</code> 查找到当前 Activity 的信息对象。注意，这里必须传入 <code>GET_META_DATA</code>标志，否则管家不会把元数据打包给你。</p>
+</li>
+<li><p><strong>取包裹</strong>：活动信息对象的 <code>metaData</code> 字段本质上就是一个 <code>Bundle</code>。我们只需要像以前一样，用 <code>getString(&quot;weather&quot;)</code> 就能拿到我们要的值了。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>开发思维</strong> 元数据常用于配置一些与特定页面逻辑强相关的参数，比如某个页面的 ID、特定的渠道标记，或者是第三方 SDK 的 API Key。它让配置与组件紧密结合，提高了代码的安全性和内聚性。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 为活动补充附加信息：桌面快捷方式 (Shortcuts)
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心功能：长按弹出菜单**
+    - **快速直达**：跳过首页，直接“空降”至特定功能页面。
+    - **配置机制**：利用元数据指向复杂的 XML 资源文件。
+- **实现流程：三步走**
+    - **资源准备**：在 `strings.xml` 定义长/短标签以适配 UI。
+    - **XML 定义**：在 `res/xml` 创建 `shortcuts.xml`。
+        - **关键属性**：通过 `targetClass` 精确指定目标 Activity。
+    - **元数据绑定**：在入口 Activity 节点添加 `<meta-data>`。
+        - **固定名称**：`android.app.shortcuts`。
+        - **资源关联**：通过 `android:resource` 关联 XML 文件。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 4 章 常用组件/file-20260308133639114.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们提到元数据可以传递简单的字符串，但它的能力远不止于此。在 Android 7.1 之后，元数据还可以指向一个复杂的 XML 资源文件。大家平时长按支付宝或微信图标弹出的扫一扫、付款码菜单，其实就是利用元数据实现的桌面快捷方式。</p>
+<p><strong>核心内容讲解</strong> 要实现这种长按弹窗功能，我们需要通过元数据将一个复杂的 XML 结构“挂载”到启动页上。具体分为三个核心步骤：</p>
+<ol>
+<li><p><strong>资源准备</strong>：首先在 <code>strings.xml</code> 中定义菜单名称。这里有个细节：我们需要同时提供“长标签”和“短标签”。系统会优先展示长标签，如果屏幕空间受限，则自动切换为短标签，以保证 UI 的适配性。</p>
+</li>
+<li><p><strong>编写 XML 定义</strong>：在 <code>res/xml</code> 目录下创建 <code>shortcuts.xml</code>。</p>
+<ul>
+<li><p><strong>核心节点</strong>：每个 <code>&lt;shortcut&gt;</code> 代表一个菜单项。</p>
+</li>
+<li><p><strong>关键属性</strong>：除了图标和标签，最核心的是内部嵌套的 <code>&lt;intent&gt;</code> 标签。通过 <code>targetPackage</code> 和 <code>targetClass</code>，我们精确指定了点击菜单后直接“空降”到哪个 Activity，实现跨过首页的极速跳转。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>元数据绑定</strong>：这是最关键的一步。在 <code>AndroidManifest.xml</code> 的入口 Activity（带有 LAUNCHER 属性的那个）中，添加一个特殊的 <code>&lt;meta-data&gt;</code>。</p>
+<ul>
+<li><p>注意它的 <code>name</code> 必须固定为 <code>android.app.shortcuts</code>。</p>
+</li>
+<li><p>通过 <code>resource</code> 属性指向我们刚才写的 <code>@xml/shortcuts</code>。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>开发思维</strong> 这种设计极大提升了用户体验。通过元数据，我们不仅告诉了系统“我是谁”，还向系统展示了“我能直接提供哪些服务”。这种通过 XML 定义复杂对象的方式，是 Android 框架中处理复杂配置的标准模式。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4.3 为活动补充附加信息：桌面快捷方式 (Shortcuts)
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```xml
+<!-- res/values/strings.xml -->
+<string name="first_short">first</string>
+<string name="first_long">启停活动</string>
+<string name="second_short">second</string>
+<string name="second_long">来回跳转</string>
+<string name="third_short">third</string>
+<string name="third_long">登录返回</string>
+```
+```
+<!-- res\xml\shortcuts.xml -->
+ <!-- 第一个快捷方式：启停活动 -->
+<shortcut
+	android:shortcutId="first"
+	android:enabled="true"
+	android:icon="@mipmap/ic_launcher"
+	android:shortcutShortLabel="@string/first_short"
+	android:shortcutLongLabel="@string/first_long">
+	<!-- 点击后打开 ActStartActivity -->
+	<intent
+		android:action="android.intent.action.VIEW"
+		android:targetPackage="com.example.chapter04"
+		android:targetClass="com.example.chapter04.ActStartActivity" / >
+	<categories android:name="android.shortcut.conversation" / >
+</shortcut>
+```
+</div>
+
+<div class="" style="position: absolute; left: 52%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<!-- AndroidManifest.xml -->
+<activity android:name=".MainActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" / >
+        <category android:name="android.intent.category.
+		        LAUNCHER" / >
+    </intent-filter>
+    
+    <!-- 指定快捷方式。在桌面上长按应用图标，
+    就会弹出@xml/shortcuts所描述的快捷菜单 -->
+    <meta-data
+        android:name="android.app.shortcuts"
+        android:resource="@xml/shortcuts" / >
+</activity>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 刚才我们提到，元数据不仅仅能传递简单的键值对，还能通过 <code>resource</code> 属性指向一个复杂的 XML 资源文件。这个特性最经典的应用就是桌面快捷方式。想象一下，用户不需要打开 App 慢慢寻找，只需在桌面长按图标，就能直接进入“启停活动”或“登录返回”等特定页面，这在嵌入式应用中能极大提升操作效率。</p>
+<p><strong>核心内容讲解</strong> 请看 PPT 上的三段核心配置代码，它们共同完成了快捷方式的构建：</p>
+<ol>
+<li><p><strong>左上角：定义文字资源。</strong> 我们在 <code>strings.xml</code> 中为每个菜单项准备了两套标签：<code>shortLabel</code> 和 <code>longLabel</code>。这样做是为了保证 UI 的自适应性，当桌面空间有限时，系统会自动缩短显示。</p>
+</li>
+<li><p><strong>左下角：编写快捷方式定义。</strong> 在 <code>res/xml/shortcuts.xml</code> 中，我们定义了具体的菜单结构。</p>
+<ul>
+<li><strong>基本属性</strong>：包括 <code>shortcutId</code>（唯一标识）和 <code>icon</code>（图标）。</li>
+<li><strong>核心跳转</strong>：关键在于嵌套的 <code>&lt;intent&gt;</code> 标签。我们通过 <code>targetPackage</code> 和 <code>targetClass</code> 精确指定了点击后要“空降”的目标页面。这其实就是一种特殊的“显式 Intent”应用。</li>
+</ul>
+</li>
+<li><p><strong>右侧：清单文件绑定。</strong> 这是“画龙点睛”的一步。在 <code>AndroidManifest.xml</code> 中，我们必须在<strong>入口 Activity</strong>（即带有 <code>MAIN</code> 和 <code>LAUNCHER</code> 标签的 Activity）内部添加元数据。</p>
+<ul>
+<li>注意 <code>name</code> 属性必须严格固定为 <code>android.app.shortcuts</code>，否则系统无法识别。</li>
+<li>通过 <code>resource</code> 属性将刚才写的 XML 关联起来。</li>
+</ul>
+</li>
+</ol>
+<p><strong>开发思维</strong> 这种“配置先行”的方法让 App 的核心功能入口直接外露给系统，是提升应用交互深度的常用手段。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 78%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **活动跳转与控制**
+    - **主动交互**：通过 `Intent` 与 `startActivity` 实现点击跳转。
+    - **页面销毁**：利用 `finish()` 优雅退出并返回上级页面。
+- **高效通信机制**
+    - **意图匹配**：区分显式（精准）与隐式（模糊）`Intent`。
+    - **数据传输**：使用 `Bundle` 统一存取，通过 `setResult` 回传数据。
+- **灵活配置与增强**
+    - **资源解耦**：利用 `strings.xml` 及 `Metadata` 实现代码数据分离。
+    - **功能外露**：通过元数据绑定 XML 实现“桌面快捷方式”。
+- **开发思维：工程化思想**
+    - 核心演进：从“硬编码”到“配置化”，从“单向”到“双向通信”。
+</div>
+
+<div class="" style="position: absolute; left: 73%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260113114548275.png" alt="" style="width: 400px; object-fit: fill">
+
+</div>
+
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《 Android 嵌入式软件开发》
+</div>
+</div>
+
+<aside class="notes"><p><strong>承上启下：转口话</strong> 通过本章的学习，我们已经从最初只会创建一个简单的页面，进化到了能够构建一个多页面协作、具备复杂交互能力的 App。在进入下一章更高级的组件学习之前，我们现在对本章的核心知识点做一个全局的复盘。</p>
+<p><strong>核心内容讲解</strong> 大家请看大纲，本章我们重点攻克了三个维度：</p>
+<ol>
+<li><p><strong>活动的生命周期与跳转控制</strong>： 我们学会了如何不再依赖定时器，而是通过 <code>Intent</code> 配合 <code>startActivity</code>，由用户点击来实现“主动跳转”。同时，我们也掌握了 <code>finish()</code> 方法，让页面在完成任务后能优雅地退出，将控制权交还给上级页面。</p>
+</li>
+<li><p><strong>高效的通信机制</strong>：</p>
+<ul>
+<li><p>在定位上，我们区分了“指名道姓”的<strong>显式 Intent</strong> 和“按需匹配”的<strong>隐式 Intent</strong>。</p>
+</li>
+<li><p>在运载上，我们引入了 <code>Bundle</code> 这一“快递包裹”的概念，让数据管理变得井然有序。</p>
+</li>
+<li><p>最重要的是，我们打通了<strong>数据回传</strong>的闭环，通过 <code>setResult</code> 和 <code>onActivityResult</code>，实现了页面间的有来有往。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>灵活的配置与增强</strong>： 我们跳出了纯代码的思维，学会了利用 <code>strings.xml</code> 实现资源解耦，利用 <code>Metadata</code> 为活动定制私有参数。最后，我们还掌握了黑科技——<strong>桌面快捷方式</strong>，通过元数据绑定 XML，让应用的核心功能长按直达。</p>
+</li>
+</ol>
+<p><strong>开发思维</strong> 从“写死代码”到“配置化开发”，从“单向跳转”到“双向通信”，这些逻辑是 Android 开发中最基础也最核心的工程思想。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《 Android 嵌入式软件开发》
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1080,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>

@@ -16,9 +16,11 @@ author_profile: true
 
 ## 📖 2、章节资源（Slides / Video）
 
-- 第1章 Android Studio 环境搭建：[📘 课件](/course-materials/2026春Android嵌入式软件开发/课件第%201%20章%20Android%20Studio环境搭建/index.html)  、[🎬 视频]()
+- 第 1 章 Android Studio 环境搭建：[📘 课件](/course-materials/2026春Android嵌入式软件开发/课件第%201%20章%20Android%20Studio环境搭建/index.html)  、[🎬 视频]()
 
-- 第2章 Android App 开发基础：[📘 课件](/course-materials/2026春Android嵌入式软件开发/课件第%202%20章%20Android%20App开发基础/index.html)  、[🎬 视频]()
+- 第 2 章 Android App 开发基础：[📘 课件](/course-materials/2026春Android嵌入式软件开发/课件第%202%20章%20Android%20App开发基础/index.html)  、[🎬 视频]()
+- 第 3 章 简单控件：[📘 课件](/course-materials/2026春Android嵌入式软件开发/课件第%203%20章%20简单控件/index.html)  、[🎬 视频]()
+- 第 4 章 常用组件：[📘 课件](/course-materials/2026春Android嵌入式软件开发/课件第%204%20章%20常用组件/index.html)  、[🎬 视频]()
 
 ## 📝 3、作业与实验（Homework / Lab）
 

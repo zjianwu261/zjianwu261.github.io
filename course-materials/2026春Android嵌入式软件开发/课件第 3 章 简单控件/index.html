@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 50%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2024-2025学年第2学期/2025春Android嵌入式软件开发/AS课件/assets/课件第1章 Android Studio环境搭建/file-20241114161819034.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 60%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第 3 章 简单控件
+</div>
+
+<div class="" style="line-height: 3.5; position: absolute; left: 0%; top: 70%; height: 30%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《Android 嵌入式软件开发》<br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div>
+
+<aside class="notes"><p>各位同学大家好，欢迎再次来到《Android嵌入式软件开发》课堂，我是来自合肥大学人工智能与大数据学院的张建武老师。本章是 简单控件</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本次课主要内容
+</div>
+
+<div class="" style="line-height: 2; font-size: 45px; position: absolute; left: 0%; top: 20%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 3.1 文本显示
+- 3.2 视图基础
+- 3.3 常用布局
+- 3.4 按钮触控
+- 3.5 图像显示
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 20%; height: 60%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260113120012540.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《Android嵌入式软件开发》
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.1 文本显示：设置文本的内容
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **设置文本内容的两种核心方式**
+    - **XML 静态设置**：利用 `android:text` 属性，适用于固定文字。
+    - **Java 动态设置**：调用 `setText()` 方法，适用于实时更新数据。
+- **分工与逻辑总结**
+    - **XML 布局**：定义 UI 的“初始样貌”。
+    - **Java 代码**：负责 UI 的“动态变化”。
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+android:text="这是第一页显示的内容"
+```
+xml 代码
+```java
+@Override  
+protected void onCreate(Bundle savedInstanceState) {  
+    super.onCreate(savedInstanceState);  
+    setContentView(R.layout.activity_main);  
+    TextView tv_hello = findViewById(R.id.tv_hello);  
+  
+    tv_hello.setText("你好，世界");  
+}
+```
+Java 代码
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+如果在 XML 布局中为一个 TextView 设置了 `android:text="Hello"`，同时在 Java 代码中又执行了该对象的 `setText("World")` 方法，那么程序运行后，屏幕上最终会显示什么内容？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “在了解了 Android 布局的基本结构之后，大家最直观的需求往往就是如何在屏幕上显示我们想要的文字。无论是标题、按钮上的说明，还是动态更新的状态，都离不开对文本内容的设置。那么，在实际开发中，我们该如何操作呢？请看这一页。”</p>
+<p><strong>（正文讲解）</strong> “设置文本内容主要有两种常用的方式，分别对应了<strong>静态配置</strong>和<strong>动态交互</strong>两种场景：</p>
+<ul>
+<li><strong>第一种方式：在 XML 文件中通过属性 <code>android:text</code> 设置文本。</strong> 这是最基础的方法。在我们的 XML 布局代码中，直接利用此属性来指定内容。这种方式适用于那些在程序运行过程中不需要改变的固定文字。</li>
+<li><strong>第二种方式：在 Java 代码中调用文本视图对象的 <code>setText</code> 方法设置文本。</strong> 在程序运行过程中，如果我们需要根据用户的操作或者数据的变化来改变文字，就需要用到代码控制。我们首先要获取到文本视图对象，然后调用它的 <code>setText</code> 方法。</li>
+</ul>
+<p><strong>（总结）</strong> “简单来说，XML 负责‘初始样貌’，而 Java 代码负责‘动态变化’。掌握了这两点，我们就迈出了控制 Android UI 的第一步。”</p>
+<p><strong>问题：</strong> 如果在 XML 布局中为一个 TextView 设置了 <code>android:text=&quot;Hello&quot;</code>，同时在 Java 代码中又执行了该对象的 <code>setText(&quot;World&quot;)</code> 方法，那么程序运行后，屏幕上最终会显示什么内容？</p>
+<p><strong>解答：</strong> 最终会显示 <strong>“World”</strong>。 <strong>解析：</strong> XML 属性是在布局加载阶段设置的初始值，而 Java 代码中的 <code>setText</code> 通常在 <code>onCreate</code> 或之后执行。后执行的代码会覆盖掉 XML 中预设的静态值。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.1 文本显示：设置文本的内容 ｜ Android 字符串资源引用
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **资源化管理优势**
+    - **解耦与维护**：避免硬编码，修改一处资源即可全局同步。
+    - **国际化支持**：方便适配多语言环境。
+- **引用资源的两种途径**
+    - **XML 布局引用**：使用 `@string/资源名称` 格式（如 `@string/app_name`）。
+    - **Java 代码引用**：通过 `R.string.资源名称` 访问（如 `R.string.welcome`）。
+- **随堂小贴士**
+    - **定义位置**：统一存放在 `res/values/strings.xml` 中。
+    - **核心逻辑**：XML 负责界面解耦，代码负责逻辑复用
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 41%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+```xml
+<resources>  
+    <string name="app_name">chapter02</string>  
+    <string name="welcome">Hello World</string>  
+</resources>
+```
+strings.xml
+```xml
+<TextView  
+    android:id="@+id/tv_hello"  
+    android:layout_width="wrap_content"  
+    android:layout_height="wrap_content"  
+    android:text="@string/app_name"></TextView>
+```
+```java
+protected void onCreate(Bundle savedInstanceState) {  
+    super.onCreate(savedInstanceState);  
+    setContentView(R.layout.activity_main);  
+    TextView tv_hello = findViewById(R.id.tv_hello);  
+    tv_hello.setText(R.string.welcome);  
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们学习了如何通过 XML 属性和 Java 代码直接设置文本内容。但在实际的企业级开发中，直接硬编码（Hardcoding）字符串并不是一个好习惯。为了方便多语言国际化适配和代码维护，我们需要把文字提取到资源文件中。接下来的这一页，我们就来学习如何<strong>引用字符串资源</strong>。”</p>
+<p><strong>（正文讲解）</strong> “在 Android 中引用已经定义好的字符串资源，同样分为两种途径：</p>
+<ul>
+<li><p><strong>首先，是在 XML 布局文件中引用。</strong> 我们会使用 <code>@string/</code> 后接资源名称的格式，例如 <code>@string/app_name</code>。这种方式能让 UI 界面与具体文字内容解耦，修改一处资源，所有引用处都会同步更新。</p>
+</li>
+<li><p><strong>其次，是在 Java 业务代码中引用。</strong> 当我们需要在逻辑代码里动态获取这些文字时，需要通过 <code>R.string.</code> 加上资源名称来访问，例如 <code>R.string.welcome</code>。通过这种方式，我们可以确保代码的整洁和资源的高度复用。”</p>
+</li>
+</ul>
+<p><strong>（总结）</strong> “掌握了资源的引用方法，我们的程序才算真正具备了‘工程化’的雏形，这也为后续学习多语言开发打下了基础。”</p>
+<p><strong>问题：</strong> 在 Android 项目中，字符串资源通常定义在哪个 XML 文件里？在 XML 布局中引用它的格式是什么？</p>
+<p><strong>解答：</strong></p>
+<ul>
+<li><strong>定义位置</strong>：通常定义在 <code>res/values/strings.xml</code> 文件中。</li>
+<li><strong>引用格式</strong>：在 XML 布局文件中，使用 <code>@string/资源名称</code> 的格式进行引用。</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.1 文本显示：设置文本的大小
+</div>
+
+<div class="" style="line-height: 1.6; position: absolute; left: 0%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **文本大小设置方式**
+    - **Java 代码**：调用 `setTextSize(数值)`，系统默认单位为 **sp**。
+    - **XML 布局**：使用 `android:textSize="数值+单位"`，必须指明单位。
+- **三大常用字号单位**
+    - px (像素)：物理屏幕最小单位，不建议用于文本适配。
+    - dp (设备无关像素)：只与屏幕尺寸有关，保证不同设备上的物理尺寸一致。
+    - sp (可伸缩像素)：Android 推荐单位，支持随系统字体大小缩放。
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<TextView  
+    android:id="@+id/tv_sp"  
+    android:layout_width="wrap_content"  
+    android:layout_height="wrap_content"  
+    android:text="你好，世界（sp大小）"  
+    android:textSize="30sp" ></TextView>
+```
+xml 语言
+```java
+protected void onCreate(Bundle savedInstanceState) {  
+    super.onCreate(savedInstanceState);  
+    setContentView(R.layout.activity_text_size);  
+    // 从布局文件中获取名叫tv_sp的文本视图  
+    TextView tv_sp = findViewById(R.id.tv_sp);  
+    tv_sp.setTextSize(30); // 设置tv_sp的文本大小  
+}
+```
+Java
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+为什么在 Java 代码中调用 `setTextSize(30)` 不需要指定单位，而 XML 中必须指定？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 转场语）</strong> “刚才我们学习了如何管理文本的内容，让 App 能够‘说话’。但要让用户看得清晰、看得舒服，文字的大小同样关键。在 Android 中，设置字号不仅仅是填个数字那么简单，它还涉及到不同设备屏幕的适配问题。今天我们就来深入探讨 Android 的字号单位及其应用场景。”</p>
+<p><strong>（核心内容讲解）</strong> “在 Java 代码中，设置字号非常直接，通过调用 <code>setTextSize(30)</code> 即可。有趣的是，这段代码虽然只填了数字，但通过查看 SDK 源码可以发现，系统默认将其单位识别为 <strong>sp</strong>，这正是 Android 官方推荐的字号单位。</p>
+<p>但在 XML 布局文件中，规则就严格多了。如果你只写 <code>android:textSize=&quot;30&quot;</code>，Android Studio 会因为无法解析单位而报错。我们必须在数字后明确标注单位，常见的有三种：</p>
+<ol>
+<li><strong>px（像素）</strong>：手机屏幕的最小显示单位。它的缺点显而易见：在分辨率极高的手机上，30px 的文字可能会显得特别小，缺乏适配性。</li>
+<li><strong>dp（设备无关像素）</strong>：这是与设备硬件无关的单位，能保证在不同尺寸的屏幕上看起来大小基本一致。</li>
+<li><strong>sp（可伸缩像素）</strong>：这是 <strong>sp</strong> 与 <strong>dp</strong> 的最大区别所在——<strong>sp 会跟随系统字体设置而变化</strong>。</li>
+</ol>
+<p>我们可以通过一个实验来观察：在系统设置为‘标准字体’时，30dp 和 30sp 看起来是一样大的。但当你进入手机设置，将系统字体调为‘大号’后，你会发现以 dp 为单位的文字纹丝不动，而以 <strong>sp</strong> 为单位的文字则会相应变大。</p>
+<p>为了保障视力不佳或有特殊需求的用户能正常阅读，我们在开发中应当坚持使用 <strong>sp</strong> 作为文本大小的单位。”</p>
+<p><strong>问题：</strong> 为什么在 Java 代码中调用 <code>setTextSize(30)</code> 不需要指定单位，而 XML 中必须指定？</p>
+<p><strong>解答：</strong> 这是因为 Android SDK 对 Java 方法进行了封装优化。查看 <code>setTextSize</code> 的源码可以发现，其内部自动调用了 <code>setTextSize(TypedValue.COMPLEX_UNIT_SP, size)</code>，即<strong>默认强制指定了 sp 作为单位</strong>，以符合官方推荐规范。而在 XML 中，系统为了提供更高的灵活性（允许开发者在特殊场景下使用 px 或 dp），要求必须显式声明单位以防歧义。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.1 文本显示：设置文本的颜色 
+</div>
+
+<div class="" style="line-height: 1.7; position: absolute; left: 0%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心控制工具**
+    - **关键方法**：`setTextColor()`，用于在代码中动态改变颜色。
+    - **内置类**：`Color` 类，提供系统预定义的标准颜色常量。
+- **常用颜色常量（Color类）**
+    - **基础色**：`BLACK` (黑)、`WHITE` (白)、`GRAY` (灰)。
+    - **彩色**：`RED` (红)、`GREEN` (绿)、`BLUE` (蓝)、`YELLOW` (黄)。
+    - **特殊色**：`TRANSPARENT` (透明)、`CYAN` (青色)
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+protected void onCreate(Bundle savedInstanceState) {  
+    super.onCreate(savedInstanceState);  
+    setContentView(R.layout.activity_text_color);  
+    TextView tv_code_system = findViewById(R.id.tv_code_system);  
+    tv_code_system.setTextColor(Color.GREEN);  
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+如果我想在代码中将一个名为 `tv_status` 的文本框颜色设置为黄色，这一行代码应该如何编写？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们掌握了如何获取和设置文本的内容，解决了‘说什么’的问题。但在嵌入式 UI 设计中，为了增强用户体验，我们往往还需要解决‘怎么说更醒目’的问题。比如，当系统出现错误时，我们需要把文字标红；当电量充足时，我们可能想用绿色表示。这一页，我们就来学习如何动态改变文本的颜色。”</p>
+<p><strong>（正文讲解）</strong> “在 Android 开发中，控制文本颜色的核心工具主要有两个：</p>
+<ul>
+<li><p><strong>核心方法：<code>setTextColor()</code>。</strong> 这是 <code>TextView</code> 类提供的一个关键方法。通过在 Java 或 Kotlin 代码中调用它，我们可以随时根据程序的运行逻辑（如传感器数值变化或点击事件）来改变文字的颜色。</p>
+</li>
+<li><p><strong>颜色来源：<code>Color</code> 类。</strong> Android 系统内置了一个非常实用的 <code>Color</code> 类。它像一个‘调色盘’，里面预定义了一系列常用的颜色常量。</p>
+</li>
+</ul>
+<p><strong>（参考颜色速查表）</strong> 大家可以看屏幕上的这张表格。从基础的黑（<code>BLACK</code>）、白（<code>WHITE</code>）、灰（<code>GRAY</code>），到醒目的红（<code>RED</code>）、绿（<code>GREEN</code>）、蓝（<code>BLUE</code>），甚至包括透明色（<code>TRANSPARENT</code>）。在编写代码时，我们只需要通过 <code>Color.颜色名</code> 就能直接引用这些标准色，非常方便快捷。”</p>
+<p><strong>（总结）</strong> “掌握了 <code>setTextColor</code> 与 <code>Color</code> 类的配合，我们就能让原本沉闷的界面变得更加生动，同时也起到了重要的视觉引导作用。”</p>
+<p><strong>问题：</strong> 如果我想在代码中将一个名为 <code>tv_status</code> 的文本框颜色设置为黄色，这一行代码应该如何编写？
+<strong>解答：</strong> <code>tv_status.setTextColor(Color.YELLOW);</code> <strong>解析：</strong> 首先调用 <code>setTextColor</code> 方法，然后通过 <code>Color</code> 类访问静态常量 <code>YELLOW</code>传入即可。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.1 文本显示：设置文本的颜色｜XML 颜色属性与十六进制色值
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心属性：`android:textColor`**
+    - **适用范围**：TextView、Button、EditText 等所有文本控件。
+    - **功能**：在 XML 布局中直接定义文本颜色。
+- **色值表达方式：`#AARRGGBB`**
+    - AA (Alpha)：透明度，`00` (全透) 至 `FF` (不透)。
+    - RRGGBB：红、绿、蓝三原色各占两位，范围均由 `00` 至 `FF`。
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<TextView  
+    android:id="@+id/tv_xml"  
+    android:layout_width="wrap_content"  
+    android:layout_height="wrap_content"  
+    android:text="布局文件设置六位文字颜色"  
+    android:textColor="#00ff00"  
+    android:textSize="17sp" ></TextView>
+```
+xml 文件中定义文本颜色
+```java
+protected void onCreate(Bundle savedInstanceState) {  
+    super.onCreate(savedInstanceState);  
+    setContentView(R.layout.activity_text_color);  
+    TextView tv_code_six = findViewById(R.id.tv_code_six);  
+    tv_code_six.setTextColor(0x00ff00);  
+}
+```
+java 文件中定义文本颜色
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+在 XML 中设置颜色时，色值 `#80FF0000` 表示什么含义？
+</div>
+</div>
+
+<aside class="notes"><p>“刚才我们学习了如何在 Java 代码中利用系统预定义的常量来修改颜色，这在逻辑判断时非常方便。但如果我们想在界面初始化时就定好颜色，或者需要更精准地控制颜色的‘透明度’和‘个性化色彩’，那就需要用到 XML 属性了。这一页，我们深入探讨十六进制色值的奥秘。”</p>
+<p><strong>（正文讲解）</strong> “在 XML 布局文件中，控制颜色的核心属性是 <code>android:textColor</code>。它不仅适用于 TextView，也同样适用于 Button 或 EditText 等继承自文本框的控件。</p>
+<p>关于色值的表达，最专业也最常用的方式就是 <strong>八位十六进制数：#AARRGGBB</strong>。大家可以把这 8 位数看作是四个‘能量槽’：</p>
+<ul>
+<li><p><strong>前两位 AA（Alpha）：</strong> 负责<strong>透明度</strong>。<code>00</code> 代表完全透明，此时文字会‘隐身’；<code>FF</code> 则代表完全不透明，色彩最实。</p>
+</li>
+<li><p><strong>中间六位 RRGGBB：</strong> 分别代表<strong>红（Red）、绿（Green）、蓝（Blue）</strong>。</p>
+<ul>
+<li>每一组都是从 <code>00</code> 到 <code>FF</code>。比如红色位是 <code>FF</code>，其他位是 <code>00</code>，那就是纯正的大红色。</li>
+</ul>
+</li>
+<li><p><strong>组合逻辑：</strong> 通过这三原色的‘浓度’叠加，再配上透明度，我们几乎可以调配出自然界中的任何颜色。”</p>
+</li>
+</ul>
+<p><strong>（总结）</strong> “掌握了 <code>#AARRGGBB</code> 的写法，你就不再受限于系统自带的那几种颜色，可以随心所欲地实现设计师要求的任何视觉效果。”</p>
+<p><strong>问题：</strong> 在 XML 中设置颜色时，色值 <code>#80FF0000</code> 表示什么含义？</p>
+<p><strong>解答：</strong> 表示 <strong>半透明的红色</strong>。 <strong>解析：</strong></p>
+<ol>
+<li><p>前两位 <code>80</code> 是透明度（Alpha），约为 <code>FF</code>（255）的一半，所以是半透明。</p>
+</li>
+<li><p>中间两位 <code>FF</code> 表示红色通道全满。</p>
+</li>
+<li><p>最后四位 <code>0000</code> 表示绿色和蓝色通道为零。</p>
+</li>
+</ol>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.1 文本显示：设置文本的颜色｜颜色资源引用与管理
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 52%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **资源化管理的价值**
+    - **全局同步**：一处修改，全工程引用处自动生效。
+    - **解耦维护**：将 UI 色值与业务逻辑分离，提升工程规范。
+- **引用资源的两种方式**
+    - **XML 布局引用**：使用 `@color/资源名称`（如 `@color/primary_blue`）。
+    - **Java 代码引用**：通过 `R.color.***` 指定 ID。
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<resources>  
+    <color name="colorPrimary">#6200EE</color>  
+    <color name="colorPrimaryDark">#3700B3</color>  
+    <color name="colorAccent">#03DAC5</color>  
+  
+    <color name="black">#000000</color>  
+    <color name="white">#ffffff</color>  
+    <color name="green">#00ff00</color>  
+</resources>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+在 Android 项目中，颜色资源通常定义在 `res/values/` 文件夹下的哪个 XML 文件里？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “在上个环节中，我们学会了如何使用 <code>#AARRGGBB</code> 这种十六进制代码来精确调色。但在实际的商业项目里，如果每个页面都手写一遍色值，一旦 UI 调优需要整体更换色调，那将是一场维护噩梦。因此，更专业的做法是把颜色统一定义在资源文件中。现在，我们就来学习如何<strong>引用颜色资源</strong>。”</p>
+<p><strong>（正文讲解）</strong> “引用颜色资源的方法与我们之前学过的字符串资源引用非常相似，主要分为两个维度：</p>
+<ul>
+<li><p><strong>首先，是在 XML 布局文件中引用。</strong> 我们会使用 <code>@color/</code> 后接你在 <code>colors.xml</code> 中定义的名称。例如 <code>@color/primary_blue</code>。这样做最大的好处是‘一处修改，全局生效’，能极大提高开发效率。</p>
+</li>
+<li><p><strong>其次，是在 Java 业务代码中引用。</strong> 如果我们需要在代码里动态设置颜色，就需要通过 <code>R.color.***</code> 来指定资源 ID。不过这里要提醒大家一个细节：在现代 Android 开发中，我们通常会配合 <code>ContextCompat.getColor()</code> 方法来使用这个 ID，以确保在不同版本的系统上都能获得正确的颜色值。”</p>
+</li>
+</ul>
+<p><strong>（总结）</strong> “通过这种资源化的管理方式，我们将 UI 表现与业务逻辑进一步解耦，这不仅是规范开发的要求，更是大型项目维护的基石。”</p>
+<p><strong>问题：</strong> 在 Android 项目中，颜色资源通常定义在 <code>res/values/</code> 文件夹下的哪个 XML 文件里？</p>
+<p><strong>解答：</strong> 通常定义在 <strong><code>colors.xml</code></strong> 文件中。在这个文件里，我们会使用 <code>&lt;color name=&quot;颜色名&quot;&gt;#色值&lt;/color&gt;</code> 的标签格式来预定义颜色。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.2 视图基础：设置视图的宽和高
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心属性：定义视图“骨架”**
+    - **宽度**：`android:layout_width`
+    - **高度**：`android:layout_height`
+- **三种核心取值方式**
+    - `match_parent`：与上级视图（父容器）保持一致，占满剩余空间。
+    - `wrap_content`：内容自适应，根据文字或图片自动撑开。
+    - 具体数值（dp）：如 `100dp`，确保不同分辨率屏幕下的显示一致性。
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<TextView  
+    android:layout_width="300dp"  
+    android:layout_height="wrap_content"  
+    android:layout_marginTop="5dp"  
+    android:background="#00ffff"  
+    android:text="视图宽度采用固定大小"  
+    android:textColor="#000000"  
+    android:textSize="17sp" ></TextView>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+如果一个按钮（Button）里的文字很少，但我希望这个按钮的宽度能够横向占满整个手机屏幕，我应该将 `android:layout_width` 设置为哪种取值？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们学习了如何给控件‘涂颜色’和‘填文字’，让 UI 变得美观。但要让一个控件在屏幕上站得住脚，我们必须先确定它的‘骨架’——也就是它的尺寸。在 Android 开发中，每一个视图（View）都必须明确告诉系统它的宽度和高度。接下来，我们就来学习两个最基础的属性：<code>layout_width</code> 和 <code>layout_height</code>。”</p>
+<p><strong>（正文讲解）</strong> “在 XML 布局文件中，视图的宽度通过 <code>android:layout_width</code> 表达，高度则通过 <code>android:layout_height</code> 表达。无论是哪种控件，它们的宽高取值通常有以下三种最核心的选择：</p>
+<ul>
+<li><strong>第一种：<code>match_parent</code>（匹配父窗体）。</strong> 顾名思义，它表示视图想要和它的‘上级’（父容器）保持一样大。如果父容器占满全屏，它也会跟着占满全屏。</li>
+<li><strong>第二种：<code>wrap_content</code>（包裹内容）。</strong> 这是一种‘按需分配’的策略。视图里有多少文字或图片，它就刚好撑开到多大，既不浪费空间，也不会遮挡内容。</li>
+<li><strong>第三种：以 <code>dp</code> 为单位的具体尺寸。</strong> 当我们有特殊设计要求时，可以手动输入数字。比如 <code>100dp</code>。这里要强调一下，在 Android 嵌入式开发中，我们使用 <code>dp</code>（密度无关像素）而不是 <code>px</code>，这样才能确保界面在不同分辨率的屏幕上看起来大小一致。”</li>
+</ul>
+<p><strong>（总结）</strong> “掌握了这三种取值方式，你就掌握了控制 UI 布局节奏的主动权。”</p>
+<p><strong>问题：</strong> 如果一个按钮（Button）里的文字很少，但我希望这个按钮的宽度能够横向占满整个手机屏幕，我应该将 <code>android:layout_width</code> 设置为哪种取值？</p>
+<p><strong>解答：</strong> 应该设置为 **<code>match_parent</code>**。 <strong>解析：</strong> <code>wrap_content</code> 只会包裹文字，按钮会很窄；只有 <code>match_parent</code> 才会强制让控件宽度与父容器（屏幕宽度）保持一致。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.2 视图基础：设置视图的宽和高 | Java 动态修改视图宽高
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 62%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心流程：代码控制“三步走”**
+    - **获取参数**：调用 `getLayoutParams()` 提取控件的布局属性。
+    - **修改数值**：直接设置 `width` 和 `height`（单位默认为 **px**）
+    - **生效提交**：调用 `setLayoutParams()` 重新应用参数并刷新布局。
+- **开发注意事项**
+    - **XML 配合**：建议初值设为 `wrap_content` 以留出调整空间。
+    - **单位换算**：代码赋值需考虑 **dp 转 px**，以适配不同屏幕。
+</div>
+
+<div class="" style="position: absolute; left: 61%; top: 15%; height: 65%; width: 42%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+protected void onCreate(Bundle savedInstanceState) {  
+    super.onCreate(savedInstanceState);  
+    setContentView(R.layout.activity_view_border);  
+    TextView tv_code = findViewById(R.id.tv_code);  
+    ViewGroup.LayoutParams params 
+	    = tv_code.getLayoutParams();  
+    params.width = Utils.dip2px(this, 300);  
+    tv_code.setLayoutParams(params); 
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+如果在 Java 代码中只修改了 `layoutParams.width = 500;` 但没有执行 `setLayoutParams(layoutParams)`， 视图的宽度会发生变化吗？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “在上一节课中，我们学习了如何在 XML 布局文件中通过 <code>match_parent</code> 或 <code>dp</code> 值来固定控件的大小。但在实际的嵌入式开发场景中，我们经常需要界面能够‘动起来’——比如根据传感器数值的变化动态拉长一个进度条，或者根据图片比例调整显示区域。这时，仅仅靠 XML 静态配置就不够了，我们需要掌握如何在 Java 代码中实时控制视图的宽高。”</p>
+<p><strong>（正文讲解）</strong> “要在代码中修改一个已经存在的视图尺寸，我们需要遵循一个标准的‘三步走’流程。这里有一个小前提：建议先在 XML 中将宽高设为 <code>wrap_content</code>，给代码留出调整空间。</p>
+<ul>
+<li><strong>第一步：获取参数。</strong> 我们要调用控件对象的 <code>getLayoutParams()</code> 方法。这就像是把控件的‘身材尺寸表’从系统那里拿过来。注意，返回的对象类型通常是 <code>LayoutParams</code>。</li>
+<li><strong>第二步：修改数值。</strong> 拿到这张‘尺寸表’后，我们可以直接修改它的 <code>width</code>（宽度）和 <code>height</code>（高度）属性。这里的数值单位默认是像素（px），所以如果你需要按 dp 计算，还需要进行一次转换。</li>
+<li><strong>第三步：重新提交。</strong> 这是最关键的一步。修改完属性后，必须调用控件的 <code>setLayoutParams()</code> 方法，把这张改好的‘尺寸表’重新塞回去。只有执行了这一步，系统才会重新绘制控件，让修改生效。”</li>
+</ul>
+<p><strong>（总结）</strong> “简单来说，这就是一个‘取出来、改一下、塞回去’的过程。掌握了这个逻辑，你就能在程序运行过程中随心所欲地控制 UI 的形态。</p>
+<p><strong>问题：</strong> 如果在 Java 代码中只修改了 <code>layoutParams.width = 500;</code> 但没有执行 <code>setLayoutParams(layoutParams)</code>，视图的宽度会发生变化吗？</p>
+<p><strong>解答：</strong> <strong>不会发生变化。</strong> <strong>解析：</strong> <code>getLayoutParams()</code> 获取的是当前参数的一个引用或副本，直接修改其属性只是改变了内存中的数值，必须通过 <code>setLayoutParams()</code> 方法通知系统重新计算布局（Request Layout），界面才会真正刷新。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.2 视图基础：视图间距控制
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **`layout_margin`（外边距）**
+    - **定义**：指定当前视图与**周围平级视图**或父容器之间的距离。
+    - **方向控制**：支持 `margin` (四周) 及 `Left/Top/Right/Bottom` 单向设置。
+    - **作用**：决定控件在布局中的外部留白，防止控件间过于拥挤。
+- **`padding`（内边距）**
+    - **定义**：指定当前视图与**内部下级内容**（如文字、图标）之间的距离。
+    - **方向控制**：支持 `padding` (四周) 及四个方向的独立设置。
+    - **作用**：控制控件内部的呼吸感，防止内容紧贴控件边缘。
+</div>
+
+<div class="" style="position: absolute; left: 65%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 3 章 简单控件/file-20260301094842044.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+如果我给一个 TextView 设置了背景颜色，现在我想让文字和背景边缘之间留出 10dp 的空隙，我应该使用 `layout_margin` 还是 `padding`？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们学会了如何控制控件本身的‘身材’（宽高）以及‘颜值’（颜色和文字）。但在实际布局中，控件之间不能紧贴在一起，否则界面会显得非常拥挤。为了给控件留出‘呼吸感’，我们需要掌握 Android 中最核心的两种间距调整方式：<strong>Margin</strong> 和 <strong>Padding</strong>。很多初学者容易把它们搞混，今天我们就来彻底理清它们的区别。”</p>
+<p><strong>（正文讲解）</strong> “在 Android 开发中，我们通过这两个属性来精确控制空间感：</p>
+<ul>
+<li><p><strong>第一种：<code>layout_margin</code>（外边距）。</strong> 想象一下，每个控件都有一个看不见的‘保护圈’。<code>margin</code> 属性定义的就是这个控件<strong>与外部平级视图</strong>（或者是父容器边缘）之间的距离。如果你想让两个按钮离得远一点，就得设置 <code>margin</code>。</p>
+<ul>
+<li>它可以细分为左、上、右、下四个方向（如 <code>marginLeft</code>、<code>marginTop</code> 等），也可以用 <code>layout_margin</code> 一次性设置四周。</li>
+</ul>
+</li>
+<li><p><strong>第二种：<code>padding</code>（内边距）。</strong> 这指的是控件<strong>与其内部内容</strong>（比如文字或图标）之间的距离。比如一个按钮，如果你觉得文字贴边太近了，就需要增加 <code>padding</code>。</p>
+<ul>
+<li>同理，它也支持四个方向的独立设置（如 <code>paddingLeft</code>、<code>paddingTop</code> 等）。</li>
+</ul>
+</li>
+</ul>
+<p><strong>（总结）</strong> “简单记：<strong>Margin 往外推，Padding 往内缩。</strong> 一个决定了控件在布局中的位置，一个决定了控件内部的留白。”</p>
+<p><strong>问题：</strong> 如果我给一个 TextView 设置了背景颜色，现在我想让文字和背景边缘之间留出 10dp 的空隙，我应该使用 <code>layout_margin</code> 还是 <code>padding</code>？</p>
+<p><strong>解答：</strong> 应该使用 **<code>padding</code>**。 <strong>解析：</strong> <code>padding</code> 是内边距，它会增加控件内部边缘与内容（文字）之间的距离，而背景色是充满整个控件范围的，所以 <code>padding</code> 能实现文字与背景边缘的空隙感；如果使用 <code>margin</code>，则是整个带颜色的文本框离别人远一点，文字依然会贴着背景边缘。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.2 视图基础：视图对齐控制
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 69%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **`layout_gravity`（外对齐）**
+    - **定义**：指定**当前视图**相对于**上级容器**的对齐方式。
+    - **应用**：决定控件在父布局中的摆放位置（如：按钮在页面居中）
+- **`gravity`（内对齐）**
+    - **定义**：指定**下级内容**相对于**当前视图**的对齐方式。
+    - **应用**：决定控件内部元素的显示位置（如：文字在文本框内靠右）
+- **常用取值与组合**
+    - **基础值**：`left`、`right`、`top`、`bottom`、`center`。
+    - **多重组合**：使用 `|` 符号连接，如 `left|top` 表示左上角对齐。
+- `layout_gravity` 控制**自己**在别人眼里的位置，`gravity` 控制**别人**在自己肚子里的位置
+</div>
+
+<div class="" style="position: absolute; left: 68%; top: 15%; height: 65%; width: 33%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 3 章 简单控件/file-20260301095523355.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们聊完了间距（Margin 和 Padding），解决了控件‘占多大地儿’的问题。但在布局中，还有一个非常关键的细节：控件应该往哪儿靠？是居中、靠左还是贴底？在 Android 中，‘对齐’这件事主要由两个长得很像的属性来负责：<code>gravity</code> 和 <code>layout_gravity</code>。很多同学在这里容易‘翻车’，分不清到底该用哪一个。”</p>
+<p><strong>（正文讲解）</strong> “简单来说，这两者的区别在于‘<strong>谁管谁</strong>’的问题：</p>
+<ul>
+<li><strong>第一种：<code>layout_gravity</code>（外对齐）。</strong> 它描述的是<strong>当前视图相对于父容器</strong>（上级视图）的对齐方式。比如，你想让一个按钮在整个大页面里水平居中，你就得设置这个按钮的 <code>layout_gravity</code>。这相当于控件在对它的上级说：‘我要站在你的中间位置。’</li>
+<li><strong>第二种：<code>gravity</code>（内对齐）。</strong> 它描述的是<strong>视图内部的内容相对于该视图本身</strong>的对齐方式。比如，你有一个很大的文本框，但文字只想显示在左下角，那就得设置这个文本框的 <code>gravity</code>。这相当于控件在对它的‘小弟’（内部内容）说：‘你们都给我去左下角呆着。’</li>
+</ul>
+<p><strong>（取值与组合）</strong> 至于它们的取值，大家非常熟悉：<code>left</code>、<code>top</code>、<code>right</code>、<code>bottom</code>。这里有一个进阶技巧：我们可以使用<strong>竖线符号 <code>|</code></strong> 来进行组合。例如 <code>left|top</code>，就代表既靠左又靠上。
+<strong>（总结）</strong> “总结一句话：<code>layout_gravity</code> 决定自己在别人眼里的位置，<code>gravity</code> 决定别人在自己肚子里的位置。”</p>
+<p><strong>问题：</strong> 如果我想让一个 TextView 里面的文字内容在水平和垂直方向都居中，我应该给这个 TextView 设置哪个属性？它的值是什么？</p>
+<p><strong>解答：</strong> 属性：**<code>android:gravity</code>** 取值：**<code>center</code>**（或者 <code>center_vertical|center_horizontal</code>） <strong>解析：</strong> 因为改变的是“内部文字”的位置，所以使用 <code>gravity</code>。<code>center</code> 是一个便捷取值，代表了水平和垂直双向居中。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.3 常用布局
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心属性：`android:orientation`**
+    - 水平排列 (`horizontal`)：内部视图从左往右横向排列（常用组合图标+文字）。
+    - 垂直排列 (`vertical`)：内部视图从上往下纵向堆叠（常用于表单页面）。
+- **默认行为与注意点**
+    - **缺省值**：若不显式指定方向，系统默认按 **水平方向** 排列。
+    - **布局逻辑**：视图会按照代码定义的先后顺序，像“排队”一样依次放置。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<LinearLayout  
+    android:layout_width="match_parent"  
+    android:layout_height="wrap_content"  
+    android:orientation="horizontal">  
+    <TextView  
+        android:layout_width="wrap_content"  
+        android:layout_height="wrap_content"  
+        android:text="横排第一个"  
+        android:textSize="17sp"  
+        android:textColor="#000000" ></TextView>  
+```
+```xml
+    <TextView  
+        android:layout_width="wrap_content"  
+        android:layout_height="wrap_content"  
+        android:text="横排第二个"  
+        android:textSize="17sp"  
+        android:textColor="#000000" ></TextView>  
+</LinearLayout>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+在一个空的 LinearLayout 中放入三个 Button，如果不写 `android:orientation` 属性，这三个按钮在屏幕上会如何分布？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们掌握了单个控件的尺寸、间距和对齐方式，这些是 UI 的‘零件’。但要把这些零件整齐地摆放出来，我们就需要一个‘容器’。在 Android 中最常用、最基础的容器就是 <strong>LinearLayout（线性布局）</strong>。它就像一根绳子，把所有的控件按顺序串在一起。那么，这根绳子是横着拉还是竖着吊呢？这就涉及到了线性布局的核心属性：<code>orientation</code>。”</p>
+<p><strong>（正文讲解）</strong> “线性布局内部视图的排列方式完全由 <code>orientation</code>（方向）属性决定，主要分为两种模式：</p>
+<ul>
+<li><p><strong>第一种：水平排列（<code>horizontal</code>）。</strong> 当属性值设为 <code>horizontal</code> 时，内部的控件就像排队买票一样，从左往右一个接一个地水平排开。这在设置图标加文字的组合时非常常用。</p>
+</li>
+<li><p><strong>第二种：垂直排列（<code>vertical</code>）。</strong> 当属性值设为 <code>vertical</code> 时，内部视图则会像堆积木一样，从上往下依次垂直排列。这是最符合我们手机阅读习惯的布局方式，比如登录界面的账号框、密码框和登录按钮，通常就是这样垂直排布的。</p>
+</li>
+</ul>
+<p><strong>（注意事项）</strong> 这里有一个细节大家要记牢：<strong>如果不手动指定 <code>orientation</code> 属性，LinearLayout 默认是水平（<code>horizontal</code>）排列的。</strong> 所以，如果你发现你的控件都横着‘挤’在了一起，别忘了检查一下是否漏写了 <code>vertical</code>。”</p>
+<p><strong>（总结）</strong> “简单来说，<code>orientation</code> 就是线性布局的‘指挥棒’，指引着内部成员的排队方向。”</p>
+<p><strong>问题：</strong> 在一个空的 LinearLayout 中放入三个 Button，如果不写 <code>android:orientation</code> 属性，这三个按钮在屏幕上会如何分布？</p>
+<p><strong>解答：</strong> 它们会按从左到右的顺序在<strong>水平方向</strong>上排列。 <strong>解析：</strong> 因为 LinearLayout 的 <code>orientation</code> 属性缺省值（默认值）是 <code>horizontal</code>。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.3 常用布局：权重 (layout_weight)
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心概念：按比例瓜分剩余空间**
+    - 解决固定尺寸在不同屏幕下难以适配的问题。
+    - **设置位置**：定义在 **直接下级子视图** 上，而非父容器。
+- **权重生效的具体配置**
+    - **水平分配宽度**：`layout_width` 设为 `0dp`，由权重决定宽度比例。
+    - **垂直分配高度**：`layout_height` 设为 `0dp`，由权重决定高度比例。
+- **逻辑总结**
+    - **分“股份”原则**：权重值越大，控件占据的剩余空间越多。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<LinearLayout  
+    android:layout_width="match_parent"  
+    android:layout_height="wrap_content"  
+    android:background="#ff0000"  
+    android:orientation="horizontal">  
+    <TextView  
+        android:layout_width="0dp"  
+        android:layout_height="wrap_content"  
+        android:layout_weight="1"  
+        android:gravity="center"  
+        android:text="横排第一个"  
+        android:textSize="17sp"  
+        android:textColor="#ffffff" ></TextView>  
+```
+```xml
+    <TextView  
+        android:layout_width="0dp"  
+        android:layout_height="wrap_content"  
+        android:layout_weight="2"  
+        android:gravity="center"  
+        android:text="横排第二个"  
+        android:textSize="17sp"  
+        android:textColor="#ffffff" ></TextView>  
+</LinearLayout>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+在一个水平排列的 LinearLayout 中有两个按钮，如果想让按钮 A 占据 1/3 的宽度，按钮 B 占据 2/3 的宽度，它们的 `layout_width` 和 `layout_weight` 应该如何设置？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “在前面的学习中，我们通过 <code>match_parent</code> 和 <code>wrap_content</code> 解决了控件‘占满’或‘自适应’的问题。但在实际开发中，我们经常遇到一种需求：比如在屏幕底部放两个按钮，要求它们各占一半宽度；或者在一个页面中，图片占三分之一，文字占三分之二。这种‘按比例分配’的需求，如果用固定 dp 值很难适配所有屏幕，这时我们就需要用到线性布局的神器——<strong>权重（layout_weight）</strong>。”</p>
+<p><strong>（正文讲解）</strong> “权重的核心思想是‘<strong>瓜分剩余空间</strong>’。关于它的用法，大家需要掌握以下三个关键点：</p>
+<ul>
+<li><p><strong>属性位置：设置在下级视图上。</strong> 请特别注意，<code>layout_weight</code> 并不是写在 <code>LinearLayout</code> 节点里的，而是写在它的<strong>直接子控件</strong>（如 Button、TextView）里。它代表的是这个子控件在父容器中所占据的比例。</p>
+</li>
+<li><p><strong>水平分配：宽度设为 <code>0dp</code>。</strong> 如果你希望在水平方向（<code>orientation=&quot;horizontal&quot;</code>）按比例分配宽度，那么请将子控件的 <code>android:layout_width</code> 设为 <code>0dp</code>。此时，<code>layout_weight</code> 的数值就是它的宽度权重。</p>
+</li>
+<li><p><strong>垂直分配：高度设为 <code>0dp</code>。</strong> 同理，在垂直布局中，若想按比例分配高度，需将 <code>android:layout_height</code> 设为 <code>0dp</code>。</p>
+</li>
+</ul>
+<p><strong>（总结）</strong> “简单来说，权重就是给控件分‘股份’。谁的权重值越大，谁分到的地盘就越多。这种方式能完美适配各种尺寸的屏幕。”</p>
+<p><strong>问题：</strong> 在一个水平排列的 LinearLayout 中有两个按钮，如果想让按钮 A 占据 1/3 的宽度，按钮 B 占据 2/3 的宽度，它们的 <code>layout_width</code> 和 <code>layout_weight</code> 应该如何设置？</p>
+<p><strong>解答：</strong></p>
+<ul>
+<li><p><strong>按钮 A</strong>：<code>android:layout_width=&quot;0dp&quot;</code>, <code>android:layout_weight=&quot;1&quot;</code></p>
+</li>
+<li><p><strong>按钮 B</strong>：<code>android:layout_width=&quot;0dp&quot;</code>, <code>android:layout_weight=&quot;2&quot;</code> <strong>解析：</strong> 将宽度设为 <code>0dp</code> 是为了让权重生效，比例则由权重值的比值（1:2）决定。</p>
+</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.3 常用布局：相对布局RelativeLayout
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心逻辑：基于“参照物”确定位置**
+    - 解决复杂 UI 场景下 LinearLayout 嵌套过深的问题。
+- **两类定位参照物**
+    - **平级视图**：相对于同一布局下的其他控件（如：在 A 控件下方）。
+    - **上级视图**：相对于父容器 RelativeLayout（如：对齐父容器右边缘）。
+- **默认对齐行为**
+    - **缺省位置**：未指定参照物时，子控件默认显示在容器**左上角**。
+    - **重叠特性**：若多个控件均未指定位置，将全部重叠在左上角。
+</div>
+
+<div class="" style="position: absolute; left: 65%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<TextView  
+    android:id="@+id/tv_left_center"  
+    android:layout_width="wrap_content"  
+    android:layout_height="wrap_content"  
+    android:layout_toLeftOf="@+id/tv_center"  
+    android:layout_alignTop="@+id/tv_center"  
+    android:background="#eeeeee"  
+    android:text="我在中间左边"  
+    android:textSize="11sp"  
+    android:textColor="#000000" ></TextView>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+在 RelativeLayout 中，如果没有为子控件设置任何定位属性（如 `layout_toRightOf` 或 `layout_alignParentBottom`等），该子控件会显示在什么位置？
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们学习了线性布局（LinearLayout），它像排队一样，要么横着排，要么竖着排，逻辑非常简单。但如果 UI 设计师要求一个控件在左上角，另一个控件在右下角，或者某个按钮必须紧贴在另一个文本框的右边，线性布局写起来就会嵌套得非常臃肿。这时候，我们就需要请出布局界的‘定位高手’——<strong>RelativeLayout（相对布局）</strong>。”</p>
+<p><strong>（正文讲解）</strong> “相对布局的核心逻辑不再是简单的顺序排列，而是通过‘<strong>参照物</strong>’来确定位置。</p>
+<ul>
+<li><p><strong>两种参照物：</strong> 在 RelativeLayout 内部，每个下级视图（子控件）都需要找一个‘靠山’来决定自己站哪儿：</p>
+<ol>
+<li><p><strong>平级视图</strong>：比如你可以告诉系统，‘按钮 A 要放在文本框 B 的下方’，这里的文本框 B 就是平级参照物。</p>
+</li>
+<li><p><strong>上级视图（父容器）</strong>：你也可以告诉系统，‘这个图标要靠在父容器的右边缘’，这里的父容器就是上级参照物。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>默认行为：</strong> 这里有一个细节需要注意：<strong>如果你在一个相对布局里放了一个控件，却没有给它指定任何参照物，那么它会默认‘堆’在布局内部的左上角。</strong> 如果你放了多个控件都没给参照物，它们就会像叠罗汉一样全部重叠在左上角。”</p>
+</li>
+</ul>
+<p><strong>（总结）</strong> “简单来说，相对布局就是‘找关系’。只要定好了参照物和相对关系，你的控件就能在屏幕上实现任何复杂的落点。”</p>
+<p><strong>问题：</strong> 在 RelativeLayout 中，如果没有为子控件设置任何定位属性（如 <code>layout_toRightOf</code> 或 <code>layout_alignParentBottom</code>等），该子控件会显示在什么位置？</p>
+<p><strong>解答：</strong> 它会默认显示在父布局（RelativeLayout）的<strong>左上角</strong>。 <strong>解析：</strong> 相对布局在没有接收到明确的定位指令时，初始坐标原点默认在左上角。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.3 常用布局：相对位置的取值
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **相对于平级视图 (ID 参照)**
+    - **位置摆放**：`toLeftOf` / `toRightOf` (左右)、`above` / `below` (上下)。
+    - **边缘对齐**：`alignLeft` / `alignRight` / `alignTop` / `alignBottom`。
+- **相对于父容器 (Parent 参照)**
+    - **中心定位**：`centerInParent` (中心)、`centerHorizontal` / `centerVertical`。
+    - **边界对齐**：`alignParentLeft` / `alignParentRight` / `alignParentBottom` 等。
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们了解了相对布局（RelativeLayout）‘找参照物’的核心逻辑。但具体怎么找？是用左手牵着别人的右手，还是要把自己挂在父容器的正中间？这就需要用到一组非常丰富的<strong>定位属性</strong>。这一页 PPT 汇总了开发中最常用的相对位置参数，它们是构建复杂界面的‘坐标系’。”</p>
+<p><strong>（正文讲解）</strong> “我们可以把这些属性分为三大类来记忆：</p>
+<ul>
+<li><p><strong>第一类：相对于‘平级视图’的摆放。</strong> 比如 <code>layout_toRightOf</code> 或 <code>layout_below</code>。这组属性是让控件站在别人的旁边或上下方。注意，这里‘被参照’的控件必须有一个明确的 <code>android:id</code>。</p>
+</li>
+<li><p><strong>第二类：相对于‘平级视图’的对齐。</strong> 比如 <code>layout_alignTop</code> 或 <code>layout_alignLeft</code>。这组属性不是站在旁边，而是要和别人的‘肩膀’或‘脚尖’对齐，让界面看起来更加规整。</p>
+</li>
+<li><p><strong>第三类：相对于‘上级视图（父容器）’。</strong> 这类属性通常以 <code>Parent</code> 结尾。</p>
+<ul>
+<li><p>比如 <code>layout_centerInParent</code> 可以让控件瞬间移动到屏幕正中央。</p>
+</li>
+<li><p>而 <code>layout_alignParentBottom</code> 则是做底部导航栏时的常客，它能让控件死死贴住父容器的底边。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>（总结）</strong> “熟练组合这些属性，你就能像下棋一样，精准地安放每一个 UI 组件，而不需要像线性布局那样层层嵌套。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.3 常用布局：网格布局GridLayout
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心功能：多行多列矩阵排列**
+    - 适用于计算器、功能菜单、照片墙等规则布局场景。
+    - **排列规律**：默认按从左往右、从上到下的顺序填充。
+- **关键属性详解**
+    - `columnCount` (列数)：定义每行最多容纳的视图数量。
+        - 超出列数限制时，内容会自动换行。
+    - `rowCount` (行数)：定义网格的纵向总行数。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 3 章 简单控件/file-20260301104256095.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “前面我们学习了‘排队’式的线性布局和‘找关系’式的相对布局。但在开发类似计算器界面、照片墙或者功能菜单时，我们需要控件像棋盘一样整齐地分布在多行多列中。如果用线性布局嵌套，代码会变得非常复杂且难以维护。这时候，Android 专门为这种场景提供的<strong>GridLayout（网格布局）</strong>就派上用场了。”</p>
+<p><strong>（正文讲解）</strong> “网格布局最大的特点就是支持<strong>多行多列</strong>的表格化排列。它遵循我们习惯的阅读顺序：默认从左往右、从上到下依次填充。为了定义这个‘棋盘’的大小，它新增了两个核心属性：</p>
+<ul>
+<li><strong>第一个是 <code>columnCount</code>（列数）：</strong> 它决定了一行最多能容纳多少个视图。比如我们设置 <code>columnCount</code> 为 3，那么当放入第 4 个控件时，它会自动换行到下一行的第一个位置。</li>
+<li><strong>第二个是 <code>rowCount</code>（行数）：</strong> 它指定了网格的纵向规模。虽然在实际开发中，列数往往更关键（因为行数通常会随内容增加而自动扩展），但在需要固定页面高度的嵌入式场景下，明确行数也非常重要。</li>
+</ul>
+<p><strong>（总结）</strong> “简单来说，<code>GridLayout</code> 就是把屏幕划分成了规则的方格。你只需要告诉它‘横向有几格’，剩下的控件摆放工作，它就会自动帮你完成。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.3 常用布局：滚动视图ScrollView
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心功能：解决内容溢出显示问题**
+    - 当 UI 控件超出物理屏幕尺寸时，提供滑动查看功能。
+- **常用滚动类型**
+    - **垂直滚动 (ScrollView)**
+        - 宽度：`match_parent`；高度：`wrap_content`。
+    - **水平滚动 (HorizontalScrollView)**
+        - 宽度：`wrap_content`；高度：`match_parent`。
+- **开发约束与注意事项**
+    - **唯一性限制**：内部只能包裹**一个**直接子视图（通常是布局容器）。
+    - **嵌套建议**：常嵌套 LinearLayout 来承载多个子控件。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<HorizontalScrollView  
+    android:layout_width="wrap_content"  
+    android:layout_height="200dp">  
+    
+    <LinearLayout  
+        android:layout_width="wrap_content"  
+        android:layout_height="match_parent"  
+        android:orientation="horizontal">  
+  
+        <View  
+            android:layout_width="300dp"  
+            android:layout_height="match_parent"  
+            android:background="#aaffff" ></View>  
+```
+```xml
+  
+        <View  
+            android:layout_width="300dp"  
+            android:layout_height="match_parent"  
+            android:background="#ffff00" ></View>  
+    </LinearLayout>  
+</HorizontalScrollView>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们学习了各种布局容器，无论是线性、相对还是网格布局，它们都有一个共同的局限性：如果内部的控件太多，超出了手机屏幕的物理尺寸，多出来的部分就会被‘截断’看不见了。在嵌入式开发中，屏幕尺寸往往比较有限，为了让用户看到完整的内容，我们就需要给布局套上一层‘滑动外壳’，这就是我们今天要讲的<strong>滚动视图（ScrollView）</strong>。”</p>
+<p><strong>（正文讲解）</strong> “Android 为我们提供了两种滚动方式，它们的使用逻辑非常直观：</p>
+<ul>
+<li><p><strong>第一种：垂直滚动（<code>ScrollView</code>）。</strong> 这是最常用的模式。当你的页面内容很长（比如一篇新闻稿）时使用。</p>
+<ul>
+<li><strong>设置要点</strong>：由于它是上下滚动的，所以宽度通常填 <code>match_parent</code> 占满屏幕，而高度必须设为 <code>wrap_content</code>。这样 <code>ScrollView</code> 才能根据内部内容的实际高度来计算滚动的距离。</li>
+</ul>
+</li>
+<li><p><strong>第二种：水平滚动（<code>HorizontalScrollView</code>）。</strong> 当你需要横向展示一系列图片或功能图标时使用。</p>
+<ul>
+<li><strong>设置要点</strong>：正好相反，它的高度通常填 <code>match_parent</code>，而宽度要设为 <code>wrap_content</code>。这样系统才知道内容在水平方向上溢出了，从而开启横向滚动功能。</li>
+</ul>
+</li>
+</ul>
+<p><strong>（注意事项）</strong> 请大家记住一个核心规则：<strong>滚动视图内部只能包裹一个直接子视图</strong>（通常是一个 LinearLayout 或 RelativeLayout）。如果你直接在里面放五六个按钮，程序是会报错的。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.4 按钮触控：Button 与 TextView 的异同分析
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 70%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **继承关系**：`Button` 直接派生自 `TextView`，继承其所有文本属性。
+- **核心区别（默认配置）**
+    - **外观背景**：`TextView` 无背景；`Button` 自带系统阴影与圆角背景。
+    - **对齐方式**：`TextView` 默认左对齐；`Button` 内部文本默认居中。
+    - **英文字体**：`Button` 默认开启大写转换（`textAllCaps="true"`）。
+- **开发应用总结**
+    - `TextView` 侧重于静态信息展示与长文本阅读。
+    - `Button` 侧重于交互感，通过视觉反馈引导用户点击。
+</div>
+
+<div class="" style="position: absolute; left: 68%; top: 15%; height: 65%; width: 32%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<Button  
+    android:id="@+id/btn_click_single"  
+    android:layout_width="0dp"  
+    android:layout_height="wrap_content"  
+    android:layout_weight="1"  
+    android:text="指定单独的点击监听器"  
+    android:textColor="#000000"  
+    android:textSize="15sp" ></Button>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “在前面的章节中，我们一直在用 TextView 来显示文本。大家可能会发现，TextView 看起来文绉绉的，只能‘看’不能‘点’。如果我们想要一个具备点击感、能和用户产生交互的控件，最常用的就是 <strong>Button（按钮）</strong>。有趣的是，在 Android 源码里，Button 其实是 TextView 的‘亲儿子’——它是直接从 TextView 派生出来的。既然是父子关系，那它们长得肯定很像，但为了各司其职，它们在细节上还是有三处显著的区别。”</p>
+<p><strong>（正文讲解）</strong> “请大家看大屏幕，这三点区别决定了它们在界面上的不同气质：</p>
+<ul>
+<li><p><strong>第一，皮肤（背景）不同。</strong> TextView 默认是没有背景的，像一张透明的纸；而 Button 自带一套系统的默认背景（通常带阴影和圆角），这让它看起来更厚实，一眼就能看出‘这是一个可以按下去的按钮’。</p>
+</li>
+<li><p><strong>第二，站位（对齐）不同。</strong> TextView 里的文字默认是‘靠左站’（左对齐），方便阅读长文本；而 Button 里的文字默认是‘站 C 位’（居中对齐），这样在按钮正中间显示标签更美观。</p>
+</li>
+<li><p><strong>第三，性格（大小写）不同。</strong> 这是一个很有意思的细节：Button 会自动把所有的英文字母变成<strong>大写</strong>（为了符合 Material Design 的设计规范）；而 TextView 则会老老实实地保持你输入的原始大小写。</p>
+</li>
+</ul>
+<p><strong>（总结）</strong> “虽然 Button 继承了 TextView 的所有属性，但通过这些默认配置的改变，它从一个‘安静的文本框’变成了‘活跃的交互按钮’。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.4 按钮触控：按钮控件的新增属性
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **显示控制：`android:textAllCaps`**
+    - **功能**：控制英文字母是否自动转换为大写。
+    - **取值**：`true`（自动大写，默认值）；`false`（保持原始大小写）。
+- **交互响应：`android:onClick`**
+    - **功能**：在 XML 中直接绑定点击事件。
+    - **实现**：指定 Activity 中对应的公开方法名（需传入 `View` 参数）。
+- **核心价值总结**
+    - `textAllCaps` 确保界面符合 Material Design 设计规范。
+    - `onClick` 提供了便捷的点击动作接管机制。
+</div>
+
+<div class="" style="position: absolute; left: 65%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<Button  
+    android:layout_width="match_parent"  
+    android:layout_height="wrap_content"  
+    android:text="Hello World"  
+    android:textAllCaps="false"  
+    android:textColor="@color/black"  
+    android:textSize="17sp" ></Button>
+```
+```
+<Button  
+    android:id="@+id/btn_click_xml"  
+    android:layout_width="match_parent"  
+    android:layout_height="wrap_content"  
+    android:onClick="doClick"  
+    android:text="直接指定点击方法"  
+    android:textColor="#000000"  
+    android:textSize="17sp" ></Button>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们聊到了 Button 和 TextView 之间‘父与子’的血缘关系，也提到了它们在外观和默认对齐方式上的不同。既然 Button 是为了交互而生的，那么 Android 必然会给它‘开小灶’，增加一些 TextView 所没有的特殊本领。这一页我们就来看看，Button 专门增加了哪两个关键属性，让我们能更好地控制它的显示和行为。”</p>
+<p><strong>（正文讲解）</strong> “为了满足交互和设计规范的需求，Button 引入了两个非常实用的新属性：</p>
+<ul>
+<li><strong>第一个是 <code>textAllCaps</code>。</strong> 大家还记得刚才提到的‘字母自动变大写’的默认行为吗？这就是由这个属性控制的。当它的值为 <code>true</code> 时（Button 的默认状态），无论你在代码里写的是大写还是小写，屏幕上通通都会变成大写。如果你希望保留单词原本的大小写，只需要将其设为 <code>false</code> 即可。</li>
+<li><strong>第二个是 <code>onClick</code>。</strong> 这是 Button 的‘灵魂’所在。它是用来接管用户的点击动作的。你可以直接在 XML 布局文件中，通过 <code>onClick</code> 属性指定一个方法名（比如叫 <code>doLogin</code>）。这样，当用户按下这个按钮时，系统就会自动去关联的 Activity 中寻找并执行这个同名的方法。</li>
+</ul>
+<p><strong>（总结）</strong> “简单来说，<code>textAllCaps</code> 负责‘面子’，决定英文怎么显示；<code>onClick</code> 负责‘里子’，决定点了按钮之后要干什么。这两个属性让按钮从一个静态标签真正变成了动态的交互组件。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.4 按钮触控：点击事件和长按事件
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心定义：监测并响应控件动作行为**
+    - 仅在满足特定动作条件时，触发执行预设的代码逻辑。
+- **常用监听器类型**
+    - **点击监听器 (`setOnClickListener`)**
+        - 触发条件：按住时长 **< 500 毫秒**。
+    - **长按监听器 (`setOnLongClickListener`)**
+        - 触发条件：按住时长 **> 500 毫秒**。
+- **开发注意事项：事件消费逻辑**
+    - 长按回调需返回 `boolean` 值。
+    - **true**：消费事件，抬起时不触发点击；**false**：不消费，抬起时仍触发点击。
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```java
+public boolean onLongClick(View v) { // 长按事件的处理方法  
+    if (v.getId() == R.id.btn_longclick_public) { 
+    // 来自按钮btn_longclick_public  
+        String desc = String.format("%s 您长按了按钮：%s",  
+                DateUtil.getNowTime(), ((Button) v).getText());  
+        tv_result.setText(desc); // 设置文本视图的文本内容  
+    }  
+    return true;  
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “在上一页中，我们提到了可以在 XML 中通过 <code>onClick</code> 属性来绑定点击事件。但在实际开发，特别是涉及复杂的逻辑或动态交互时，我们更多地是在 Java 或 Kotlin 代码中通过<strong>监听器（Listener）</strong>来接管按钮的行为。所谓‘监听器’，就像是给按钮安了一个‘声纳’，它时刻监测着控件的状态。一旦用户的动作达成了预设条件，监听器就会立刻拉响开关，执行我们写好的代码。”</p>
+<p><strong>（正文讲解）</strong> “对于按钮控件，我们最常打交道的是两种时间维度的监听器：</p>
+<ul>
+<li><strong>第一种：点击监听器（<code>setOnClickListener</code>）。</strong> 这是最基础的交互。在 Android 系统的逻辑里，如果你手指按住按钮的时间<strong>少于 500 毫秒</strong>（也就是半秒钟）后抬起，系统就判定这这是一次‘点击’。这时就会触发 <code>onClick</code>回调。</li>
+<li><strong>第二种：长按监听器（<code>setOnLongClickListener</code>）。</strong> 当某些操作比较关键，或者我们需要调出二级菜单时，会用到长按。只要你按住按钮的时间<strong>超过 500 毫秒</strong>，系统就会认为你在‘长按’它。</li>
+</ul>
+<p><strong>（注意事项）</strong> 这里有一个很有趣的细节：长按监听器通常需要返回一个布尔值（<code>true</code> 或 <code>false</code>）。如果你返回了 <code>true</code>，系统会认为这个动作你已经‘消费’完了，不会再触发后续的点击事件；如果你返回 <code>false</code>，松手时可能还会触发一次点击。这就是事件分发的基础逻辑。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.4 按钮触控：禁用与恢复按钮
+</div>
+
+<div class="" style="line-height: 1.6; position: absolute; left: 0%; top: 15%; height: 65%; width: 62%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心属性：`android:enabled`**
+    - **功能**：控制按钮的交互开关（XML 属性或 `setEnabled()` 方法）
+    - **取值**：`true` (可用，默认)；`false` (不可用/禁用)。
+- **状态对比：可用 vs 不可用**
+    - **视觉表现**：可用时文字为正常色；不可用时文字自动“置灰”
+    - **交互功能**：可用时响应监听器；不可用时点击/长按均无反应
+- **实际业务应用场景**
+    - **安全校验**：未勾选隐私协议时，禁用“注册”按钮。
+    - **防重复触发**：点击“发送验证码”后，立即置灰按钮进入倒计时
+</div>
+
+<div class="" style="position: absolute; left: 58%; top: 15%; height: 65%; width: 44%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```
+public void onClick(View v) { // 点击事件的处理方法  
+    if (v.getId() == R.id.btn_enable) {
+        btn_test.setTextColor(Color.BLACK); 
+        btn_test.setEnabled(true); // 启用当前控件  
+    } else if (v.getId() == R.id.btn_disable) { 
+        btn_test.setTextColor(Color.GRAY); 
+        btn_test.setEnabled(false); // 禁用当前控件  
+    } else if (v.getId() == R.id.btn_test) {
+        String desc = String.format("%s 您点击了按钮：%s",  
+            DateUtil.getNowTime(), ((Button) v).getText());  
+        tv_result.setText(desc); // 设置文本视图的文本内容  
+    }  
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们学习了如何通过监听器让按钮‘动’起来。但在真实的嵌入式软件开发中，并不是所有的按钮在任何时候都能被点击。比如：用户还没勾选隐私协议时，‘注册’按钮应该是灰色的；或者表单没填完整时，‘提交’按钮点击了也没反应。这就是我们要讨论的：按钮的<strong>可用状态（Enabled）与不可用状态（Disabled）</strong>。”</p>
+<p><strong>（正文讲解）</strong> “在 Android 中，按钮的状态直接关系到它的视觉表现和交互逻辑。我们从两个维度来对比：</p>
+<ul>
+<li><p><strong>第一，视觉上的区别。</strong></p>
+<ul>
+<li><strong>可用按钮</strong>：文字通常是正常的黑色（或系统主题色），给人一种‘随时待命’的视觉提示。</li>
+<li><strong>不可用按钮</strong>：为了提醒用户此路不通，它的文字会自动变为<strong>灰色</strong>，背景通常也会变淡，这在 UI 设计中被称为‘置灰’处理。</li>
+</ul>
+</li>
+<li><p><strong>第二，功能上的区别。</strong></p>
+<ul>
+<li><strong>可用按钮</strong>：响应各种监听器。你点它，它就执行代码。</li>
+<li><strong>不可用按钮</strong>：它会进入‘休眠’模式。哪怕用户在屏幕上戳破了指头，它也不会触发任何点击或长按事件。</li>
+</ul>
+</li>
+</ul>
+<p><strong>（核心属性）</strong> “控制这个开关的神器就是 <strong><code>enabled</code></strong> 属性。在 XML 中它是 <code>android:enabled</code>，在代码里则是 <code>setEnabled()</code> 方法。</p>
+<ul>
+<li>设置为 **<code>true</code>**：按钮大门常打开，迎接点击。</li>
+<li>设置为 **<code>false</code>**：按钮关门谢客，进入置灰状态。”</li>
+</ul>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.5 图像显示：图像视图ImageView
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 66%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心功能：展示 res/drawable 目录下的图片**
+    - 提升 UI 直观性与用户体验，支持静态与动态两种装载方式。
+- **资源装载方式详解**
+    - **XML 静态装载**：使用 `android:src` 属性。
+        - 格式：`@drawable/图片名称`（不含扩展名）。
+    - **Java/Kotlin 动态装载**：调用 `setImageResource()` 方法
+        - 格式：`R.drawable.图片名称`（通过资源索引引用）。
+- **开发要点总结**
+    - **引用规则**：统一使用文件名作为标识，无需后缀（.png/.jpg）。
+    - **应用场景**：XML 适合固定布局，代码适合逻辑驱动的图像切换。
+</div>
+
+<div class="" style="position: absolute; left: 61%; top: 15%; height: 65%; width: 41%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<ImageButton  
+    android:layout_width="match_parent"  
+    android:layout_height="80dp"  
+    android:src="@drawable/sqrt"  
+    android:scaleType="fitCenter" ></ImageButton>
+```
+```java
+protected void onCreate(Bundle savedInstanceState) {  
+    super.onCreate(savedInstanceState);  
+    setContentView(R.layout.activity_image_scale);  
+    iv_scale = findViewById(R.id.iv_scale);  
+    iv_scale.setImageResource(R.drawable.sqrt);  
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们学习了如何通过 Button 激发各种功能动作。不过，一个优秀的 UI 界面如果只有冷冰冰的文字和按钮，难免显得单调。在嵌入式开发中，直观的图标和精美的图片能极大地提升用户体验。现在，我们就来学习如何使用 <strong>ImageView（图像视图）</strong>，以及如何将我们准备好的素材‘装载’到这个容器里。”</p>
+<p><strong>（正文讲解）</strong> “在 Android 中，我们要显示的图片通常存放在工程的 <code>res/drawable</code> 系列目录下。要把这些图片展示出来，主要有两种‘装载’方式：</p>
+<ul>
+<li><p><strong>第一种：静态装载（XML 属性设置）。</strong> 如果你在设计界面时就已经确定了要显示的图片，可以直接在 XML 布局文件中使用 <code>android:src</code> 属性。</p>
+<ul>
+<li><strong>写法注意</strong>：属性值的格式是 <code>@drawable/图片名</code>。记得这里只需要写文件名，<strong>不需要</strong>带 <code>.png</code> 或 <code>.jpg</code> 这样的扩展名。</li>
+</ul>
+</li>
+<li><p><strong>第二种：动态装载（Java 代码设置）。</strong> 如果你的图片需要根据程序的运行状态来改变（比如点击按钮后换一张图），那就需要用到代码控制。</p>
+<ul>
+<li><p><strong>实现方法</strong>：调用 ImageView 实例的 <code>setImageResource()</code> 方法。</p>
+</li>
+<li><p><strong>写法注意</strong>：参数通过资源索引 <code>R</code> 来引用，格式为 <code>R.drawable.图片名</code>。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>（总结）</strong> “简单来说，XML 设置适合‘所见即所得’的固定布局，而代码设置则给了我们动态交互的无限可能。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.5 图像显示：图像视图的缩放类型
+</div>
+
+<div class="" style="line-height: 1.7; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **核心功能**：控制图片在视图容器内的缩放与对齐方式。
+- **常用模式分类**
+    - 非等比填充 (`fitXY`)：强制拉伸填满视图，图片会变形
+    - 等比适配 (`fitCenter`)：**默认值**。保持比例，完整显示在中心。
+    - 等比裁剪 (`centerCrop`)：保持比例填满视图，多余部分被裁剪（无留白）。
+    - 原始尺寸 (`center`)：不缩放，仅居中显示图片中心区域
+- **开发建议**
+    - 追求**完整性**选 `fitCenter`；
+    - 追求**视觉铺满**选 `centerCrop`
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 3 章 简单控件/file-20260301211808646.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们学会了如何把图片‘装进’ImageView，但在实际开发中，大家经常会遇到一个尴尬的问题：图片是长方形的，但我们的布局容器是正方形的；或者图片分辨率太高，放进小图标里只剩下一个角。这时候，如果只是简单地摆放，图片往往会变形或者显示不全。为了解决这个问题，Android 为我们提供了一个强大的调控工具——<strong>scaleType（缩放类型）</strong>。”</p>
+<p><strong>（正文讲解）</strong> “<code>scaleType</code> 决定了图片如何在 ImageView 这个‘相框’里进行缩放和定位。我们重点看几种最常用的模式：</p>
+<ul>
+<li><p><strong>首先是‘填充派’：</strong> 最典型的是 **<code>fitXY</code>**。它不顾图片的原始比例，硬生生地把图片拉伸到填满整个视图。虽然能填满，但图片往往会变得‘亲妈都不认识’（严重变形）。</p>
+</li>
+<li><p><strong>其次是‘比例派’：</strong> 比如 <strong><code>fitCenter</code><strong>（默认值），它会保持宽高比，把图片拉伸到正好能完整放入视图并居中。而 <strong><code>centerCrop</code></strong> 则是开发者的最爱，它会保持比例并拉伸图片直到</strong>充满</strong>视图，多出的部分虽然会被裁剪，但保证了界面没有留白且图片不变形。</p>
+</li>
+<li><p><strong>最后是‘原图派’：</strong> 比如 **<code>center</code>**，它完全不缩放，直接把原图往中间一放，如果图片比视图大，你只能看到图片的中心区域。</p>
+</li>
+</ul>
+<p><strong>（总结）</strong> “选择哪种模式，取决于你是希望‘完整显示’还是‘填满空间’。在嵌入式设备的有限屏幕上，灵活运用这些属性，才能做出精致的视觉效果。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.5 图像显示：图像按钮ImageButton
+</div>
+
+<div class="" style="line-height: 1.7; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **继承体系**：继承自 `ImageView`，而非 `Button`。
+- **与普通 Button 的核心区别**
+    - **内容类型**：`Button` 可显示文本与图片；`ImageButton` 仅限图片。
+    - **缩放表现**：`ImageButton` 支持 `scaleType` 比例缩放，防止拉伸变形。
+    - **图层叠加**：支持 `background`（背景）与 `src`（前景）两层图像叠加。
+- **应用建议**
+    - 适用于纯图标交互场景（如返回键、播放控制）。
+    - 追求高保质、多层次视觉效果时优先选择。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 3 章 简单控件/file-20260301212429310.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “刚才我们深入研究了如何像‘摄影师’一样调整 ImageView 的缩放效果。那么大家可能会想：如果我想要一个按钮，它不需要文字，本身就是一张精美的图标，比如‘返回’箭头的图标，或者是‘播放’按钮的图标，该用什么呢？这时候，我们就需要用到专门的 <strong>ImageButton（图像按钮）</strong>。虽然它名字里带个‘Button’，但在 Android 的家族族谱里，它其实是 ImageView 的‘亲兄弟’，而不是从 Button 派生出来的。这种特殊的身份，让它在处理图像时比普通按钮要专业得多。”</p>
+<p><strong>（正文讲解）</strong> “我们来对比一下 ImageButton 和普通 Button 的三大核心区别，看看它强在哪里：</p>
+<ul>
+<li><p><strong>第一，纯粹性不同。</strong> Button 是个‘全才’，能写字也能带图；但 ImageButton 非常‘专一’，它<strong>只能显示图片</strong>。如果你试图给它设置 <code>text</code> 属性，屏幕上是不会有任何反应的。</p>
+</li>
+<li><p><strong>第二，身材管理（缩放）不同。</strong> 普通 Button 如果强行塞入一张背景图，图片往往会随着按钮的大小被拉伸得‘惨不忍睹’；但 ImageButton 继承了 ImageView 的优良血统，支持我们刚才学过的各种 <code>scaleType</code> 属性，可以<strong>按比例缩放</strong>，保证图标永远精致。</p>
+</li>
+<li><p><strong>第三，层次感不同。</strong> Button 通常只能靠背景显示一张图。而 ImageButton 支持<strong>两层叠加</strong>：你可以给它设置一个 <code>background</code>（背景），再设置一个 <code>src</code>（前景）。比如，背景是一个带圆角的底框，前景是一个搜索图标，两张图叠在一起，效果非常灵活。”</p>
+</li>
+</ul>
+<p><strong>（总结）</strong> “所以，当你需要一个单纯靠图标驱动，且对画质要求极高的交互组件时，ImageButton 是你的不二之选。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.5 图像显示：ImageButton的使用场合
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 68%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **应用场景：处理特殊字符/字体**
+    - 针对输入法无法输入的符号 `$\sqrt{\hspace{0.8cm}}$` 或特殊艺术字体。
+    - **策略**：采用“先切图、后展示”，确保视觉统一与交互性。
+- ImageButton vs. ImageView 核心区别
+    - **默认背景**：`ImageView` 无背景；`ImageButton` 自带系统按钮背景。
+    - 默认缩放 (scaleType)：
+        - `ImageView`：默认 `fitCenter`（自动缩放至充满视图）
+        - `ImageButton`：默认 `center`（保持原尺寸居中，不缩放）
+</div>
+
+<div class="" style="position: absolute; left: 66%; top: 15%; height: 65%; width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```xml
+<ImageButton  
+    android:layout_width="match_parent"  
+    android:layout_height="80dp"  
+    android:src="@drawable/sqrt"  
+    android:scaleType="fitCenter" / >
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>（承上启下 - 过渡语）
+“刚才我们对比了 ImageButton 和 Button，明确了它在处理图像方面的专业性。但在实际开发中，有些同学可能会产生新的疑问：‘既然 ImageButton 继承自 ImageView，那为什么我不直接给 ImageView 设置一个点击监听器来当按钮用呢？反正它们都能显示图片。’其实，Android 专门设计 ImageButton 是有其特定用途的，尤其是在处理一些‘难以输入’的特殊符号时。”</p>
+<p>（正文讲解）
+“首先，我们来看一个实际业务场景：特殊字符的处理。
+在做数学计算类应用或嵌入式仪表界面时，有些符号（比如开平方根、复杂的积分符号或特殊的艺术字体）通过系统字体很难完美还原，或者输入法根本打不出来。这时候，最稳妥的办法就是‘先切图，再展示’。把这些符号做成精美的图片，放在 ImageButton 里，既保证了视觉统一，又具备了按钮的交互属性。</p>
+<p>接着，我们看看 ImageButton 和它的父类 ImageView 在默认表现上的两点核心区别：</p>
+<p>第一，自带‘装备’不同。
+ImageView 就像一张白纸，默认是没有背景的。而 ImageButton 既然名带‘Button’，它就自带了系统的默认按钮背景（通常是带阴影或点击波纹效果的方块）。</p>
+<p>第二，默认‘站姿’（缩放）不同。
+这是最容易被忽略的一点：ImageView 默认的缩放类型是 fitCenter，它会尽可能帮你把图拉伸到填满视图；而 ImageButton 默认是 center，它会保持图片原大小居中显示，不进行任何缩放。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3.5 图像显示：同时展示文本与图像
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **方式一：组合布局（LinearLayout 嵌套）**
+    - **实现**：利用容器将 `ImageView` 与 `TextView` 组合。
+    - **优点**：灵活性极高，支持复杂对齐与独立动画。
+- **方式二：内置属性（Drawable 系列）**
+    - **核心属性**：在 `Button` 或 `TextView` 中直接挂载图片。
+        - `drawableLeft / Right / Top / Bottom`：指定图片方位。
+        - `drawablePadding`：控制图片与文字的间距。
+    - **优点**：代码简洁，减少布局层级，提升渲染性能。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 3 章 简单控件/file-20260302173035964.png" alt="" style="object-fit: scale-down">
+
+```xml
+<Button  
+    android:layout_width="wrap_content"  
+    android:layout_height="wrap_content"  
+    android:layout_marginTop="10dp"  
+    android:layout_gravity="center"  
+    android:drawableLeft="@drawable/ic_about"  
+    android:drawablePadding="5dp"  
+    android:text="图标在左"  
+    android:textColor="#000000"  
+    android:textSize="17sp" ></Button>
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “在前面的课程中，我们分别学习了如何用 TextView 显示文字，以及如何用 ImageView 和 ImageButton 展示图片。但在实际的 UI 设计中，文字和图片往往是‘如影随形’的。比如带有图标的菜单项，或者带箭头的确认按钮。那么，在 Android 中有哪些优雅的方式能让文字和图像‘同框’出现呢？这就是我们这一节要探讨的两种主流途径。”</p>
+<p><strong>（正文讲解）</strong> “实现图文混排，我们通常有两种思路：</p>
+<ul>
+<li><p><strong>第一种：组合拳法（LinearLayout 布局嵌套）。</strong> 这是一种最直观的方法。我们可以利用 <code>LinearLayout</code>（线性布局）作为容器，把 <code>ImageView</code> 和 <code>TextView</code> 像排队一样放在一起。这种方式非常灵活，你可以随意调整图片和文字的相对位置，甚至给它们分别设置不同的动画效果。</p>
+</li>
+<li><p><strong>第二种：单兵作战（利用 Button/TextView 的 Drawable 属性）。</strong> 如果你只是想在文字旁边加一个小图标，专门用一个布局容器就显得有些‘杀鸡焉用牛刀’了。其实，<code>Button</code> 和 <code>TextView</code> 内部自带了四个方位的‘挂件槽’：</p>
+<ul>
+<li><p>**<code>drawableTop/Bottom/Left/Right</code>**：通过这些属性，你可以直接把图片挂在文字的上下左右。</p>
+</li>
+<li><p>**<code>drawablePadding</code>**：这是一个非常关键的细节属性，它专门用来控制图片和文字之间的‘亲密度’，也就是它们之间的间距。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>（总结）</strong> “简单来说，追求极致灵活性选布局嵌套，追求代码简洁和性能优化则优先使用内置的 <code>drawable</code> 属性。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 实战项目计算器：界面构成拆解 
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 65%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **信息展示区（上方：TextView）**
+    - **功能**：承载用户输入表达式（如 `5+8`）与实时计算结果。
+    - **设计**：通常采用大字号、右对齐，确保数据清晰易读。
+- **交互控制区（下方：Button / ImageButton）**
+    - **基础输入**：0-9 数字键、小数点、正负号。
+    - **运算指令**：四则运算、等号，以及平方、开方等高级运算。
+    - **逻辑控制**：退格（删除）、清空（C/CE）等系统控制功能。
+- **结构总结**
+    - **表现与交互分离**：上方负责“看”，下方负责“点”。
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 3 章 简单控件/file-20260302173819034.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “前面我们已经把 TextView、Button、ImageView 等核心控件的‘单兵作战’能力摸得清清楚楚了。俗话说‘练兵千日，用兵一时’，现在我们要把这些零散的知识点聚合起来，去攻克一个最经典的实战案例——<strong>计算器界面</strong>。在动手写代码布局之前，我们先得像架构师一样，把这个复杂的界面拆解开来，看看它到底由哪些部分组成。”</p>
+<p><strong>（正文讲解）</strong> “从 UI 布局的角度来看，一个标准的计算器界面可以划分为泾渭分明的‘两大领地’：</p>
+<ul>
+<li><p><strong>第一部分：信息展示区（上方）。</strong> 这里是计算器的‘窗口’，通常由一个或多个 <code>TextView</code> 组成。它负责承载两类动态信息：一是记录用户按下的每一个表达式（比如 <code>5 + 8</code>），二是实时呈现最终的计算结果数字。为了阅读方便，这里往往需要设置较大的字号和特定的对齐方式。</p>
+</li>
+<li><p><strong>第二部分：交互控制区（下方）。</strong> 这是计算器的‘操作台’，密密麻麻分布着各式各样的 <code>Button</code> 或 <code>ImageButton</code>。我们可以将其细分为三类：</p>
+<ol>
+<li><p><strong>基础输入</strong>：0 到 9 的数字键，以及小数点和正负号。</p>
+</li>
+<li><p><strong>运算指令</strong>：加、减、乘、除、等号，以及平方、开方、求倒数等高级运算。</p>
+</li>
+<li><p><strong>逻辑控制</strong>：负责撤销误操作的‘退格键’，以及一键归零的‘清空（C）’和‘取消（CE）’按钮。</p>
+</li>
+</ol>
+</li>
+</ul>
+<p><strong>（总结）</strong> “上方的展示区负责‘看’，下方的按键区负责‘点’。理解了这种‘表现与交互分离’的结构，我们在接下来进行布局编写时就会更有条理。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 实战项目计算器：界面构成拆解 
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 72%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **布局框架选型**
+    - 整体框架 (LinearLayout)：采用垂直排列，划分为显示区与按键区。
+    - 按键区域 (GridLayout)：实现“五行四列”分布，确保按钮整齐对齐。
+    - 兼容处理 (ScrollView)：外层嵌套滚动视图，防止小屏设备显示溢出。
+- **核心控件应用**
+    - 结果显示 (TextView)：利用 `gravity` 属性实现文字“靠下靠右”显示。
+    - 通用输入 (Button)：承载 0-9 数字键及常规运算符。
+    - 特殊符号 (ImageButton)：加载标准图片以完美展示开根号  `$\sqrt{\hspace{0.8cm}}$` 符号。
+</div>
+
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 3 章 简单控件/file-20260302174642724.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “在拆解完计算器的功能模块后，接下来的挑战就是：如何选择最合适的‘建筑材料’把这个界面搭出来？在 Android 嵌入式开发中，合理的布局选型和控件应用不仅能高度还原设计稿，还能大幅优化代码的逻辑性。现在，我们就来看看实现一个标准计算器需要动用哪些‘武器库’里的成员。”</p>
+<p><strong>（正文讲解）</strong> “首先，我们从<strong>布局框架</strong>说起：</p>
+<ul>
+<li><p><strong>整体框架——LinearLayout</strong>：计算器由上方的显示区和下方的按键区组成，这种典型的‘头脚并立’结构，最适合用<strong>线性布局</strong>按垂直方向排列。</p>
+</li>
+<li><p><strong>核心区域——GridLayout</strong>：下半部分的按钮区是典型的‘五行四列’结构。相比于嵌套多个线性布局，<strong>网格布局</strong>能一步到位地实现整齐的对齐，既简洁又高效。</p>
+</li>
+<li><p><strong>兼容处理——ScrollView</strong>：在一些小屏幕的嵌入式设备上，如果按键太多导致溢出，我们需要在外层套一个<strong>滚动视图</strong>，确保用户能滑到最底部。</p>
+</li>
+</ul>
+<p>接下来看具体的<strong>功能控件</strong>：</p>
+<ul>
+<li><p><strong>显示核心——TextView</strong>：用于展示结果。为了模拟真实计算器的习惯，我们要让文字‘靠下靠右’对齐，这需要用到我们学过的 <code>gravity</code> 属性。</p>
+</li>
+<li><p><strong>输入主力——Button</strong>：0-9 的数字和加减乘除，使用标准按钮即可满足需求。</p>
+</li>
+<li><p><strong>特殊处理——ImageButton</strong>：这是一个细节。虽然输入法能打出 <code>$\sqrt{\hspace{0.8cm}}$</code>，但它上方缺少一横，不够标准。为了完美的视觉呈现，我们选择<strong>图像按钮</strong>，直接加载一张标准的开根号图片。”</p>
+</li>
+</ul>
+<p><strong>（总结）</strong> “从宏观的布局对齐到微观的图标选择，每一处细节都体现了开发的专业度。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+<div class="" style="line-height: 2; position: absolute; left: 0%; top: 15%; height: 65%; width: 78%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **开发思想：动静结合**
+    - **XML 布局**：定义 UI 的初始样貌与静态结构。
+    - **Java 代码**：驱动控件的逻辑变化与动态更新。
+- **选型指南：布局与控件**
+    - **布局**：线性布局（条理性）、网格布局（规律性）、滚动视图（兼容性）。
+    - **控件**：`Button`（文本+图像）对比 `ImageButton`（专业图标不失真）。
+- **交互进阶：细节打磨**
+    - **逻辑控制**：`enabled` 属性管理可用状态，点击与长按的“消费”机制。
+    - **视觉优化**：利用 `scaleType` 精准控制图像的缩放与裁剪。
+- **课程小结**：掌握基础控件的组合，是构建嵌入式交互界面的基本功。
+</div>
+
+<div class="" style="position: absolute; left: 73%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春Android嵌入式软件开发/AS课件/assets/课件第 1 章 Android Studio环境搭建/file-20260113114548275.png" alt="" style="width: 400px; object-fit: fill">
+
+</div>
+
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《 Android 嵌入式软件开发》
+</div>
+</div>
+
+<aside class="notes"><p><strong>（承上启下 - 过渡语）</strong> “经过这一章节的学习，我们已经从最基础的文字显示，一路进阶到了能够亲手拆解并构思一个复杂的计算器界面。‘麻雀虽小，五脏俱全’，这些看似简单的控件，其实就是构建所有安卓应用最核心的‘砖块’。在结束本章的学习之前，让我们一起快速梳理一下这几条关键的开发逻辑。”</p>
+<p><strong>（正文讲解）</strong> “本章我们重点掌握了五个核心模块：</p>
+<ul>
+<li><p><strong>首先，是‘动静结合’的开发思想。</strong> 我们学习了无论是文本（TextView）还是图像（ImageView），都可以通过 XML 进行静态设置，也可以通过 Java 代码进行动态更新。记住：XML 负责‘初始样貌’，Java 代码负责‘逻辑变化’。</p>
+</li>
+<li><p><strong>其次，是‘布局与控件’的精准选型。</strong> 我们认识了<strong>线性布局（LinearLayout）</strong>的条理性、<strong>网格布局（GridLayout）</strong>的规律性，以及在有限屏幕下必不可少的<strong>滚动视图（ScrollView）</strong>。同时，我们也辨析了 Button 和 ImageButton 的区别：追求文字图文并茂选 Button，追求图标精准不失真选 ImageButton。</p>
+</li>
+<li><p><strong>最后，是‘交互与细节’的打磨。</strong> 我们深入理解了‘点击’与‘长按’的消费机制，学会了利用 <code>enabled</code> 属性控制按钮状态，以及通过 <code>scaleType</code> 像摄影师一样裁剪和缩放图像。</p>
+</li>
+</ul>
+<p><strong>（总结）</strong> “这些基础控件的组合，本质上就是数据展示与用户意图的交换。掌握了这些，大家就已经具备了开发简单嵌入式交互界面的基本功。”</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 本章小结
+</div>
+
+# 谢谢观看！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+2026年春《 Android 嵌入式软件开发》
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1080,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"default"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>
