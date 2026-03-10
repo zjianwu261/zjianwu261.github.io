@@ -62,3 +62,7 @@ author_profile: true
 ## 📝 3、作业与实验（Homework / Lab）
 
 - 实验1：[📄 下载实验文档](/files/mcu-2025fa/lab1.pdf)
+
+## 4、其他
+
+- 教学比赛：[第六届教师教学创新大赛](/course-materials/2026-03-11第六届教师教学创新大赛)

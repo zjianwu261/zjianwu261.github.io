@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title></title>
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/simple.css" id="theme" />
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="plugin/customcontrols/style.css">
+
+
+
+    <script defer src="dist/fontawesome/all.min.js"></script>
+
+	<script type="text/javascript">
+		var forgetPop = true;
+		function onPopState(event) {
+			if(forgetPop){
+				forgetPop = false;
+			} else {
+				parent.postMessage(event.target.location.href, "app://obsidian.md");
+			}
+        }
+		window.onpopstate = onPopState;
+		window.onmessage = event => {
+			if(event.data == "reload"){
+				window.document.location.reload();
+			}
+			forgetPop = true;
+		}
+
+		function fitElements(){
+			const itemsToFit = document.getElementsByClassName('fitText');
+			for (const item in itemsToFit) {
+				if (Object.hasOwnProperty.call(itemsToFit, item)) {
+					var element = itemsToFit[item];
+					fitElement(element,1, 1000);
+					element.classList.remove('fitText');
+				}
+			}
+		}
+
+		function fitElement(element, start, end){
+
+			let size = (end + start) / 2;
+			element.style.fontSize = `${size}px`;
+
+			if(Math.abs(start - end) < 1){
+				while(element.scrollHeight > element.offsetHeight){
+					size--;
+					element.style.fontSize = `${size}px`;
+				}
+				return;
+			}
+
+			if(element.scrollHeight > element.offsetHeight){
+				fitElement(element, start, size);
+			} else {
+				fitElement(element, size, end);
+			}		
+		}
+
+
+		document.onreadystatechange = () => {
+			fitElements();
+			if (document.readyState === 'complete') {
+				if (window.location.href.indexOf("?export") != -1){
+					parent.postMessage(event.target.location.href, "app://obsidian.md");
+				}
+				if (window.location.href.indexOf("print-pdf") != -1){
+					let stateCheck = setInterval(() => {
+						clearInterval(stateCheck);
+						window.print();
+					}, 250);
+				}
+			}
+	};
+
+
+        </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 40%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260308161805357.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="" style="position: absolute; left: 0%; top: 38%; height: 45%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+
+AI赋能教学，智慧驱动实践<br><!-- .element: style="font-size: 80px" -->
+
+——大模型 + 《单片机原理与应用》教学创新实践 <!-- .element: style="font-size: 40px" -->
+</div>
+
+<div class="" style="line-height: 3.5; position: absolute; left: 0%; top: 70%; height: 30%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+人大学院 智能科学与工程系｜张建武
+</div>
+</div>
+
+<aside class="notes"><!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 说课
+</div>
+
+<div class="" style="line-height: 2.2; font-size: 45px; position: absolute; left: 0%; top: 20%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+1. 教学痛点与学情分析
+2. 创新理念与路径
+3. 教学实施过程
+4. 创新成效与反思
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 20%; height: 60%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260308165726409.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1. 教学痛点与学情分析
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- 作业 **AI 化**：脑子没动，作业已交
+- 学习 **背诵化**：背得挺熟，一问就懵
+- 编程 **虚胖化**：代码靠抄，一跑就跪
+- 表达 **紧张化**：上台前自信，开口后忘词
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310123606477.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2. 创新理念与路径
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **AI 时代的学习观**
+    - 知识获取不再是门槛，关键在于学习欲望与主动性
+- **激发学习动机**
+    - 从技术历史与问题背景展开，提升学习兴趣
+    - 引导学生参与课堂讨论与实践    
+- **培养实践能力**
+    - 做真正的“键盘侠”：用代码解决问题
+    - 通过答辩与讲解展示技术思路
+- **强化学习输出**
+    - 不仅输入知识，更要表达与分享
+    - 站上讲台，讲清自己的代码与思路
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310125446842.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3. 教学实施过程：
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **交互式 AI 课件建设**
+    - 制作支持互动的 AI 教学课件
+- **多平台教学资源**
+    - 在线 PPT 课件
+    - B 站录制课程视频
+- **智能学习支持**
+    - 在线 PPT 支持 AI 实时提问与答疑
+</div>
+
+<div class="" style="position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310130237644.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3. 教学实施过程：
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **交互式 AI 课件建设**
+    - 制作支持互动的 AI 教学课件
+- **多平台教学资源**
+    - 在线 PPT 课件
+    - B 站录制课程视频
+- **智能学习支持**
+    - 在线 PPT 支持 AI 实时提问与答疑
+</div>
+
+<div class="" style="position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310125928616.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3. 教学实施过程：
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **交互式 AI 课件建设**
+    - 制作支持互动的 AI 教学课件
+- **多平台教学资源**
+    - 在线 PPT 课件
+    - B 站录制课程视频
+- **智能学习支持**
+    - 在线 PPT 支持 AI 实时提问与答疑
+</div>
+
+<div class="" style="position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310130620412.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3. 教学实施过程：
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **课堂上的回答问题，不只是“说出来”，更要“做出来”**
+    - 不只是把话筒交给学生，更要把键盘交给学生
+    - 用代码回应问题，用实践检验理解
+- **Talk is cheap, show me the code**
+    - 强化动手能力
+    - 强调结果表达
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 20%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310131605868.png" alt="" style="object-fit: scale-down">
+
+</div>
+<div class="" style="position: absolute; left: 70%; top: 15%; height: 65%; width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310130717602.png" alt="" style="width: 500px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310130734739.png" alt="" style="width: 500px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3. 教学实施过程
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **作业验收方式改革**
+    - 不再以学习报告为主
+    - 通过上台演说展示学习成果
+- **竞赛式学习任务**
+    - 提供完整学习资料
+    - 学生自主学习并开展讨论交流
+</div>
+
+<div class="flex-even" style="position: absolute; left: 45%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: row; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310132016035.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310131705460.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 4. 创新成效与反思
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **教学效果提升**
+    - 学生课程及格率和学习满意度明显提高
+- **人才培养成效**
+    - 筛选并培养积极学生参与各类竞赛
+- **教师发展成果**
+    - 获得省级质量工程项目
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310133009082.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #6a7962; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 特色与创新总结
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **模式创新**
+    - 构建“师—生—机”三元互动的教学新生态
+- **内容创新**
+    - 引入 AI 辅助开发融入工程实践
+    - 缩短理论学习到产品实现的距离
+- **评价创新**
+    - 构建数据驱动的全过程、多维度评价体系
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260308171805208.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="stretch-column" style="position: absolute; left: 0%; top: 5%; height: 40%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260308161805357.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="stretch-column" style="font-size: 20px; position: absolute; left: 0%; top: 55%; height: 20%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly" align="stretch">
+
+# 第2章 点亮你的LED
+</div>
+
+<div class="" style="position: absolute; left: 10%; top: 70%; height: 20%; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+《单片机原理与应用》<br><br>
+张建武（zjw261@hfuu.edu.cn）
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 讲课
+</div>
+
+<div class="" style="line-height: 2.2; font-size: 45px; position: absolute; left: 0%; top: 20%; height: 60%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+1. 从点亮一盏灯开始
+2. 程序控制实现 LED 灯亮灭
+3. 延迟程序
+</div>
+
+<div class="" style="position: absolute; left: 60%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310114709390.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div>
+
+<aside class="notes"><!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1. 从点亮一盏灯开始
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **串联电路基础（初中物理回顾）**
+    - 电源、开关、灯泡通过导线连接形成串联电路
+- **开关控制电路**
+    - 开关闭合 → 电路导通 → 灯泡点亮
+    - 开关断开 → 电路断开 → 灯泡熄灭
+- **核心意义**
+    - 通过开关实现对电路最基本的控制
+</div>
+
+<div class="" style="position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<video controls width="1000" height="600"> <source src="video/bulb_light.webm" type="video/webm"> </video>
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div>
+
+<aside class="notes"><p>在正式学习单片机之前，我们先简单回顾一下大家在<strong>初中物理</strong>中学过的一个非常基础的电路——<strong>串联电路</strong>。</p>
+<p>在这个电路中，我们通常用导线把<strong>电源、开关和灯泡</strong>连接在一起，形成一个完整的电流通路。当<strong>开关闭合</strong>时，电路导通，电流可以在电路中流动，这时灯泡就会被点亮；而当<strong>开关断开</strong>时，电路被切断，电流无法流动，灯泡也就随之熄灭。</p>
+<p>从这个简单的实验中，我们可以看到一个非常重要的概念：<br><strong>开关可以控制电路的通断。</strong><br>也就是说，人类可以通过一个简单的开关，实现对电路最基本的控制。</p>
+<p>其实，这个看似简单的原理，在很多电子设备中都在不断被应用。只不过，在现代电子系统中，我们往往不再依赖人工去按下开关，而是通过电子电路甚至单片机来完成控制。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1. 从点亮一盏灯开始
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **手动控制的局限**
+    - 开关必须依赖人工操作
+    - 在很多场景下不方便、不智能
+- **实际需求**
+    - 例如：电灯在天黑时自动点亮、天亮时自动关闭
+- **自动控制的思路**
+    - 系统能够感知环境变化（如光线强弱）
+    - 根据环境信息自动控制设备工作
+</div>
+
+<div class="" style="position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<video controls width="1000" height="600"> <source src="video/替换开关为单片机.mp4" type="video/mp4"> </video>
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们通过一个简单的串联电路实验，看到了<strong>机械开关可以控制电路的通断</strong>。当开关闭合时灯泡点亮，开关断开时灯泡熄灭。这是一种最基础、也是最直观的控制方式。</p>
+<p>不过，这种控制方式也有一个明显的局限：<strong>它必须依赖人工操作</strong>。也就是说，每次设备需要工作时，都必须有人去按一下开关。在很多实际场景中，这样的方式就会显得不够方便，也不够智能。</p>
+<p>比如说，我们希望<strong>电灯在天黑的时候自动点亮，在天亮的时候自动关闭</strong>。如果每次都需要人去操作开关，不仅麻烦，而且有时候也无法及时完成。</p>
+<p>那有没有一种办法，可以让设备<strong>自己根据环境变化来决定是否工作</strong>呢？</p>
+<p>其实是可以的。我们只需要让系统具备两种能力：<br>第一，能够<strong>感知外界环境</strong>，比如通过传感器检测光线的强弱；<br>第二，根据获取到的信息<strong>自动做出控制决策</strong>。例如，当光线变暗时自动打开电灯，当光线变亮时再自动关闭。</p>
+<p>当一个系统既能感知环境，又能根据环境信息自动控制设备时，这样的系统就具备了<strong>自动控制的能力</strong>。而在现代电子系统中，完成这种控制任务的核心器件，往往就是<strong>单片机</strong>。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1. 从点亮一盏灯开始
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **问题引入：芯片内部有什么？**    
+    - 小小芯片为何能实现强大的控制功能？
+- **内部结构特点**
+    - 内部密集排列大量微小电子结构
+    - 这些结构相互连接形成复杂的逻辑电路
+- **外部可见部分**
+	- 芯片外围分布着用于连接电路的引脚
+</div>
+
+<div class="" style="position: absolute; left: 40%; top: 15%; height: 65%; width: 60%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+<video controls width="1000" height="600"> <source src="video/芯片拆解.mp4" type="video/mp4"> </video>
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div>
+
+<aside class="notes"><p>前面我们已经看到，单片机可以通过引脚控制 LED 的亮灭，从而实现对外部电路的控制。那么接下来我们不妨再深入思考一个问题：<strong>这样一块看起来黑乎乎的小芯片，它的内部究竟是什么样子的？为什么它能够实现如此强大的控制功能呢？</strong></p>
+<p>如果我们把芯片放大来看，就会发现，在芯片内部密密麻麻地排列着大量微小的电子结构。这些微小结构并不是随意排列的，它们按照一定的规则相互连接，最终构成了各种各样的<strong>逻辑电路</strong>。正是这些逻辑电路，让单片机具备了计算、判断和控制的能力。</p>
+<p>而在芯片的外部，我们能够直接看到的部分，其实就是分布在芯片四周的一排排<strong>引脚</strong>。这些引脚就像是单片机与外部世界沟通的“接口”，通过它们，单片机可以接收外部信号，也可以向外部电路输出控制信号。</p>
+<p>这里给大家思考一个简单的问题：</p>
+<p><strong>问题：如果单片机内部有这么多复杂的电路，我们为什么在外部只看到少量的引脚呢？</strong></p>
+<p>答案是：因为这些复杂的电路都被<strong>集成在芯片内部</strong>，通过高度集成的半导体工艺制造出来。外部的引脚只是用来与外部电路进行连接的接口，而真正完成计算和控制功能的，是芯片内部那些大量的逻辑电路。</p>
+<p>也正因为这种高度集成的设计，我们才能把原本复杂庞大的电子系统，<strong>浓缩在一块小小的芯片之中</strong>。接下来，我们就进一步看看：<strong>这些引脚是如何与内部电路配合，从而实现对外部设备的控制的。</strong></p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1. 从点亮一盏灯开始
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **实验电路简化**
+    - 将机械开关控制灯泡的电路进行模型化简化
+- **简化电路结构**
+    - 电流路径：电源正极 → LED → 限流电阻 → 电源负极
+- **电路工作原理**
+    - 回路导通 → 电流流动 → LED 点亮
+    - 回路断开 → 电流无法流动 → LED 熄灭
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310102601002.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310102256484.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div>
+
+<aside class="notes"><p>好的，我们先回到刚才提到的那个实验。为了让大家更容易理解电路的工作原理，我们可以把原来的电路做一个简单的<strong>模型化和简化</strong>。</p>
+<p>在这个简化后的电路中，电流从<strong>电源的正极</strong>流出，首先进入一个发光二极管，也就是我们常说的 <strong>LED</strong>。接着，电流会经过一个<strong>限流电阻</strong>，最后再回到电源的<strong>负极</strong>，这样就形成了一个完整的电流回路。</p>
+<p>只要这个回路是<strong>导通的</strong>，电流就能够在电路中流动，这时 LED 就会被点亮；如果回路被断开，电流无法流动，LED 也就不会发光。</p>
+<p>通过这样一个简单的电路，我们其实已经看到了电子系统中一个非常核心的概念，那就是：<strong>只有当电流形成完整回路时，电路才能正常工作。</strong></p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1. 从点亮一盏灯开始
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **用单片机引脚替代机械开关**
+    - 将电路中的电源负极连接到单片机引脚
+- **引脚控制电平**
+    - 单片机通过内部逻辑控制 **P0.0 输出低电平**
+- **电流形成回路**
+    - 电流：电源正极 → LED → 限流电阻 → P0.0 → 回路形成
+    - LED 被点亮
+- **引出问题**
+    - 单片机内部是如何实现这种控制的？
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310102903433.png" alt="" style="object-fit: scale-down">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310103049222.png" alt="" style="object-fit: scale-down">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div>
+
+<aside class="notes"><p>在刚才的例子中，这个回路是通过<strong>机械开关</strong>来控制导通和断开的。</p>
+<p>那么接下来，我们做一个小小的改变。我们把原来电路中的<strong>电源负极</strong>，换成<strong>单片机的一个引脚</strong>。通过单片机内部的逻辑控制，让 <strong>P0.0 引脚输出低电平</strong>。</p>
+<p>当 P0.0 引脚输出低电平时，它就相当于提供了一个接近电源负极的电位。这时，电流就可以从<strong>电源正极</strong>流出，依次经过 <strong>LED 和限流电阻</strong>，最后流入单片机的 <strong>P0.0 引脚</strong>。这样一来，电流同样形成了一个完整的回路，于是 LED 小灯就被点亮了。</p>
+<p>从这个过程我们可以看到：<br><strong>单片机其实可以通过控制引脚的电平状态，来控制外部电路是否形成回路，从而实现对外部设备的控制。</strong></p>
+<p>这里给大家思考一个简单的问题：</p>
+<p><strong>问题：如果把 P0.0 引脚设置为高电平，LED 一定会熄灭吗？</strong></p>
+<p>答案是：<strong>不一定。</strong><br>这取决于电路的具体连接方式。如果 LED 是像刚才这样连接在电源正极和单片机引脚之间，那么当引脚输出高电平时，两端电位接近，电流就无法流动，LED 会熄灭。但如果电路采用的是另一种连接方式，比如接在地和引脚之间，那么高电平反而可能会点亮 LED。</p>
+<p>所以在单片机系统中，一个非常重要的概念就是：<strong>通过程序控制引脚电平，从而控制外部电路的工作状态。</strong></p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1. 从点亮一盏灯开始
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **单片机引脚控制外部电路**
+    - P0.0 输出低电平 → 电流形成回路 → LED 点亮
+    - 单片机可像“电子开关”一样控制电路通断
+- **内部实现原理**
+    - 每个引脚在内部对应一个电子开关结构
+    - 程序控制开关状态，决定引脚输出高/低电平
+- **特殊功能寄存器（SFR）**
+    - 通过向寄存器写入 1 或 0 控制引脚电平
+    - 程序通过修改寄存器值实现对外部电路的控制
+</div>
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310104816602.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们看到，通过让单片机的 <strong>P0.0 引脚输出低电平</strong>，就可以让电流形成回路，从而点亮 LED。也就是说，单片机可以像一个“电子开关”一样，控制外部电路的通断。</p>
+<p>那么单片机是如何做到这一点的呢？</p>
+<p>实际上，在单片机内部，<strong>每一个引脚都对应着一个电子开关结构</strong>。我们可以通过程序去控制这个开关的状态，从而决定引脚输出的是<strong>高电平</strong>还是<strong>低电平</strong>。</p>
+<p>而控制这些开关状态的，就是单片机中的一种特殊存储单元，叫做<strong>特殊功能寄存器</strong>，通常简称 <strong>SFR</strong>。程序通过向这些寄存器写入数据，就可以控制引脚的工作状态。</p>
+<p>例如，当我们在寄存器中写入 <strong>高电平（1）</strong> 时，相当于把内部开关<strong>打开</strong>，这时对应的引脚就会输出<strong>高电平</strong>；当我们写入 <strong>低电平（0）</strong> 时，相当于把开关<strong>关闭</strong>，引脚就会输出<strong>低电平</strong>。</p>
+<p>通过这种方式，程序就可以像操作开关一样，去控制单片机的各个引脚，从而实现对外部电路的控制，比如点亮 LED、驱动蜂鸣器，或者控制其他电子设备。</p>
+<p>这里给大家思考一个简单的问题：</p>
+<p><strong>问题：如果程序没有向寄存器写入数据，引脚的电平状态会改变吗？</strong></p>
+<p>答案是：<strong>不会。</strong><br>因为单片机的引脚状态是由寄存器中的数据决定的，如果程序不去修改寄存器的值，引脚就会一直保持原来的电平状态。</p>
+<p>所以在单片机系统中，一个非常核心的思想就是：<br><strong>通过程序修改寄存器的值，从而控制引脚电平，进而控制外部电路。</strong></p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1. 从点亮一盏灯开始
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 54%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **电子开关类比**
+    - 类似家庭墙上的开关控制电器
+    - 多个开关可控制多个设备
+- **单片机内部结构**
+    - 内部包含大量电子开关
+    - 每个开关控制一个引脚或功能模块
+- **控制方式**
+    - 程序控制开关闭合或断开，实现设备工作或停止
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310112158421.png" alt="" style="width: 700px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310112230005.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div>
+
+<aside class="notes"><p>刚才我们已经了解到，单片机可以通过程序控制寄存器，从而改变引脚输出的高低电平，进而控制外部电路，比如点亮 LED 或关闭 LED。其实，从本质上来说，这个过程和我们日常生活中的开关控制电器是非常类似的。</p>
+<p>实际上，在单片机内部，像这样的<strong>电子开关结构是非常多的</strong>。可以把它想象成我们家里墙上的<strong>开关盒</strong>：一个开关可以控制一盏灯，多个开关就可以控制多个电器。同样的道理，在单片机内部，也存在着许多这样的“电子开关”，每一个开关都可以控制一个引脚或者一个功能模块的工作状态。</p>
+<p>通过程序，我们就可以去操作这些内部的开关，让它们<strong>打开或者关闭</strong>。当开关闭合时，电路导通，设备开始工作；当开关断开时，电路被切断，设备就停止工作。这样，单片机就能够实现对外部设备的控制。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 1. 从点亮一盏灯开始
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 58%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **单片机内部电子开关**
+    - 一部分连接外部电路，用于控制 LED、蜂鸣器等设备
+    - 另一部分未连接外部，用于内部数据存储
+- **开关与二进制**
+    - 开关两种状态：开 / 关 → 对应 0 / 1
+    - 多个开关组合可表示一组二进制数据
+- **示例**
+    - 开关状态：闭闭开开开开开开闭 → 二进制：00111110 → 十进制：62
+- **核心思想**
+    - 数字系统通过 0 和 1 表示与处理信息
+</div>
+
+<div class="" style="position: absolute; left: 53%; top: 15%; height: 65%; width: 48%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310112333071.png" alt="" style="width: 700px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310112349284.png" alt="" style="width: 700px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div>
+
+<aside class="notes"><p>前面我们已经了解到，单片机内部包含大量的电子开关，其中有一部分开关通过引脚与外部电路相连接，用来控制 LED、蜂鸣器等外部设备的工作。</p>
+<p>不过，如果大家仔细观察会发现，<strong>还有一部分开关并没有直接连接到外部电路</strong>。那这些开关又是用来做什么的呢？</p>
+<p>答案其实很简单——<strong>用来存储数据</strong>。</p>
+<p>我们可以把这些开关看作是一组可以记录状态的装置。每一个开关只有两种状态：<strong>开或者关</strong>，这正好对应数字系统中的 <strong>0 和 1</strong>。当多个开关组合在一起时，就可以表示一串二进制数据。</p>
+<p>例如，假设有这样一组开关状态：<br><strong>闭、闭、开、开、开、开、开、开、闭</strong>。<br>如果我们把“开”看作 <strong>0</strong>，“闭”看作 <strong>1</strong>，就可以得到一组二进制数据：<br><strong>00111110</strong>。</p>
+<p>而这组二进制数据如果转换为十进制数，就是 <strong>62</strong>。</p>
+<p>通过这个例子大家可以看到，单片机内部的这些电子开关不仅可以用来<strong>控制外部电路</strong>，还可以用来<strong>表示和存储数据</strong>。这也是数字电子系统的一个核心思想：<strong>用 0 和 1 来表示和处理信息</strong>。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2. 程序控制实现 LED 灯亮灭
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **程序控制 LED 的实现**
+    - 通过程序控制单片机引脚实现 LED 亮灭
+- **主程序逻辑**
+    - `while(1)` 实现无限循环
+    - `LED = 0` 控制 LED 点亮
+- **引脚映射定义**
+    - `sbit LED = P0^0`：定义位变量 LED
+    - LED 对应单片机 **P0.0 引脚**
+- **P0 口结构**
+    - P0 为 **8 位寄存器**
+    - 每一位对应一个单片机引脚
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```C
+#include <reg52.h>
+sbit LED = P0^0;   // 定义LED连接在P0.0
+// 延时函数
+void delay_ms(unsigned int ms){
+    unsigned int i,j;
+    for(i=0;i<ms;i++)
+        for(j=0;j<110;j++);   // 粗略1ms延时
+}
+```
+```C
+void main(){
+    while(1) {
+        LED = 0;      // LED亮（低电平点亮）
+        delay_ms(500); // 延时500ms
+        LED = 1;      // LED灭
+        delay_ms(500); // 延时500ms
+    }
+}
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div>
+
+<aside class="notes"><p>好的，前面我们已经铺垫了很多，从机械开关到单片机引脚，再到寄存器和电子开关。接下来，我们就通过一段<strong>实际的程序</strong>，来真正实现单片机控制 LED 小灯的点亮和熄灭。</p>
+<p>我们先直接看主程序。程序中有一个 <code>while(1)</code>，它表示<strong>死循环</strong>，也就是让单片机不断重复执行循环体中的内容。在这个循环里面，有一句非常关键的代码：<code>LED = 0;</code>，它的作用是让 LED 点亮。</p>
+<p>看到这里，大家可能马上会产生一个疑问：<br><strong>为什么我在程序里随便写一个 <code>LED</code>，现实世界中的 LED 小灯就真的亮了呢？</strong></p>
+<p>别着急，我们往上看。在前面的程序中，有这样一句定义：</p>
+<p><code>sbit LED = P0^0;</code></p>
+<p>这句话的意思是：我们定义了一个名为 <strong>LED</strong> 的位变量，用它来代指 <strong>P0 口的第 0 位，也就是 P0.0 引脚</strong>。这样一来，程序中对 <code>LED</code> 的操作，本质上就是在操作单片机的 <strong>P0.0 引脚</strong>。</p>
+<p>这里还要补充一点，<strong>P0 口本身是一个 8 位寄存器</strong>，也就是说，它由 8 个二进制位组成，分别对应 8 个引脚。而 <code>P0^0</code> 就表示其中的第 0 位。</p>
+<p>但是讲到这里，可能大家还会继续追问：<br><strong>那 P0 口到底又是什么？为什么它能直接和单片机的引脚对应起来？</strong></p>
+<p>这个问题提得非常好。因为程序不能只停留在“会写”，还要追问“为什么能这样写”。我们学习单片机，也应该有这种严谨的态度。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 2. 程序控制实现 LED 灯亮灭
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 53%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **头文件 reg52.h 的作用**
+    - 定义 8051 单片机的特殊功能寄存器（SFR）
+    - 如：P0、P1、P2、P3 等端口寄存器
+- **寄存器与引脚映射**
+    - `sbit LED = P0^0`：将 LED 映射到 P0.0 引脚
+- **程序控制流程**
+    - `LED = 0` → P0.0 输出低电平 → LED 点亮
+- **核心理解**    
+    - 程序操作寄存器位 → 控制单片机引脚 → 影响外部硬件电路
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310121240585.png" alt="" style="width: 600px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310103049222.png" alt="" style="width: 600px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+第六届教师教学创新大赛｜张建武
+</div>
+</div>
+
+<aside class="notes"><p>这个头文件非常重要。它里面已经把 8051 单片机中很多特殊功能寄存器都提前定义好了，比如 <strong>P0、P1、P2、P3</strong> 等端口寄存器。也就是说，<code>reg52.h</code> 相当于给我们提供了一张“单片机内部资源对照表”，让我们在写程序时，可以直接通过这些名字去操作对应的寄存器，而不需要自己去记复杂的地址。</p>
+<p>所以，整个逻辑就串起来了：</p>
+<ul>
+<li><code>reg52.h</code> 帮我们定义好了 <strong>P0 寄存器</strong></li>
+<li><code>sbit LED = P0^0</code> 让 <strong>LED 这个名字对应到 P0.0</strong></li>
+<li>当程序执行 <code>LED = 0</code> 时，本质上就是让 <strong>P0.0 输出低电平</strong></li>
+<li>如果外部电路连接正确，LED 小灯就会被点亮</li>
+</ul>
+<p>也就是说，看起来我们是在控制一个叫 <code>LED</code> 的字符，实际上我们控制的是<strong>单片机的寄存器位和物理引脚</strong>，最终才作用到现实中的硬件电路。</p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section></section><section ><section data-markdown><script type="text/template"><!-- .slide: class="drop" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3. 延迟程序
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **延时函数实现原理**
+    - 通过循环指令不断消耗 CPU 执行时间
+    - `DJNZ` 是 8051 汇编指令：Decrement and Jump if Not Zero
+- **内层循环**
+    - `MOV R5,#110`：设置循环次数
+    - `DJNZ R5,LOOP2`：递减并循环执行
+- **外层循环**
+    - 内层循环结束后重复执行 `ms` 次
+- **核心思想**
+    - 通过大量空循环实现软件延时
+</div>
+
+<div class="" style="position: absolute; left: 55%; top: 15%; height: 65%; width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+```
+; delay_ms(ms)
+; R7:R6 存放 ms 参数
+
+DELAY_MS:
+    MOV  R7, #HIGH_MS   ; 外层循环高字节
+    MOV  R6, #LOW_MS    ; 外层循环低字节
+LOOP1:                  ; 外层循环
+    MOV  R5, #110       ; 内层循环计数
+LOOP2:                  ; 内层循环
+    DJNZ R5, LOOP2      ; R5--，不为0继续循环
+    DJNZ R6, LOOP1      ; ms--
+    DJNZ R7, LOOP1
+    RET
+```
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div>
+
+<aside class="notes"><p>前面我们已经通过程序实现了 LED 小灯的亮和灭。不过大家可能会发现，如果程序只是简单地执行 <code>LED = 0</code> 和 <code>LED = 1</code>，LED 的变化速度会非常快，人眼几乎是看不到闪烁效果的。因此，我们在程序中通常需要加入<strong>延时程序</strong>，来让 LED 的变化变慢，从而便于观察。</p>
+<p>那么延时程序是如何实现的呢？其实原理非常简单：<strong>通过循环指令不断消耗 CPU 的执行时间</strong>。</p>
+<p>在汇编层面，我们通常会设计两层循环。首先是<strong>内层循环</strong>，例如：</p>
+<p><code>MOV R5,#110</code></p>
+<p>这条指令的作用是给寄存器 R5 赋值 110，也就是设置循环次数。接下来通过：</p>
+<p><code>DJNZ R5, LOOP2</code></p>
+<p>这条指令会让 R5 每执行一次循环就减 1，只要不为 0，就继续跳回去执行。这样一来，CPU 就会不断重复执行这一段指令，从而消耗一定的时间。</p>
+<p>当内层循环结束后，再进入<strong>外层循环</strong>。外层循环通常按照我们需要的延时时间，比如 <code>ms</code> 次，再重复执行整个内层循环。通过这种方式，就可以实现毫秒级的延迟效果。</p>
+<p>所以我们可以总结一句话：<br><strong>延时函数的本质，就是让 CPU 执行大量“空循环”，从而消耗时间，实现软件延时。</strong></p>
+<!-- .slide: data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" --></aside></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 3. 延迟程序
+</div>
+
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+- **指令执行与机器周期**
+    - 单片机执行每条指令都需要消耗机器周期
+    - 在 8051 中：1 个机器周期 = 12 个晶振周期
+- **程序执行特点**
+    - 单片机按时间顺序逐条执行指令
+- **本质理解**
+    - 单片机在时序电路控制下完成程序执行
+</div>
+
+<div class="" style="position: absolute; left: 50%; top: 15%; height: 65%; width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+ 
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310134838304.png" alt="" style="width: 300px; object-fit: fill">
+
+<img src="Timestamps/Semester/2025-2026学年第2学期/2026春教科管理/2026年春教学比赛/assets/2026-03-11第六届教师教学创新大赛/file-20260310135334556.png" alt="" style="width: 800px; object-fit: fill">
+
+</div>
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div></script></section><section data-markdown><script type="text/template"><!-- .slide: class="drop" data-background-image="Clippings/本冰/assets/2025-01出埃及记/hero-background.svg" -->
+<div class="" style="position: absolute; left: 0px; top: 0px; height: 1080px; width: 1920px; min-height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center" absolute="true">
+
+<div class="has-dark-background" style="font-size: 20px; border-radius: 15px; background-color: #236B8E; padding: 0 20px; box-sizing: border-box; position: absolute; left: 0%; top: 0%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-evenly" align="left">
+
+## 说课
+</div>
+
+# 谢谢各位
+# 恳请大家批评指正！
+
+<div class="has-light-background" style="border-radius: 15px; background-color: #e9e9e9; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" >
+</div>
+<div class="" style="line-height: 1.8; position: absolute; left: 0%; top: 85%; height: 10%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center" align="center">
+
+
+</div>
+</div></script></section></section></div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/math/math.js"></script>
+	<script src="plugin/mermaid/mermaid.js"></script>
+	<script src="plugin/chart/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+	<script src="plugin/menu/menu.js"></script>
+	<script src="plugin/customcontrols/plugin.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+	  function isLight(color) {
+		let hex = color.replace('#', '');
+
+		// convert #fff => #ffffff
+		if(hex.length == 3){
+			hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}`;
+		}
+
+		const c_r = parseInt(hex.substr(0, 2), 16);
+		const c_g = parseInt(hex.substr(2, 2), 16);
+		const c_b = parseInt(hex.substr(4, 2), 16);
+		const brightness = ((c_r * 299) + (c_g * 587) + (c_b * 114)) / 1000;
+		return brightness > 155;
+	}
+
+	var bgColor = getComputedStyle(document.documentElement).getPropertyValue('--r-background-color').trim();
+	var isLight = isLight(bgColor);
+
+	if(isLight){
+		document.body.classList.add('has-light-background');
+	} else {
+		document.body.classList.add('has-dark-background');
+	}
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath.MathJax3,
+		  RevealMermaid,
+		  RevealChart,
+		  RevealCustomControls,
+		  RevealMenu,
+        ],
+
+
+    	allottedTime: 120 * 1000,
+
+		mathjax3: {
+			mathjax: 'plugin/math/mathjax/tex-mml-chtml.js',
+		},
+		markdown: {
+		  gfm: true,
+		  mangle: true,
+		  pedantic: false,
+		  smartLists: false,
+		  smartypants: false,
+		},
+
+		mermaid: {
+			theme: isLight ? 'default' : 'dark',
+		},
+
+		customcontrols: {
+			controls: [
+				{id: 'toggle-overview',
+				title: 'Toggle overview (O)',
+				icon: '<i class="fa fa-th"></i>',
+				action: 'Reveal.toggleOverview();'
+				},
+			]
+		},
+		menu: {
+			loadIcons: false
+		}
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"width":1920,"height":1080,"margin":0,"minScale":0.1,"maxScale":4,"controls":true,"progress":true,"slideNumber":true,"transition":"slide","transitionSpeed":"slow"}, queryOptions);
+    </script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+
+  <!-- created with Advanced Slides -->
+</html>
